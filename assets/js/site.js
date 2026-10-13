@@ -210,7 +210,7 @@
       '<li><a href="' + LINKEDIN + '" target="_blank" rel="noopener">LinkedIn</a></li>' +
       '<li><a href="' + ROOT + 'index.html#contact">Work with me</a></li></ul></div>' +
       "</div>" +
-      '<p class="disclaimer">Educational content only — not legal, security or professional advice. EU AI Act content reflects Regulation (EU) 2024/1689 as amended by the Digital Omnibus on AI, Regulation (EU) 2026/1744 (in force 27 July 2026). Last reviewed October 2026. © ' + y + " " + SITE_NAME + ".</p>" +
+      '<p class="disclaimer">Educational content only — not legal, security or professional advice. EU AI Act content reflects Regulation (EU) 2024/1689 as amended by the Digital Omnibus on AI, Regulation (EU) 2026/1744 (in force 27 July 2026). Last reviewed October 2026. Courses created with AI assistance and human review — <a href="' + a + 'how-these-courses-were-made.html">how these courses were made</a>. © ' + y + " " + SITE_NAME + ".</p>" +
       "</div></footer>"
     );
   }
