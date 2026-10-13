@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# After you connect your domain, replace the address below and uncomment:
+# Sitemap: https://www.YOUR-DOMAIN.com/sitemap.xml

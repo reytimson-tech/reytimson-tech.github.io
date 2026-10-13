@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — How AI and Large Language Models Work</title>
+<meta name="description" content="Key terms from How AI and Large Language Models Work, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>How AI works: glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. token, embedding, RLHF" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Attention</dt><dd>The mechanism in transformers that lets the model weigh how relevant each token in the context is when processing another.</dd>
+        <dt>Base model</dt><dd>A model after pre-training only — knowledgeable, but not yet tuned to follow instructions.</dd>
+        <dt>Constitutional AI</dt><dd>Anthropic's approach to training models with a written set of principles and AI-generated feedback.</dd>
+        <dt>Context window</dt><dd>The maximum amount of text (in tokens) a model can consider at once, including instructions, conversation, documents and its own reply.</dd>
+        <dt>Deep learning</dt><dd>Machine learning with neural networks of many layers.</dd>
+        <dt>Diffusion model</dt><dd>A generative model that creates images or video by learning to remove noise step by step.</dd>
+        <dt>Embedding</dt><dd>A list of numbers representing a token, word or document's meaning, so similar meanings sit close together.</dd>
+        <dt>Feature</dt><dd>An input variable describing an example, such as a house's floor area.</dd>
+        <dt>Gradient descent</dt><dd>The training method that adjusts parameters step by step in the direction that reduces error.</dd>
+        <dt>Hallucination</dt><dd>Plausible but false or unsupported model output.</dd>
+        <dt>Inference</dt><dd>Using a trained model to produce outputs for new inputs.</dd>
+        <dt>Interpretability</dt><dd>Research into understanding what happens inside AI models.</dd>
+        <dt>Knowledge cut-off</dt><dd>The date after which a model's training data contains no information.</dd>
+        <dt>Label</dt><dd>The correct answer attached to a training example in supervised learning.</dd>
+        <dt>Large language model (LLM)</dt><dd>A transformer-based model trained on vast text to predict the next token, then post-trained to be a helpful assistant.</dd>
+        <dt>Loss</dt><dd>A score measuring how wrong a model's predictions are during training.</dd>
+        <dt>Overfitting</dt><dd>When a model memorises training data and fails to generalise to new data.</dd>
+        <dt>Parameter</dt><dd>A learned weight inside a model. Modern LLMs have billions.</dd>
+        <dt>Post-training</dt><dd>Training after pre-training — instruction tuning, RLHF, safety training — that shapes an assistant's behaviour.</dd>
+        <dt>Pre-training</dt><dd>The first, compute-intensive stage of training an LLM on huge amounts of text to predict the next token.</dd>
+        <dt>Precision</dt><dd>Of the cases a model flagged as positive, the share that truly were.</dd>
+        <dt>Reasoning model</dt><dd>An LLM trained to work through problems step by step before answering, using more computation on harder tasks.</dd>
+        <dt>Recall</dt><dd>Of all truly positive cases, the share a model caught.</dd>
+        <dt>Reinforcement learning</dt><dd>Learning by trial and error from rewards and penalties.</dd>
+        <dt>Retrieval-augmented generation (RAG)</dt><dd>Retrieving relevant documents and adding them to the model's context so answers are grounded in sources.</dd>
+        <dt>RLHF</dt><dd>Reinforcement learning from human feedback: training a model towards responses people prefer.</dd>
+        <dt>Self-supervised learning</dt><dd>Learning where labels come from the data itself — such as the next word in a sentence.</dd>
+        <dt>Supervised learning</dt><dd>Learning from labelled examples.</dd>
+        <dt>Sycophancy</dt><dd>A model's tendency to agree with or flatter the user, even when the user is wrong.</dd>
+        <dt>Temperature</dt><dd>A setting controlling how random a model's token choices are.</dd>
+        <dt>Token</dt><dd>A chunk of text — a word, part of a word or punctuation — that a language model processes.</dd>
+        <dt>Transformer</dt><dd>The neural network architecture, introduced in 2017, behind today's LLMs.</dd>
+        <dt>Unsupervised learning</dt><dd>Finding structure in unlabelled data, such as clusters.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="Key terms from Evaluating &amp; Deploying AI (LLMOps), in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>LLMOps glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. canary, trace, drift" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>A/B test</dt><dd>Comparing two versions on real users to measure which performs better.</dd>
+        <dt>AI gateway</dt><dd>A central component through which all model calls pass, handling keys, retries, routing, limits and logging.</dd>
+        <dt>Canary release</dt><dd>Releasing a new version to a small share of users before everyone.</dd>
+        <dt>Drift</dt><dd>Changes in inputs, outputs or model behaviour over time that degrade performance.</dd>
+        <dt>Evaluation harness</dt><dd>Code that runs test cases through an AI system and grades the outputs.</dd>
+        <dt>Exponential back-off</dt><dd>Retrying with progressively longer waits, usually with random jitter.</dd>
+        <dt>Fallback</dt><dd>An alternative model or response used when the primary one fails.</dd>
+        <dt>Feature flag</dt><dd>A switch to turn features or configurations on or off without redeploying.</dd>
+        <dt>Guardrail</dt><dd>A check or control around an AI system's inputs, outputs or actions.</dd>
+        <dt>LLM judge</dt><dd>A language model used with a rubric to grade outputs.</dd>
+        <dt>LLMOps</dt><dd>Practices for building, deploying, monitoring and maintaining LLM applications.</dd>
+        <dt>MLOps</dt><dd>Practices for reliably building, deploying and maintaining machine learning models.</dd>
+        <dt>Offline evaluation</dt><dd>Testing on a fixed evaluation set before release.</dd>
+        <dt>Online evaluation</dt><dd>Measuring quality on live traffic and user signals.</dd>
+        <dt>p95 latency</dt><dd>The response time that 95% of requests are faster than.</dd>
+        <dt>PII redaction</dt><dd>Removing or masking personally identifiable information.</dd>
+        <dt>Regression</dt><dd>A drop in quality compared with a previous version.</dd>
+        <dt>Release gate</dt><dd>An automated check that must pass before a change can be deployed.</dd>
+        <dt>Rollback</dt><dd>Returning to a previous known-good version.</dd>
+        <dt>Shadow testing</dt><dd>Running a new version on real traffic in parallel without showing its outputs.</dd>
+        <dt>Streaming</dt><dd>Sending a model's response token by token as it's generated.</dd>
+        <dt>Time to first token</dt><dd>How long a user waits before the first part of a response appears.</dd>
+        <dt>Trace</dt><dd>A record of every step of one request through an AI system.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

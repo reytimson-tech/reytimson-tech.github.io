@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Inventories, risk and impact assessment — AI Governance, Risk &amp; Compliance</title>
+<meta name="description" content="Building an AI inventory, risk tiering, assessing and treating risk, impact assessments (AIIA, DPIA, FRIA) and vendor due diligence.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-governance">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 35 minutes</span>
+      <h1>Inventories, risk and impact assessment</h1>
+      <p class="lead">This is where governance gets practical: finding your AI, classifying it, assessing what could go wrong, and holding vendors to account.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Find AI across the organisation and record it in an inventory</li><li>Design a proportionate risk-tiering scheme</li><li>Assess and treat AI risks</li><li>Choose and combine the right impact assessments</li><li>Run AI vendor due diligence</li></ul>
+      </div>
+
+      <h2>5.1 Start with an AI inventory</h2>
+      <p>You can't govern what you can't see. An <strong>AI inventory</strong> (or register) is the foundation of every governance programme — and the EU AI Act Fundamentals course recommends it as the first compliance step.</p>
+      <p>Find AI through: surveys of business units; procurement and contract records; software and SaaS asset lists (many tools have added AI features); expense claims for AI subscriptions; IT network data; and data science project lists.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Inventory field</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Name and description</td><td>CV screening assistant</td></tr>
+            <tr><td>Business owner</td><td>Head of Talent Acquisition</td></tr>
+            <tr><td>Purpose and use</td><td>Ranks applicants for recruiter review</td></tr>
+            <tr><td>Built, bought or embedded</td><td>Bought — vendor X, feature of applicant tracking system</td></tr>
+            <tr><td>Model type</td><td>Machine learning classifier + LLM summaries</td></tr>
+            <tr><td>Data used</td><td>CVs, application forms (personal data)</td></tr>
+            <tr><td>People affected</td><td>Job applicants</td></tr>
+            <tr><td>Decision role</td><td>Supports human decision</td></tr>
+            <tr><td>Jurisdictions</td><td>UK, Ireland</td></tr>
+            <tr><td>Risk tier and regulatory classification</td><td>High (internal); EU AI Act Annex III — employment</td></tr>
+            <tr><td>Assessments completed</td><td>DPIA, AI impact assessment, vendor due diligence</td></tr>
+            <tr><td>Status and review date</td><td>Live; review March 2027</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 744 110" style="min-width:620px" role="img" aria-label="From finding AI to managing it: governance effort is set by the risk tier."><rect x="20" y="20" width="120" height="70" rx="10" class="b-n"/><text x="80" y="43.3" font-size="13" text-anchor="middle" font-weight="600">Discover</text><text x="80" y="63.4" font-size="11" text-anchor="middle" class="mut">surveys, SaaS,</text><text x="80" y="77.7" font-size="11" text-anchor="middle" class="mut">expenses</text><rect x="166" y="20" width="120" height="70" rx="10" class="b-a"/><text x="226" y="43.3" font-size="13" text-anchor="middle" font-weight="600">Inventory</text><text x="226" y="63.4" font-size="11" text-anchor="middle" class="mut">owner, purpose,</text><text x="226" y="77.7" font-size="11" text-anchor="middle" class="mut">data</text><rect x="312" y="20" width="120" height="70" rx="10" class="b-a"/><text x="372" y="43.3" font-size="13" text-anchor="middle" font-weight="600">Tier</text><text x="372" y="63.4" font-size="11" text-anchor="middle" class="mut">prohibited / high</text><text x="372" y="77.7" font-size="11" text-anchor="middle" class="mut">/ medium / low</text><rect x="458" y="20" width="120" height="70" rx="10" class="b-w"/><text x="518" y="43.3" font-size="13" text-anchor="middle" font-weight="600">Assess</text><text x="518" y="63.4" font-size="11" text-anchor="middle" class="mut">AIIA, DPIA,</text><text x="518" y="77.7" font-size="11" text-anchor="middle" class="mut">FRIA, vendor</text><rect x="604" y="20" width="120" height="70" rx="10" class="b-g"/><text x="664" y="43.3" font-size="13" text-anchor="middle" font-weight="600">Treat &amp; monitor</text><text x="664" y="63.4" font-size="11" text-anchor="middle" class="mut">controls,</text><text x="664" y="77.7" font-size="11" text-anchor="middle" class="mut">review dates</text><line x1="143" y1="55" x2="157" y2="55" class="ln"/><polygon points="163,55 155,59.4 155,50.6" class="ah"/><line x1="289" y1="55" x2="303" y2="55" class="ln"/><polygon points="309,55 301,59.4 301,50.6" class="ah"/><line x1="435" y1="55" x2="449" y2="55" class="ln"/><polygon points="455,55 447,59.4 447,50.6" class="ah"/><line x1="581" y1="55" x2="595" y2="55" class="ln"/><polygon points="601,55 593,59.4 593,50.6" class="ah"/></svg></div>
+        <figcaption>From finding AI to managing it: governance effort is set by the risk tier.</figcaption>
+      </figure>
+
+      <h2>5.2 Risk tiering</h2>
+      <p>Classify each use case so governance effort is proportionate. A simple internal scheme:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tier</th><th>Typical criteria</th><th>Governance</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Prohibited</strong></td><td>Banned by law or contrary to policy</td><td>Not allowed</td></tr>
+            <tr><td><strong>High</strong></td><td>Significant decisions about people; safety; legally high-risk; sensitive data at scale; customer-facing autonomy</td><td>Full impact assessment, committee approval, testing, monitoring, periodic audit</td></tr>
+            <tr><td><strong>Medium</strong></td><td>Internal decision support; customer-facing content with human review; personal data</td><td>Standard assessment, owner sign-off, monitoring</td></tr>
+            <tr><td><strong>Low</strong></td><td>Productivity uses with no personal data or decisions about people</td><td>Approved-tool list, acceptable use policy</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5.3 Assessing risk</h2>
+      <p>For each system, assess risks across categories — for example the NIST trustworthiness characteristics or the GenAI Profile's twelve risks — rating <strong>likelihood</strong> and <strong>impact</strong>, then deciding treatment: <em>mitigate, transfer, avoid or accept</em>, within the organisation's risk appetite.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 610 236" style="min-width:560px" role="img" aria-label="Rate each risk by likelihood and impact, then choose a treatment — within the organisation&#x27;s risk appetite."><rect x="80" y="14" width="92" height="54" rx="6" class="b-w"/><rect x="176" y="14" width="92" height="54" rx="6" class="b-b"/><rect x="272" y="14" width="92" height="54" rx="6" class="b-b"/><text x="72" y="46" font-size="11.5" text-anchor="end" class="mut">High</text><rect x="80" y="72" width="92" height="54" rx="6" class="b-g"/><rect x="176" y="72" width="92" height="54" rx="6" class="b-w"/><rect x="272" y="72" width="92" height="54" rx="6" class="b-b"/><text x="72" y="104" font-size="11.5" text-anchor="end" class="mut">Medium</text><rect x="80" y="130" width="92" height="54" rx="6" class="b-g"/><rect x="176" y="130" width="92" height="54" rx="6" class="b-g"/><rect x="272" y="130" width="92" height="54" rx="6" class="b-w"/><text x="72" y="162" font-size="11.5" text-anchor="end" class="mut">Low</text><text x="126" y="204" font-size="11.5" text-anchor="middle" class="mut">Low</text><text x="222" y="204" font-size="11.5" text-anchor="middle" class="mut">Medium</text><text x="318" y="204" font-size="11.5" text-anchor="middle" class="mut">High</text><text x="222" y="226" font-size="12" text-anchor="middle" font-weight="600">Likelihood →</text><text x="18" y="100" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 18 100)">Impact →</text><rect x="390" y="14" width="200" height="40" rx="10" class="b-a"/><text x="490" y="29.625" font-size="12.5" text-anchor="middle" font-weight="600">Mitigate</text><text x="490" y="48.925" font-size="10.5" text-anchor="middle" class="mut">reduce likelihood or impact</text><rect x="390" y="60" width="200" height="40" rx="10" class="b-n"/><text x="490" y="75.625" font-size="12.5" text-anchor="middle" font-weight="600">Transfer</text><text x="490" y="94.925" font-size="10.5" text-anchor="middle" class="mut">insurance, contracts</text><rect x="390" y="106" width="200" height="40" rx="10" class="b-b"/><text x="490" y="121.625" font-size="12.5" text-anchor="middle" font-weight="600">Avoid</text><text x="490" y="140.925" font-size="10.5" text-anchor="middle" class="mut">don&#x27;t do it</text><rect x="390" y="152" width="200" height="40" rx="10" class="b-g"/><text x="490" y="167.625" font-size="12.5" text-anchor="middle" font-weight="600">Accept</text><text x="490" y="186.925" font-size="10.5" text-anchor="middle" class="mut">within risk appetite</text></svg></div>
+        <figcaption>Rate each risk by likelihood and impact, then choose a treatment — within the organisation's risk appetite.</figcaption>
+      </figure>
+
+      <h2>5.4 Impact assessments</h2>
+      <p>Several assessments may apply. Combine them where you can to avoid duplication:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Assessment</th><th>Focus</th><th>When</th></tr></thead>
+          <tbody>
+            <tr><td>AI impact assessment (AIIA)</td><td>Impacts on individuals, groups and society (ISO/IEC 42005)</td><td>Medium- and high-risk AI</td></tr>
+            <tr><td>Data Protection Impact Assessment (DPIA)</td><td>Risks to individuals from personal data processing</td><td>Required for high-risk processing under GDPR</td></tr>
+            <tr><td>Fundamental Rights Impact Assessment (FRIA)</td><td>Impacts on fundamental rights</td><td>Required for certain deployers of high-risk AI under the EU AI Act</td></tr>
+            <tr><td>Equality impact assessment</td><td>Effects on protected groups</td><td>Public sector (UK Public Sector Equality Duty) and good practice</td></tr>
+            <tr><td>Security risk assessment</td><td>Threats to the AI system and data</td><td>All AI systems (see <a href="../ai-security/index.html">AI Security &amp; Safety</a>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5.5 Third-party and vendor due diligence</h2>
+      <p>Most organisations buy far more AI than they build. Key questions for AI vendors:</p>
+      <ul class="checklist">
+        <li>What does the AI do, what model(s) does it use, and who provides them?</li>
+        <li>How is our data used, stored and retained? Is it used for training?</li>
+        <li>What testing has been done for accuracy, bias, robustness and security? Can we see results?</li>
+        <li>What documentation is available — model cards, transparency notes, instructions for use?</li>
+        <li>What certifications do you hold (ISO/IEC 42001, ISO 27001, SOC 2)?</li>
+        <li>How will you support our legal obligations (e.g. EU AI Act deployer duties, DPIAs)?</li>
+        <li>How are incidents notified? How are model changes communicated?</li>
+        <li>What contractual commitments — liability, IP indemnities, audit rights — will you give?</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>The inventory is the foundation — look in procurement, SaaS lists, expenses and surveys.</li><li>Tier risk to make governance proportionate.</li><li>Assess likelihood and impact; mitigate, transfer, avoid or accept.</li><li>Combine AIIA, DPIA, FRIA, equality and security assessments where possible.</li><li>Ask vendors about data use, testing, documentation, certifications, incidents and contracts.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">NIST</span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a> — AI RMF 1.0 and the Generative AI Profile (NIST AI 600-1)</li><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/" target="_blank" rel="noopener">Generative AI Security Scoping Matrix</a> — five scopes, from consumer apps to self-trained models</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-governance" target="_blank" rel="noopener">What is AI governance?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "What is the foundation of any AI governance programme?",
+"options": [
+"A press release",
+"An AI inventory",
+"A new logo",
+"A bigger model"
+],
+"answer": 1,
+"explain": "You can't govern what you can't see."
+},
+{
+"q": "Which source helps find AI you didn't know about?",
+"options": [
+"Expense claims for AI subscriptions and SaaS asset lists",
+"The company newsletter only",
+"Org charts",
+"Office floor plans"
+],
+"answer": 0,
+"explain": "Shadow AI often appears in expenses and SaaS lists."
+},
+{
+"q": "A tool that ranks job applicants for recruiters would typically be tiered as…",
+"options": [
+"Low",
+"Medium",
+"High",
+"Exempt"
+],
+"answer": 2,
+"explain": "Significant decisions about people; Annex III employment under the EU AI Act."
+},
+{
+"q": "Which assessment is required under the EU AI Act for certain deployers of high-risk AI?",
+"options": [
+"Fundamental Rights Impact Assessment (FRIA)",
+"Environmental Impact Statement",
+"Financial audit",
+"Penetration test only"
+],
+"answer": 0,
+"explain": "Article 27 requires FRIAs for certain deployers."
+},
+{
+"q": "Which is a key vendor due diligence question?",
+"options": [
+"What colour is your logo?",
+"Is our data used to train your models, and how is it retained?",
+"How many offices do you have?",
+"Who is your CEO's favourite author?"
+],
+"answer": 1,
+"explain": "Data use is a critical risk area."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Running an AI governance programme →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

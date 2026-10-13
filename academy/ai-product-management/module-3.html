@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Designing AI experiences — AI Product Management</title>
+<meta name="description" content="Mental models and expectations, designing for errors, levels of human in the loop, useful feedback, and choosing the right interface.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Designing AI experiences</h1>
+      <p class="lead">Users trust AI products that are honest about what they can do and easy to correct. This module covers the design patterns that make that possible.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Set accurate user expectations</li><li>Design for noticing and recovering from errors</li><li>Choose the right level of human oversight</li><li>Collect feedback that improves the product</li></ul>
+      </div>
+
+      <h2>3.1 Set the right expectations</h2>
+      <p>Users form a <strong>mental model</strong> of what your AI can do. If it's too optimistic, they over-trust and get burned; too pessimistic, and they ignore a useful feature. Be clear about what the feature does, what it doesn't, and how sure it is.</p>
+      <ul class="checklist">
+        <li>Explain capability in plain language at the point of use ("Drafts a reply from your order history — check before sending")</li>
+        <li>Show the sources behind answers, so users can verify</li>
+        <li>Signal uncertainty where it helps ("I couldn't find this in the policy")</li>
+        <li>Label AI-generated content where people would want to know — and where regulation requires it</li>
+      </ul>
+
+      <h2>3.2 Design for when it's wrong</h2>
+      <p>Every AI feature will make mistakes. Good design makes them <strong>cheap to notice and easy to fix</strong>:</p>
+      <ul class="checklist">
+        <li>Make outputs editable rather than final</li>
+        <li>Offer alternatives (several suggestions) when one guess is risky</li>
+        <li>Provide an easy route to a human or to the non-AI path</li>
+        <li>Confirm before irreversible actions — sending, paying, deleting</li>
+        <li>Fail gracefully: "I'm not sure" beats a confident wrong answer</li>
+      </ul>
+
+      <h2>3.3 Human in the loop</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Level</th><th>Pattern</th><th>Suits</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Suggest</strong></td><td>AI proposes; human decides</td><td>High stakes, early trust</td></tr>
+            <tr><td><strong>Act with approval</strong></td><td>AI prepares the action; human confirms</td><td>Actions with consequences</td></tr>
+            <tr><td><strong>Act and notify</strong></td><td>AI acts; human can review or undo</td><td>Reversible, lower-stakes actions</td></tr>
+            <tr><td><strong>Fully automated</strong></td><td>AI acts; humans monitor samples and metrics</td><td>High volume, low stakes, proven quality</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 230" style="min-width:560px" role="img" aria-label="Levels of human oversight. Move up only when evidence shows quality is good enough for the stakes."><rect x="20" y="130" width="148" height="54" rx="10" class="b-g"/><text x="94" y="152.625" font-size="12.5" text-anchor="middle" font-weight="600">Suggest</text><text x="94" y="171.925" font-size="10.5" text-anchor="middle" class="mut">human decides</text><rect x="178" y="96" width="148" height="54" rx="10" class="b-a"/><text x="252" y="118.625" font-size="12.5" text-anchor="middle" font-weight="600">Act with approval</text><text x="252" y="137.925" font-size="10.5" text-anchor="middle" class="mut">human confirms</text><rect x="336" y="62" width="148" height="54" rx="10" class="b-w"/><text x="410" y="84.625" font-size="12.5" text-anchor="middle" font-weight="600">Act and notify</text><text x="410" y="103.925" font-size="10.5" text-anchor="middle" class="mut">human can undo</text><rect x="494" y="28" width="148" height="54" rx="10" class="b-b"/><text x="568" y="50.625" font-size="12.5" text-anchor="middle" font-weight="600">Fully automated</text><text x="568" y="69.925" font-size="10.5" text-anchor="middle" class="mut">humans monitor</text><line x1="20" y1="200" x2="634" y2="200" class="ln"/><polygon points="640,200 632,204.4 632,195.6" class="ah"/><text x="330" y="220" font-size="11" text-anchor="middle" class="mut">more AI autonomy — needs higher stakes tolerance and proven quality →</text></svg></div>
+        <figcaption>Levels of human oversight. Move up only when evidence shows quality is good enough for the stakes.</figcaption>
+      </figure>
+
+      <h2>3.4 Feedback that improves the product</h2>
+      <p>Collect feedback that's useful, not just thumbs. Implicit signals — accepting, editing, regenerating or abandoning an output — are often more reliable than ratings. Ask for a reason when users reject an output. Close the loop: show users their feedback changed something.</p>
+
+      <h2>3.5 Conversational interfaces aren't always best</h2>
+      <p>A chat box is flexible but puts the burden on users to know what to ask. Often a button ("Summarise this thread"), inline suggestions or a pre-filled form works better. Choose the interface for the task, not the technology.</p>
+<div class="activity"><b>Activity: design the error experience</b><p>For your feature from Module 2, list the three most likely ways the AI will be wrong. For each, describe how the user will notice and how they'll recover.</p><details><summary>See a worked example</summary><p><b>Example — expense categorisation:</b> (1) Wrong category → shown as an editable suggestion with the top three options. (2) Can't read receipt → 'We couldn't read this — please choose a category' with the normal form. (3) Confidently wrong on a new merchant → finance sees a weekly sample of AI-categorised claims, and corrections feed back into the model.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Calibrate trust: explain capabilities and show sources.</li><li>Make errors cheap to notice and easy to fix.</li><li>Match human oversight to stakes and evidence.</li><li>Implicit signals are often better than ratings.</li><li>Chat isn't always the best interface.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-for-builders" target="_blank" rel="noopener">AI Fluency for Builders</a> — from customer problem to shipped product</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-agents" target="_blank" rel="noopener">What are AI agents?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Over-trust happens when users…",
+"options": [
+"Understand limits",
+"Believe the AI is more capable than it is",
+"Never use it",
+"Read the docs"
+],
+"answer": 1,
+"explain": "Calibrate expectations."
+},
+{
+"q": "Which design reduces the cost of AI errors?",
+"options": [
+"Final, uneditable outputs",
+"Editable outputs and confirmation before irreversible actions",
+"Hiding the AI",
+"No undo"
+],
+"answer": 1,
+"explain": "Make errors recoverable."
+},
+{
+"q": "'Act and notify' suits…",
+"options": [
+"Irreversible high-stakes actions",
+"Reversible, lower-stakes actions",
+"Medical decisions",
+"Payments"
+],
+"answer": 1,
+"explain": "User can undo."
+},
+{
+"q": "A strong implicit feedback signal is…",
+"options": [
+"Page colour",
+"Whether users accept, edit or regenerate outputs",
+"Login time",
+"Screen size"
+],
+"answer": 1,
+"explain": "Behaviour reveals quality."
+},
+{
+"q": "Why might a button beat a chat box?",
+"options": [
+"Buttons are newer",
+"Users don't have to know what to ask",
+"Chat is illegal",
+"Buttons use more tokens"
+],
+"answer": 1,
+"explain": "Fit the interface to the task."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Specifying quality with evals →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

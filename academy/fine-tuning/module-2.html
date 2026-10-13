@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Fine-tuning methods — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Full fine-tuning, LoRA and QLoRA, SFT, preference tuning (DPO), reinforcement fine-tuning, continued pre-training, distillation and choosing a base model.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 30 minutes</span>
+      <h1>Fine-tuning methods</h1>
+      <p class="lead">There are many ways to adapt a model. Knowing what each changes — and what it needs — helps you pick the cheapest one that works.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Contrast full fine-tuning and PEFT</li><li>Explain how LoRA and QLoRA work</li><li>Match SFT, DPO, RFT, continued pre-training and distillation to use cases</li><li>Choose a suitable base model</li></ul>
+      </div>
+
+      <h2>2.1 Full fine-tuning</h2>
+      <p>Update <em>all</em> of the model's parameters. Maximum flexibility, but for modern LLMs it needs a lot of GPU memory, produces a full-size copy of the model for every tune, and risks <strong>catastrophic forgetting</strong> — losing general abilities as the model specialises.</p>
+
+      <h2>2.2 Parameter-efficient fine-tuning (PEFT)</h2>
+      <p>PEFT methods freeze the original weights and train a small number of extra parameters. The most popular is <strong>LoRA</strong> (Low-Rank Adaptation): alongside a frozen weight matrix, it learns two small matrices whose product is a low-rank "update". Typically well under 1% of the parameters are trained.</p>
+      <ul>
+        <li><strong>Much less memory</strong> and faster training.</li>
+        <li><strong>Tiny adapter files</strong> (megabytes, not gigabytes) — you can keep many adapters for one base model and swap them.</li>
+        <li><strong>Less forgetting</strong>, because the base weights are untouched.</li>
+        <li><strong>QLoRA</strong> goes further by loading the frozen base model in 4-bit precision, making it possible to tune fairly large models on a single GPU.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 250" style="min-width:620px" role="img" aria-label="Full fine-tuning updates the whole weight matrix. LoRA keeps it frozen and learns two thin matrices (A × B) whose product is a low-rank update — a tiny fraction of the parameters."><text x="150" y="22" font-size="13.5" text-anchor="middle" font-weight="700">Full fine-tuning</text><text x="150" y="40" font-size="11" text-anchor="middle" class="mut">every weight updated</text><rect x="70" y="56" width="160" height="160" rx="6" class="b-w"/><rect x="78" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="78" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="97" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="116" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="135" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="154" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="173" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="192" y="197" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="64" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="83" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="102" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="121" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="140" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="159" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="178" width="14" height="14" rx="2" class="f-w"/><rect x="211" y="197" width="14" height="14" rx="2" class="f-w"/><text x="150" y="236" font-size="11" text-anchor="middle" class="t-b">huge memory · full copy per task</text><line x1="300" y1="20" x2="300" y2="245" class="ln-l"/><text x="500" y="22" font-size="13.5" text-anchor="middle" font-weight="700">LoRA</text><text x="500" y="40" font-size="11" text-anchor="middle" class="mut">base frozen, small adapters trained</text><rect x="330" y="56" width="160" height="160" rx="6" class="b-n"/><text x="410" y="140" font-size="22" text-anchor="middle" font-weight="700" class="mut">W</text><text x="410" y="160" font-size="11" text-anchor="middle" class="mut">frozen</text><text x="507" y="140" font-size="20" text-anchor="middle" font-weight="700">+</text><rect x="525" y="56" width="20" height="160" rx="4" class="b-a"/><text x="535" y="236" font-size="12" text-anchor="middle" font-weight="700" class="t-a">A</text><text x="560" y="140" font-size="16" text-anchor="middle" font-weight="700">×</text><rect x="575" y="56" width="110" height="20" rx="4" class="b-a"/><text x="630" y="92" font-size="12" text-anchor="middle" font-weight="700" class="t-a">B</text><text x="605" y="236" font-size="11" text-anchor="middle" class="t-g">&lt;1% of parameters</text></svg></div>
+        <figcaption>Full fine-tuning updates the whole weight matrix. LoRA keeps it frozen and learns two thin matrices (A × B) whose product is a low-rank update — a tiny fraction of the parameters.</figcaption>
+      </figure>
+
+      <h2>2.3 What you're optimising for: training objectives</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Training data</th><th>Good for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Supervised fine-tuning (SFT)</strong></td><td>Examples of inputs with ideal outputs</td><td>Formats, classification, extraction, style, instruction following</td></tr>
+            <tr><td><strong>Preference tuning</strong> — e.g. Direct Preference Optimization (DPO)</td><td>For each prompt, a preferred and a rejected response</td><td>Tone, helpfulness, what to emphasise in summaries</td></tr>
+            <tr><td><strong>Reinforcement fine-tuning (RFT)</strong></td><td>Tasks plus a grader that scores answers</td><td>Improving reasoning on tasks with checkable answers</td></tr>
+            <tr><td><strong>Continued pre-training</strong></td><td>Large amounts of unlabelled domain text</td><td>Specialist vocabulary (e.g. legal, clinical), before SFT</td></tr>
+            <tr><td><strong>Distillation</strong></td><td>Outputs from a larger "teacher" model</td><td>Teaching a small model to imitate a big one on a task (Module 6)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>These are the same ingredients model developers use in post-training (see <a href="../how-ai-works/module-5.html">How AI Works, Module 5</a>) — applied to your narrow task.</p>
+
+      <h2>2.4 Choosing a base model</h2>
+      <ul class="checklist">
+        <li>Start from an <strong>instruction-tuned</strong> model, not a raw base model, for most tasks</li>
+        <li>Prefer the <strong>smallest model</strong> that reaches your quality bar after tuning</li>
+        <li>Check the <strong>licence</strong> permits your commercial use and fine-tuning</li>
+        <li>Check <strong>language and domain</strong> coverage</li>
+        <li>Consider where it will be <strong>served</strong> and at what cost</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Full fine-tuning updates everything: costly and risks forgetting.</li><li>LoRA trains small adapter matrices while the base stays frozen; QLoRA adds 4-bit loading.</li><li>SFT learns from ideal outputs; DPO from preferred vs rejected; RFT from a grader.</li><li>Start from the smallest suitable instruction-tuned model with a permissive licence.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/fine-tuning" target="_blank" rel="noopener">What is fine-tuning?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/llm" target="_blank" rel="noopener">Machine Learning Crash Course: Intro to LLMs</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/foundation-models/" target="_blank" rel="noopener">What are foundation models?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "What does LoRA train?",
+"options": [
+"Every weight in the model",
+"Small low-rank adapter matrices while the base weights stay frozen",
+"Only the tokenizer",
+"Nothing"
+],
+"answer": 1,
+"explain": "A tiny fraction of parameters."
+},
+{
+"q": "Which method uses pairs of preferred and rejected responses?",
+"options": [
+"SFT",
+"DPO (preference tuning)",
+"Quantisation",
+"Pruning"
+],
+"answer": 1,
+"explain": "Direct Preference Optimization."
+},
+{
+"q": "What does QLoRA add to LoRA?",
+"options": [
+"Loading the frozen base model in 4-bit precision to save memory",
+"More epochs",
+"A larger vocabulary",
+"Human feedback"
+],
+"answer": 0,
+"explain": "Makes larger models tunable on modest GPUs."
+},
+{
+"q": "What is catastrophic forgetting?",
+"options": [
+"Losing the training data",
+"A model losing general abilities as it specialises",
+"Forgetting the API key",
+"A crash during training"
+],
+"answer": 1,
+"explain": "A risk especially with full fine-tuning."
+},
+{
+"q": "Which base model is usually the best starting point?",
+"options": [
+"The largest model available",
+"The smallest instruction-tuned model, with a suitable licence, that reaches your quality bar after tuning",
+"A raw base model always",
+"Any model with no licence"
+],
+"answer": 1,
+"explain": "Smaller is cheaper to tune and serve."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Preparing training data →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

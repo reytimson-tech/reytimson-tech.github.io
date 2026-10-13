@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Text classification — NLP Fundamentals</title>
+<meta name="description" content="TF-IDF, a vectoriser-plus-model pipeline, inspecting learned words, error analysis and sentiment.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 35 minutes</span>
+      <h1>Text classification</h1>
+      <p class="lead">Text classification routes, tags and monitors messages at scale. A TF-IDF pipeline is the fast, cheap baseline every text project should start with.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain TF-IDF weighting</li><li>Train and evaluate a text classifier in a pipeline</li><li>Inspect which words drive predictions</li><li>Analyse errors and spot label problems</li></ul>
+      </div>
+
+      <h2>2.1 TF-IDF: weighting words that matter</h2>
+      <p>Raw counts over-reward words that appear everywhere. <strong>TF-IDF</strong> (term frequency × inverse document frequency) raises the weight of words frequent in <em>this</em> message but rare across the collection, and lowers words that appear in almost every message.</p>
+<pre data-copy><code>from sklearn.feature_extraction.text import TfidfVectorizer
+
+tfidf = TfidfVectorizer(ngram_range=(1, 2), min_df=2, sublinear_tf=True)
+X_tfidf = tfidf.fit_transform(messages["text"])
+print(X_tfidf.shape)</code></pre>
+
+      <h2>2.2 A text classifier in a pipeline</h2>
+      <p>Put the vectoriser and model in one pipeline so the vocabulary is learned only from training data — the same leakage protection you met in <a href="../data-quality/module-5.html">Data Quality, Module 5</a>.</p>
+<pre data-copy><code><span class="label">Python · TF-IDF + logistic regression</span>from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+
+X_train, X_test, y_train, y_test = train_test_split(
+    messages["text"], messages["category"], test_size=0.25, random_state=0, stratify=messages["category"])
+
+clf = make_pipeline(TfidfVectorizer(ngram_range=(1, 2), min_df=2, sublinear_tf=True),
+                    LogisticRegression(max_iter=1000))
+clf.fit(X_train, y_train)
+print(classification_report(y_test, clf.predict(X_test), digits=3))</code></pre>
+      <p>Expect high but not perfect scores: the 8% of noisy labels cap how well any model can appear to do. Look at the errors before assuming the model is wrong — sometimes the label is.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 702 140" style="min-width:600px" role="img" aria-label="A text classifier is a vectoriser and a model chained together, so preprocessing is learned without peeking at test data."><rect x="20" y="30" width="140" height="56" rx="10" class="b-n"/><text x="90" y="62.375" font-size="12.5" text-anchor="middle" font-weight="600">Raw message</text><rect x="194" y="30" width="140" height="56" rx="10" class="b-a"/><text x="264" y="54.25" font-size="12.5" text-anchor="middle" font-weight="600">TF-IDF</text><text x="264" y="70.5" font-size="12.5" text-anchor="middle">vectoriser</text><rect x="368" y="30" width="140" height="56" rx="10" class="b-a"/><text x="438" y="54.25" font-size="12.5" text-anchor="middle" font-weight="600">Logistic</text><text x="438" y="70.5" font-size="12.5" text-anchor="middle">regression</text><rect x="542" y="30" width="140" height="56" rx="10" class="b-g"/><text x="612" y="54.25" font-size="12.5" text-anchor="middle" font-weight="600">Category +</text><text x="612" y="70.5" font-size="12.5" text-anchor="middle">probability</text><line x1="163" y1="58" x2="185" y2="58" class="ln"/><polygon points="191,58 183,62.4 183,53.6" class="ah"/><line x1="337" y1="58" x2="359" y2="58" class="ln"/><polygon points="365,58 357,62.4 357,53.6" class="ah"/><line x1="511" y1="58" x2="533" y2="58" class="ln"/><polygon points="539,58 531,62.4 531,53.6" class="ah"/><rect x="184" y="20" width="334" height="76" rx="10" class="b-none"/><text x="341" y="118" font-size="11.5" text-anchor="middle" class="mut">one pipeline — fitted on training data only</text></svg></div>
+        <figcaption>A text classifier is a vectoriser and a model chained together, so preprocessing is learned without peeking at test data.</figcaption>
+      </figure>
+
+      <h2>2.3 What did the model learn?</h2>
+<pre data-copy><code>vec = clf.named_steps["tfidfvectorizer"]
+lr = clf.named_steps["logisticregression"]
+words = vec.get_feature_names_out()
+for i, cat in enumerate(lr.classes_):
+    top = np.argsort(lr.coef_[i])[-6:][::-1]
+    print(f"{cat:9}", ", ".join(words[top]))</code></pre>
+      <p>Inspecting the strongest words is a fast sanity check. If a "billing" model relies on a customer's name or a date format, it has learned a shortcut that won't generalise.</p>
+
+      <h2>2.4 Reading the errors</h2>
+<pre data-copy><code>test = pd.DataFrame({"text": X_test, "actual": y_test, "predicted": clf.predict(X_test)})
+errors = test[test["actual"] != test["predicted"]]
+print(len(errors), "errors")
+print(errors.head(8).to_string())</code></pre>
+      <p>Sort errors into buckets: wrong label, genuinely ambiguous message, or model mistake. Only the last bucket is fixed by a better model; the first is fixed by better labels (see <a href="../data-quality/module-4.html">Data Quality, Module 4</a>).</p>
+
+      <h2>2.5 Sentiment analysis</h2>
+      <p>Sentiment is just classification with labels like positive, negative and neutral. The same pipeline works if you have labelled examples. Without them, an LLM can label a sample for you to check (Module 5) — or you can use an off-the-shelf sentiment model. Watch for sarcasm, negation and domain words ("sick" can be praise).</p>
+<div class="activity"><b>Exercise: predict new messages</b><p>Use <code>clf</code> to classify three messages you write yourself — one clearly about each category, plus one that mixes two. Print each prediction with its probability (<code>predict_proba</code>).</p><details><summary>Show a solution</summary><pre data-copy><code>new = ["My kettle stopped working", "Charged twice, please refund", "Courier lost my parcel",
+       "The lamp arrived late and I was billed twice"]
+for text, probs in zip(new, clf.predict_proba(new)):
+    best = probs.argmax()
+    print(f"{clf.classes_[best]:9} {probs[best]:.2f}  {text}")
+# The mixed message gets a lower top probability: a good candidate for human review.</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>TF-IDF up-weights distinctive words and down-weights ubiquitous ones.</li><li>Fit the vectoriser inside a pipeline to avoid leakage.</li><li>Check the strongest words for shortcuts.</li><li>Some 'errors' are wrong labels — read them.</li><li>Sentiment is classification with care for negation and sarcasm.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/classification" target="_blank" rel="noopener">ML Crash Course: Classification</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/natural-language-processing" target="_blank" rel="noopener">What is NLP?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "TF-IDF gives a high weight to a word that is…",
+"options": [
+"Common in every document",
+"Frequent in this document but rare across the collection",
+"Very short",
+"A stop word"
+],
+"answer": 1,
+"explain": "Term frequency × inverse document frequency."
+},
+{
+"q": "Why put the vectoriser inside a pipeline?",
+"options": [
+"It's faster",
+"So the vocabulary is learned from training data only",
+"To use less memory",
+"It's required"
+],
+"answer": 1,
+"explain": "Prevents test data leaking into features."
+},
+{
+"q": "Your 'billing' model's top word is a customer's surname. This suggests…",
+"options": [
+"An excellent model",
+"A shortcut that won't generalise",
+"Perfect labels",
+"Nothing"
+],
+"answer": 1,
+"explain": "Inspect features for spurious signals."
+},
+{
+"q": "Some test errors turn out to be mislabelled examples. The fix is…",
+"options": [
+"A bigger model",
+"Better labels",
+"More epochs",
+"Removing the test set"
+],
+"answer": 1,
+"explain": "Label quality caps measured performance."
+},
+{
+"q": "Which makes sentiment analysis hard?",
+"options": [
+"Short words",
+"Sarcasm and negation",
+"Punctuation only",
+"Numbers"
+],
+"answer": 1,
+"explain": "Meaning can invert with context."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Embeddings and semantic search →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

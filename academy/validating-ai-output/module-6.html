@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: When a human must decide — Critical Thinking: Checking and Validating AI Output</title>
+<meta name="description" content="Decisions that need people, legal expectations of human involvement, meaningful oversight, a validation checklist and team culture.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="validating-ai-output">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 25 minutes</span>
+      <h1>When a human must decide</h1>
+      <p class="lead">Validation tells you whether output is good. Judgement tells you whether a person, not a system, should make the call.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Identify decisions that require human judgement</li><li>Describe legal expectations of human involvement in the UK and EU</li><li>Distinguish meaningful oversight from rubber-stamping</li><li>Apply a proportionate validation checklist</li><li>Document checks and build a checking culture</li></ul>
+      </div>
+
+      <h2>6.1 Some decisions need a person</h2>
+      <p>Even perfectly validated AI output shouldn't make some decisions on its own. Human judgement is essential when a decision:</p>
+      <ul>
+        <li><strong>significantly affects someone's life</strong> — jobs, money, health, housing, education, legal status;</li>
+        <li>involves <strong>values, ethics or trade-offs</strong> between people's interests;</li>
+        <li>needs <strong>accountability</strong> — someone who can explain and answer for it;</li>
+        <li>is <strong>novel or ambiguous</strong>, outside what the AI was designed or tested for;</li>
+        <li>is <strong>hard to reverse</strong>.</li>
+      </ul>
+
+      <h2>6.2 The legal backdrop</h2>
+      <p>Law increasingly expects meaningful human involvement:</p>
+      <ul>
+        <li><strong>UK and EU data protection law</strong> gives people protections around significant decisions based solely on automated processing, including rights to human intervention and to contest decisions. The UK's Data (Use and Access) Act 2025 updated these rules, but safeguards remain for significant decisions.</li>
+        <li><strong>The EU AI Act</strong> requires high-risk AI systems to be designed for effective human oversight, and deployers to assign oversight to people with the necessary competence, training and authority.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 790 245" style="min-width:640px" role="img" aria-label="When must a person make the call? One &#x27;yes&#x27; is enough."><rect x="20" y="85" width="110" height="50" rx="10" class="b-n"/><text x="75" y="106.4" font-size="12" text-anchor="middle" font-weight="600">AI-assisted</text><text x="75" y="122" font-size="12" text-anchor="middle">decision</text><rect x="170" y="80" width="140" height="60" rx="10" class="b-w"/><text x="240" y="106.55" font-size="11.5" text-anchor="middle" font-weight="600">Significant effect</text><text x="240" y="121.5" font-size="11.5" text-anchor="middle">on someone&#x27;s life?</text><line x1="133" y1="110" x2="161" y2="110" class="ln"/><polygon points="167,110 159,114.4 159,105.6" class="ah"/><line x1="240" y1="142" x2="240" y2="176" class="ln"/><polygon points="240,182 235.6,174 244.4,174" class="ah"/><text x="248" y="166" font-size="11.5" text-anchor="start" class="mut">yes</text><rect x="330" y="80" width="140" height="60" rx="10" class="b-w"/><text x="400" y="106.55" font-size="11.5" text-anchor="middle" font-weight="600">Values or trade-offs</text><text x="400" y="121.5" font-size="11.5" text-anchor="middle">between people?</text><line x1="313" y1="110" x2="321" y2="110" class="ln"/><polygon points="327,110 319,114.4 319,105.6" class="ah"/><text x="320" y="103" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="400" y1="142" x2="400" y2="176" class="ln"/><polygon points="400,182 395.6,174 404.4,174" class="ah"/><text x="408" y="166" font-size="11.5" text-anchor="start" class="mut">yes</text><rect x="490" y="80" width="140" height="60" rx="10" class="b-w"/><text x="560" y="106.55" font-size="11.5" text-anchor="middle" font-weight="600">Novel, ambiguous or</text><text x="560" y="121.5" font-size="11.5" text-anchor="middle">hard to reverse?</text><line x1="473" y1="110" x2="481" y2="110" class="ln"/><polygon points="487,110 479,114.4 479,105.6" class="ah"/><text x="480" y="103" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="560" y1="142" x2="560" y2="176" class="ln"/><polygon points="560,182 555.6,174 564.4,174" class="ah"/><text x="568" y="166" font-size="11.5" text-anchor="start" class="mut">yes</text><rect x="170" y="186" width="460" height="44" rx="8" class="b-b"/><text x="400" y="213" font-size="12.5" text-anchor="middle" font-weight="600">A human decides — AI may inform, with meaningful oversight</text><rect x="660" y="80" width="110" height="60" rx="10" class="b-g"/><text x="715" y="106.4" font-size="12" text-anchor="middle" font-weight="600">AI can assist,</text><text x="715" y="122" font-size="12" text-anchor="middle">then check</text><line x1="633" y1="110" x2="651" y2="110" class="ln"/><polygon points="657,110 649,114.4 649,105.6" class="ah"/><text x="645" y="103" font-size="11.5" text-anchor="middle" class="mut">no</text></svg></div>
+        <figcaption>When must a person make the call? One 'yes' is enough.</figcaption>
+      </figure>
+
+      <h2>6.3 Meaningful, not rubber-stamp, oversight</h2>
+      <div class="compare">
+        <div class="weak"><h4>Rubber stamp</h4><p>A reviewer approves 200 AI decisions an hour, can't see the inputs, has no time to investigate and is never expected to disagree.</p></div>
+        <div class="strong"><h4>Meaningful oversight</h4><p>A trained reviewer sees the inputs and the AI's reasoning, has time and authority to override, is expected to challenge, and their overrides are tracked to improve the system.</p></div>
+      </div>
+      <p>A useful signal: <strong>if the human never disagrees with the AI, the oversight may not be real.</strong></p>
+
+      <h2>6.4 A validation checklist</h2>
+      <p>Bring the course together with this checklist. Scale it to the stakes.</p>
+      <ol class="checklist">
+        <li><strong>Purpose:</strong> Is this a task AI should be doing? Is a human decision needed? (Modules 1 and 6)</li>
+        <li><strong>Facts:</strong> Are claims, names, dates and figures verified at independent, authoritative sources? (Module 3)</li>
+        <li><strong>Sources:</strong> Do citations exist and say what's claimed? (Module 3)</li>
+        <li><strong>Context:</strong> Does it match the documents provided? Is it current? (Module 2)</li>
+        <li><strong>Logic and numbers:</strong> Does the reasoning hold? Have key numbers been recomputed? (Module 5)</li>
+        <li><strong>Fairness:</strong> Could this treat anyone unfairly? Did you run a counterfactual check where relevant? (Module 4)</li>
+        <li><strong>Completeness:</strong> What's missing — caveats, risks, other views?</li>
+        <li><strong>Accountability:</strong> Are you comfortable putting your name to it? Is AI use disclosed where it should be?</li>
+      </ol>
+
+      <h2>6.5 Document what you checked</h2>
+      <p>For important work, keep a brief record: what AI was used for, what you checked and how, and who signed it off. This protects you, helps colleagues trust the work, and supports your organisation's governance.</p>
+
+      <h2>6.6 Build a team culture of checking</h2>
+      <ul>
+        <li>Make it normal to ask "how was this checked?"</li>
+        <li>Share examples of caught errors — without blame</li>
+        <li>Set clear review levels for different types of AI-assisted work</li>
+        <li>Give reviewers time; checking is real work</li>
+      </ul>
+
+      <div class="activity">
+        <b>Capstone: validate a real output</b>
+        <p>Take an AI-generated piece of work from your job (or ask for one: e.g. "a one-page briefing on the UK's approach to AI regulation, with sources"). Apply the full checklist. Record each error you found, its type (Module 2), and how you found it.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Significant, value-laden, novel or irreversible decisions need people.</li><li>Data protection law and the EU AI Act expect meaningful human involvement in key cases.</li><li>If reviewers never disagree, oversight may not be real.</li><li>Use the checklist: purpose, facts, sources, context, logic, fairness, completeness, accountability.</li><li>Record what you checked; make checking normal.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/responsible-ai/" target="_blank" rel="noopener">Responsible AI</a> — AWS's eight dimensions of responsible AI</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">AI Fluency: Framework &amp; Foundations</a> — the 4D Framework: Delegation, Description, Discernment and Diligence</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Which decision most clearly needs a human decision-maker?",
+"options": [
+"Sorting emails into folders",
+"Rejecting someone's mortgage application",
+"Suggesting a meeting time",
+"Correcting spelling"
+],
+"answer": 1,
+"explain": "It significantly affects someone's life."
+},
+{
+"q": "Under the EU AI Act, who should oversee a high-risk AI system on the deployer's side?",
+"options": [
+"Anyone available",
+"People with the necessary competence, training and authority",
+"Only the provider",
+"No one"
+],
+"answer": 1,
+"explain": "Deployers must assign competent, empowered overseers."
+},
+{
+"q": "Which is a sign that oversight may be a rubber stamp?",
+"options": [
+"Reviewers sometimes override the AI",
+"Reviewers never disagree with the AI",
+"Reviewers have time to investigate",
+"Overrides are tracked"
+],
+"answer": 1,
+"explain": "Zero disagreement suggests no real scrutiny."
+},
+{
+"q": "Which item belongs on the validation checklist?",
+"options": [
+"Fonts",
+"Fairness: could this treat anyone unfairly?",
+"Word count only",
+"Colour scheme"
+],
+"answer": 1,
+"explain": "Fairness is one of the eight checks."
+},
+{
+"q": "Why document what you checked on important AI-assisted work?",
+"options": [
+"It's never useful",
+"It supports accountability, trust and governance",
+"To slow things down",
+"To hide AI use"
+],
+"answer": 1,
+"explain": "Records protect you and your organisation."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

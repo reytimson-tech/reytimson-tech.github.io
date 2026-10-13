@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Business cases and measuring value — AI Business Strategy</title>
+<meta name="description" content="What a business case must show, counting full costs, honest benefit estimates, metrics at three levels, and pilot design.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-business-strategy">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Business cases and measuring value</h1>
+      <p class="lead">AI investments compete with everything else. This module shows how to build a business case that survives scrutiny — and how to prove value.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Structure an AI business case</li><li>Identify the full costs of an AI initiative</li><li>Estimate benefits with ranges and assumptions</li><li>Define business, adoption and quality metrics</li><li>Design pilots with clear success criteria</li></ul>
+      </div>
+
+      <h2>3.1 What a business case must show</h2>
+      <p>A credible AI business case answers four questions: <strong>what will change</strong>, <strong>what it's worth</strong>, <strong>what it will cost</strong> (in full), and <strong>how we'll know</strong> — with the decision points for stopping or scaling.</p>
+
+      <h2>3.2 Count the full cost</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Cost</th><th>Often forgotten parts</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Technology</strong></td><td>Licences or API usage (per user or per token), hosting, vector databases, monitoring tools</td></tr>
+            <tr><td><strong>Data</strong></td><td>Cleaning, labelling, integration, access controls</td></tr>
+            <tr><td><strong>People</strong></td><td>Build team, subject-matter experts' time for testing and review, ongoing operations</td></tr>
+            <tr><td><strong>Change</strong></td><td>Training, process redesign, communication, temporary productivity dip</td></tr>
+            <tr><td><strong>Risk &amp; governance</strong></td><td>Assessments, legal review, security testing, audits</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Usage-based pricing scales with adoption: model costs carefully at the expected volume, not the pilot volume.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 260" style="min-width:560px" role="img" aria-label="The cost iceberg: the licence is the visible part. Most of an AI initiative&#x27;s cost sits below the waterline."><path d="M200 30 L440 30 L470 90 L170 90 Z" class="b-a"/><text x="320" y="66" font-size="12.5" text-anchor="middle" font-weight="700">Visible: licences / API usage</text><line x1="30" y1="96" x2="610" y2="96" class="ln-b dash"/><text x="606" y="112" font-size="10.5" text-anchor="end" class="mut">waterline</text><path d="M170 100 L470 100 L560 250 L80 250 Z" class="b-s"/><text x="320" y="128" font-size="12" text-anchor="middle">data cleaning, labelling, integration</text><text x="320" y="154" font-size="12" text-anchor="middle">experts&#x27; time for testing and review</text><text x="320" y="180" font-size="12" text-anchor="middle">training, process redesign, comms</text><text x="320" y="206" font-size="12" text-anchor="middle">security, legal and risk reviews</text><text x="320" y="232" font-size="12" text-anchor="middle">monitoring, support and operations</text></svg></div>
+        <figcaption>The cost iceberg: the licence is the visible part. Most of an AI initiative's cost sits below the waterline.</figcaption>
+      </figure>
+
+      <h2>3.3 Estimate benefits honestly</h2>
+      <p>Time saved is the most common benefit — and the most often overstated. Ask: what will people do with the time? Unless it's redeployed to valuable work, reduced overtime or hiring avoided, it isn't a financial saving. Use ranges (low / expected / high) rather than single numbers, and state your assumptions.</p>
+<div class="callout"><b>A simple worked example</b><p>200 support agents each spend 2 hours a day drafting replies. A pilot shows AI drafting cuts that by 30% with no drop in quality scores. That's 120 hours a day. If half of it absorbs growth that would otherwise need new hires, at a loaded cost of £30/hour over 230 working days, that's about <strong>£414,000 a year</strong> — before subtracting licence, integration and training costs.</p></div>
+
+      <h2>3.4 Measure what matters</h2>
+      <p>Define metrics at three levels before the pilot starts, with a baseline for each:</p>
+      <ul class="checklist">
+        <li><strong>Business outcomes</strong> — cost per case, revenue, customer satisfaction, error rates</li>
+        <li><strong>Process and adoption</strong> — active users, tasks completed with AI, time per task, override rates</li>
+        <li><strong>Model quality and safety</strong> — accuracy on test sets, groundedness, harmful-output rate, latency, cost per request</li>
+      </ul>
+      <p>Adoption without outcomes is a vanity metric; outcomes without quality metrics hide risk.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 200" style="min-width:560px" role="img" aria-label="Measure at three levels, each with a baseline. Adoption without outcomes is a vanity metric; outcomes without quality metrics hide risk."><rect x="20" y="14" width="200" height="52" rx="10" class="b-g"/><text x="120" y="44.375" font-size="12.5" text-anchor="middle" font-weight="600">Business outcomes</text><text x="236" y="45" font-size="12" text-anchor="start">cost per case · revenue · CSAT · error rate</text><rect x="20" y="76" width="200" height="52" rx="10" class="b-a"/><text x="120" y="106.375" font-size="12.5" text-anchor="middle" font-weight="600">Process &amp; adoption</text><text x="236" y="107" font-size="12" text-anchor="start">active users · time per task · override rate</text><rect x="20" y="138" width="200" height="52" rx="10" class="b-w"/><text x="120" y="168.375" font-size="12.5" text-anchor="middle" font-weight="600">Model quality &amp; safety</text><text x="236" y="169" font-size="12" text-anchor="start">accuracy · groundedness · harmful outputs · latency · cost</text></svg></div>
+        <figcaption>Measure at three levels, each with a baseline. Adoption without outcomes is a vanity metric; outcomes without quality metrics hide risk.</figcaption>
+      </figure>
+
+      <h2>3.5 Design pilots to learn</h2>
+      <ul class="checklist">
+        <li>A clear hypothesis and success threshold agreed up front ("≥ 25% faster with no fall in CSAT")</li>
+        <li>A comparison group or before/after baseline</li>
+        <li>Real users, real data, real volume — not a curated demo</li>
+        <li>A fixed time box (often 6–12 weeks) and a scale / iterate / stop decision at the end</li>
+      </ul>
+<div class="activity"><b>Activity: a one-page business case</b><p>For your top use case from Module 2, write a one-page business case: the change, benefit range with assumptions, full cost (all five categories), three metrics with baselines, and the pilot's success threshold and time box.</p><details><summary>See a worked example</summary><p><b>Example — support drafting:</b> Change: AI drafts replies, agents edit and send. Benefits: £250k–£500k/year (assumes 20–35% drafting time saved, half redeployed). Costs: licences £90k/yr, integration £60k one-off, training £20k, QA reviews 0.5 FTE. Metrics: handling time (baseline 7.5 min), CSAT (baseline 4.3/5), edit rate. Pilot: 30 agents, 8 weeks; scale if ≥ 25% faster and CSAT ≥ 4.2.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Show what changes, its worth, its full cost and how you'll know.</li><li>Count data, people, change and governance costs — not just licences.</li><li>Time saved is only money saved if it's redeployed.</li><li>Measure outcomes, adoption and model quality together.</li><li>Pilots need a hypothesis, baseline, time box and decision.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google Cloud</span><a href="https://cloud.google.com/transform/gen-ai-kpis-measuring-ai-success-deep-dive" target="_blank" rel="noopener">Measuring gen AI success: the KPIs you need</a> — November 2024</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/paths/transform-your-business-with-microsoft-ai/" target="_blank" rel="noopener">Transform your business with AI</a> — 4 modules for business leaders</li><li><span class="provider">AWS</span><a href="https://docs.aws.amazon.com/whitepapers/latest/aws-caf-for-ai/aws-caf-for-ai.html" target="_blank" rel="noopener">Cloud Adoption Framework for AI, ML and generative AI (CAF-AI)</a> — a whitepaper on moving beyond proofs of concept</li><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Which cost is most often forgotten?",
+"options": [
+"Licences",
+"Change management and subject-matter experts' time",
+"Laptops",
+"Electricity only"
+],
+"answer": 1,
+"explain": "People and change costs are easy to miss."
+},
+{
+"q": "When is 'time saved' a real financial benefit?",
+"options": [
+"Always",
+"When the time is redeployed, overtime falls or hiring is avoided",
+"Never",
+"Only for executives"
+],
+"answer": 1,
+"explain": "Ask what happens to the time."
+},
+{
+"q": "Why use ranges for benefits?",
+"options": [
+"To confuse readers",
+"To show uncertainty honestly with stated assumptions",
+"It's required by law",
+"No reason"
+],
+"answer": 1,
+"explain": "Low / expected / high."
+},
+{
+"q": "High adoption with no outcome change is…",
+"options": [
+"Success",
+"A vanity metric",
+"Impossible",
+"A risk metric"
+],
+"answer": 1,
+"explain": "Adoption must link to outcomes."
+},
+{
+"q": "A well-designed pilot has…",
+"options": [
+"No end date",
+"A hypothesis, baseline, success threshold and time box",
+"Only demo data",
+"No metrics"
+],
+"answer": 1,
+"explain": "Built to support a decision."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Build, buy and foundations →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

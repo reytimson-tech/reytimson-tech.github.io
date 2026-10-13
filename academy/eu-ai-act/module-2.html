@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: The risk-based approach — EU AI Act Fundamentals</title>
+<meta name="description" content="The four risk tiers of the EU AI Act — unacceptable, high, transparency and minimal risk — and where general-purpose AI fits.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 20 minutes</span>
+      <h1>The risk-based approach</h1>
+      <p class="lead">The AI Act doesn't regulate "AI" as a technology. It regulates <em>uses</em> of AI, according to the risk they pose. The same model can be minimal risk in one setting and high risk in another.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul>
+          <li>Name the four risk tiers and what each one requires</li>
+          <li>Explain why the intended purpose drives classification</li>
+          <li>Describe how general-purpose AI models are treated separately</li>
+          <li>Follow a simple classification process for a new AI use case</li>
+        </ul>
+      </div>
+
+      <h2>2.1 Four tiers of risk</h2>
+      <div class="pyramid" role="img" aria-label="Risk pyramid: unacceptable at the top, then high, transparency, and minimal risk at the base">
+        <div class="p1">Unacceptable risk<small>Banned</small></div>
+        <div class="p2">High risk<small>Strict requirements before and after market</small></div>
+        <div class="p3">Transparency risk<small>Disclosure duties</small></div>
+        <div class="p4">Minimal risk<small>No new obligations — voluntary codes encouraged</small></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tier</th><th>Where in the Act</th><th>What it means</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Unacceptable</strong></td><td>Article 5</td><td>Prohibited. Cannot be placed on the market, put into service or used in the EU.</td><td>Social scoring; manipulative AI that causes significant harm; emotion recognition at work.</td></tr>
+            <tr><td><strong>High</strong></td><td>Article 6, Annexes I &amp; III</td><td>Allowed, but providers must meet extensive requirements and complete a conformity assessment; deployers have duties too.</td><td>CV screening; credit scoring; AI in medical devices; exam proctoring.</td></tr>
+            <tr><td><strong>Transparency</strong> (often called "limited")</td><td>Article 50</td><td>People must be told they're dealing with AI or AI-generated content.</td><td>Chatbots; deepfakes; AI-generated images and audio.</td></tr>
+            <tr><td><strong>Minimal</strong></td><td>—</td><td>No specific obligations beyond AI literacy. Voluntary codes of conduct encouraged.</td><td>Spam filters; AI in video games; stock forecasting.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <b>Tiers can overlap</b>
+        <p>The tiers are not strictly exclusive. A high-risk system that also interacts directly with people — say, an AI interviewer used for recruitment — must meet the high-risk requirements <em>and</em> the Article 50 transparency duties.</p>
+      </div>
+
+      <p>Most AI systems in use today fall into the <strong>minimal-risk</strong> tier. The Act concentrates its heaviest requirements on a relatively small set of uses where the stakes for people's safety and rights are highest.</p>
+
+      <h2>2.2 Intended purpose drives classification</h2>
+      <p>Classification depends on the <strong>intended purpose</strong> — what the provider says the system is for, as set out in the instructions for use, marketing and technical documentation — and on how it's actually used.</p>
+
+      <div class="example">
+        <span class="eyebrow">Same technology, different risk</span>
+        <p>A facial-analysis model used to <strong>blur faces</strong> in holiday photos → minimal risk.</p>
+        <p>The same model used to <strong>verify identity</strong> for a phone unlock → typically outside the high-risk biometric category (1:1 verification is excluded).</p>
+        <p>The same model used for <strong>remote biometric identification</strong> of people in a crowd → high risk, and prohibited in real time for law enforcement in public spaces except in narrow cases.</p>
+        <p>The same model used to <strong>infer employees' emotions</strong> at work → prohibited.</p>
+      </div>
+
+      <h2>2.3 General-purpose AI: a separate track</h2>
+      <p>General-purpose AI (GPAI) <strong>models</strong> — such as large language models that can perform a wide range of tasks — sit outside the four tiers. They have their own chapter (Chapter V) with two levels:</p>
+      <ul>
+        <li><strong>All GPAI models:</strong> documentation, information for downstream providers, a copyright policy and a public summary of training content.</li>
+        <li><strong>GPAI models with systemic risk:</strong> extra duties, including model evaluation, adversarial testing, serious-incident reporting and cybersecurity.</li>
+      </ul>
+      <p>When a GPAI model is built into an AI <em>system</em> — a chatbot, for example — that system is then classified under the four tiers according to its use. We cover GPAI in detail in Module 5.</p>
+
+      <h2>2.4 A practical classification process</h2>
+      <p>When you assess any AI use case, work through these questions in order:</p>
+      <ol>
+        <li><strong>Is it an AI system at all?</strong> Does it infer outputs from inputs? (Module 1)</li>
+        <li><strong>Is it in scope?</strong> Check the territorial scope and exclusions — military, pure research, personal use.</li>
+        <li><strong>Is it prohibited?</strong> Check every Article 5 practice. If yes — stop. (Module 3)</li>
+        <li><strong>Is it high-risk?</strong> Is it a safety component of, or itself, a product under Annex I law that needs third-party conformity assessment? Is it used in an Annex III area — and if so, does the Article 6(3) filter apply? (Module 4)</li>
+        <li><strong>Does it trigger transparency duties?</strong> Does it interact with people, generate synthetic content, recognise emotions or create deepfakes? (Module 5)</li>
+        <li><strong>Otherwise</strong> it is minimal risk. Ensure AI literacy and consider voluntary codes.</li>
+        <li><strong>Identify your role</strong> — provider, deployer, importer or distributor — to know which obligations apply to you.</li>
+      </ol>
+
+      <div class="callout">
+        <b>Try it</b>
+        <p>Use the <a href="../../tools/risk-checker.html">EU AI Act risk checker</a> to walk through this process for a real or imagined use case.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul>
+        <li>Four tiers: unacceptable (banned), high (strict requirements), transparency (disclosure) and minimal (no new rules).</li>
+        <li>The <em>use</em> of AI, not the technology, determines the tier.</li>
+        <li>Tiers can overlap — a high-risk system can also carry transparency duties.</li>
+        <li>GPAI models follow a separate two-level regime.</li>
+      </ul>
+
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+        [
+          {"q":"What primarily determines an AI system's risk tier under the AI Act?","options":["The size of the model","The technique used (e.g. deep learning)","Its intended purpose and use","The provider's country of origin"],"answer":2,"explain":"The Act regulates uses of AI. Classification follows the intended purpose and context of use."},
+          {"q":"An email spam filter is most likely to fall into which tier?","options":["Unacceptable","High","Transparency","Minimal"],"answer":3,"explain":"Spam filters pose little risk to safety or fundamental rights and carry no specific obligations."},
+          {"q":"A company deploys an AI chatbot that interviews job candidates and scores them. Which obligations apply?","options":["Only transparency duties","Only high-risk requirements","Both high-risk requirements and transparency duties","None — chatbots are minimal risk"],"answer":2,"explain":"Recruitment is an Annex III high-risk area, and the chatbot interacts with people, so Article 50 also applies. Tiers can overlap."},
+          {"q":"How are general-purpose AI models treated?","options":["They are always high-risk","They have their own regime, with extra duties for models with systemic risk","They are exempt from the Act","They are prohibited"],"answer":1,"explain":"Chapter V sets obligations for all GPAI model providers, with additional obligations for models with systemic risk."},
+          {"q":"In the classification process, which check should come before assessing whether a system is high-risk?","options":["Whether it is prohibited under Article 5","Whether it uses a cloud provider","Whether it has a CE mark","Whether staff have been trained"],"answer":0,"explain":"Check for prohibited practices first — if a system is banned, there's no point classifying it further."}
+        ]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Prohibited practices →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Red teaming, evaluation and secure operations — AI Security &amp; Safety</title>
+<meta name="description" content="AI red teaming and Microsoft&#x27;s lessons, running an exercise, safety evaluation, frontier AI safety, secure operations and a checklist.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-security">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Red teaming, evaluation and secure operations</h1>
+      <p class="lead">Security isn't a one-off review. This module covers how to test AI systems adversarially, evaluate them continuously and run them securely.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain AI red teaming and key lessons from practice</li><li>Plan a red-team exercise</li><li>Build ongoing safety evaluations</li><li>Describe frontier AI safety frameworks and institutions</li><li>Apply secure operations and an AI security checklist</li></ul>
+      </div>
+
+      <h2>6.1 AI red teaming</h2>
+      <p><strong>Red teaming</strong> means deliberately attacking your own AI system to find weaknesses before others do — security vulnerabilities (injection, data leakage) and safety failures (harmful content, bias, dangerous capabilities). Microsoft's AI Red Team, drawing on its experience of red-teaming over 100 generative AI products, highlights lessons including:</p>
+      <ul>
+        <li>Understand what the system can do and where it's used — real-world impact matters more than clever attacks.</li>
+        <li>Simple techniques often work; you don't need sophisticated attacks to find serious problems.</li>
+        <li>Automation scales testing (Microsoft's open-source <strong>PyRIT</strong> tool, for example), but human judgement remains essential.</li>
+        <li>Responsible AI harms are pervasive and hard to measure; red teaming is not the same as benchmarking.</li>
+        <li>The work is never finished — systems and attacks keep changing.</li>
+      </ul>
+
+      <h2>6.2 Running a red-team exercise</h2>
+      <ol>
+        <li><strong>Scope:</strong> which system, which risks (security, safety, fairness), which threat actors?</li>
+        <li><strong>Team:</strong> security testers plus domain experts and diverse perspectives.</li>
+        <li><strong>Test:</strong> direct and indirect injection, jailbreaks, data extraction, harmful content, excessive agency, abuse of tools, cost exhaustion.</li>
+        <li><strong>Record:</strong> inputs, outputs, severity and reproducibility.</li>
+        <li><strong>Fix and re-test;</strong> turn findings into automated regression tests.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 390" style="min-width:560px" role="img" aria-label="Red teaming is a cycle, not a one-off: every finding becomes an automated test, re-run whenever the model or system changes."><polyline points="418,58.5929 426.985,61.5122 461.601,109.158" class="ln"/><polygon points="465.128,114.012 456.866,110.126 463.985,104.954" class="ah"/><polyline points="486.924,174.012 486.924,245.988 452.308,293.634" class="ln"/><polygon points="448.781,298.488 449.923,289.429 457.043,294.602" class="ah"/><polyline points="338.985,357.081 330,360 326.722,358.935" class="ln"/><polygon points="321.015,357.081 329.984,355.368 327.264,363.738" class="ah"/><polyline points="211.219,298.488 173.076,245.988 173.076,180.012" class="ln"/><polygon points="173.076,174.012 177.476,182.012 168.676,182.012" class="ah"/><polyline points="194.872,114.012 233.015,61.5122 236.294,60.447" class="ln"/><polygon points="242,58.5929 235.751,65.2497 233.032,56.8804" class="ah"/><rect x="245" y="3" width="170" height="54" rx="10" class="b-n"/><text x="330" y="25.45" font-size="13" text-anchor="middle" font-weight="600">Scope</text><text x="330" y="45.55" font-size="11" text-anchor="middle" class="mut">system, risks, attackers</text><rect x="401.924" y="117.012" width="170" height="54" rx="10" class="b-b"/><text x="486.924" y="139.462" font-size="13" text-anchor="middle" font-weight="600">Attack</text><text x="486.924" y="159.562" font-size="11" text-anchor="middle" class="mut">injection, jailbreaks, abuse</text><rect x="341.985" y="301.488" width="170" height="54" rx="10" class="b-w"/><text x="426.985" y="323.938" font-size="13" text-anchor="middle" font-weight="600">Record</text><text x="426.985" y="344.038" font-size="11" text-anchor="middle" class="mut">inputs, outputs, severity</text><rect x="148.015" y="301.488" width="170" height="54" rx="10" class="b-a"/><text x="233.015" y="323.938" font-size="13" text-anchor="middle" font-weight="600">Fix</text><text x="233.015" y="344.038" font-size="11" text-anchor="middle" class="mut">mitigate the root cause</text><rect x="88.0757" y="117.012" width="170" height="54" rx="10" class="b-g"/><text x="173.076" y="139.462" font-size="13" text-anchor="middle" font-weight="600">Regression test</text><text x="173.076" y="159.562" font-size="11" text-anchor="middle" class="mut">automate, re-run on changes</text><text x="330" y="200" font-size="13" text-anchor="middle" font-weight="700">Red teaming</text></svg></div>
+        <figcaption>Red teaming is a cycle, not a one-off: every finding becomes an automated test, re-run whenever the model or system changes.</figcaption>
+      </figure>
+
+      <h2>6.3 Safety evaluation</h2>
+      <p>Beyond attacks, systems need ongoing <strong>evaluation</strong>: accuracy and hallucination rates on realistic tasks, harmful-content rates, fairness across groups and robustness to unusual inputs. Build evaluation sets from real use (with privacy safeguards), automate them, and run them before every release and model change.</p>
+
+      <h2>6.4 Frontier AI safety</h2>
+      <p>For the most capable models, developers and governments focus on severe risks — such as misuse to help with chemical, biological, radiological or nuclear weapons, advanced cyber-offence, or models acting autonomously against their developers' intentions. Approaches include:</p>
+      <ul>
+        <li><strong>Developer safety frameworks</strong> — Anthropic's Responsible Scaling Policy, OpenAI's Preparedness Framework and Google DeepMind's Frontier Safety Framework — which set capability thresholds that trigger stronger safeguards.</li>
+        <li><strong>Pre-deployment testing</strong> by government bodies such as the UK AI Security Institute.</li>
+        <li><strong>System cards</strong> publishing evaluation results with each major model release.</li>
+        <li><strong>The International AI Safety Report</strong>, an independent scientific assessment of advanced AI's capabilities and risks, with its 2026 edition published in February.</li>
+        <li><strong>Regulation:</strong> the EU AI Act requires providers of general-purpose AI models with systemic risk to evaluate models, run adversarial testing, report serious incidents and ensure cybersecurity.</li>
+      </ul>
+
+      <h2>6.5 Secure operations</h2>
+      <p>The NCSC guidelines' fourth stage — secure operation and maintenance — applies directly:</p>
+      <ul class="checklist">
+        <li><strong>Logging and monitoring</strong> of prompts, outputs, tool calls and anomalies — within data protection rules</li>
+        <li><strong>Update management</strong> — track model and dependency versions; re-test after changes</li>
+        <li><strong>Incident response</strong> — AI-specific playbooks: disable tools, roll back models, purge poisoned data, rotate credentials, notify affected parties</li>
+        <li><strong>Information sharing</strong> — report vulnerabilities to vendors; learn from community resources such as MITRE ATLAS case studies</li>
+        <li><strong>Secure by default</strong> — safe configurations out of the box</li>
+      </ul>
+
+      <h2>6.6 AI for defenders</h2>
+      <p>AI also strengthens security teams: triaging alerts, summarising incidents, reviewing code for vulnerabilities, and analysing malware. Google's SAIF encourages using automation to keep pace with threats. Apply the same governance and validation to security AI as to any other.</p>
+
+      <h2>6.7 Putting it together: an AI security checklist</h2>
+      <ol class="checklist">
+        <li>Know your scope (consumer app → self-trained model) and your AI bill of materials</li>
+        <li>Threat-model every system: untrusted inputs × sensitive data × possible actions</li>
+        <li>Defend against prompt injection in depth; assume some attacks succeed</li>
+        <li>Treat model output as untrusted; enforce access control outside the model</li>
+        <li>Apply least privilege and human approval to agents and tools</li>
+        <li>Secure data and model supply chains; prefer safe model formats</li>
+        <li>Set rate limits, quotas and budget alerts</li>
+        <li>Red-team before launch and regularly after; automate regression tests</li>
+        <li>Monitor, log and have an AI incident playbook</li>
+        <li>Align with OWASP, NCSC/UK Code of Practice, SAIF and NIST</li>
+      </ol>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Red-team for security and safety; simple attacks often work; automate but keep humans.</li><li>Turn findings into regression tests.</li><li>Evaluate before every release and model change.</li><li>Frontier developers use capability thresholds; governments test models; the EU AI Act requires adversarial testing for systemic-risk GPAI.</li><li>Monitor, log, update and rehearse AI incident response.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/security/ai-red-team/" target="_blank" rel="noopener">Microsoft AI Red Team</a> — red-teaming guidance, PyRIT and threat modelling</li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/responsible-scaling-policy" target="_blank" rel="noopener">Responsible Scaling Policy</a> — how a frontier lab sets safety thresholds</li><li><span class="provider">International AI Safety Report</span><a href="https://internationalaisafetyreport.org/" target="_blank" rel="noopener">International AI Safety Report 2026</a></li><li><span class="provider">NCSC (UK)</span><a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development" target="_blank" rel="noopener">Guidelines for secure AI system development</a></li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "What is AI red teaming?",
+"options": [
+"Painting servers red",
+"Deliberately attacking your own AI system to find security and safety weaknesses",
+"A marketing campaign",
+"Benchmarking speed"
+],
+"answer": 1,
+"explain": "Adversarial testing before others find the weaknesses."
+},
+{
+"q": "One lesson from Microsoft's red-teaming of 100+ generative AI products is that…",
+"options": [
+"Only sophisticated attacks matter",
+"Simple techniques often work",
+"Red teaming can be fully automated",
+"It only needs doing once"
+],
+"answer": 1,
+"explain": "You don't need sophisticated attacks to find serious problems."
+},
+{
+"q": "What should happen to red-team findings after fixes?",
+"options": [
+"Delete them",
+"Turn them into automated regression tests",
+"Publish exploits publicly",
+"Ignore them"
+],
+"answer": 1,
+"explain": "Prevent regressions."
+},
+{
+"q": "Under the EU AI Act, providers of GPAI models with systemic risk must…",
+"options": [
+"Do nothing extra",
+"Evaluate models, conduct adversarial testing, report serious incidents and ensure cybersecurity",
+"Open-source their weights",
+"Stop training"
+],
+"answer": 1,
+"explain": "Chapter V obligations for systemic-risk models."
+},
+{
+"q": "Which belongs in an AI incident response playbook?",
+"options": [
+"Disable tools, roll back models, purge poisoned data and rotate credentials",
+"Change the logo",
+"Increase temperature",
+"Delete all logs"
+],
+"answer": 0,
+"explain": "AI-specific response actions."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

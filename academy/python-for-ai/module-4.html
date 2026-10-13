@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Working with data in pandas — Python for AI</title>
+<meta name="description" content="DataFrames, inspecting data, selecting and filtering, missing values, new columns, grouping, charts and saving results.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="python-for-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 35 minutes</span>
+      <h1>Working with data in pandas</h1>
+      <p class="lead">pandas turns Python into a powerful, repeatable spreadsheet. It's the tool you'll use to prepare data for — and analyse results from — AI.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Create and inspect DataFrames</li><li>Select columns and filter rows</li><li>Handle missing values and add columns</li><li>Group and summarise data</li><li>Plot and save results</li></ul>
+      </div>
+
+      <h2>4.1 What pandas is for</h2>
+      <p><strong>pandas</strong> is the standard Python library for working with tables of data — like a programmable spreadsheet. Its main object is the <strong>DataFrame</strong>: rows and named columns.</p>
+<pre data-copy><code>import pandas as pd
+
+df = pd.DataFrame({
+    "order_id": ["A1", "A2", "A3", "A4", "A5", "A6"],
+    "product":  ["board", "oil", "board", "utensils", "board", "oil"],
+    "region":   ["UK", "UK", "IE", "UK", "IE", None],
+    "qty":      [2, 1, 1, 3, None, 2],
+    "price":    [24.99, 6.50, 24.99, 12.00, 24.99, 6.50],
+})
+df.head()          # first rows
+df.info()          # columns, types and missing values
+df.describe()      # summary statistics for numeric columns</code></pre>
+      <p>To load real data: <code>pd.read_csv("file.csv")</code> or <code>pd.read_excel("file.xlsx")</code>.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 240" style="min-width:560px" role="img" aria-label="Anatomy of a DataFrame: an index labels the rows, named columns hold one kind of value each."><rect x="70" y="40" width="98" height="30" rx="3" class="b-a"/><text x="119" y="60" font-size="12" text-anchor="middle" font-weight="700">order_id</text><rect x="170" y="40" width="98" height="30" rx="3" class="b-a"/><text x="219" y="60" font-size="12" text-anchor="middle" font-weight="700">product</text><rect x="270" y="40" width="98" height="30" rx="3" class="b-a"/><text x="319" y="60" font-size="12" text-anchor="middle" font-weight="700">region</text><rect x="370" y="40" width="98" height="30" rx="3" class="b-a"/><text x="419" y="60" font-size="12" text-anchor="middle" font-weight="700">qty</text><rect x="470" y="40" width="98" height="30" rx="3" class="b-a"/><text x="519" y="60" font-size="12" text-anchor="middle" font-weight="700">price</text><rect x="20" y="70" width="46" height="28" rx="3" class="b-w"/><text x="43" y="89" font-size="12" text-anchor="middle" font-weight="600">0</text><rect x="70" y="70" width="98" height="28" rx="3" class="b-s"/><text x="119" y="89" font-size="12" text-anchor="middle">A1</text><rect x="170" y="70" width="98" height="28" rx="3" class="b-s"/><text x="219" y="89" font-size="12" text-anchor="middle">board</text><rect x="270" y="70" width="98" height="28" rx="3" class="b-s"/><text x="319" y="89" font-size="12" text-anchor="middle">UK</text><rect x="370" y="70" width="98" height="28" rx="3" class="b-s"/><text x="419" y="89" font-size="12" text-anchor="middle">2</text><rect x="470" y="70" width="98" height="28" rx="3" class="b-s"/><text x="519" y="89" font-size="12" text-anchor="middle">24.99</text><rect x="20" y="100" width="46" height="28" rx="3" class="b-w"/><text x="43" y="119" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="70" y="100" width="98" height="28" rx="3" class="b-s"/><text x="119" y="119" font-size="12" text-anchor="middle">A2</text><rect x="170" y="100" width="98" height="28" rx="3" class="b-s"/><text x="219" y="119" font-size="12" text-anchor="middle">oil</text><rect x="270" y="100" width="98" height="28" rx="3" class="b-s"/><text x="319" y="119" font-size="12" text-anchor="middle">UK</text><rect x="370" y="100" width="98" height="28" rx="3" class="b-s"/><text x="419" y="119" font-size="12" text-anchor="middle">1</text><rect x="470" y="100" width="98" height="28" rx="3" class="b-s"/><text x="519" y="119" font-size="12" text-anchor="middle">6.50</text><rect x="20" y="130" width="46" height="28" rx="3" class="b-w"/><text x="43" y="149" font-size="12" text-anchor="middle" font-weight="600">2</text><rect x="70" y="130" width="98" height="28" rx="3" class="b-s"/><text x="119" y="149" font-size="12" text-anchor="middle">A3</text><rect x="170" y="130" width="98" height="28" rx="3" class="b-s"/><text x="219" y="149" font-size="12" text-anchor="middle">board</text><rect x="270" y="130" width="98" height="28" rx="3" class="b-s"/><text x="319" y="149" font-size="12" text-anchor="middle">IE</text><rect x="370" y="130" width="98" height="28" rx="3" class="b-s"/><text x="419" y="149" font-size="12" text-anchor="middle">1</text><rect x="470" y="130" width="98" height="28" rx="3" class="b-s"/><text x="519" y="149" font-size="12" text-anchor="middle">24.99</text><rect x="20" y="160" width="46" height="28" rx="3" class="b-w"/><text x="43" y="179" font-size="12" text-anchor="middle" font-weight="600">3</text><rect x="70" y="160" width="98" height="28" rx="3" class="b-s"/><text x="119" y="179" font-size="12" text-anchor="middle">A4</text><rect x="170" y="160" width="98" height="28" rx="3" class="b-s"/><text x="219" y="179" font-size="12" text-anchor="middle">utensils</text><rect x="270" y="160" width="98" height="28" rx="3" class="b-s"/><text x="319" y="179" font-size="12" text-anchor="middle">UK</text><rect x="370" y="160" width="98" height="28" rx="3" class="b-s"/><text x="419" y="179" font-size="12" text-anchor="middle">3</text><rect x="470" y="160" width="98" height="28" rx="3" class="b-s"/><text x="519" y="179" font-size="12" text-anchor="middle">12.00</text><text x="320" y="26" font-size="11.5" text-anchor="middle" font-weight="600" class="t-a">columns (named)</text><text x="43" y="26" font-size="11.5" text-anchor="middle" font-weight="600" class="t-w">index</text><rect x="370" y="70" width="98" height="118" rx="3" class="b-none"/><text x="420" y="210" font-size="11" text-anchor="middle" class="mut">df[&quot;qty&quot;] — one column (a Series)</text></svg></div>
+        <figcaption>Anatomy of a DataFrame: an index labels the rows, named columns hold one kind of value each.</figcaption>
+      </figure>
+
+      <h2>4.2 Selecting and filtering</h2>
+<pre data-copy><code>df["product"]                         # one column
+df[["product", "price"]]              # several columns
+df[df["region"] == "UK"]              # rows where region is UK
+df[(df["product"] == "board") &amp; (df["price"] > 20)]   # combine with &amp; (and), | (or)</code></pre>
+
+      <h2>4.3 New columns and missing values</h2>
+<pre data-copy><code>df.isna().sum()                       # count missing values per column
+df["qty"] = df["qty"].fillna(1)       # a business decision: assume 1 if missing
+df["region"] = df["region"].fillna("Unknown")
+df["revenue"] = df["qty"] * df["price"]</code></pre>
+      <div class="callout warn">
+        <b>Missing values are decisions</b>
+        <p>Filling, dropping or leaving gaps changes your results. Write down what you chose and why — the <a href="../data-quality/index.html">Data Quality</a> course goes deeper.</p>
+      </div>
+
+      <h2>4.4 Grouping and summarising</h2>
+<pre data-copy><code>by_product = df.groupby("product")["revenue"].sum().sort_values(ascending=False)
+print(by_product)
+
+summary = df.groupby("region").agg(orders=("order_id", "count"),
+                                   revenue=("revenue", "sum"))
+print(summary)</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 650 230" style="min-width:560px" role="img" aria-label="df.groupby(&quot;product&quot;)[&quot;revenue&quot;].sum(): split rows into groups, apply a calculation to each, combine the results."><text x="110" y="20" font-size="13" text-anchor="middle" font-weight="700">Split</text><text x="330" y="20" font-size="13" text-anchor="middle" font-weight="700">Apply: sum()</text><text x="530" y="20" font-size="13" text-anchor="middle" font-weight="700">Combine</text><rect x="40" y="34" width="140" height="72" rx="4" class="b-a"/><text x="70" y="51" font-size="11.5" text-anchor="start">board</text><text x="170" y="51" font-size="11.5" text-anchor="end">49.98</text><text x="70" y="75" font-size="11.5" text-anchor="start">board</text><text x="170" y="75" font-size="11.5" text-anchor="end">24.99</text><text x="70" y="99" font-size="11.5" text-anchor="start">board</text><text x="170" y="99" font-size="11.5" text-anchor="end">24.99</text><line x1="184" y1="70" x2="264" y2="70" class="ln"/><polygon points="270,70 262,74.4 262,65.6" class="ah"/><rect x="275" y="55" width="110" height="30" rx="10" class="b-a"/><text x="330" y="74.2" font-size="12" text-anchor="middle" font-weight="600">99.96</text><line x1="389" y1="70" x2="464" y2="70" class="ln"/><polygon points="470,70 462,74.4 462,65.6" class="ah"/><rect x="40" y="120" width="140" height="48" rx="4" class="b-w"/><text x="70" y="137" font-size="11.5" text-anchor="start">oil</text><text x="170" y="137" font-size="11.5" text-anchor="end">6.50</text><text x="70" y="161" font-size="11.5" text-anchor="start">oil</text><text x="170" y="161" font-size="11.5" text-anchor="end">13.00</text><line x1="184" y1="144" x2="264" y2="144" class="ln"/><polygon points="270,144 262,148.4 262,139.6" class="ah"/><rect x="275" y="129" width="110" height="30" rx="10" class="b-w"/><text x="330" y="148.2" font-size="12" text-anchor="middle" font-weight="600">19.50</text><line x1="389" y1="144" x2="464.673" y2="104.762" class="ln"/><polygon points="470,102 464.923,109.589 460.873,101.776" class="ah"/><rect x="40" y="182" width="140" height="24" rx="4" class="b-g"/><text x="70" y="199" font-size="11.5" text-anchor="start">utensils</text><text x="170" y="199" font-size="11.5" text-anchor="end">36.00</text><line x1="184" y1="194" x2="264" y2="194" class="ln"/><polygon points="270,194 262,198.4 262,189.6" class="ah"/><rect x="275" y="179" width="110" height="30" rx="10" class="b-g"/><text x="330" y="198.2" font-size="12" text-anchor="middle" font-weight="600">36.00</text><line x1="389" y1="194" x2="465.179" y2="137.571" class="ln"/><polygon points="470,134 466.191,142.297 460.953,135.226" class="ah"/><rect x="475" y="56" width="150" height="28" rx="3" class="b-s"/><text x="490" y="75" font-size="12" text-anchor="start">board</text><text x="615" y="75" font-size="12" text-anchor="end" font-weight="600">99.96</text><rect x="475" y="88" width="150" height="28" rx="3" class="b-s"/><text x="490" y="107" font-size="12" text-anchor="start">oil</text><text x="615" y="107" font-size="12" text-anchor="end" font-weight="600">19.50</text><rect x="475" y="120" width="150" height="28" rx="3" class="b-s"/><text x="490" y="139" font-size="12" text-anchor="start">utensils</text><text x="615" y="139" font-size="12" text-anchor="end" font-weight="600">36.00</text></svg></div>
+        <figcaption>df.groupby("product")["revenue"].sum(): split rows into groups, apply a calculation to each, combine the results.</figcaption>
+      </figure>
+
+      <h2>4.5 A quick chart</h2>
+<pre data-copy><code>import matplotlib.pyplot as plt
+
+by_product.plot(kind="bar", title="Revenue by product")
+plt.ylabel("£")
+plt.tight_layout()
+plt.show()</code></pre>
+
+      <h2>4.6 Saving results</h2>
+<pre data-copy><code>df.to_csv("orders_clean.csv", index=False)
+summary.to_excel("summary.xlsx")      # may need: pip install openpyxl</code></pre>
+<div class="activity"><b>Exercise: best-selling region</b><p>Using the DataFrame above (after filling missing values and adding revenue), find the region with the highest total revenue and the average order quantity per product.</p><details><summary>Show a solution</summary><pre data-copy><code>best_region = df.groupby("region")["revenue"].sum().idxmax()
+avg_qty = df.groupby("product")["qty"].mean().round(2)
+print(best_region)
+print(avg_qty)</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>A DataFrame is a table with named columns.</li><li>head(), info() and describe() give a quick overview.</li><li>Filter with conditions combined by & and |.</li><li>Treat missing-value handling as a documented decision.</li><li>groupby + agg answers most summary questions.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/pandas" target="_blank" rel="noopener">Pandas</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/machine-learning/" target="_blank" rel="noopener">What is machine learning?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Which method shows column types and missing-value counts?",
+"options": [
+"df.head()",
+"df.info()",
+"df.plot()",
+"df.save()"
+],
+"answer": 1,
+"explain": "info() summarises structure."
+},
+{
+"q": "How do you select rows where region is 'UK'?",
+"options": [
+"df['UK']",
+"df[df['region'] == 'UK']",
+"df.region('UK')",
+"df.get('UK')"
+],
+"answer": 1,
+"explain": "Boolean filtering."
+},
+{
+"q": "What does df.isna().sum() give you?",
+"options": [
+"Total revenue",
+"The number of missing values in each column",
+"The number of rows",
+"Column names"
+],
+"answer": 1,
+"explain": "A quick missing-data check."
+},
+{
+"q": "Which code gives total revenue per product?",
+"options": [
+"df.sum('product')",
+"df.groupby('product')['revenue'].sum()",
+"df['product'].sum()",
+"df.revenue.product()"
+],
+"answer": 1,
+"explain": "Group, then aggregate."
+},
+{
+"q": "Why document how you filled missing quantities?",
+"options": [
+"It isn't necessary",
+"It's a decision that changes results, so others need to know",
+"pandas requires it",
+"To make files larger"
+],
+"answer": 1,
+"explain": "Data decisions affect conclusions."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Calling AI model APIs →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

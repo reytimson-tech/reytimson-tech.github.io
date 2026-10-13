@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — How AI and Large Language Models Work</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>How AI and Large Language Models Work: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "A bank wants to flag unusual payments, but fraud patterns keep changing. Rules or machine learning?",
+"options": [
+"Rules — they're always better",
+"Machine learning — it can learn complex, shifting patterns from data",
+"Neither",
+"A spreadsheet"
+],
+"answer": 1,
+"explain": "Complex, changing patterns suit ML (Module 1)."
+},
+{
+"q": "What happens during training?",
+"options": [
+"The model answers user questions",
+"Parameters are repeatedly adjusted to reduce prediction error on examples",
+"Data is deleted",
+"The model is given rules by a programmer"
+],
+"answer": 1,
+"explain": "Training reduces the loss (Module 1)."
+},
+{
+"q": "'A model only learns what its data and error score reward.' Which later topic does this help explain?",
+"options": [
+"Why GPUs are fast",
+"Why LLMs may guess rather than admit uncertainty",
+"Why tokens cost money",
+"Why transformers use attention"
+],
+"answer": 1,
+"explain": "Evaluation incentives contribute to hallucination (Modules 1 and 6)."
+},
+{
+"q": "A model learns to play a video game by being rewarded for higher scores. This is…",
+"options": [
+"Supervised learning",
+"Unsupervised learning",
+"Reinforcement learning",
+"Regression"
+],
+"answer": 2,
+"explain": "Learning from rewards (Module 2)."
+},
+{
+"q": "Why keep a test set locked away until the end?",
+"options": [
+"To save storage",
+"To get an honest measure of performance on unseen data",
+"Because it's illegal to use",
+"To speed up training"
+],
+"answer": 1,
+"explain": "Held-out data reveals true generalisation (Module 2)."
+},
+{
+"q": "A spam filter that auto-deletes messages should prioritise…",
+"options": [
+"Recall",
+"Precision — avoid deleting real emails",
+"Neither",
+"Temperature"
+],
+"answer": 1,
+"explain": "False positives are costly here (Module 2)."
+},
+{
+"q": "Why is a neural network called a 'black box'?",
+"options": [
+"It's painted black",
+"Its behaviour is spread across huge numbers of weights that are hard to interpret individually",
+"It has no inputs",
+"It is encrypted by law"
+],
+"answer": 1,
+"explain": "Interpretability is hard (Module 3)."
+},
+{
+"q": "An AI tool explains, step by step, how it reached its answer. How should you treat that explanation?",
+"options": [
+"As a guaranteed record of its internal process",
+"As another output to evaluate — useful but not guaranteed to reflect what happened inside",
+"As legally binding",
+"As irrelevant"
+],
+"answer": 1,
+"explain": "Interpretability research shows self-explanations can differ from internal processes (Module 3)."
+},
+{
+"q": "Which architecture is mainly used to generate images by gradually removing noise?",
+"options": [
+"Diffusion models",
+"Recurrent networks",
+"Decision trees",
+"Spreadsheets"
+],
+"answer": 0,
+"explain": "Diffusion models (Module 3)."
+},
+{
+"q": "Roughly how many tokens is a 750-word English document?",
+"options": [
+"About 100",
+"About 1,000",
+"About 10,000",
+"About 750,000"
+],
+"answer": 1,
+"explain": "A token averages about three-quarters of a word (Module 4)."
+},
+{
+"q": "Semantic search that finds documents by meaning rather than exact keywords compares…",
+"options": [
+"File sizes",
+"Embeddings",
+"Temperatures",
+"Passwords"
+],
+"answer": 1,
+"explain": "Embeddings capture meaning (Module 4)."
+},
+{
+"q": "You ask the same question twice and get different answers. The most likely reason is…",
+"options": [
+"The model was retrained in between",
+"Sampling — the model picks among likely next tokens with some randomness",
+"Your internet connection",
+"The model is broken"
+],
+"answer": 1,
+"explain": "Sampling and temperature (Module 4)."
+},
+{
+"q": "A chatbot 'forgets' details from very early in a long conversation. Why?",
+"options": [
+"It deliberately ignores you",
+"Earlier content may fall outside or get lost in the context window",
+"It has been hacked",
+"Its temperature is zero"
+],
+"answer": 1,
+"explain": "The context window is finite (Module 4)."
+},
+{
+"q": "What was the 2017 paper that introduced the transformer?",
+"options": [
+"'Deep Blue'",
+"'Attention Is All You Need'",
+"'ImageNet'",
+"'The Imitation Game'"
+],
+"answer": 1,
+"explain": "Published by Google researchers (Module 5)."
+},
+{
+"q": "Which stage turns a base model into an instruction-following assistant?",
+"options": [
+"Pre-training",
+"Post-training, such as instruction tuning and RLHF",
+"Tokenisation",
+"Inference"
+],
+"answer": 1,
+"explain": "Post-training (Module 5)."
+},
+{
+"q": "Why might training on human approval contribute to sycophancy?",
+"options": [
+"Humans tend to rate agreeable, flattering answers highly",
+"Humans never give feedback",
+"It removes all bias",
+"It makes models refuse everything"
+],
+"answer": 0,
+"explain": "Optimising for approval can reward telling people what they want to hear (Modules 5 and 6)."
+},
+{
+"q": "When are reasoning models most worth their extra cost and time?",
+"options": [
+"Simple greetings",
+"Complex, multi-step problems such as maths, coding and analysis",
+"Spell-checking one word",
+"Never"
+],
+"answer": 1,
+"explain": "They spend more computation thinking (Module 5)."
+},
+{
+"q": "An AI tool cites a real-looking journal article that doesn't exist. This is…",
+"options": [
+"A hallucination",
+"Overfitting",
+"Tokenisation",
+"Underfitting"
+],
+"answer": 0,
+"explain": "Fabricated references are a classic hallucination (Module 6)."
+},
+{
+"q": "Which mitigation best addresses the knowledge cut-off?",
+"options": [
+"Lower temperature",
+"Search or retrieval tools that fetch current information",
+"Longer prompts",
+"More parameters"
+],
+"answer": 1,
+"explain": "Tools let a frozen model look things up (Module 6)."
+},
+{
+"q": "Which statement best summarises an LLM?",
+"options": [
+"A database of verified facts",
+"A pattern-completion engine, shaped to be helpful, that produces plausible text — not guaranteed truth",
+"A human-like mind",
+"A search engine"
+],
+"answer": 1,
+"explain": "The core mental model of this course (Module 6)."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

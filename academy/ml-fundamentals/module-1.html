@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: The machine learning workflow — Machine Learning Fundamentals</title>
+<meta name="description" content="Framing problems, classification vs regression, the end-to-end workflow, scikit-learn&#x27;s fit/predict pattern, the practice dataset and a first model against a baseline.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 30 minutes</span>
+      <h1>The machine learning workflow</h1>
+      <p class="lead">Good machine learning starts with a good question. This module frames problems properly and gets your first model running in minutes.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Frame a problem with a decision, target, available data and success measure</li><li>Distinguish classification from regression</li><li>Outline the end-to-end ML workflow</li><li>Use scikit-learn's create–fit–predict pattern</li><li>Compare a model against a baseline</li></ul>
+      </div>
+
+      <div class="callout">
+        <b>Before you start</b>
+        <p>This course uses Python, pandas and <a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">scikit-learn</a>, all pre-installed in <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a>. If you're new to them, take <a href="../python-for-ai/index.html">Python for AI</a> and <a href="../data-quality/index.html">Data Quality &amp; Preparation</a> first. The non-mathematical background is in <a href="../how-ai-works/index.html">How AI and LLMs Work</a>.</p>
+      </div>
+
+      <h2>1.1 Frame the problem first</h2>
+      <p>Most failed ML projects fail at the start: the wrong question, the wrong target, or no clear way to measure success. Before writing code, answer:</p>
+      <ul class="checklist">
+        <li><strong>What decision will the model support?</strong> e.g. "which customers should the retention team call this week?"</li>
+        <li><strong>What exactly will it predict?</strong> A category (classification) or a number (regression)?</li>
+        <li><strong>What data will be available at prediction time?</strong> (No peeking into the future.)</li>
+        <li><strong>How will success be measured</strong> — technically and in business terms?</li>
+        <li><strong>What's the simplest baseline?</strong> A rule of thumb or "always predict the average".</li>
+      </ul>
+
+      <h2>1.2 Classification or regression?</h2>
+      <div class="compare">
+        <div><h4>Classification — predict a category</h4><p>Will this customer churn (yes/no)? Is this transaction fraudulent? Which product category is this?</p></div>
+        <div><h4>Regression — predict a number</h4><p>What will this customer spend next year? How many units will we sell? How long will delivery take?</p></div>
+      </div>
+
+      <h2>1.3 The machine learning workflow</h2>
+      <ol>
+        <li>Frame the problem and success measure.</li>
+        <li>Get and prepare data (cleaning, features).</li>
+        <li>Split into training and test sets.</li>
+        <li>Build a baseline.</li>
+        <li>Train models and compare them with cross-validation.</li>
+        <li>Evaluate the chosen model once on the test set.</li>
+        <li>Interpret, check fairness, document.</li>
+        <li>Deploy, monitor and retrain when needed.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 682 205" style="min-width:600px" role="img" aria-label="The end-to-end machine learning workflow. Most of the effort sits outside the &#x27;train&#x27; box."><rect x="30" y="20" width="140" height="50" rx="10" class="b-n"/><text x="100" y="41.25" font-size="12.5" text-anchor="middle" font-weight="600">Frame the</text><text x="100" y="57.5" font-size="12.5" text-anchor="middle">problem</text><rect x="194" y="20" width="140" height="50" rx="10" class="b-a"/><text x="264" y="41.25" font-size="12.5" text-anchor="middle" font-weight="600">Prepare</text><text x="264" y="57.5" font-size="12.5" text-anchor="middle">data</text><rect x="358" y="20" width="140" height="50" rx="10" class="b-a"/><text x="428" y="41.25" font-size="12.5" text-anchor="middle" font-weight="600">Split</text><text x="428" y="57.5" font-size="12.5" text-anchor="middle">train / test</text><rect x="522" y="20" width="140" height="50" rx="10" class="b-w"/><text x="592" y="41.25" font-size="12.5" text-anchor="middle" font-weight="600">Build a</text><text x="592" y="57.5" font-size="12.5" text-anchor="middle">baseline</text><rect x="522" y="110" width="140" height="50" rx="10" class="b-a"/><text x="592" y="131.25" font-size="12.5" text-anchor="middle" font-weight="600">Train &amp;</text><text x="592" y="147.5" font-size="12.5" text-anchor="middle">cross-validate</text><rect x="358" y="110" width="140" height="50" rx="10" class="b-w"/><text x="428" y="139.375" font-size="12.5" text-anchor="middle" font-weight="600">Test once</text><rect x="194" y="110" width="140" height="50" rx="10" class="b-g"/><text x="264" y="131.25" font-size="12.5" text-anchor="middle" font-weight="600">Interpret &amp;</text><text x="264" y="147.5" font-size="12.5" text-anchor="middle">document</text><rect x="30" y="110" width="140" height="50" rx="10" class="b-g"/><text x="100" y="131.25" font-size="12.5" text-anchor="middle" font-weight="600">Deploy &amp;</text><text x="100" y="147.5" font-size="12.5" text-anchor="middle">monitor</text><line x1="173" y1="45" x2="185" y2="45" class="ln"/><polygon points="191,45 183,49.4 183,40.6" class="ah"/><line x1="519" y1="135" x2="507" y2="135" class="ln"/><polygon points="501,135 509,130.6 509,139.4" class="ah"/><line x1="337" y1="45" x2="349" y2="45" class="ln"/><polygon points="355,45 347,49.4 347,40.6" class="ah"/><line x1="355" y1="135" x2="343" y2="135" class="ln"/><polygon points="337,135 345,130.6 345,139.4" class="ah"/><line x1="501" y1="45" x2="513" y2="45" class="ln"/><polygon points="519,45 511,49.4 511,40.6" class="ah"/><line x1="191" y1="135" x2="179" y2="135" class="ln"/><polygon points="173,135 181,130.6 181,139.4" class="ah"/><line x1="592" y1="73" x2="592" y2="101" class="ln"/><polygon points="592,107 587.6,99 596.4,99" class="ah"/><polyline points="30,135 14,135 14,45 21,45" class="ln dash"/><polygon points="27,45 19,49.4 19,40.6" class="ah"/><text x="352" y="192" font-size="11.5" text-anchor="middle" class="mut">Monitoring feeds back: new data, new questions, retraining</text></svg></div>
+        <figcaption>The end-to-end machine learning workflow. Most of the effort sits outside the 'train' box.</figcaption>
+      </figure>
+
+      <h2>1.4 scikit-learn's simple pattern</h2>
+      <p>Every scikit-learn model follows the same three steps — which makes it easy to try many models:</p>
+<pre data-copy><code>model = SomeModel(settings)     # 1. create
+model.fit(X_train, y_train)     # 2. learn from training data
+predictions = model.predict(X_test)   # 3. predict on new data</code></pre>
+      <p><code>X</code> holds the <strong>features</strong> (inputs, one row per example); <code>y</code> holds the <strong>target</strong> (what you want to predict).</p>
+
+      <h2>1.5 The practice dataset</h2>
+      <p>You'll use a synthetic customer dataset with a hidden pattern built in, so you can see whether models find it. Run this in a notebook:</p>
+<pre data-copy><code><span class="label">Python · practice data: synthetic customers (run this first)</span>import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(42)
+n = 2000
+customers = pd.DataFrame({
+    "tenure_months":   rng.integers(1, 60, n),
+    "monthly_spend":   rng.normal(40, 15, n).clip(5, 120).round(2),
+    "support_tickets": rng.poisson(1.2, n),
+    "on_promo":        rng.integers(0, 2, n),
+    "region":          rng.choice(["UK", "IE"], n, p=[0.75, 0.25]),
+})
+# Hidden "true" pattern: short tenure and many tickets raise churn risk
+logit = (1.2 - 0.06 * customers["tenure_months"] + 0.55 * customers["support_tickets"]
+         - 0.02 * customers["monthly_spend"] + 0.4 * customers["on_promo"])
+customers["churned"] = (rng.random(n) &lt; 1 / (1 + np.exp(-logit))).astype(int)
+# Annual value we might want to predict (regression)
+customers["annual_value"] = (customers["monthly_spend"] * 12 * (1 - 0.3 * customers["churned"])
+                             + rng.normal(0, 40, n)).round(2)
+print(customers.head())
+print("Churn rate:", customers["churned"].mean().round(3))</code></pre>
+
+      <h2>1.6 Your first model in ten lines</h2>
+<pre data-copy><code><span class="label">Python · first classifier vs a baseline</span>from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.dummy import DummyClassifier
+
+features = ["tenure_months", "monthly_spend", "support_tickets", "on_promo"]
+X, y = customers[features], customers["churned"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0, stratify=y)
+
+baseline = DummyClassifier(strategy="most_frequent").fit(X_train, y_train)
+model = LogisticRegression(max_iter=1000).fit(X_train, y_train)
+print("Baseline accuracy:", round(baseline.score(X_test, y_test), 3))
+print("Model accuracy:   ", round(model.score(X_test, y_test), 3))</code></pre>
+      <p>Always compare with a baseline. A model that can't beat "always predict the most common answer" isn't learning anything useful.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Start with the decision the model supports and how success is measured.</li><li>Classification predicts categories; regression predicts numbers.</li><li>Split, baseline, train, compare, test once, interpret, deploy, monitor.</li><li>Every scikit-learn model: create, fit, predict.</li><li>Always beat a baseline.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" rel="noopener">Intro to Machine Learning</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Predicting next year's spend for each customer is…",
+"options": [
+"Classification",
+"Regression",
+"Clustering",
+"Dimensionality reduction"
+],
+"answer": 1,
+"explain": "The target is a number."
+},
+{
+"q": "Why compare a model with a DummyClassifier?",
+"options": [
+"It's more accurate",
+"To check the model beats a trivial baseline such as always predicting the most common class",
+"It's required by scikit-learn",
+"To speed up training"
+],
+"answer": 1,
+"explain": "No baseline, no evidence of learning."
+},
+{
+"q": "In scikit-learn, what does model.fit(X_train, y_train) do?",
+"options": [
+"Makes predictions",
+"Learns from the training data",
+"Deletes data",
+"Plots a chart"
+],
+"answer": 1,
+"explain": "fit = train."
+},
+{
+"q": "Which question should you answer before modelling?",
+"options": [
+"Which GPU to buy",
+"What data will be available at prediction time",
+"Which colour scheme to use",
+"None"
+],
+"answer": 1,
+"explain": "Avoid using information from the future."
+},
+{
+"q": "What is X in scikit-learn code?",
+"options": [
+"The target",
+"The features (inputs)",
+"The model",
+"The accuracy"
+],
+"answer": 1,
+"explain": "y is the target."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Regression: predicting numbers →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

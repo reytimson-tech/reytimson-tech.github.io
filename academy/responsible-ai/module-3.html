@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Fairness and bias — Responsible AI Principles &amp; Ethics</title>
+<meta name="description" content="Six sources of bias, proxies, competing fairness definitions, measuring and mitigating bias, and fairness in generative AI.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="responsible-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 35 minutes</span>
+      <h1>Fairness and bias</h1>
+      <p class="lead">Fairness is the most discussed responsible AI principle — and the hardest. This module shows why 'fair' has several meanings and how teams make principled choices.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Identify six sources of bias</li><li>Explain why removing protected attributes isn't enough</li><li>Compare demographic parity, equalised odds and calibration</li><li>Explain why fairness definitions can conflict</li><li>Describe how to measure and mitigate bias</li></ul>
+      </div>
+
+      <h2>3.1 Where bias comes from</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Source</th><th>What happens</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Historical bias</strong></td><td>Data accurately reflects an unfair world</td><td>Past promotions favoured one group; a model learns to do the same</td></tr>
+            <tr><td><strong>Representation bias</strong></td><td>Some groups are under-represented in training data</td><td>Skin-condition images mostly of lighter skin</td></tr>
+            <tr><td><strong>Measurement bias</strong></td><td>The thing measured is a poor proxy for what matters</td><td>Using healthcare spending as a proxy for health need, when some groups historically received less care</td></tr>
+            <tr><td><strong>Aggregation bias</strong></td><td>One model for groups that differ in important ways</td><td>A single clinical threshold that works poorly for some populations</td></tr>
+            <tr><td><strong>Evaluation bias</strong></td><td>Test data doesn't reflect real users</td><td>Speech recognition benchmarked mainly on one accent</td></tr>
+            <tr><td><strong>Deployment bias</strong></td><td>A system is used in a context it wasn't designed for</td><td>A tool built for one country used in another</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 760 175" style="min-width:560px" role="img" aria-label="Where bias enters the AI lifecycle. Each stage has its own failure mode — so each needs its own check."><rect x="20" y="30" width="120" height="44" rx="10" class="b-n"/><text x="80" y="56.375" font-size="12.5" text-anchor="middle" font-weight="600">World</text><rect x="170" y="30" width="120" height="44" rx="10" class="b-a"/><text x="230" y="56.375" font-size="12.5" text-anchor="middle" font-weight="600">Data</text><rect x="320" y="30" width="120" height="44" rx="10" class="b-a"/><text x="380" y="56.375" font-size="12.5" text-anchor="middle" font-weight="600">Model</text><rect x="470" y="30" width="120" height="44" rx="10" class="b-a"/><text x="530" y="56.375" font-size="12.5" text-anchor="middle" font-weight="600">Testing</text><rect x="620" y="30" width="120" height="44" rx="10" class="b-w"/><text x="680" y="56.375" font-size="12.5" text-anchor="middle" font-weight="600">Deployment</text><line x1="143" y1="52" x2="161" y2="52" class="ln"/><polygon points="167,52 159,56.4 159,47.6" class="ah"/><line x1="293" y1="52" x2="311" y2="52" class="ln"/><polygon points="317,52 309,56.4 309,47.6" class="ah"/><line x1="443" y1="52" x2="461" y2="52" class="ln"/><polygon points="467,52 459,56.4 459,47.6" class="ah"/><line x1="593" y1="52" x2="611" y2="52" class="ln"/><polygon points="617,52 609,56.4 609,47.6" class="ah"/><line x1="80" y1="124" x2="80" y2="86" class="ln"/><polygon points="80,80 84.4,88 75.6,88" class="ah"/><text x="80" y="149.85" font-size="11" text-anchor="middle" class="t-b">historical bias</text><line x1="230" y1="124" x2="230" y2="86" class="ln"/><polygon points="230,80 234.4,88 225.6,88" class="ah"/><text x="230" y="142.7" font-size="11" text-anchor="middle" class="t-b">representation,</text><text x="230" y="157" font-size="11" text-anchor="middle" class="t-b">measurement</text><line x1="380" y1="124" x2="380" y2="86" class="ln"/><polygon points="380,80 384.4,88 375.6,88" class="ah"/><text x="380" y="149.85" font-size="11" text-anchor="middle" class="t-b">aggregation</text><line x1="530" y1="124" x2="530" y2="86" class="ln"/><polygon points="530,80 534.4,88 525.6,88" class="ah"/><text x="530" y="149.85" font-size="11" text-anchor="middle" class="t-b">evaluation bias</text><line x1="680" y1="124" x2="680" y2="86" class="ln"/><polygon points="680,80 684.4,88 675.6,88" class="ah"/><text x="680" y="149.85" font-size="11" text-anchor="middle" class="t-b">deployment bias</text></svg></div>
+        <figcaption>Where bias enters the AI lifecycle. Each stage has its own failure mode — so each needs its own check.</figcaption>
+      </figure>
+
+      <h2>3.2 Proxies: removing the column isn't enough</h2>
+      <p>Simply deleting a protected characteristic such as ethnicity or gender from the data rarely removes bias. Other features — postcode, school, name, gaps in employment, hobbies — can act as <strong>proxies</strong>, and models are very good at finding them. Under the UK Equality Act 2010, a practice that disadvantages a protected group can be <strong>indirect discrimination</strong> unless it can be objectively justified.</p>
+
+      <h2>3.3 What does "fair" mean? Competing definitions</h2>
+      <p>There are many mathematical definitions of fairness. Three common ones, for a model that approves or rejects applications:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Definition</th><th>Requires</th><th>Intuition</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Demographic parity</strong></td><td>Equal approval rates across groups</td><td>Outcomes should be shared equally</td></tr>
+            <tr><td><strong>Equal opportunity / equalised odds</strong></td><td>Equal true-positive (and false-positive) rates across groups</td><td>Equally qualified people should be treated alike; errors shouldn't fall more on one group</td></tr>
+            <tr><td><strong>Calibration</strong></td><td>A given risk score means the same thing for every group</td><td>"70% risk" should be 70% for everyone</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn">
+        <b>You can't always have them all</b>
+        <p>Research published in 2016–17 showed that when underlying rates differ between groups, it is generally mathematically impossible to satisfy calibration and equal error rates at the same time. This is exactly what the COMPAS debate turned on. Choosing a fairness definition is therefore a <strong>values decision</strong> that should be made deliberately, with affected stakeholders in mind — not left to a default setting.</p>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 705 245" style="min-width:620px" role="img" aria-label="Three common fairness definitions, each asking for something different to be equal across groups. Choosing between them is a values decision."><rect x="15" y="10" width="215" height="200" rx="10" class="b-s"/><text x="122" y="34" font-size="13" text-anchor="middle" font-weight="700">Demographic parity</text><text x="122" y="52" font-size="10.5" text-anchor="middle" class="mut">equal approval rates</text><rect x="70" y="98" width="40" height="72" rx="3" class="f-a"/><text x="90" y="190" font-size="11" text-anchor="middle">Group A</text><rect x="135" y="98" width="40" height="72" rx="3" class="f-w"/><text x="155" y="190" font-size="11" text-anchor="middle">Group B</text><line x1="55" y1="170" x2="190" y2="170" class="ln"/><rect x="245" y="10" width="215" height="200" rx="10" class="b-s"/><text x="352" y="34" font-size="13" text-anchor="middle" font-weight="700">Equal opportunity</text><text x="352" y="52" font-size="10.5" text-anchor="middle" class="mut">equal catch rate among the qualified</text><rect x="300" y="74" width="40" height="96" rx="3" class="f-a"/><text x="320" y="190" font-size="11" text-anchor="middle">Group A</text><rect x="365" y="74" width="40" height="96" rx="3" class="f-w"/><text x="385" y="190" font-size="11" text-anchor="middle">Group B</text><line x1="285" y1="170" x2="420" y2="170" class="ln"/><rect x="475" y="10" width="215" height="200" rx="10" class="b-s"/><text x="582" y="34" font-size="13" text-anchor="middle" font-weight="700">Calibration</text><text x="582" y="52" font-size="10.5" text-anchor="middle" class="mut">a &#x27;70%&#x27; score means 70% for everyone</text><rect x="530" y="86" width="40" height="84" rx="3" class="f-a"/><text x="550" y="190" font-size="11" text-anchor="middle">Group A</text><rect x="595" y="86" width="40" height="84" rx="3" class="f-w"/><text x="615" y="190" font-size="11" text-anchor="middle">Group B</text><line x1="515" y1="170" x2="650" y2="170" class="ln"/><text x="352" y="232" font-size="12" text-anchor="middle" font-weight="600" class="t-b">When groups&#x27; underlying rates differ, you generally can&#x27;t equalise all three at once.</text></svg></div>
+        <figcaption>Three common fairness definitions, each asking for something different to be equal across groups. Choosing between them is a values decision.</figcaption>
+      </figure>
+
+      <h2>3.4 Measuring fairness in practice</h2>
+      <ol>
+        <li><strong>Identify affected groups</strong> — including protected characteristics and intersections (e.g. older women, not just women or older people).</li>
+        <li><strong>Choose metrics</strong> that reflect the harm you're worried about — e.g. false rejections in lending.</li>
+        <li><strong>Disaggregate</strong> performance by group rather than relying on overall accuracy.</li>
+        <li><strong>Investigate gaps</strong> — are differences justified by legitimate factors?</li>
+        <li><strong>Document</strong> decisions and trade-offs.</li>
+      </ol>
+      <p>Open-source toolkits such as Microsoft's Fairlearn and IBM's AI Fairness 360 support this analysis. Collecting demographic data for testing raises its own privacy questions, which need careful handling.</p>
+
+      <h2>3.5 Mitigating bias</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stage</th><th>Techniques</th></tr></thead>
+          <tbody>
+            <tr><td>Before training</td><td>Collect more representative data; fix labels; reweight under-represented groups; question the target variable</td></tr>
+            <tr><td>During training</td><td>Add fairness constraints to the objective</td></tr>
+            <tr><td>After training</td><td>Adjust decision thresholds; add human review for borderline cases</td></tr>
+            <tr><td>In deployment</td><td>Monitor outcomes by group; give people ways to contest decisions; be ready to pause</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>And sometimes the responsible answer is <strong>not to use AI</strong> for a particular decision at all.</p>
+
+      <h2>3.6 Fairness in generative AI</h2>
+      <p>For generative AI, fairness issues include stereotyped images and text, unequal quality across languages and dialects, and offensive content about particular groups. Testing uses <strong>counterfactual prompts</strong> (change only a name or attribute and compare outputs), red-teaming with diverse testers, and representative evaluation sets.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Bias enters through history, representation, measurement, aggregation, evaluation and deployment.</li><li>Proxies mean deleting a column rarely removes bias.</li><li>Fairness definitions can be mathematically incompatible — choosing one is a values decision.</li><li>Disaggregate evaluation by group and intersection.</li><li>Mitigate at every stage — or decide not to use AI.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/fairness" target="_blank" rel="noopener">Machine Learning Crash Course: Fairness</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-ethics" target="_blank" rel="noopener">What is AI ethics?</a></li><li><span class="provider">AWS Skill Builder</span><a href="https://skillbuilder.aws/category/exam-prep/ai-practitioner-AIF-C01" target="_blank" rel="noopener">AWS Certified AI Practitioner exam prep plan</a> — free foundational AI training, including responsible AI and AI governance</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "A health model uses past healthcare spending as a proxy for medical need, underestimating need for groups who historically received less care. This is…",
+"options": [
+"Measurement bias",
+"Evaluation bias",
+"Random error",
+"Overfitting"
+],
+"answer": 0,
+"explain": "The measured variable is a poor proxy for the real target."
+},
+{
+"q": "Why doesn't deleting the 'ethnicity' column guarantee a fair model?",
+"options": [
+"Models can't read columns",
+"Other features such as postcode can act as proxies",
+"It always does guarantee fairness",
+"Ethnicity is never relevant"
+],
+"answer": 1,
+"explain": "Proxies carry the same information."
+},
+{
+"q": "'Equally qualified applicants should be approved at equal rates regardless of group' most closely matches…",
+"options": [
+"Demographic parity",
+"Equal opportunity",
+"Calibration",
+"Accuracy"
+],
+"answer": 1,
+"explain": "Equal true-positive rates across groups."
+},
+{
+"q": "Why is choosing a fairness metric a values decision?",
+"options": [
+"Metrics are random",
+"When base rates differ, different fairness definitions can't all be satisfied at once",
+"It isn't — there's one correct metric",
+"Because the law dictates a single formula"
+],
+"answer": 1,
+"explain": "Trade-offs must be made deliberately."
+},
+{
+"q": "Which is a post-training mitigation?",
+"options": [
+"Collecting more representative data",
+"Adjusting decision thresholds and adding human review for borderline cases",
+"Rewriting labels",
+"Changing the target variable"
+],
+"answer": 1,
+"explain": "Post-processing adjusts outputs after training."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Transparency, explainability and accountability →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

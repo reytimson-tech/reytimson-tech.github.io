@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Data Quality & Preparation for AI: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "A customer table has the same customer twice with identical details. Which dimension is affected?",
+"options": [
+"Uniqueness",
+"Timeliness",
+"Validity",
+"Accuracy"
+],
+"answer": 0,
+"explain": "Module 1."
+},
+{
+"q": "Last year's prices used to predict this year's demand is a problem of…",
+"options": [
+"Timeliness",
+"Uniqueness",
+"Consistency",
+"Validity"
+],
+"answer": 0,
+"explain": "Module 1."
+},
+{
+"q": "Which statement reflects data-centric AI?",
+"options": [
+"Always use the biggest model",
+"Improving data quality often improves results more than tuning the model",
+"Data doesn't matter",
+"Labels are optional"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which code counts repeated customer IDs?",
+"options": [
+"df['customer_id'].duplicated().sum()",
+"df.describe()",
+"df.head()",
+"df.isna()"
+],
+"answer": 0,
+"explain": "Module 2."
+},
+{
+"q": "An age of 230 is best caught by…",
+"options": [
+"A rule-based range check",
+"The IQR rule only",
+"Value counts",
+"Nothing"
+],
+"answer": 0,
+"explain": "Rules find impossible values (Module 2)."
+},
+{
+"q": "A histogram of 'income' shows a spike at exactly 999999. What does it suggest?",
+"options": [
+"Many millionaires",
+"A default or placeholder value that needs investigating",
+"Perfect data",
+"A plotting error"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which best standardises 'uk', 'UK ', 'U.K.' and 'United Kingdom'?",
+"options": [
+"Delete them",
+"Strip, lower-case and map to a standard code",
+"Leave them",
+"Sort them"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Only 2% of rows lack a postcode, apparently at random. A reasonable option is…",
+"options": [
+"Drop the whole column",
+"Drop those rows (and record the decision)",
+"Invent postcodes",
+"Fill with 'London'"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Missing income is more common among younger applicants. Why is dropping those rows risky?",
+"options": [
+"It isn't",
+"Missingness isn't random, so dropping rows biases the sample",
+"It's slow",
+"It breaks pandas"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Which approach to an extreme but genuine value is reasonable?",
+"options": [
+"Always delete",
+"Keep it, cap it, or transform the feature — and document the choice",
+"Replace with zero",
+"Duplicate it"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Cohen's kappa of 0.2 between two labellers suggests…",
+"options": [
+"Near-perfect agreement",
+"Poor agreement beyond chance — guidelines likely need work",
+"The model is accurate",
+"Too many labels"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which belongs in labelling guidelines?",
+"options": [
+"Definitions, examples, counter-examples and rules for ambiguous cases",
+"Only the label names",
+"The labellers' salaries",
+"Model code"
+],
+"answer": 0,
+"explain": "Module 4."
+},
+{
+"q": "A trained model confidently disagrees with 40 training labels. What should you do?",
+"options": [
+"Ignore it",
+"Review those examples — they may be label errors",
+"Delete the model",
+"Retrain immediately without checking"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which split prevents the same patient appearing in training and test sets?",
+"options": [
+"Random split",
+"Entity (group) split by patient",
+"Alphabetical split",
+"No split"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "You scaled all data, then split it. What's the problem?",
+"options": [
+"None",
+"Preprocessing leakage — test data influenced the scaling",
+"Too much data",
+"Wrong labels"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Your model scores 99% in testing but fails in production. Which is a likely cause?",
+"options": [
+"Data leakage",
+"Too few comments in code",
+"Good data",
+"Stratification"
+],
+"answer": 0,
+"explain": "Module 5."
+},
+{
+"q": "What does OneHotEncoder do?",
+"options": [
+"Scales numbers",
+"Turns categories into 0/1 columns",
+"Removes missing values",
+"Splits data"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which documents where data came from and every transformation applied?",
+"options": [
+"Lineage",
+"Kappa",
+"Stratification",
+"Imputation"
+],
+"answer": 0,
+"explain": "Module 6."
+},
+{
+"q": "Which data protection principle is applied by dropping columns you don't need?",
+"options": [
+"Data minimisation",
+"Storage limitation",
+"Accuracy",
+"Transparency"
+],
+"answer": 0,
+"explain": "Module 6."
+},
+{
+"q": "For a high-risk AI system under the EU AI Act, which practice helps evidence Article 10 compliance?",
+"options": [
+"Deleting cleaning logs",
+"Profiling reports, cleaning decision logs, representativeness checks and datasheets",
+"Using only synthetic data",
+"Avoiding documentation"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

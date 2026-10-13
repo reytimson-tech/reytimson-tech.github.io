@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Monitoring and observability — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="What to observe, tracing, structured logging in Python, online quality monitoring, drift, alerts and incidents, and privacy in logs.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Monitoring and observability</h1>
+      <p class="lead">Once live, you need to see what your AI is doing — and know quickly when it goes wrong.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Choose signals for reliability, latency, cost, quality, safety and users</li><li>Implement tracing and structured logging</li><li>Monitor quality online with sampling</li><li>Detect drift</li><li>Set alerts, run incidents and protect privacy in logs</li></ul>
+      </div>
+
+      <h2>5.1 What to observe</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Category</th><th>Signals</th></tr></thead>
+          <tbody>
+            <tr><td>Reliability</td><td>Error rate, timeouts, retries, fallback rate</td></tr>
+            <tr><td>Latency</td><td>Time to first token and total time (p50, p95)</td></tr>
+            <tr><td>Cost</td><td>Tokens in/out, cost per request, per user, per feature</td></tr>
+            <tr><td>Quality</td><td>Online eval scores on sampled traffic, groundedness, format failures</td></tr>
+            <tr><td>Safety</td><td>Guardrail triggers, injection detections, moderation flags</td></tr>
+            <tr><td>User signals</td><td>Thumbs up/down, edits, copy rate, escalations, task completion</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5.2 Tracing</h2>
+      <p>A <strong>trace</strong> follows one request through every step: the prompt version, retrieved documents, each model call (with tokens, latency and cost), tool calls, guardrail decisions and the final output. Traces turn "the bot said something weird" into a specific, fixable cause. OpenTelemetry and many LLM observability tools support this.</p>
+<pre data-copy><code><span class="label">Python · structured logging of each model call</span>import json, logging, time, uuid
+log = logging.getLogger("llm")
+
+def traced_call(model_fn, prompt_id, prompt_version, user_id, **kwargs):
+    trace_id, t0 = str(uuid.uuid4()), time.time()
+    status, usage = "ok", {}
+    try:
+        result, usage = model_fn(**kwargs)          # return text and token usage
+        return result
+    except Exception as e:
+        status = f"error:{type(e).__name__}"
+        raise
+    finally:
+        log.info(json.dumps({
+            "trace_id": trace_id, "prompt_id": prompt_id, "prompt_version": prompt_version,
+            "user": user_id,                         # pseudonymous ID, not a name
+            "latency_s": round(time.time() - t0, 3), "status": status, **usage,
+        }))</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 232" style="min-width:560px" role="img" aria-label="Tracing shows where time and money go in each request — here, almost all of it is the model call."><text x="20" y="18" font-size="12" text-anchor="start" font-weight="600">One trace, broken into spans (illustrative timings)</text><rect x="220" y="30" width="420" height="22" rx="4" class="b-n"/><text x="210" y="45" font-size="11.5" text-anchor="end">request</text><rect x="220" y="60" width="25.2" height="22" rx="4" class="b-w"/><text x="210" y="75" font-size="11.5" text-anchor="end">input guardrails</text><rect x="245.2" y="90" width="50.4" height="22" rx="4" class="b-a"/><text x="210" y="105" font-size="11.5" text-anchor="end">retrieve (12 chunks)</text><rect x="295.6" y="120" width="294" height="22" rx="4" class="b-a"/><text x="210" y="135" font-size="11.5" text-anchor="end">model call · 2,140 tokens in / 230 out</text><rect x="589.6" y="150" width="29.4" height="22" rx="4" class="b-w"/><text x="210" y="165" font-size="11.5" text-anchor="end">output guardrails</text><rect x="619" y="180" width="21" height="22" rx="4" class="b-g"/><text x="210" y="195" font-size="11.5" text-anchor="end">log &amp; respond</text><text x="220" y="222" font-size="11" text-anchor="start" class="mut">0 s</text><text x="640" y="222" font-size="11" text-anchor="end" class="mut">2.4 s</text></svg></div>
+        <figcaption>Tracing shows where time and money go in each request — here, almost all of it is the model call.</figcaption>
+      </figure>
+
+      <h2>5.3 Online quality monitoring</h2>
+      <p>Sample a percentage of production traffic and score it with your automated graders and LLM judges, and send a smaller sample for human review. Track scores over time; a drop often signals a model update, a change in user behaviour or stale retrieval data.</p>
+
+      <h2>5.4 Drift</h2>
+      <p>Behaviour can change without any code change: providers update models, users ask new kinds of questions, documents go out of date. Watch the distribution of inputs (topics, languages, lengths) and outputs (refusal rate, length, sentiment) for shifts.</p>
+
+      <h2>5.5 Alerts and incidents</h2>
+      <p>Set alerts on thresholds — error rate, p95 latency, daily spend, guardrail triggers, quality score drops. Have an incident playbook: who's on call, how to switch to a fallback model or disable a feature, how to roll back a prompt, and how to notify users or regulators if needed. Turn every incident into new evaluation cases.</p>
+
+      <h2>5.6 Privacy in logs</h2>
+      <p>Logs of prompts and outputs can contain personal and confidential data. Minimise, pseudonymise or redact; restrict access; set retention periods; and record the lawful basis — the same data protection duties apply to logs as to the application.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Observe reliability, latency, cost, quality, safety and user signals.</li><li>Traces connect a bad output to its cause.</li><li>Score sampled production traffic automatically and with humans.</li><li>Behaviour drifts without code changes — watch inputs and outputs.</li><li>Logs carry personal data — minimise, protect and limit retention.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/llmops" target="_blank" rel="noopener">What is LLMOps?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/security/ai-red-team/" target="_blank" rel="noopener">Microsoft AI Red Team</a> — red-teaming guidance, PyRIT and threat modelling</li><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "What does a trace record?",
+"options": [
+"Only the final answer",
+"Every step of a request: prompt version, retrieval, model and tool calls, guardrails, cost and timing",
+"Only errors",
+"User passwords"
+],
+"answer": 1,
+"explain": "End-to-end visibility."
+},
+{
+"q": "Quality scores drop with no code change. Which is a likely cause?",
+"options": [
+"A provider model update, changed user behaviour or stale retrieval data",
+"Nothing could cause this",
+"The logo changed",
+"Faster servers"
+],
+"answer": 0,
+"explain": "That's drift."
+},
+{
+"q": "Why log a pseudonymous user ID rather than a name?",
+"options": [
+"Names are too long",
+"Data minimisation — logs fall under data protection law",
+"IDs are prettier",
+"Names can't be logged"
+],
+"answer": 1,
+"explain": "Privacy in logs."
+},
+{
+"q": "Which should trigger an alert?",
+"options": [
+"A sudden spike in daily spend or guardrail triggers",
+"A user saying thank you",
+"A normal day",
+"A successful request"
+],
+"answer": 0,
+"explain": "Threshold-based alerts."
+},
+{
+"q": "What should happen after an incident?",
+"options": [
+"Forget it",
+"Turn it into new evaluation cases",
+"Delete the logs",
+"Raise prices"
+],
+"answer": 1,
+"explain": "Incidents improve the test suite."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Managing cost, change and governance →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

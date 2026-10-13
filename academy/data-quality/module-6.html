@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Documenting and governing data — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Datasheets, lineage and versioning, UK GDPR principles for AI data, pseudonymisation in code, the EU AI Act&#x27;s Article 10, and continuous data quality checks.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Documenting and governing data</h1>
+      <p class="lead">Good data work leaves evidence. This module covers the documentation, protection and governance that make datasets trustworthy — and legally defensible.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Write a datasheet for a dataset</li><li>Maintain lineage and versions</li><li>Apply data protection principles to AI data</li><li>Pseudonymise identifiers</li><li>Explain Article 10 and automate data quality checks</li></ul>
+      </div>
+
+      <h2>6.1 Document your data: datasheets</h2>
+      <p>A <strong>datasheet for a dataset</strong> records what anyone using it needs to know. Key sections:</p>
+      <ul class="checklist">
+        <li><strong>Motivation:</strong> why it was created and by whom</li>
+        <li><strong>Composition:</strong> what each record represents, size, fields, known gaps</li>
+        <li><strong>Collection:</strong> sources, time period, consent and legal basis</li>
+        <li><strong>Preparation:</strong> cleaning and labelling steps (your decision log)</li>
+        <li><strong>Uses:</strong> intended uses — and uses it is <em>not</em> suitable for</li>
+        <li><strong>Maintenance:</strong> owner, update schedule, version history</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 212" style="min-width:560px" role="img" aria-label="The six sections of a datasheet. Together with lineage and versions, it makes a dataset understandable and auditable."><rect x="20" y="14" width="600" height="186" rx="10" class="b-s"/><text x="320" y="38" font-size="13" text-anchor="middle" font-weight="700">Datasheet: customer churn dataset v1.2</text><rect x="36" y="54" width="180" height="58" rx="10" class="b-a"/><text x="126" y="78.625" font-size="12.5" text-anchor="middle" font-weight="600">Motivation</text><text x="126" y="97.925" font-size="10.5" text-anchor="middle" class="mut">why, by whom</text><rect x="232" y="54" width="180" height="58" rx="10" class="b-w"/><text x="322" y="78.625" font-size="12.5" text-anchor="middle" font-weight="600">Composition</text><text x="322" y="97.925" font-size="10.5" text-anchor="middle" class="mut">records, fields, gaps</text><rect x="428" y="54" width="180" height="58" rx="10" class="b-a"/><text x="518" y="78.625" font-size="12.5" text-anchor="middle" font-weight="600">Collection</text><text x="518" y="97.925" font-size="10.5" text-anchor="middle" class="mut">sources, consent, basis</text><rect x="36" y="124" width="180" height="58" rx="10" class="b-w"/><text x="126" y="148.625" font-size="12.5" text-anchor="middle" font-weight="600">Preparation</text><text x="126" y="167.925" font-size="10.5" text-anchor="middle" class="mut">cleaning &amp; labelling log</text><rect x="232" y="124" width="180" height="58" rx="10" class="b-a"/><text x="322" y="148.625" font-size="12.5" text-anchor="middle" font-weight="600">Uses</text><text x="322" y="167.925" font-size="10.5" text-anchor="middle" class="mut">intended &amp; unsuitable</text><rect x="428" y="124" width="180" height="58" rx="10" class="b-w"/><text x="518" y="148.625" font-size="12.5" text-anchor="middle" font-weight="600">Maintenance</text><text x="518" y="167.925" font-size="10.5" text-anchor="middle" class="mut">owner, versions</text></svg></div>
+        <figcaption>The six sections of a datasheet. Together with lineage and versions, it makes a dataset understandable and auditable.</figcaption>
+      </figure>
+
+      <h2>6.2 Lineage and versioning</h2>
+      <p><strong>Data lineage</strong> records where data came from and every transformation applied. <strong>Versioning</strong> means you can always say exactly which data trained a given model — essential for debugging, audits and reproducing results. Save cleaning code (not just cleaned files), and give each dataset release a version and date.</p>
+
+      <h2>6.3 Data protection</h2>
+      <p>If your data relates to identifiable people, UK GDPR (or EU GDPR) applies throughout the AI lifecycle:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Principle</th><th>In practice for AI data</th></tr></thead>
+          <tbody>
+            <tr><td>Lawfulness, fairness, transparency</td><td>A lawful basis for using data to train or run AI; tell people in privacy notices</td></tr>
+            <tr><td>Purpose limitation</td><td>Check that training a model is compatible with why the data was collected</td></tr>
+            <tr><td>Data minimisation</td><td>Only the fields you need; pseudonymise IDs; drop direct identifiers</td></tr>
+            <tr><td>Accuracy</td><td>Everything in this course!</td></tr>
+            <tr><td>Storage limitation</td><td>Retention periods for raw and derived datasets</td></tr>
+            <tr><td>Security</td><td>Access controls, encryption, audit logs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Special category data (such as health or ethnicity) needs extra conditions; a Data Protection Impact Assessment is often required. The ICO's guidance on AI and data protection is the UK reference point.</p>
+
+      <h2>6.4 Pseudonymisation in code</h2>
+<pre data-copy><code><span class="label">Python · replace IDs with salted hashes</span>import hashlib, os
+
+SALT = os.environ.get("ID_SALT", "set-a-secret-salt")     # keep the salt secret and separate
+
+def pseudonymise(value):
+    return hashlib.sha256((SALT + str(value)).encode()).hexdigest()[:16]
+
+clean["customer_key"] = clean["customer_id"].map(pseudonymise)
+model_data = clean.drop(columns=["customer_id"])</code></pre>
+      <p>Pseudonymised data is still personal data under GDPR, because it can be re-linked with the key — but it reduces risk.</p>
+
+      <h2>6.5 The EU AI Act: data governance for high-risk AI</h2>
+      <p>For high-risk AI systems, Article 10 of the EU AI Act requires training, validation and testing data to be subject to appropriate data governance and management practices, and to be relevant, sufficiently representative and, to the best extent possible, free of errors and complete in view of the intended purpose — with attention to possible biases. The practices in this course — profiling, cleaning logs, representativeness checks, documentation — are how organisations evidence that. See <a href="../eu-ai-act/module-4.html">EU AI Act Fundamentals, Module 4</a>.</p>
+
+      <h2>6.6 Data quality is continuous</h2>
+      <p>Data keeps changing after a model is deployed. Automate checks in data pipelines (types, ranges, allowed values, missing rates, row counts), alert on failures, and monitor for <strong>drift</strong> — shifts in the data your model sees compared with what it was trained on.</p>
+<pre data-copy><code><span class="label">Python · simple automated checks for a pipeline</span>def check(df):
+    problems = []
+    if df["customer_key"].duplicated().any():          problems.append("duplicate customers")
+    if not df["age"].between(16, 110).all():           problems.append("age out of range")
+    if df["monthly_spend"].isna().mean() > 0.05:       problems.append("too many missing spend values")
+    if not set(df["country"].dropna()) &lt;= {"UK", "IE"}: problems.append("unexpected country code")
+    return problems
+
+print(check(model_data) or "All checks passed")</code></pre>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Datasheets record motivation, composition, collection, preparation, uses and maintenance.</li><li>Version data and save cleaning code to make models reproducible.</li><li>UK GDPR applies throughout the AI lifecycle; minimise and pseudonymise.</li><li>Article 10 requires governed, representative, error-checked data for high-risk AI.</li><li>Automate checks and monitor drift.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-governance" target="_blank" rel="noopener">What is AI governance?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Which section of a datasheet says what the data should NOT be used for?",
+"options": [
+"Composition",
+"Uses",
+"Collection",
+"Maintenance"
+],
+"answer": 1,
+"explain": "Intended and unsuitable uses."
+},
+{
+"q": "Why version datasets?",
+"options": [
+"To save disk space",
+"To know exactly which data trained a model, for debugging, audits and reproducibility",
+"It's required by Python",
+"To delete old data"
+],
+"answer": 1,
+"explain": "Reproducibility and accountability."
+},
+{
+"q": "Is pseudonymised data still personal data under GDPR?",
+"options": [
+"No",
+"Yes — it can be re-linked with the key, though risk is reduced",
+"Only in Ireland",
+"Only if it includes names"
+],
+"answer": 1,
+"explain": "Pseudonymisation reduces, not removes, obligations."
+},
+{
+"q": "Article 10 of the EU AI Act requires high-risk training data to be…",
+"options": [
+"Public",
+"Relevant, sufficiently representative and, as far as possible, free of errors and complete, with attention to bias",
+"Collected only in the EU",
+"Under 1 GB"
+],
+"answer": 1,
+"explain": "Data governance for high-risk AI."
+},
+{
+"q": "What should an automated pipeline check catch?",
+"options": [
+"Nothing — check once at the start",
+"Duplicates, out-of-range values, missing rates and unexpected categories",
+"Only column names",
+"Only file size"
+],
+"answer": 1,
+"explain": "Data quality is continuous."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

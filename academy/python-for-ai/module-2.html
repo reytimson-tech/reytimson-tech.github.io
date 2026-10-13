@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Data structures, logic and functions — Python for AI</title>
+<meta name="description" content="Lists, dictionaries, conditions, loops, list comprehensions and functions.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="python-for-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 30 minutes</span>
+      <h1>Data structures, logic and functions</h1>
+      <p class="lead">Real data comes in collections. This module gives you the tools to store, loop over and make decisions about it.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Create, index and slice lists</li><li>Use dictionaries — the same shape as JSON</li><li>Write if/elif/else conditions</li><li>Loop with for, enumerate and list comprehensions</li><li>Define and call functions</li></ul>
+      </div>
+
+      <h2>2.1 Lists</h2>
+<pre data-copy><code>reviews = ["Love it", "Arrived damaged", "Great value", "Too small"]
+print(reviews[0])        # first item: "Love it"
+print(reviews[-1])       # last item: "Too small"
+print(len(reviews))      # 4
+reviews.append("Would buy again")
+print(reviews[1:3])      # slice: ["Arrived damaged", "Great value"]</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 160" style="min-width:560px" role="img" aria-label="List positions count from 0 at the front and from −1 at the back. Slices take a range."><rect x="90" y="50" width="130" height="44" rx="10" class="b-a"/><text x="155" y="76.2" font-size="12" text-anchor="middle">&quot;Love it&quot;</text><text x="155" y="36" font-size="13" text-anchor="middle" font-weight="700" class="t-a">0</text><text x="155" y="116" font-size="13" text-anchor="middle" font-weight="700" class="t-w">-4</text><rect x="230" y="50" width="130" height="44" rx="10" class="b-a"/><text x="295" y="76.2" font-size="12" text-anchor="middle">&quot;Arrived damaged&quot;</text><text x="295" y="36" font-size="13" text-anchor="middle" font-weight="700" class="t-a">1</text><text x="295" y="116" font-size="13" text-anchor="middle" font-weight="700" class="t-w">-3</text><rect x="370" y="50" width="130" height="44" rx="10" class="b-a"/><text x="435" y="76.2" font-size="12" text-anchor="middle">&quot;Great value&quot;</text><text x="435" y="36" font-size="13" text-anchor="middle" font-weight="700" class="t-a">2</text><text x="435" y="116" font-size="13" text-anchor="middle" font-weight="700" class="t-w">-2</text><rect x="510" y="50" width="130" height="44" rx="10" class="b-a"/><text x="575" y="76.2" font-size="12" text-anchor="middle">&quot;Too small&quot;</text><text x="575" y="36" font-size="13" text-anchor="middle" font-weight="700" class="t-a">3</text><text x="575" y="116" font-size="13" text-anchor="middle" font-weight="700" class="t-w">-1</text><text x="78" y="36" font-size="11" text-anchor="end" class="t-a">index</text><text x="78" y="116" font-size="11" text-anchor="end" class="t-w">from end</text><text x="370" y="146" font-size="11.5" text-anchor="middle" class="mut">reviews[0] → &quot;Love it&quot;     reviews[-1] → &quot;Too small&quot;     reviews[1:3] → middle two</text></svg></div>
+        <figcaption>List positions count from 0 at the front and from −1 at the back. Slices take a range.</figcaption>
+      </figure>
+
+      <h2>2.2 Dictionaries</h2>
+      <p>A <strong>dictionary</strong> maps keys to values — the same shape as JSON, which is how AI APIs send and receive data.</p>
+<pre data-copy><code>order = {"id": "GFY-10422", "item": "Bamboo board", "qty": 2, "price": 24.99}
+print(order["item"])                 # "Bamboo board"
+order["status"] = "dispatched"       # add a key
+total = order["qty"] * order["price"]
+print(order.get("discount", 0))      # safe lookup with a default: 0</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 520 228" style="min-width:520px" role="img" aria-label="A dictionary maps keys to values — exactly the shape of the JSON that AI APIs send and receive."><text x="110" y="20" font-size="12" text-anchor="middle" class="mut">keys</text><text x="390" y="20" font-size="12" text-anchor="middle" class="mut">values</text><rect x="40" y="30" width="140" height="34" rx="10" class="b-w"/><text x="110" y="51.375" font-size="12.5" text-anchor="middle">&quot;id&quot;</text><line x1="184" y1="47" x2="290" y2="47" class="ln"/><polygon points="296,47 288,51.4 288,42.6" class="ah"/><rect x="300" y="30" width="180" height="34" rx="10" class="b-a"/><text x="390" y="51.375" font-size="12.5" text-anchor="middle">&quot;GFY-10422&quot;</text><rect x="40" y="74" width="140" height="34" rx="10" class="b-w"/><text x="110" y="95.375" font-size="12.5" text-anchor="middle">&quot;item&quot;</text><line x1="184" y1="91" x2="290" y2="91" class="ln"/><polygon points="296,91 288,95.4 288,86.6" class="ah"/><rect x="300" y="74" width="180" height="34" rx="10" class="b-a"/><text x="390" y="95.375" font-size="12.5" text-anchor="middle">&quot;Bamboo board&quot;</text><rect x="40" y="118" width="140" height="34" rx="10" class="b-w"/><text x="110" y="139.375" font-size="12.5" text-anchor="middle">&quot;qty&quot;</text><line x1="184" y1="135" x2="290" y2="135" class="ln"/><polygon points="296,135 288,139.4 288,130.6" class="ah"/><rect x="300" y="118" width="180" height="34" rx="10" class="b-a"/><text x="390" y="139.375" font-size="12.5" text-anchor="middle">2</text><rect x="40" y="162" width="140" height="34" rx="10" class="b-w"/><text x="110" y="183.375" font-size="12.5" text-anchor="middle">&quot;price&quot;</text><line x1="184" y1="179" x2="290" y2="179" class="ln"/><polygon points="296,179 288,183.4 288,174.6" class="ah"/><rect x="300" y="162" width="180" height="34" rx="10" class="b-a"/><text x="390" y="183.375" font-size="12.5" text-anchor="middle">24.99</text><text x="260" y="216" font-size="12" text-anchor="middle" font-weight="600">order[&quot;item&quot;]  →  &quot;Bamboo board&quot;</text></svg></div>
+        <figcaption>A dictionary maps keys to values — exactly the shape of the JSON that AI APIs send and receive.</figcaption>
+      </figure>
+
+      <h2>2.3 Conditions</h2>
+<pre data-copy><code>rating = 2
+if rating >= 4:
+    sentiment = "positive"
+elif rating == 3:
+    sentiment = "neutral"
+else:
+    sentiment = "negative"
+print(sentiment)</code></pre>
+      <p>Indentation (four spaces) matters in Python: it shows which lines belong to the <code>if</code>.</p>
+
+      <h2>2.4 Loops</h2>
+<pre data-copy><code>for review in reviews:
+    print(review.upper())
+
+# loop with a counter
+for i, review in enumerate(reviews, start=1):
+    print(i, review)
+
+# list comprehension: build a new list in one line
+lengths = [len(r) for r in reviews]
+short = [r for r in reviews if len(r) &lt; 12]</code></pre>
+
+      <h2>2.5 Functions</h2>
+      <p>Functions package code you'll reuse. You'll write one later to call an AI model.</p>
+<pre data-copy><code>def classify_rating(rating):
+    # Return a sentiment label for a 1-5 star rating.
+    if rating >= 4:
+        return "positive"
+    if rating == 3:
+        return "neutral"
+    return "negative"
+
+ratings = [5, 2, 3, 4, 1]
+labels = [classify_rating(r) for r in ratings]
+print(labels)    # ['positive', 'negative', 'neutral', 'positive', 'negative']</code></pre>
+<figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 580 140" style="min-width:560px" role="img" aria-label="A function takes inputs, runs its logic, and returns a result you can reuse anywhere."><rect x="20" y="50" width="120" height="46" rx="10" class="b-n"/><text x="80" y="77.375" font-size="12.5" text-anchor="middle">rating = 2</text><rect x="190" y="30" width="200" height="86" rx="10" class="b-a"/><text x="290" y="61.75" font-size="12.5" text-anchor="middle" font-weight="600">classify_rating(rating)</text><text x="290" y="81.1" font-size="10.5" text-anchor="middle" class="mut">if ≥ 4 → positive</text><text x="290" y="94.75" font-size="10.5" text-anchor="middle" class="mut">3 → neutral, else negative</text><rect x="440" y="50" width="120" height="46" rx="10" class="b-g"/><text x="500" y="77.375" font-size="12.5" text-anchor="middle">&quot;negative&quot;</text><line x1="143" y1="73" x2="181" y2="73" class="ln"/><polygon points="187,73 179,77.4 179,68.6" class="ah"/><text x="165" y="66" font-size="11.5" text-anchor="middle" class="mut">input</text><line x1="393" y1="73" x2="431" y2="73" class="ln"/><polygon points="437,73 429,77.4 429,68.6" class="ah"/><text x="415" y="66" font-size="11.5" text-anchor="middle" class="mut">return</text></svg></div>
+        <figcaption>A function takes inputs, runs its logic, and returns a result you can reuse anywhere.</figcaption>
+      </figure>
+
+      <div class="activity"><b>Exercise: count the complaints</b><p>Given a list of review dictionaries like <code>{"text": "Arrived damaged", "stars": 1}</code>, write a function that returns how many reviews have 2 stars or fewer, and a list of their texts.</p><details><summary>Show a solution</summary><pre data-copy><code>reviews = [
+    {"text": "Love it", "stars": 5},
+    {"text": "Arrived damaged", "stars": 1},
+    {"text": "Too small", "stars": 2},
+]
+
+def complaints(reviews):
+    bad = [r["text"] for r in reviews if r["stars"] &lt;= 2]
+    return len(bad), bad
+
+print(complaints(reviews))   # (2, ['Arrived damaged', 'Too small'])</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Lists hold ordered items; index from 0, and -1 is the last.</li><li>Dictionaries map keys to values, like JSON.</li><li>Indentation defines code blocks.</li><li>List comprehensions build lists concisely.</li><li>Functions package reusable logic.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/python" target="_blank" rel="noopener">Python</a> — free, browser-based exercises</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li><li><span class="provider">IBM SkillsBuild</span><a href="https://skillsbuild.org/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noopener">Free AI learning catalogue</a> — courses and digital credentials, including AI Fundamentals</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/machine-learning/" target="_blank" rel="noopener">What is machine learning?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "Given reviews = ['a', 'b', 'c'], what is reviews[-1]?",
+"options": [
+"'a'",
+"'b'",
+"'c'",
+"Error"
+],
+"answer": 2,
+"explain": "-1 is the last item."
+},
+{
+"q": "How do you safely read a dictionary key that might be missing?",
+"options": [
+"d['key']",
+"d.get('key', default)",
+"d.key",
+"get(d)"
+],
+"answer": 1,
+"explain": "get() returns a default instead of raising an error."
+},
+{
+"q": "What does [r for r in reviews if len(r) < 12] produce?",
+"options": [
+"The lengths of reviews",
+"A list of reviews shorter than 12 characters",
+"An error",
+"The first 12 reviews"
+],
+"answer": 1,
+"explain": "A filtered list comprehension."
+},
+{
+"q": "Why does indentation matter in Python?",
+"options": [
+"It doesn't",
+"It defines which lines belong to a block, such as an if or a function",
+"It's only style",
+"It speeds code up"
+],
+"answer": 1,
+"explain": "Indentation is syntax in Python."
+},
+{
+"q": "What does a function's return statement do?",
+"options": [
+"Prints a value",
+"Sends a value back to the caller",
+"Deletes variables",
+"Repeats the function"
+],
+"answer": 1,
+"explain": "return passes back a result."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Files, text and JSON →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

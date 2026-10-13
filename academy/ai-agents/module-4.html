@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Building an agent loop — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="A bounded agent loop in Python, state and memory, managing context, planning, multi-agent systems, skills and frameworks.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 35 minutes</span>
+      <h1>Building an agent loop</h1>
+      <p class="lead">Under every agent framework is a simple loop. Build it yourself once and you'll understand — and debug — any agent.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Implement a bounded agent loop with error handling and tracing</li><li>Distinguish working, scratchpad and long-term memory</li><li>Manage context in long tasks</li><li>Explain planning, sub-agents and skills</li><li>Evaluate when to use a framework</li></ul>
+      </div>
+
+      <h2>4.1 The agent loop</h2>
+      <p>At its core, an agent is a loop: the model looks at the goal and everything so far, chooses an action (usually a tool call), your code executes it, the result is added to the context, and the loop repeats — until the model produces a final answer or a limit is hit.</p>
+<pre data-copy><code><span class="label">Python · a minimal, bounded agent loop</span>TOOL_FUNCS = {"get_order_status": get_order_status}     # name → Python function
+
+def run_agent(goal, max_steps=10):
+    messages = [{"role": "user", "content": goal}]
+    for step in range(max_steps):
+        r = client.messages.create(model=MODEL, max_tokens=1000, tools=tools,
+                                   system="You are a careful support agent. "
+                                          "Use tools to check facts. Stop and ask if unsure.",
+                                   messages=messages)
+        messages.append({"role": "assistant", "content": r.content})
+        if r.stop_reason != "tool_use":                 # model gave a final answer
+            return "".join(b.text for b in r.content if b.type == "text")
+        results = []
+        for call in (b for b in r.content if b.type == "tool_use"):
+            try:
+                out = TOOL_FUNCS[call.name](**call.input)
+            except Exception as e:                       # errors go back to the model
+                out = {"error": str(e)}
+            print(f"step {step}: {call.name}({call.input}) -> {out}")   # trace
+            results.append({"type": "tool_result", "tool_use_id": call.id,
+                            "content": json.dumps(out)})
+        messages.append({"role": "user", "content": results})
+    return "Stopped: step limit reached — escalating to a human."</code></pre>
+      <p>Three details matter: a <strong>step limit</strong>, <strong>errors returned to the model</strong> so it can recover, and a <strong>trace</strong> of every action.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 650 325" style="min-width:560px" role="img" aria-label="Under every agent framework is this loop. The exits — a final answer or a limit — matter as much as the loop itself."><polyline points="351.962,70 403.923,100 403.923,184" class="ln"/><polygon points="403.923,190 399.523,182 408.323,182" class="ah"/><polyline points="351.962,250 300,280 253.235,253" class="ln"/><polygon points="248.038,250 257.167,250.189 252.767,257.811" class="ah"/><polyline points="196.077,190 196.077,100 242.842,73" class="ln"/><polygon points="248.038,70 243.31,77.8105 238.91,70.1895" class="ah"/><rect x="225" y="13" width="150" height="54" rx="10" class="b-a"/><text x="300" y="35.45" font-size="13" text-anchor="middle" font-weight="600">Decide</text><text x="300" y="55.55" font-size="11" text-anchor="middle" class="mut">model picks next action</text><rect x="328.923" y="193" width="150" height="54" rx="10" class="b-w"/><text x="403.923" y="215.45" font-size="13" text-anchor="middle" font-weight="600">Act</text><text x="403.923" y="235.55" font-size="11" text-anchor="middle" class="mut">your code runs the tool</text><rect x="121.077" y="193" width="150" height="54" rx="10" class="b-n"/><text x="196.077" y="215.45" font-size="13" text-anchor="middle" font-weight="600">Observe</text><text x="196.077" y="235.55" font-size="11" text-anchor="middle" class="mut">result added to context</text><text x="300" y="156" font-size="13" text-anchor="middle" font-weight="700">Agent loop</text><text x="300" y="174" font-size="11" text-anchor="middle" class="mut">max_steps</text><rect x="500" y="40" width="130" height="46" rx="10" class="b-g"/><text x="565" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">Final answer</text><rect x="500" y="268" width="130" height="46" rx="10" class="b-b"/><text x="565" y="287.4" font-size="12" text-anchor="middle" font-weight="600">Limit hit →</text><text x="565" y="303" font-size="12" text-anchor="middle">escalate</text><line x1="380" y1="50" x2="492.021" y2="59.4933" class="ln"/><polygon points="498,60 489.657,63.7087 490.4,54.9402" class="ah"/><text x="439" y="48" font-size="11.5" text-anchor="middle" class="mut">done</text><line x1="420" y1="250" x2="514.075" y2="265.052" class="ln"/><polygon points="520,266 511.405,269.081 512.796,260.391" class="ah"/></svg></div>
+        <figcaption>Under every agent framework is this loop. The exits — a final answer or a limit — matter as much as the loop itself.</figcaption>
+      </figure>
+
+      <h2>4.2 State, memory and context</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kind</th><th>What it holds</th><th>How</th></tr></thead>
+          <tbody>
+            <tr><td>Working memory</td><td>The current task: goal, steps, tool results</td><td>The conversation context itself</td></tr>
+            <tr><td>Scratchpad / plan</td><td>A to-do list or notes the agent updates</td><td>A file or state object the agent reads and writes via tools</td></tr>
+            <tr><td>Long-term memory</td><td>Facts and preferences across sessions</td><td>A database or retrieval index, read and written deliberately</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Long tasks fill the context window. Techniques include summarising or trimming old tool results, storing details in files and re-reading them when needed, and handing sub-tasks to sub-agents with their own fresh context.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 180" style="min-width:560px" role="img" aria-label="Three kinds of agent memory, from short-lived to persistent."><rect x="20" y="16" width="380" height="44" rx="10" class="b-a"/><text x="210" y="33.625" font-size="12.5" text-anchor="middle" font-weight="600">Working memory</text><text x="210" y="52.925" font-size="10.5" text-anchor="middle" class="mut">the current conversation &amp; tool results</text><text x="420" y="43" font-size="12" text-anchor="start" class="mut">lost after the task</text><rect x="20" y="70" width="380" height="44" rx="10" class="b-w"/><text x="210" y="87.625" font-size="12.5" text-anchor="middle" font-weight="600">Scratchpad / plan</text><text x="210" y="106.925" font-size="10.5" text-anchor="middle" class="mut">to-do list or notes the agent updates</text><text x="420" y="97" font-size="12" text-anchor="start" class="mut">kept for the task</text><rect x="20" y="124" width="380" height="44" rx="10" class="b-g"/><text x="210" y="141.625" font-size="12.5" text-anchor="middle" font-weight="600">Long-term memory</text><text x="210" y="160.925" font-size="10.5" text-anchor="middle" class="mut">facts &amp; preferences in a database</text><text x="420" y="151" font-size="12" text-anchor="start" class="mut">kept across sessions</text></svg></div>
+        <figcaption>Three kinds of agent memory, from short-lived to persistent.</figcaption>
+      </figure>
+
+      <h2>4.3 Planning</h2>
+      <p>Asking an agent to write a short plan first — and update it as it goes — tends to improve long, multi-step work. Reasoning models do much of this internally. Either way, keep plans <em>visible</em> in traces so humans can understand what the agent intended.</p>
+
+      <h2>4.4 Multi-agent systems</h2>
+      <p>Some systems split work across several agents — for example an orchestrator that hands research, coding and review to specialised <strong>sub-agents</strong>, each with its own instructions, tools and context. This can help with large tasks and parallelism, but multiplies cost and makes failures harder to trace. Use it when a single agent demonstrably struggles, not by default.</p>
+
+      <h2>4.5 Reusable skills and instructions</h2>
+      <p>Agents perform better with good instructions about <em>how</em> to do recurring tasks. Several platforms now support packaged, reusable instructions — for example Anthropic's agent <strong>Skills</strong>, which an agent loads only when relevant. Treat them like code: version, review and test them.</p>
+
+      <h2>4.6 Frameworks</h2>
+      <p>You can build agents directly on a model API (as above) or use frameworks and platforms such as the OpenAI Agents SDK, Microsoft's agent frameworks, Google's Agent Development Kit, Amazon Bedrock's agent services, or open-source libraries. Frameworks speed up common plumbing — tool registration, tracing, hand-offs — but understand the underlying loop first so you can debug it.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>The loop: decide → act → observe → repeat, until done or a limit.</li><li>Step limits, errors returned to the model and traces are essential.</li><li>Use files, summaries and sub-agents to manage context.</li><li>Multi-agent systems add power and cost — use when one agent struggles.</li><li>Learn the loop before relying on a framework.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/introduction-to-subagents" target="_blank" rel="noopener">Introduction to subagents</a></li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank" rel="noopener">Introduction to agent skills</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">AI Agents for Beginners (18 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "When does the minimal agent loop end?",
+"options": [
+"After one tool call",
+"When the model returns a final answer instead of a tool call, or the step limit is reached",
+"Never",
+"When the user closes the browser"
+],
+"answer": 1,
+"explain": "Two exits: done, or limit."
+},
+{
+"q": "Why return tool errors to the model rather than crashing?",
+"options": [
+"To hide them",
+"So the agent can understand and recover, e.g. by retrying with corrected arguments",
+"It's faster",
+"Errors are never useful"
+],
+"answer": 1,
+"explain": "Recoverable errors make agents robust."
+},
+{
+"q": "A long task is filling the context window with old tool outputs. A good technique is…",
+"options": [
+"Increase temperature",
+"Summarise or offload details to files and re-read when needed",
+"Delete the goal",
+"Restart every step"
+],
+"answer": 1,
+"explain": "Context management keeps agents effective."
+},
+{
+"q": "When are multi-agent systems most justified?",
+"options": [
+"Always",
+"When a single agent demonstrably struggles and the task splits well",
+"For simple FAQs",
+"To reduce cost"
+],
+"answer": 1,
+"explain": "They multiply cost and complexity."
+},
+{
+"q": "Why print a trace of each step?",
+"options": [
+"Decoration",
+"To debug, audit and understand agent behaviour",
+"It's required by the API",
+"To slow the agent"
+],
+"answer": 1,
+"explain": "Observability starts with traces."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Guardrails and human-in-the-loop →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Anatomy of a strong prompt — Prompt Engineering &amp; Working with Generative AI</title>
+<meta name="description" content="Role, task, context, format, constraints and examples — with a reusable template.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="prompt-engineering">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 25 minutes</span>
+      <h1>Anatomy of a strong prompt</h1>
+      <p class="lead">Most disappointing AI output can be traced to a missing ingredient. This module gives you a simple recipe for strong prompts.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Name the six ingredients of a strong prompt</li><li>Rewrite weak prompts into strong ones</li><li>Use positive instructions and explain why</li><li>Use roles appropriately</li><li>Apply a reusable prompt template</li></ul>
+      </div>
+
+      <h2>2.1 Six ingredients</h2>
+      <p>Most strong prompts combine some or all of these ingredients. You won't need every one every time — but when output disappoints, the missing ingredient is usually the cause.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ingredient</th><th>Ask yourself</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Role</strong></td><td>What expertise or perspective should it bring?</td><td>"You are an experienced UK employment lawyer…"</td></tr>
+            <tr><td><strong>Task</strong></td><td>What exactly should it do? Use a clear verb.</td><td>"Review this contract clause and list risks for the employer."</td></tr>
+            <tr><td><strong>Context</strong></td><td>Who's it for? Why? What background matters?</td><td>"The reader is a small business owner with no legal training."</td></tr>
+            <tr><td><strong>Format</strong></td><td>What should the output look like?</td><td>"A table with columns: risk, why it matters, suggested wording."</td></tr>
+            <tr><td><strong>Constraints</strong></td><td>Length, tone, language, what to avoid</td><td>"Under 300 words. UK English. No legal jargon."</td></tr>
+            <tr><td><strong>Examples</strong></td><td>Can I show what good looks like?</td><td>"Here's a summary we liked last month: …"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 695 170" style="min-width:560px" role="img" aria-label="Six ingredients. You won&#x27;t always need all of them — but when output disappoints, the missing ingredient is usually the cause."><rect x="20" y="20" width="136" height="56" rx="10" class="b-a"/><text x="88" y="43.45" font-size="13" text-anchor="middle" font-weight="600">Role</text><text x="88" y="63.55" font-size="11" text-anchor="middle" class="mut">perspective</text><rect x="170" y="20" width="136" height="56" rx="10" class="b-a"/><text x="238" y="43.45" font-size="13" text-anchor="middle" font-weight="600">Task</text><text x="238" y="63.55" font-size="11" text-anchor="middle" class="mut">clear verb</text><rect x="320" y="20" width="136" height="56" rx="10" class="b-n"/><text x="388" y="43.45" font-size="13" text-anchor="middle" font-weight="600">Context</text><text x="388" y="63.55" font-size="11" text-anchor="middle" class="mut">who, why, background</text><rect x="20" y="90" width="136" height="56" rx="10" class="b-n"/><text x="88" y="113.45" font-size="13" text-anchor="middle" font-weight="600">Format</text><text x="88" y="133.55" font-size="11" text-anchor="middle" class="mut">structure, length</text><rect x="170" y="90" width="136" height="56" rx="10" class="b-w"/><text x="238" y="113.45" font-size="13" text-anchor="middle" font-weight="600">Constraints</text><text x="238" y="133.55" font-size="11" text-anchor="middle" class="mut">tone, must/avoid</text><rect x="320" y="90" width="136" height="56" rx="10" class="b-g"/><text x="388" y="113.45" font-size="13" text-anchor="middle" font-weight="600">Examples</text><text x="388" y="133.55" font-size="11" text-anchor="middle" class="mut">what good looks like</text><polyline points="475,90 514,90" class="ln ln-a"/><polygon points="520,90 512,94.4 512,85.6" class="ah-a"/><rect x="525" y="30" width="150" height="120" rx="10" class="b-s"/><text x="600" y="86" font-size="14" text-anchor="middle" font-weight="700">Strong</text><text x="600" y="104" font-size="14" text-anchor="middle" font-weight="700">prompt</text><rect x="540" y="46" width="120" height="3" rx="1" class="f-l"/><rect x="540" y="53" width="106" height="3" rx="1" class="f-l"/><rect x="540" y="60" width="92" height="3" rx="1" class="f-l"/><rect x="540" y="67" width="78" height="3" rx="1" class="f-l"/><rect x="540" y="74" width="64" height="3" rx="1" class="f-l"/></svg></div>
+        <figcaption>Six ingredients. You won't always need all of them — but when output disappoints, the missing ingredient is usually the cause.</figcaption>
+      </figure>
+
+      <h2>2.2 Before and after</h2>
+      <div class="compare">
+        <div class="weak"><h4>Weak</h4><p>"Write a LinkedIn post about our new product."</p></div>
+        <div class="strong"><h4>Strong</h4><p>"You're a B2B marketer. Write a LinkedIn post announcing <em>Bamboo Prep</em>, our new range of bamboo chopping boards. Audience: independent kitchenware retailers in the UK. Key points: FSC-certified bamboo, knife-friendly, wholesale discount for first orders before 30 November. Tone: warm and practical, not salesy. 120–150 words, UK English, max two emojis, end with a question to encourage comments."</p></div>
+      </div>
+
+      <h2>2.3 Be explicit about what you want</h2>
+      <ul>
+        <li><strong>Say what to do, not only what to avoid.</strong> "Write in short, plain sentences" works better than "Don't be verbose".</li>
+        <li><strong>Explain why.</strong> "Keep it under 100 words because it will be read on a phone" helps the model make sensible trade-offs.</li>
+        <li><strong>Specify the audience and purpose.</strong> A summary for a board differs from one for new starters.</li>
+        <li><strong>Ask for the level of ambition you want.</strong> If you want a thorough, creative or opinionated result, say so.</li>
+      </ul>
+
+      <h2>2.4 Using roles well</h2>
+      <p>Giving the model a role — in the system prompt or at the start — focuses its tone, vocabulary and priorities. It's most useful when you want a particular perspective: <em>"Review this as a sceptical CFO would."</em> A role is not a substitute for context, though. "You are a marketing expert" adds less than three sentences about your actual customers.</p>
+
+      <h2>2.5 A reusable template</h2>
+<pre data-copy><code>ROLE: You are a [role] helping [who].
+
+TASK: [Clear verb + what to produce].
+
+CONTEXT:
+- Audience: [who will read/use it]
+- Purpose: [what it's for / decision it supports]
+- Background: [anything the model needs to know]
+
+FORMAT: [structure, headings, table, bullet points, length]
+
+CONSTRAINTS: [tone, UK English, things to avoid, must-include points]
+
+If anything important is unclear, ask me up to 3 questions before you start.</code></pre>
+      <p>The last line is a powerful habit: it lets the model surface gaps in your brief before it guesses.</p>
+
+      <div class="activity">
+        <b>Try it: upgrade a prompt</b>
+        <p>Take this weak prompt — <em>"Help me prepare for my appraisal"</em> — and rewrite it using the template. Run both in an approved AI tool and compare the results.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Role, task, context, format, constraints and examples.</li><li>Say what to do, explain why, and name the audience.</li><li>Roles focus perspective but don't replace context.</li><li>Invite clarifying questions before the model starts.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google</span><a href="https://grow.google/ai-essentials/" target="_blank" rel="noopener">Google AI Essentials</a> — self-paced, under 5 hours, no experience needed</li><li><span class="provider">Anthropic</span><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Interactive prompt engineering tutorial (GitHub)</a> — hands-on exercises</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/prompt-engineering/" target="_blank" rel="noopener">What is prompt engineering?</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/fundamentals-generative-ai/" target="_blank" rel="noopener">Introduction to generative AI and agents</a> — LLMs, prompts and agents</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "'The reader is a small business owner with no legal training' is an example of…",
+"options": [
+"Format",
+"Context (audience)",
+"Role",
+"Constraint"
+],
+"answer": 1,
+"explain": "It tells the model who the output is for."
+},
+{
+"q": "Which instruction is likely to work best?",
+"options": [
+"'Don't be verbose'",
+"'Write in short, plain sentences — it will be read on a phone'",
+"'Be good'",
+"'No'"
+],
+"answer": 1,
+"explain": "Positive instructions with a reason help the model make good trade-offs."
+},
+{
+"q": "What's the main limitation of 'You are a marketing expert'?",
+"options": [
+"Roles are banned",
+"A role adds less than concrete context about your actual customers and goals",
+"It makes outputs shorter",
+"It changes the language"
+],
+"answer": 1,
+"explain": "Roles help, but context matters more."
+},
+{
+"q": "Why end a prompt with 'ask me up to 3 questions before you start'?",
+"options": [
+"To slow the model down",
+"To surface gaps in your brief before the model guesses",
+"To use more tokens",
+"It has no effect"
+],
+"answer": 1,
+"explain": "Clarifying questions improve the brief."
+},
+{
+"q": "'A table with columns: risk, why it matters, suggested wording' specifies the…",
+"options": [
+"Role",
+"Format",
+"Task",
+"Example"
+],
+"answer": 1,
+"explain": "It defines the output's structure."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Core prompting techniques →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

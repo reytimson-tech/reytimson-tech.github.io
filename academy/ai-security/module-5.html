@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Securing AI agents — AI Security &amp; Safety</title>
+<meta name="description" content="Why agents raise the stakes, excessive agency, the dangerous combination, agent controls, MCP and tool risks, and browser agents.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-security">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Securing AI agents</h1>
+      <p class="lead">When AI can take actions, a successful attack becomes a real-world incident. This module shows how to give agents power safely.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain why agents increase security risk</li><li>Identify the three causes of excessive agency</li><li>Recognise the dangerous combination of data, untrusted content and external communication</li><li>Apply controls for agents and tools</li><li>Manage risks from MCP servers and browser agents</li></ul>
+      </div>
+
+      <h2>5.1 Why agents raise the stakes</h2>
+      <p>An agent combines an LLM with <strong>tools</strong> (search, email, files, code execution, APIs, browsers) and the <strong>autonomy</strong> to decide which to use, in a loop. That's what makes agents useful — and why a successful prompt injection against an agent can lead to real actions: data exfiltration, unauthorised payments, deleted files or changed configurations.</p>
+
+      <h2>5.2 Excessive agency (OWASP LLM06)</h2>
+      <p>OWASP identifies three root causes:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Cause</th><th>Example</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Excessive functionality</strong></td><td>An agent that only needs to read emails is given a tool that can also send and delete</td><td>Give only the tools the task needs</td></tr>
+            <tr><td><strong>Excessive permissions</strong></td><td>A tool connects to the database with an admin account</td><td>Least-privilege, scoped credentials — ideally acting with the user's own permissions</td></tr>
+            <tr><td><strong>Excessive autonomy</strong></td><td>High-impact actions run without confirmation</td><td>Human approval for consequential or irreversible actions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>5.3 The dangerous combination</h2>
+      <p>Security practitioners warn about agents that combine <strong>three capabilities</strong>:</p>
+      <ol>
+        <li>access to <strong>private or sensitive data</strong>;</li>
+        <li>exposure to <strong>untrusted content</strong> that could contain injected instructions; and</li>
+        <li>the ability to <strong>communicate externally</strong> (send emails, make web requests, write to shared locations).</li>
+      </ol>
+      <p>Together, these let an attacker's hidden instructions read your data and send it out. If an agent needs all three, add strong controls — or redesign so that no single agent has all of them at once.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 330" style="min-width:560px" role="img" aria-label="The dangerous combination. An agent with all three can be tricked by hidden instructions into reading your data and sending it out. Remove one — or split the work across agents."><circle cx="230" cy="110" r="95" class="b-a" style="opacity:.75"/><circle cx="370" cy="110" r="95" class="b-w" style="opacity:.75"/><circle cx="300" cy="225" r="95" class="b-g" style="opacity:.75"/><text x="185" y="86.25" font-size="12.5" text-anchor="middle" font-weight="600">Private or</text><text x="185" y="102.5" font-size="12.5" text-anchor="middle">sensitive data</text><text x="415" y="86.25" font-size="12.5" text-anchor="middle" font-weight="600">Untrusted</text><text x="415" y="102.5" font-size="12.5" text-anchor="middle">content</text><text x="300" y="266.25" font-size="12.5" text-anchor="middle" font-weight="600">External</text><text x="300" y="282.5" font-size="12.5" text-anchor="middle">communication</text><circle cx="300" cy="150" r="30" class="b-b"/><text x="300" y="148" font-size="11" text-anchor="middle" font-weight="700" class="t-b">data</text><text x="300" y="161" font-size="11" text-anchor="middle" font-weight="700" class="t-b">theft</text></svg></div>
+        <figcaption>The dangerous combination. An agent with all three can be tricked by hidden instructions into reading your data and sending it out. Remove one — or split the work across agents.</figcaption>
+      </figure>
+
+      <h2>5.4 Controls for agents</h2>
+      <ul class="checklist">
+        <li><strong>Least privilege</strong> for every tool and credential; short-lived, scoped tokens</li>
+        <li><strong>Human-in-the-loop</strong> approval for sending, paying, deleting, sharing or changing permissions</li>
+        <li><strong>Sandboxing</strong> — run code and browsing in isolated environments</li>
+        <li><strong>Allow-lists</strong> for domains, recipients and actions</li>
+        <li><strong>Separation</strong> — split tasks across agents with different privileges; a "reader" agent that sees untrusted content shouldn't hold powerful tools</li>
+        <li><strong>Logging and audit</strong> of every tool call and decision</li>
+        <li><strong>Limits</strong> on steps, spend and time; kill switch</li>
+        <li><strong>Identity</strong> — agents act as identifiable principals, not anonymous super-users</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 250" style="min-width:560px" role="img" aria-label="Agents should reach tools only through a control layer — with stricter checks the more consequential the action."><rect x="20" y="90" width="120" height="60" rx="10" class="b-a"/><text x="80" y="124.9" font-size="14" text-anchor="middle" font-weight="600">Agent</text><rect x="180" y="30" width="160" height="180" rx="10" class="b-w"/><text x="260" y="54" font-size="13" text-anchor="middle" font-weight="700">Control layer</text><text x="260" y="82" font-size="11.5" text-anchor="middle">least-privilege tokens</text><text x="260" y="108" font-size="11.5" text-anchor="middle">allow-lists</text><text x="260" y="134" font-size="11.5" text-anchor="middle">spend &amp; step limits</text><text x="260" y="160" font-size="11.5" text-anchor="middle">logging</text><text x="260" y="186" font-size="11.5" text-anchor="middle">approval for risky actions</text><rect x="400" y="20" width="140" height="40" rx="10" class="b-g"/><text x="470" y="44.2" font-size="12" text-anchor="middle" font-weight="600">Read files</text><line x1="342" y1="120" x2="394.559" y2="44.9154" class="ln"/><polygon points="398,40 397.017,49.0771 389.808,44.0306" class="ah"/><rect x="400" y="80" width="140" height="40" rx="10" class="b-g"/><text x="470" y="104.2" font-size="12" text-anchor="middle" font-weight="600">Search web</text><line x1="342" y1="120" x2="392.35" y2="102.018" class="ln"/><polygon points="398,100 391.946,106.834 388.986,98.547" class="ah"/><rect x="400" y="140" width="140" height="40" rx="10" class="b-w"/><text x="470" y="164.2" font-size="12" text-anchor="middle" font-weight="600">Send email</text><line x1="342" y1="120" x2="393.118" y2="156.513" class="ln"/><polygon points="398,160 388.933,158.931 394.048,151.77" class="ah"/><rect x="400" y="200" width="140" height="40" rx="10" class="b-b"/><text x="470" y="224.2" font-size="12" text-anchor="middle" font-weight="600">Issue refund</text><line x1="342" y1="120" x2="395.068" y2="214.765" class="ln"/><polygon points="398,220 390.252,215.17 397.93,210.87" class="ah"/><line x1="142" y1="120" x2="172" y2="120" class="ln"/><polygon points="178,120 170,124.4 170,115.6" class="ah"/><text x="620" y="64" font-size="11" text-anchor="middle" font-weight="600" class="t-g">auto</text><text x="620" y="164" font-size="11" text-anchor="middle" font-weight="600" class="t-w">ask a human</text><text x="620" y="224" font-size="11" text-anchor="middle" font-weight="600" class="t-b">ask + limit</text></svg></div>
+        <figcaption>Agents should reach tools only through a control layer — with stricter checks the more consequential the action.</figcaption>
+      </figure>
+
+      <h2>5.5 Tools, plugins and the Model Context Protocol</h2>
+      <p>Protocols such as the open <strong>Model Context Protocol (MCP)</strong> make it easy to connect AI models to tools and data. They also add supply-chain and injection risks:</p>
+      <ul>
+        <li>A malicious or compromised tool server can return injected instructions or steal data passed to it.</li>
+        <li>Tool descriptions themselves are read by the model and can contain hidden instructions ("tool poisoning").</li>
+        <li>A tool's behaviour can change after you've approved it.</li>
+      </ul>
+      <p>Treat tool servers like any third-party software: use trusted sources, review permissions, pin versions, monitor behaviour and remove what you don't need.</p>
+
+      <h2>5.6 Computer-use and browser agents</h2>
+      <p>Agents that operate a browser or desktop face the largest attack surface — every web page, document and advert is potential input. Use dedicated, low-privilege browser profiles; restrict sites; require confirmation for purchases, form submissions and downloads; and watch what the agent does.</p>
+
+      <div class="activity">
+        <b>Try it: redesign a risky agent</b>
+        <p>A team proposes one agent that reads all incoming customer emails (untrusted), has full access to the customer database (sensitive), and can send emails and issue refunds (external actions). Redesign it to reduce risk.</p>
+        <details><summary>Show one possible design</summary><p>Agent A (no database or send rights) classifies and summarises emails. Agent B looks up only the specific customer's record, with read-only, scoped access. Drafts go to a human queue; refunds over a small threshold need human approval; outbound email only to the original sender's verified address; all tool calls logged; rate and spend limits applied.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Agents turn manipulated outputs into actions.</li><li>Excessive functionality, permissions and autonomy cause excessive agency.</li><li>Avoid combining private data, untrusted content and external communication in one agent.</li><li>Least privilege, approval, sandboxing, allow-lists, separation, logging and limits.</li><li>Treat tool servers as third-party software.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OWASP</span><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">Top 10 for LLM Applications 2025</a></li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/research/prompt-injection-defenses" target="_blank" rel="noopener">Mitigating the risk of prompt injections in browser use</a> — November 2025</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/security/ai-red-team/" target="_blank" rel="noopener">Microsoft AI Red Team</a> — red-teaming guidance, PyRIT and threat modelling</li><li><span class="provider">Google</span><a href="https://safety.google/cybersecurity-advancements/saif/" target="_blank" rel="noopener">Secure AI Framework (SAIF)</a> — six core elements for securing AI</li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "An agent that only needs to read calendar events is given a tool that can also delete them. This is…",
+"options": [
+"Excessive functionality",
+"Excessive autonomy",
+"Membership inference",
+"Prompt leakage"
+],
+"answer": 0,
+"explain": "Give only the tools the task needs."
+},
+{
+"q": "Which combination is especially dangerous in one agent?",
+"options": [
+"Spell-check, grammar check and translation",
+"Access to private data, exposure to untrusted content, and the ability to communicate externally",
+"Read-only access and logging",
+"Rate limits and quotas"
+],
+"answer": 1,
+"explain": "Together they allow data exfiltration via injection."
+},
+{
+"q": "Which action should most clearly require human approval?",
+"options": [
+"Summarising a document",
+"Issuing a large refund or deleting records",
+"Reading a public web page",
+"Formatting a table"
+],
+"answer": 1,
+"explain": "Consequential or irreversible actions need confirmation."
+},
+{
+"q": "What is 'tool poisoning' in the context of MCP?",
+"options": [
+"Overloading a server",
+"Hidden instructions in tool descriptions or responses that the model reads",
+"Deleting tools",
+"Paying for tools"
+],
+"answer": 1,
+"explain": "Tool metadata is input to the model too."
+},
+{
+"q": "A good practice for browser agents is…",
+"options": [
+"Using your main browser profile with all saved passwords",
+"A dedicated, low-privilege profile, restricted sites and confirmation for purchases and submissions",
+"Disabling all logging",
+"Letting it browse anywhere unsupervised"
+],
+"answer": 1,
+"explain": "Minimise what a compromised agent can reach."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Red teaming, evaluation and secure operations →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

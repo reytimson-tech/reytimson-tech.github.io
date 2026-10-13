@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Data, privacy and confidentiality — AI Literacy for Work</title>
+<meta name="description" content="Where your data goes, consumer vs enterprise tools, a traffic-light approach, UK GDPR basics, IP and safe habits.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-literacy">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 25 minutes</span>
+      <h1>Data, privacy and confidentiality</h1>
+      <p class="lead">The fastest way to get into trouble with AI is to paste the wrong thing into the wrong tool. This module shows you how to keep personal and confidential information safe.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain the difference between consumer and enterprise AI tools for data handling</li><li>Classify information using a green–amber–red approach</li><li>Apply basic data protection principles when using AI</li><li>Recognise confidentiality and intellectual property risks</li><li>Build safe everyday habits</li></ul>
+      </div>
+
+      <h2>4.1 Where does your data go?</h2>
+      <p>When you type into an AI tool, your text (and any files you upload) is sent to the provider's servers to be processed. What happens next depends heavily on <strong>which version</strong> of the tool you're using.</p>
+      <div class="compare">
+        <div class="weak"><h4>Consumer / personal accounts</h4><p>Free or personal plans may, depending on the provider and your settings, keep conversations and use them to improve models. You're bound by consumer terms, not your employer's contract.</p></div>
+        <div class="strong"><h4>Enterprise / business accounts</h4><p>Business plans typically come with a contract that sets out data handling, retention, security and — usually — a commitment not to train models on your data. Your IT and legal teams have reviewed it.</p></div>
+      </div>
+      <p>AWS's <em>Generative AI Security Scoping Matrix</em> makes the same distinction for organisations: using a <strong>public consumer app</strong> (scope 1) gives you the least control over data, while an <strong>enterprise app</strong> under a business agreement (scope 2) gives you more. Settings and terms change, so always check your organisation's current guidance.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 650 225" style="min-width:560px" role="img" aria-label="When you use an AI tool, your text and files leave your device. Whether they&#x27;re stored, used for training or seen by staff depends on the account type and settings — which is why enterprise contracts matter."><rect x="20" y="70" width="110" height="46" rx="10" class="b-n"/><text x="75" y="89.25" font-size="12.5" text-anchor="middle" font-weight="600">You type or</text><text x="75" y="105.5" font-size="12.5" text-anchor="middle">upload</text><rect x="170" y="20" width="460" height="190" rx="12" class="b-none"/><text x="400" y="40" font-size="12.5" text-anchor="middle" font-weight="600">Provider&#x27;s servers</text><rect x="190" y="70" width="120" height="46" rx="10" class="b-a"/><text x="250" y="89.25" font-size="12.5" text-anchor="middle" font-weight="600">Model</text><text x="250" y="105.5" font-size="12.5" text-anchor="middle">processes it</text><rect x="380" y="50" width="180" height="36" rx="10" class="b-w"/><text x="470" y="72.2" font-size="12" text-anchor="middle" font-weight="600">Stored? For how long?</text><rect x="380" y="96" width="180" height="36" rx="10" class="b-w"/><text x="470" y="118.2" font-size="12" text-anchor="middle" font-weight="600">Used to train models?</text><rect x="380" y="142" width="180" height="36" rx="10" class="b-w"/><text x="470" y="164.2" font-size="12" text-anchor="middle" font-weight="600">Who can see it?</text><line x1="133" y1="93" x2="181" y2="93" class="ln"/><polygon points="187,93 179,97.4 179,88.6" class="ah"/><text x="160" y="86" font-size="11.5" text-anchor="middle" class="mut">sent</text><line x1="313" y1="85.8409" x2="371.038" y2="79.2456" class="ln"/><polygon points="377,78.5682 369.548,83.8433 368.554,75.0996" class="ah"/><line x1="313" y1="99.0136" x2="371.027" y2="104.553" class="ln"/><polygon points="377,105.123 368.618,108.743 369.454,99.9825" class="ah"/><line x1="313" y1="112.186" x2="395.305" y2="137.252" class="ln"/><polygon points="401.045,139 392.11,140.878 394.674,132.46" class="ah"/><text x="400" y="202" font-size="11.5" text-anchor="middle" class="mut">Consumer terms or business contract decide the answers</text></svg></div>
+        <figcaption>When you use an AI tool, your text and files leave your device. Whether they're stored, used for training or seen by staff depends on the account type and settings — which is why enterprise contracts matter.</figcaption>
+      </figure>
+
+      <h2>4.2 A traffic-light approach to data</h2>
+      <p>Many organisations use a simple classification like this. Your own policy takes precedence.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Type of information</th><th>Examples</th><th>Typical rule</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:var(--good)">Green</strong></td><td>Public or non-sensitive</td><td>Published web content, generic questions, your own rough ideas</td><td>OK in approved tools</td></tr>
+            <tr><td><strong style="color:var(--gold)">Amber</strong></td><td>Internal</td><td>Internal process docs, draft plans, non-personal operational data</td><td>Approved enterprise tools only</td></tr>
+            <tr><td><strong style="color:var(--bad)">Red</strong></td><td>Confidential, personal or regulated</td><td>Customer records, HR files, health data, passwords and keys, unreleased financials, client confidential material</td><td>Not without specific approval, safeguards and a lawful basis</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.3 Personal data and UK GDPR</h2>
+      <p>If you put information about identifiable people into an AI tool, data protection law applies — in the UK, UK GDPR and the Data Protection Act 2018; in the EU, the GDPR. In practice that means:</p>
+      <ul>
+        <li><strong>Only use what you need</strong> (data minimisation). Can you remove names or replace them with placeholders?</li>
+        <li><strong>Have a lawful basis</strong> and use the data in ways people would reasonably expect.</li>
+        <li><strong>Be careful with special category data</strong> such as health, ethnicity or religion.</li>
+        <li><strong>Be cautious about automated decisions</strong> that significantly affect people — such as hiring or credit — which carry extra legal protections.</li>
+      </ul>
+      <p>The UK Information Commissioner's Office (ICO) publishes detailed guidance on AI and data protection — see the links below.</p>
+
+      <h2>4.4 Confidentiality and intellectual property</h2>
+      <ul>
+        <li><strong>Client and commercial confidentiality:</strong> contracts and professional rules (for lawyers, accountants, doctors) may forbid sharing information with third-party tools.</li>
+        <li><strong>Your organisation's IP:</strong> source code, product plans and trade secrets need the same care.</li>
+        <li><strong>Others' IP in outputs:</strong> AI can produce text or images that closely resemble existing works. Check before publishing, and follow your organisation's rules on using AI-generated content commercially.</li>
+      </ul>
+
+      <h2>4.5 Safe habits</h2>
+      <ul class="checklist">
+        <li>Use approved, enterprise accounts for work</li>
+        <li>Strip out names, contact details and identifiers when you can — "Customer A", "Employee B"</li>
+        <li>Never paste passwords, API keys or access tokens</li>
+        <li>Check your settings for chat history and model training</li>
+        <li>Be careful with uploads — a spreadsheet may contain hidden tabs or columns of personal data</li>
+        <li>When in doubt, ask your data protection or information security team first</li>
+      </ul>
+
+      <div class="activity">
+        <b>Try it: rewrite the prompt safely</b>
+        <p>"Summarise this complaint from Jane Smith (jane.smith@email.com, account 12345678) about her mortgage arrears and draft a reply."</p>
+        <details><summary>Show a safer version</summary><p>"Summarise this customer complaint about mortgage arrears and draft a reply. [Complaint text with name, email and account number removed]". Use an approved enterprise tool, and only if your policy allows customer correspondence there. Add personal details back yourself before sending.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Enterprise AI plans usually offer contractual data protections that consumer plans don't.</li><li>Classify information before sharing: public, internal, or confidential/personal/regulated.</li><li>Data protection law applies to personal data you put into AI — minimise and anonymise.</li><li>Never paste secrets; check uploads; ask when unsure.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/" target="_blank" rel="noopener">Generative AI Security Scoping Matrix</a> — five scopes, from consumer apps to self-trained models</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">IBM SkillsBuild</span><a href="https://skillsbuild.org/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noopener">Free AI learning catalogue</a> — courses and digital credentials, including AI Fundamentals</li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Why does it matter whether you use an enterprise or a personal account of an AI tool?",
+"options": [
+"Enterprise versions are always more accurate",
+"Enterprise plans usually come with a contract covering data handling, retention and use for training",
+"Personal accounts can't upload files",
+"There is no difference"
+],
+"answer": 1,
+"explain": "The contract, not the model, usually determines how your data is protected."
+},
+{
+"q": "Under a traffic-light approach, a spreadsheet of customer names, addresses and order histories is…",
+"options": [
+"Green",
+"Amber",
+"Red — personal data needing specific approval and safeguards",
+"Not data"
+],
+"answer": 2,
+"explain": "It contains personal data about identifiable customers."
+},
+{
+"q": "Which is the best example of data minimisation?",
+"options": [
+"Uploading the full HR database to get one statistic",
+"Replacing names with 'Employee A' and 'Employee B' before asking for help with a rota",
+"Adding extra context about people's health 'just in case'",
+"Sharing passwords so the AI can log in"
+],
+"answer": 1,
+"explain": "Use only the data you need and remove identifiers where you can."
+},
+{
+"q": "Which should you NEVER paste into an AI tool?",
+"options": [
+"A published press release",
+"An API key or password",
+"A generic question about Excel",
+"Your own rough ideas"
+],
+"answer": 1,
+"explain": "Credentials should never be shared with any third-party tool."
+},
+{
+"q": "In AWS's Generative AI Security Scoping Matrix, using a public consumer AI app is scope 1. What does that imply?",
+"options": [
+"You have the most control over data",
+"You have the least control over how the model and data are handled",
+"It is prohibited",
+"It is the same as training your own model"
+],
+"answer": 1,
+"explain": "Scope 1 gives the organisation the least visibility and control."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Risks and how to spot them →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

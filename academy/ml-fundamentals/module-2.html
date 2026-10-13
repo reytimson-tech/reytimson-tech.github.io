@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Regression: predicting numbers — Machine Learning Fundamentals</title>
+<meta name="description" content="Linear regression, training and evaluating against a baseline, MAE, RMSE and R², interpreting coefficients, and inspecting errors.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 30 minutes</span>
+      <h1>Regression: predicting numbers</h1>
+      <p class="lead">From sales forecasts to delivery times, many business questions are 'how much?' This module covers the workhorse model for those questions.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain linear regression</li><li>Train a regression model and compare with a mean baseline</li><li>Interpret MAE, RMSE and R²</li><li>Read coefficients carefully</li><li>Inspect errors visually</li></ul>
+      </div>
+
+      <h2>2.1 Linear regression: drawing the best line</h2>
+      <p><strong>Linear regression</strong> predicts a number as a weighted sum of the features plus a constant. Training finds the weights that minimise the squared differences between predictions and actual values. It's fast, interpretable and a strong first model for regression.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 215" style="min-width:560px" role="img" aria-label="Linear regression draws the line that minimises the squared residuals — the vertical gaps between each point and the line."><line x1="60" y1="185" x2="570" y2="185" class="ln"/><line x1="60" y1="185" x2="60" y2="15" class="ln"/><line x1="70" y1="167.2" x2="550" y2="32.8" class="ln ln-a"/><line x1="90" y1="173.6" x2="90" y2="161.6" class="ln-w dash"/><circle cx="90" cy="173.6" r="5" class="d-a"/><line x1="130" y1="135.4" x2="130" y2="150.4" class="ln-w dash"/><circle cx="130" cy="135.4" r="5" class="d-a"/><line x1="170" y1="147.2" x2="170" y2="139.2" class="ln-w dash"/><circle cx="170" cy="147.2" r="5" class="d-a"/><line x1="210" y1="122" x2="210" y2="128" class="ln-w dash"/><circle cx="210" cy="122" r="5" class="d-a"/><line x1="250" y1="134.8" x2="250" y2="116.8" class="ln-w dash"/><circle cx="250" cy="134.8" r="5" class="d-a"/><line x1="290" y1="95.6" x2="290" y2="105.6" class="ln-w dash"/><circle cx="290" cy="95.6" r="5" class="d-a"/><line x1="330" y1="98.4" x2="330" y2="94.4" class="ln-w dash"/><circle cx="330" cy="98.4" r="5" class="d-a"/><line x1="370" y1="69.2" x2="370" y2="83.2" class="ln-w dash"/><circle cx="370" cy="69.2" r="5" class="d-a"/><line x1="410" y1="81" x2="410" y2="72" class="ln-w dash"/><circle cx="410" cy="81" r="5" class="d-a"/><line x1="450" y1="57.8" x2="450" y2="60.8" class="ln-w dash"/><circle cx="450" cy="57.8" r="5" class="d-a"/><line x1="490" y1="64.6" x2="490" y2="49.6" class="ln-w dash"/><circle cx="490" cy="64.6" r="5" class="d-a"/><line x1="530" y1="30.4" x2="530" y2="38.4" class="ln-w dash"/><circle cx="530" cy="30.4" r="5" class="d-a"/><text x="262" y="130" font-size="11" text-anchor="start" font-weight="600" class="t-w">residual = actual − predicted</text><text x="330" y="50" font-size="11.5" text-anchor="middle" font-weight="600" class="t-a">best-fit line</text><text x="66" y="22" font-size="11" text-anchor="start" class="mut">annual value (£)</text><text x="315" y="205" font-size="11" text-anchor="middle" class="mut">monthly spend (£) →</text></svg></div>
+        <figcaption>Linear regression draws the line that minimises the squared residuals — the vertical gaps between each point and the line.</figcaption>
+      </figure>
+
+      <h2>2.2 Train and evaluate</h2>
+<pre data-copy><code><span class="label">Python · predicting annual customer value</span>from sklearn.linear_model import LinearRegression
+from sklearn.dummy import DummyRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+reg_features = ["tenure_months", "monthly_spend", "support_tickets", "on_promo"]
+Xr, yr = customers[reg_features], customers["annual_value"]
+Xr_train, Xr_test, yr_train, yr_test = train_test_split(Xr, yr, test_size=0.2, random_state=0)
+
+base = DummyRegressor(strategy="mean").fit(Xr_train, yr_train)
+lin = LinearRegression().fit(Xr_train, yr_train)
+
+for name, m in [("Baseline (mean)", base), ("Linear regression", lin)]:
+    pred = m.predict(Xr_test)
+    mae = mean_absolute_error(yr_test, pred)
+    rmse = mean_squared_error(yr_test, pred) ** 0.5
+    print(f"{name:18}  MAE £{mae:6.1f}   RMSE £{rmse:6.1f}   R² {r2_score(yr_test, pred):.2f}")</code></pre>
+
+      <h2>2.3 Regression metrics</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th>Meaning</th><th>Use when</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MAE</strong> (mean absolute error)</td><td>Average size of errors, in the target's units</td><td>Easy to explain: "off by £40 on average"</td></tr>
+            <tr><td><strong>RMSE</strong> (root mean squared error)</td><td>Like MAE but penalises big errors more</td><td>Large errors are especially costly</td></tr>
+            <tr><td><strong>R²</strong></td><td>Share of the variation explained, compared with predicting the mean (1 is perfect, 0 is no better than the mean)</td><td>Comparing models on the same data</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>2.4 Reading the coefficients</h2>
+<pre data-copy><code>coefs = pd.Series(lin.coef_, index=reg_features).round(2)
+print(coefs)
+# e.g. monthly_spend ≈ +10: each extra £1 of monthly spend adds about £10 of annual value</code></pre>
+      <p>Coefficients show how the prediction changes when one feature rises by one unit, holding the others constant. They're easy to explain — but they describe association, not causation, and become unreliable when features are strongly correlated with each other.</p>
+
+      <h2>2.5 Check the errors, not just the score</h2>
+<pre data-copy><code>import matplotlib.pyplot as plt
+
+pred = lin.predict(Xr_test)
+plt.scatter(yr_test, pred, s=8, alpha=0.5)
+plt.plot([yr_test.min(), yr_test.max()], [yr_test.min(), yr_test.max()], "r--")
+plt.xlabel("Actual annual value (£)"); plt.ylabel("Predicted (£)")
+plt.show()</code></pre>
+      <p>Points close to the diagonal are good predictions. Patterns — such as consistent under-prediction for high-value customers — suggest missing features or a non-linear relationship.</p>
+<div class="activity"><b>Exercise: add a feature</b><p>Add <code>region</code> to the regression by one-hot encoding it (e.g. with <code>pd.get_dummies(..., drop_first=True)</code>). Does MAE improve? Why or why not?</p><details><summary>Show a solution</summary><pre data-copy><code>Xr2 = pd.get_dummies(customers[reg_features + ["region"]], columns=["region"], drop_first=True)
+Xa, Xb, ya, yb = train_test_split(Xr2, yr, test_size=0.2, random_state=0)
+m = LinearRegression().fit(Xa, ya)
+print(mean_absolute_error(yb, m.predict(Xb)))
+# Little or no improvement: region played no part in how this synthetic data was generated.</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Linear regression fits a weighted sum of features.</li><li>MAE is the average error in real units; RMSE punishes big errors; R² compares with predicting the mean.</li><li>Coefficients show association, not causation.</li><li>Plot predicted vs actual to find systematic errors.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/linear-regression" target="_blank" rel="noopener">ML Crash Course: Linear regression</a></li><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" rel="noopener">Intro to Machine Learning</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/machine-learning" target="_blank" rel="noopener">What is machine learning?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "MAE of £40 means…",
+"options": [
+"Predictions are £40 too high every time",
+"Predictions are off by £40 on average",
+"R² is 0.40",
+"40% accuracy"
+],
+"answer": 1,
+"explain": "Mean absolute error in the target's units."
+},
+{
+"q": "Which metric penalises large errors more heavily?",
+"options": [
+"MAE",
+"RMSE",
+"Accuracy",
+"Recall"
+],
+"answer": 1,
+"explain": "Squaring emphasises big errors."
+},
+{
+"q": "R² of 0 means the model is…",
+"options": [
+"Perfect",
+"No better than always predicting the mean",
+"Always wrong",
+"Overfitting"
+],
+"answer": 1,
+"explain": "R² compares with the mean baseline."
+},
+{
+"q": "A coefficient of +10 on monthly_spend means…",
+"options": [
+"Spend causes value",
+"Each extra £1 of monthly spend is associated with about £10 more predicted annual value, other features fixed",
+"Spend is 10% of value",
+"Nothing"
+],
+"answer": 1,
+"explain": "Association, holding other features constant."
+},
+{
+"q": "Predictions for high-value customers are consistently too low. What does this suggest?",
+"options": [
+"Perfect model",
+"Missing features or a non-linear relationship",
+"Too much data",
+"A plotting error"
+],
+"answer": 1,
+"explain": "Systematic errors reveal model limitations."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Classification and evaluation →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

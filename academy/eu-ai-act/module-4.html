@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: High-risk AI systems — EU AI Act Fundamentals</title>
+<meta name="description" content="How the EU AI Act classifies high-risk AI under Annex I and Annex III, the Article 6(3) filter, provider requirements and deployer duties.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 40 minutes</span>
+      <h1>High-risk AI systems</h1>
+      <p class="lead">High-risk AI is the heart of the AI Act. These systems are allowed, but only if they meet strict requirements on risk management, data, documentation, transparency, human oversight and robustness.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul>
+          <li>Explain the two routes to high-risk classification (Annex I and Annex III)</li>
+          <li>Apply the Article 6(3) filter for Annex III systems</li>
+          <li>Summarise the core requirements for providers</li>
+          <li>Describe deployers' duties, including the fundamental rights impact assessment</li>
+          <li>State when the high-risk rules apply after the 2026 amendments</li>
+        </ul>
+      </div>
+
+      <div class="callout update">
+        <b>Key dates after the Digital Omnibus</b>
+        <p><strong>2 December 2027</strong> — Annex III (stand-alone) high-risk systems. <strong>2 August 2028</strong> — Annex I (AI in regulated products). Systems already on the market before these dates are only caught if they are significantly changed afterwards; systems used by public authorities have until <strong>2 August 2030</strong>.</p>
+      </div>
+
+      <h2>4.1 Route 1: AI in regulated products (Annex I)</h2>
+      <p>Under Article 6(1), an AI system is high-risk if <strong>both</strong> conditions are met:</p>
+      <ol>
+        <li>it is a <strong>safety component</strong> of a product, or is itself a product, covered by the EU product legislation listed in <strong>Annex I</strong>; and</li>
+        <li>that product must undergo a <strong>third-party conformity assessment</strong> under that legislation.</li>
+      </ol>
+      <p>Annex I covers areas such as medical devices and in-vitro diagnostics, toys, lifts, radio equipment, personal protective equipment, and vehicles and aviation. Following the 2026 amendments, a "safety component" must have the intended purpose of preventing or mitigating risks to health and safety — AI used purely for efficiency or convenience in a product is not a safety component.</p>
+
+      <h2>4.2 Route 2: high-risk use cases (Annex III)</h2>
+      <p>Under Article 6(2), AI systems used in the areas listed in Annex III are high-risk. The eight areas are:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Examples of high-risk uses</th></tr></thead>
+          <tbody>
+            <tr><td>1. Biometrics</td><td>Remote biometric identification (not 1:1 verification); biometric categorisation by sensitive attributes; emotion recognition (where not prohibited).</td></tr>
+            <tr><td>2. Critical infrastructure</td><td>Safety components in managing road traffic, digital infrastructure, or supply of water, gas, heating and electricity.</td></tr>
+            <tr><td>3. Education and vocational training</td><td>Deciding admission; evaluating learning outcomes; assessing the appropriate level of education; detecting cheating in tests.</td></tr>
+            <tr><td>4. Employment and worker management</td><td>Recruitment and CV screening; decisions on promotion, termination and task allocation; monitoring and evaluating performance.</td></tr>
+            <tr><td>5. Access to essential services</td><td>Eligibility for public benefits; creditworthiness and credit scoring (except fraud detection); risk assessment and pricing in life and health insurance; triage of emergency calls.</td></tr>
+            <tr><td>6. Law enforcement</td><td>Assessing risk of victimisation; polygraphs; evaluating reliability of evidence; profiling in criminal investigations.</td></tr>
+            <tr><td>7. Migration, asylum and border control</td><td>Assessing security or health risks; examining asylum, visa and residence applications.</td></tr>
+            <tr><td>8. Administration of justice and democracy</td><td>Assisting judges in researching and interpreting facts and law; systems intended to influence election outcomes or voting behaviour.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The Article 6(3) filter</h3>
+      <p>An Annex III system is <strong>not</strong> high-risk if it does not pose a significant risk of harm to health, safety or fundamental rights — for example because it only:</p>
+      <ul>
+        <li>performs a <strong>narrow procedural task</strong> (e.g. sorting incoming documents into categories);</li>
+        <li><strong>improves the result</strong> of a previously completed human activity (e.g. polishing the language of a document);</li>
+        <li><strong>detects patterns or deviations</strong> in decision-making without replacing or influencing a human assessment without proper human review; or</li>
+        <li>performs a <strong>preparatory task</strong> to an assessment (e.g. translating files).</li>
+      </ul>
+      <div class="callout warn">
+        <b>Profiling is always high-risk</b>
+        <p>An Annex III system that performs <strong>profiling of natural persons</strong> is always high-risk — the filter cannot be used. Providers relying on the filter must document their assessment and make it available to authorities on request.</p>
+      </div>
+
+      <h2>4.3 Requirements for high-risk AI systems</h2>
+      <p>Chapter III, Section 2 sets out the requirements every high-risk system must meet:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Article</th><th>Requirement</th><th>In plain English</th></tr></thead>
+          <tbody>
+            <tr><td>9</td><td>Risk management system</td><td>A continuous, iterative process across the whole lifecycle to identify, evaluate and mitigate risks.</td></tr>
+            <tr><td>10</td><td>Data and data governance</td><td>Training, validation and testing data must be relevant, sufficiently representative and, as far as possible, free of errors and complete — with bias examined and mitigated.</td></tr>
+            <tr><td>11</td><td>Technical documentation</td><td>Detailed documentation (Annex IV) showing how the system complies. SMEs and small mid-caps can use simplified forms.</td></tr>
+            <tr><td>12</td><td>Record-keeping</td><td>Automatic logging of events to ensure traceability.</td></tr>
+            <tr><td>13</td><td>Transparency to deployers</td><td>Clear instructions for use: capabilities, limitations, accuracy, intended purpose and oversight measures.</td></tr>
+            <tr><td>14</td><td>Human oversight</td><td>Designed so people can understand, monitor, override and stop the system, and avoid "automation bias".</td></tr>
+            <tr><td>15</td><td>Accuracy, robustness and cybersecurity</td><td>Appropriate, declared levels of accuracy; resilience to errors and attacks such as data poisoning and adversarial examples.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Provider obligations</h3>
+      <p>On top of building a compliant system, providers must:</p>
+      <ul>
+        <li>run a <strong>quality management system</strong> (Article 17) — proportionate for SMEs and small mid-caps;</li>
+        <li>complete a <strong>conformity assessment</strong> (Article 43) — mostly internal control for Annex III, third-party for some biometrics and for Annex I products under their sector rules;</li>
+        <li>draw up an <strong>EU declaration of conformity</strong> and affix the <strong>CE marking</strong>;</li>
+        <li><strong>register</strong> the system in the EU database (Article 49);</li>
+        <li>carry out <strong>post-market monitoring</strong> (Article 72) and report <strong>serious incidents</strong> to authorities (Article 73);</li>
+        <li>take corrective action and cooperate with authorities.</li>
+      </ul>
+
+      <h2>4.4 Deployer obligations</h2>
+      <p>Organisations <em>using</em> high-risk AI must (Article 26):</p>
+      <ul>
+        <li>use the system in line with the <strong>instructions for use</strong>;</li>
+        <li>assign <strong>human oversight</strong> to people with the competence, training, authority and support to do it;</li>
+        <li>ensure <strong>input data</strong> under their control is relevant and sufficiently representative;</li>
+        <li><strong>monitor</strong> operation and report risks and serious incidents to the provider and authorities;</li>
+        <li>keep automatically generated <strong>logs for at least six months</strong>;</li>
+        <li><strong>inform workers</strong> and their representatives before using high-risk AI in the workplace;</li>
+        <li><strong>inform people</strong> when a high-risk system is used to make, or help make, decisions about them.</li>
+      </ul>
+      <p>People affected by decisions based on certain high-risk systems also have a <strong>right to an explanation</strong> of the role the AI played (Article 86).</p>
+
+      <h3>Fundamental rights impact assessment (FRIA)</h3>
+      <p>Under Article 27, some deployers must assess the impact on fundamental rights <strong>before</strong> first use:</p>
+      <ul>
+        <li>bodies governed by public law;</li>
+        <li>private entities providing public services; and</li>
+        <li>deployers using AI for <strong>creditworthiness/credit scoring</strong> or <strong>life and health insurance risk assessment and pricing</strong>.</li>
+      </ul>
+      <p>The FRIA describes the process, the period and frequency of use, the people likely to be affected, the specific risks of harm, the human oversight measures and what happens if risks materialise.</p>
+
+      <div class="example">
+        <span class="eyebrow">Scenario</span>
+        <p>A UK-based recruitment agency uses a vendor's AI tool to shortlist candidates for roles at clients in France.</p>
+        <p><strong>Classification:</strong> employment — Annex III, area 4. It ranks and filters candidates, which involves profiling, so the 6(3) filter can't apply. <strong>High-risk.</strong></p>
+        <p><strong>Roles:</strong> the vendor is the provider; the agency is a deployer (its output is used in the EU). From 2 December 2027 the agency must follow instructions, assign trained human reviewers, keep logs for six months, and tell candidates that AI is involved. The vendor must have completed conformity assessment, CE marking and registration.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul>
+        <li>High-risk status comes via Annex I (regulated products) or Annex III (eight sensitive areas).</li>
+        <li>The Article 6(3) filter can take some Annex III systems out of scope — but never systems that profile people.</li>
+        <li>Providers carry the heaviest load: Articles 9–15, quality management, conformity assessment, CE marking, registration and monitoring.</li>
+        <li>Deployers must use systems properly, ensure human oversight, keep logs, inform people — and some must run a FRIA.</li>
+        <li>Annex III rules apply from 2 December 2027; Annex I from 2 August 2028.</li>
+      </ul>
+
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+        [
+          {"q":"From when do the high-risk obligations apply to Annex III (stand-alone) systems, following the 2026 Digital Omnibus?","options":["2 August 2026","2 December 2027","2 August 2028","2 August 2030"],"answer":1,"explain":"The Omnibus moved Annex III obligations from 2 August 2026 to 2 December 2027. Annex I moved to 2 August 2028."},
+          {"q":"Which of these is a high-risk use case under Annex III?","options":["AI that recommends films","AI that screens CVs to shortlist job applicants","A spam filter","AI that detects payment fraud"],"answer":1,"explain":"Recruitment and selection is listed under employment in Annex III. Fraud detection is specifically carved out of the credit area."},
+          {"q":"When can a provider NOT rely on the Article 6(3) filter for an Annex III system?","options":["When the system performs a narrow procedural task","When the system performs profiling of natural persons","When the system is sold to SMEs","When the system is open source"],"answer":1,"explain":"Annex III systems that profile natural persons are always considered high-risk."},
+          {"q":"How long must deployers keep logs automatically generated by a high-risk AI system, at a minimum?","options":["One month","Six months","Two years","Ten years"],"answer":1,"explain":"Article 26 requires deployers to keep logs for at least six months, unless other law says otherwise."},
+          {"q":"Which deployer must carry out a fundamental rights impact assessment?","options":["Any company using a chatbot","A private bank using AI for credit scoring","A retailer using AI for stock forecasting","A video game studio"],"answer":1,"explain":"Article 27 requires a FRIA from public bodies, private entities providing public services, and deployers of credit scoring and life/health insurance pricing systems."}
+        ]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Transparency &amp; GPAI →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

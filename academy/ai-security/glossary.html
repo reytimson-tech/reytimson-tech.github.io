@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — AI Security &amp; Safety</title>
+<meta name="description" content="Key terms from AI Security &amp; Safety, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-security">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>AI security glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. prompt injection, backdoor, MCP" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Adversarial example</dt><dd>An input crafted, often imperceptibly, to make a model produce a wrong output.</dd>
+        <dt>AI bill of materials</dt><dd>A record of the models, datasets, libraries and services an AI system depends on.</dd>
+        <dt>AI red teaming</dt><dd>Deliberately attacking an AI system to find security and safety weaknesses.</dd>
+        <dt>Backdoor</dt><dd>A hidden behaviour implanted in a model, usually through poisoning, that activates on a trigger.</dd>
+        <dt>Data poisoning</dt><dd>Manipulating training, fine-tuning or retrieval data to change a model's behaviour.</dd>
+        <dt>Defence in depth</dt><dd>Layering multiple controls so that if one fails, others still protect the system.</dd>
+        <dt>Denial of wallet</dt><dd>An attack that drives up the cost of an AI service through excessive usage.</dd>
+        <dt>Direct prompt injection</dt><dd>An attacker typing instructions designed to override a model's intended behaviour.</dd>
+        <dt>Excessive agency</dt><dd>OWASP LLM06: an AI system with more functionality, permissions or autonomy than needed.</dd>
+        <dt>Improper output handling</dt><dd>OWASP LLM05: passing model output to other systems without validation.</dd>
+        <dt>Indirect prompt injection</dt><dd>Malicious instructions hidden in content an AI processes, such as web pages, emails or documents.</dd>
+        <dt>Jailbreak</dt><dd>A prompt designed to bypass a model's safety training.</dd>
+        <dt>Least privilege</dt><dd>Giving each component only the minimum access it needs.</dd>
+        <dt>Membership inference</dt><dd>Determining whether a specific record was in a model's training data.</dd>
+        <dt>MITRE ATLAS</dt><dd>A knowledge base of adversary tactics and techniques against AI systems.</dd>
+        <dt>Model Context Protocol (MCP)</dt><dd>An open protocol for connecting AI models to tools and data sources.</dd>
+        <dt>Model extraction</dt><dd>Copying a model's behaviour by querying it and training a replica on the outputs.</dd>
+        <dt>Model inversion</dt><dd>Reconstructing sensitive features of training data from a model's outputs.</dd>
+        <dt>OWASP Top 10 for LLM Applications</dt><dd>The OWASP GenAI Security Project's list of the most critical LLM application risks (2025 edition).</dd>
+        <dt>PyRIT</dt><dd>Microsoft's open-source Python Risk Identification Tool for automating generative AI red teaming.</dd>
+        <dt>Safetensors</dt><dd>A model file format designed to store weights safely, without executing code when loaded.</dd>
+        <dt>SAIF</dt><dd>Google's Secure AI Framework, with six core elements for securing AI.</dd>
+        <dt>Sandboxing</dt><dd>Running code or tools in an isolated environment to limit damage.</dd>
+        <dt>System prompt leakage</dt><dd>OWASP LLM07: exposure of system prompt contents, which should never contain secrets.</dd>
+        <dt>Tool poisoning</dt><dd>Hidden instructions in a tool's description or responses that manipulate the model.</dd>
+        <dt>Unbounded consumption</dt><dd>OWASP LLM10: uncontrolled resource usage leading to cost, denial of service or extraction.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

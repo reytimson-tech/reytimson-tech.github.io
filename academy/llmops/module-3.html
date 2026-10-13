@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Guardrails and safety in production — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="Layered guardrails, PII redaction, content moderation, structured output validation, graceful failure and safety test suites.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Guardrails and safety in production</h1>
+      <p class="lead">Every production LLM system needs guardrails around the model. This module shows the layers and how to implement them.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Design layered guardrails for inputs, outputs and actions</li><li>Redact personal data and understand its limits</li><li>Configure content moderation for your audience</li><li>Validate structured outputs</li><li>Fail gracefully and test safety continuously</li></ul>
+      </div>
+
+      <h2>3.1 Defence in depth</h2>
+      <p>No single control makes an LLM application safe. Production systems layer guardrails around the model:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stage</th><th>Guardrails</th></tr></thead>
+          <tbody>
+            <tr><td>Before the model (input)</td><td>Authentication, rate limits, input length limits, prompt-injection and jailbreak detection, PII redaction, topic filters</td></tr>
+            <tr><td>Around the model</td><td>A clear system prompt, least-privilege tools, retrieval with permission checks</td></tr>
+            <tr><td>After the model (output)</td><td>Content moderation, PII and secret detection, format validation, groundedness checks, policy checks</td></tr>
+            <tr><td>Around actions</td><td>Business rules in code, human approval for risky actions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 720 235" style="min-width:620px" role="img" aria-label="Layered guardrails: checks before and after the model, with a safe path whenever something is blocked."><rect x="20" y="80" width="100" height="46" rx="10" class="b-n"/><text x="70" y="107.375" font-size="12.5" text-anchor="middle" font-weight="600">User input</text><rect x="150" y="60" width="130" height="86" rx="10" class="b-w"/><text x="215" y="91.75" font-size="12.5" text-anchor="middle" font-weight="600">Input checks</text><text x="215" y="111.1" font-size="10.5" text-anchor="middle" class="mut">auth · limits</text><text x="215" y="124.75" font-size="10.5" text-anchor="middle" class="mut">injection · PII</text><rect x="310" y="70" width="110" height="66" rx="10" class="b-a"/><text x="365" y="98.1" font-size="14" text-anchor="middle" font-weight="600">Model</text><text x="365" y="119.8" font-size="12" text-anchor="middle" class="mut">+ tools, retrieval</text><rect x="450" y="60" width="130" height="86" rx="10" class="b-w"/><text x="515" y="91.75" font-size="12.5" text-anchor="middle" font-weight="600">Output checks</text><text x="515" y="111.1" font-size="10.5" text-anchor="middle" class="mut">moderation · PII</text><text x="515" y="124.75" font-size="10.5" text-anchor="middle" class="mut">format · grounding</text><rect x="610" y="80" width="90" height="46" rx="10" class="b-g"/><text x="655" y="107.375" font-size="12.5" text-anchor="middle" font-weight="600">User</text><line x1="123" y1="103" x2="141" y2="103" class="ln"/><polygon points="147,103 139,107.4 139,98.6" class="ah"/><line x1="283" y1="103" x2="301" y2="103" class="ln"/><polygon points="307,103 299,107.4 299,98.6" class="ah"/><line x1="423" y1="103" x2="441" y2="103" class="ln"/><polygon points="447,103 439,107.4 439,98.6" class="ah"/><line x1="583" y1="103" x2="601" y2="103" class="ln"/><polygon points="607,103 599,107.4 599,98.6" class="ah"/><rect x="230" y="180" width="280" height="40" rx="10" class="b-b"/><text x="370" y="204.2" font-size="12" text-anchor="middle" font-weight="600">Blocked or failed → safe fallback / human</text><line x1="215" y1="148" x2="274.552" y2="175.486" class="ln"/><polygon points="280,178 270.892,178.643 274.58,170.653" class="ah"/><line x1="515" y1="148" x2="465.267" y2="175.127" class="ln"/><polygon points="460,178 464.916,170.306 469.13,178.032" class="ah"/></svg></div>
+        <figcaption>Layered guardrails: checks before and after the model, with a safe path whenever something is blocked.</figcaption>
+      </figure>
+
+      <h2>3.2 Redacting personal data</h2>
+<pre data-copy><code><span class="label">Python · simple pattern-based redaction (a starting point, not a complete solution)</span>import re
+
+PATTERNS = {
+    "EMAIL": r"[\w.+-]+@[\w-]+\.[\w.-]+",
+    "UK_PHONE": r"(?:\+44\s?|0)7\d{3}\s?\d{6}",
+    "CARD": r"\b(?:\d[ -]?){13,16}\b",
+}
+
+def redact(text):
+    for label, pattern in PATTERNS.items():
+        text = re.sub(pattern, f"[{label}]", text)
+    return text
+
+print(redact("Email jo@example.com or call 07700 900123"))
+# -> Email [EMAIL] or call [UK_PHONE]</code></pre>
+      <p>Pattern matching misses a lot (names, addresses). Production systems combine patterns with dedicated PII-detection services or models — and minimise what data reaches the model in the first place.</p>
+
+      <h2>3.3 Content moderation</h2>
+      <p>Major providers and clouds offer moderation and safety classifiers for harmful content categories, and platforms such as Amazon Bedrock, Azure AI Content Safety and Google Cloud offer configurable guardrail services. Configure thresholds for your audience — a children's education service needs stricter settings than an internal coding assistant.</p>
+
+      <h2>3.4 Validating structured output</h2>
+<pre data-copy><code><span class="label">Python · validate before you trust</span># !pip install pydantic
+from pydantic import BaseModel, ValidationError
+from typing import Literal
+
+class Triage(BaseModel):
+    category: Literal["BILLING", "DELIVERY", "PRODUCT", "OTHER"]
+    urgent: bool
+    summary: str
+
+def parse_triage(raw_json):
+    try:
+        return Triage.model_validate_json(raw_json)
+    except ValidationError:
+        return None          # retry once, then route to a human</code></pre>
+
+      <h2>3.5 Graceful failure</h2>
+      <ul class="checklist">
+        <li>A helpful fallback message when the model fails, times out or a guardrail blocks</li>
+        <li>Human hand-off for sensitive topics or repeated failures</li>
+        <li>No raw error messages or stack traces shown to users</li>
+        <li>Fail <em>closed</em> for risky actions: if a check can't run, don't act</li>
+      </ul>
+
+      <h2>3.6 Safety test suites</h2>
+      <p>Keep a red-team suite — injection attempts, jailbreaks, requests for personal data, harmful content prompts, off-topic abuse — and run it with every release alongside quality evals. See the <a href="../ai-security/index.html">AI Security &amp; Safety</a> course for attack techniques and OWASP's Top 10 for LLM applications.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Guard inputs, the model's context, outputs and actions.</li><li>Pattern-based redaction is a start; combine with dedicated detection and data minimisation.</li><li>Moderation thresholds depend on the audience.</li><li>Validate structured outputs before using them.</li><li>Fail closed for risky actions; run a red-team suite every release.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OWASP</span><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">Top 10 for LLM Applications 2025</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/security/ai-red-team/" target="_blank" rel="noopener">Microsoft AI Red Team</a> — red-teaming guidance, PyRIT and threat modelling</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/" target="_blank" rel="noopener">Generative AI Security Scoping Matrix</a> — five scopes, from consumer apps to self-trained models</li><li><span class="provider">Google</span><a href="https://safety.google/cybersecurity-advancements/saif/" target="_blank" rel="noopener">Secure AI Framework (SAIF)</a> — six core elements for securing AI</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Which is an output guardrail?",
+"options": [
+"Rate limiting users",
+"Detecting personal data or secrets in the model's response before showing it",
+"Authentication",
+"Input length limits"
+],
+"answer": 1,
+"explain": "Checks after the model."
+},
+{
+"q": "Why isn't regex-based redaction enough on its own?",
+"options": [
+"Regex is slow",
+"It misses many kinds of personal data, such as names and addresses",
+"It's illegal",
+"It deletes all text"
+],
+"answer": 1,
+"explain": "Combine with dedicated PII detection and minimisation."
+},
+{
+"q": "The model returns invalid JSON for a triage task. What should the system do?",
+"options": [
+"Show it to the user",
+"Validate, retry once, then route to a human",
+"Crash",
+"Guess the fields"
+],
+"answer": 1,
+"explain": "Validate before you trust."
+},
+{
+"q": "What does 'fail closed' mean for a risky action?",
+"options": [
+"Proceed if a check can't run",
+"Don't act if a required check can't run",
+"Close the browser",
+"Retry forever"
+],
+"answer": 1,
+"explain": "Safety first when checks fail."
+},
+{
+"q": "Moderation settings for a children's education app should be…",
+"options": [
+"The same as an internal coding assistant",
+"Stricter, configured for the audience",
+"Turned off",
+"Random"
+],
+"answer": 1,
+"explain": "Thresholds depend on audience."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Deploying AI applications →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Embeddings and semantic search — NLP Fundamentals</title>
+<meta name="description" content="Why exact word matching falls short, cosine similarity, getting embeddings from an API, semantic search steps and the limits of embeddings.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 35 minutes</span>
+      <h1>Embeddings and semantic search</h1>
+      <p class="lead">Embeddings let systems match meaning rather than exact words. They're the foundation of semantic search, recommendations and RAG.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain what an embedding is</li><li>Compute cosine similarity</li><li>Describe the steps of semantic search</li><li>Recognise the limits of embeddings</li></ul>
+      </div>
+
+      <h2>3.1 Meaning, not just words</h2>
+      <p>TF-IDF only matches exact words: "parcel" and "package" look unrelated. <strong>Embeddings</strong> fix this by representing words, sentences or documents as lists of numbers (vectors) learned so that texts with similar meanings sit close together. They power semantic search, recommendations, clustering and <a href="../rag/index.html">retrieval-augmented generation</a>.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 244" style="min-width:560px" role="img" aria-label="Embeddings place texts with similar meanings close together, so a query finds its nearest neighbours even without shared words."><rect x="20" y="14" width="600" height="220" rx="10" class="b-s"/><circle cx="110" cy="60" r="5" class="d-a"/><text x="119" y="64" font-size="11" text-anchor="start">parcel still missing</text><circle cx="160" cy="86" r="5" class="d-a"/><text x="169" y="90" font-size="11" text-anchor="start">package not arrived</text><circle cx="130" cy="110" r="5" class="d-a"/><text x="139" y="114" font-size="11" text-anchor="start">courier lost my box</text><circle cx="410" cy="50" r="5" class="d-o"/><text x="419" y="54" font-size="11" text-anchor="start">refund not received</text><circle cx="460" cy="76" r="5" class="d-o"/><text x="469" y="80" font-size="11" text-anchor="start">charged twice</text><circle cx="430" cy="100" r="5" class="d-o"/><text x="439" y="104" font-size="11" text-anchor="start">money back please</text><circle cx="260" cy="170" r="5" class="d-g"/><text x="269" y="174" font-size="11" text-anchor="start">kettle broke</text><circle cx="310" cy="196" r="5" class="d-g"/><text x="319" y="200" font-size="11" text-anchor="start">lamp stopped working</text><circle cx="60" cy="140" r="7" class="d-r"/><text x="40" y="164" font-size="11.5" text-anchor="start" font-weight="700" class="t-b">query: “my package hasn&#x27;t come”</text><line x1="60" y1="140" x2="130" y2="110" class="ln-a dash"/><line x1="60" y1="140" x2="160" y2="86" class="ln-a dash"/><text x="600" y="34" font-size="11" text-anchor="end" class="mut">meaning space (2D sketch)</text></svg></div>
+        <figcaption>Embeddings place texts with similar meanings close together, so a query finds its nearest neighbours even without shared words.</figcaption>
+      </figure>
+
+      <h2>3.2 Measuring similarity</h2>
+      <p>The usual measure is <strong>cosine similarity</strong>: how closely two vectors point in the same direction, from −1 (opposite) to 1 (identical direction). You can try the idea right now with TF-IDF vectors:</p>
+<pre data-copy><code>from sklearn.metrics.pairwise import cosine_similarity
+
+query = ["my package has not arrived"]
+q_vec = tfidf.transform(query)
+scores = cosine_similarity(q_vec, X_tfidf).ravel()
+best = scores.argsort()[-3:][::-1]
+for i in best:
+    print(round(scores[i], 2), messages["text"].iloc[i])</code></pre>
+      <p>Notice that TF-IDF can only match on shared words like "arrived" — it doesn't know "package" means "parcel". That's the gap embeddings close.</p>
+
+      <h2>3.3 Getting embeddings</h2>
+      <p>Embeddings come from trained models. You can call an embeddings API (for example <a href="https://developers.openai.com/api/docs/guides/embeddings" target="_blank" rel="noopener">OpenAI's embeddings</a>, Amazon Bedrock or Google Vertex AI), or run an open-source model locally. The shape of the code is the same either way:</p>
+<pre data-copy><code><span class="label">Python · embeddings via an API (optional — needs an API key)</span>import os
+from openai import OpenAI
+
+client = OpenAI()   # reads OPENAI_API_KEY from the environment — never paste keys into code
+texts = ["my package has not arrived", "parcel still missing", "refund not received"]
+resp = client.embeddings.create(model="text-embedding-3-small", input=texts)
+vectors = np.array([d.embedding for d in resp.data])
+print(vectors.shape)                         # (3, 1536)
+print(cosine_similarity(vectors).round(2))   # the first two should be most similar</code></pre>
+
+      <h2>3.4 Semantic search in four steps</h2>
+      <ol>
+        <li><strong>Embed</strong> every document (or chunk) once and store the vectors.</li>
+        <li><strong>Embed</strong> the user's query with the same model.</li>
+        <li><strong>Rank</strong> documents by cosine similarity to the query.</li>
+        <li><strong>Return</strong> the top results — or pass them to an LLM to answer from (RAG).</li>
+      </ol>
+      <p>For more than a few thousand documents, store vectors in a <strong>vector database</strong> or index that finds nearest neighbours quickly. Combining embeddings with keyword search (hybrid search) usually beats either alone — see the <a href="../rag/module-3.html">RAG course</a>.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 736 112" style="min-width:640px" role="img" aria-label="Semantic search in practice. Steps 1–2 happen in advance; steps 3–5 run for every query."><rect x="20" y="30" width="120" height="58" rx="10" class="b-n"/><text x="80" y="55.55" font-size="11.5" text-anchor="middle" font-weight="600">Embed all</text><text x="80" y="70.5" font-size="11.5" text-anchor="middle">documents once</text><rect x="164" y="30" width="120" height="58" rx="10" class="b-s"/><text x="224" y="55.55" font-size="11.5" text-anchor="middle" font-weight="600">Store vectors</text><text x="224" y="70.5" font-size="11.5" text-anchor="middle">(index / vector DB)</text><rect x="308" y="30" width="120" height="58" rx="10" class="b-a"/><text x="368" y="55.55" font-size="11.5" text-anchor="middle" font-weight="600">Embed the</text><text x="368" y="70.5" font-size="11.5" text-anchor="middle">query</text><rect x="452" y="30" width="120" height="58" rx="10" class="b-a"/><text x="512" y="55.55" font-size="11.5" text-anchor="middle" font-weight="600">Rank by cosine</text><text x="512" y="70.5" font-size="11.5" text-anchor="middle">similarity</text><rect x="596" y="30" width="120" height="58" rx="10" class="b-g"/><text x="656" y="55.55" font-size="11.5" text-anchor="middle" font-weight="600">Return top results</text><text x="656" y="70.5" font-size="11.5" text-anchor="middle">(or feed an LLM)</text><line x1="143" y1="59" x2="155" y2="59" class="ln"/><polygon points="161,59 153,63.4 153,54.6" class="ah"/><line x1="287" y1="59" x2="299" y2="59" class="ln"/><polygon points="305,59 297,63.4 297,54.6" class="ah"/><line x1="431" y1="59" x2="443" y2="59" class="ln"/><polygon points="449,59 441,63.4 441,54.6" class="ah"/><line x1="575" y1="59" x2="587" y2="59" class="ln"/><polygon points="593,59 585,63.4 585,54.6" class="ah"/></svg></div>
+        <figcaption>Semantic search in practice. Steps 1–2 happen in advance; steps 3–5 run for every query.</figcaption>
+      </figure>
+
+      <h2>3.5 Limits of embeddings</h2>
+      <ul class="checklist">
+        <li>Similar isn't the same as correct: "refund approved" and "refund refused" can sit close together</li>
+        <li>Embeddings reflect their training data, including its biases and blind spots</li>
+        <li>Domain jargon and rare product names may be poorly represented — test on your own data</li>
+        <li>Changing embedding model means re-embedding everything; vectors from different models aren't comparable</li>
+      </ul>
+<div class="activity"><b>Exercise: a tiny FAQ search</b><p>Create a list of five FAQ answers (for example on returns, delivery times, refunds, discount codes and broken items). Using a <code>TfidfVectorizer</code> fitted on the FAQs, write <code>search(question)</code> that returns the best-matching answer and its score. Try a question that uses different words from the FAQ — what happens?</p><details><summary>Show a solution</summary><pre data-copy><code>faqs = ["Returns are free within 30 days of delivery.",
+        "Standard delivery takes 3 to 5 working days.",
+        "Refunds are paid to your original payment method within 7 days.",
+        "Discount codes must be entered before checkout and cannot be combined.",
+        "If an item arrives broken, send a photo and we will replace it."]
+faq_vec = TfidfVectorizer(stop_words="english").fit(faqs)
+faq_X = faq_vec.transform(faqs)
+
+def search(question):
+    s = cosine_similarity(faq_vec.transform([question]), faq_X).ravel()
+    return faqs[s.argmax()], round(s.max(), 2)
+
+print(search("how long does delivery take"))
+print(search("my mug came smashed"))   # no shared words: score 0 — embeddings would do better</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Embeddings place similar meanings close together.</li><li>Cosine similarity measures how closely vectors point the same way.</li><li>Embed documents once, embed each query, rank, return.</li><li>Similar isn't the same as correct; test on your own data.</li><li>Don't mix vectors from different models.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/embeddings" target="_blank" rel="noopener">ML Crash Course: Embeddings</a></li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/embeddings" target="_blank" rel="noopener">Vector embeddings guide</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/vector-database" target="_blank" rel="noopener">What is a vector database?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/retrieval-augmented-generation/" target="_blank" rel="noopener">What is retrieval-augmented generation?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What does an embedding represent?",
+"options": [
+"A file format",
+"Text as a vector of numbers where similar meanings are close",
+"A compressed image",
+"A password hash"
+],
+"answer": 1,
+"explain": "Meaning becomes geometry."
+},
+{
+"q": "Why can't TF-IDF match 'package' with 'parcel'?",
+"options": [
+"It's too slow",
+"It only matches exact shared words",
+"It ignores nouns",
+"It needs a GPU"
+],
+"answer": 1,
+"explain": "No notion of synonyms."
+},
+{
+"q": "Cosine similarity of 1 means…",
+"options": [
+"Opposite meanings",
+"Vectors point in the same direction",
+"No relation",
+"An error"
+],
+"answer": 1,
+"explain": "Range −1 to 1."
+},
+{
+"q": "You switch to a new embedding model. You must…",
+"options": [
+"Do nothing",
+"Re-embed all stored documents",
+"Delete the queries",
+"Lower the threshold"
+],
+"answer": 1,
+"explain": "Vectors from different models aren't comparable."
+},
+{
+"q": "'Refund approved' and 'refund refused' have high similarity. This shows…",
+"options": [
+"A bug",
+"Similar topic isn't the same as the same meaning",
+"Perfect embeddings",
+"Nothing"
+],
+"answer": 1,
+"explain": "Check results, not just scores."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Information extraction →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

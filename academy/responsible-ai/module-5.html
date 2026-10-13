@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Privacy, safety and human agency — Responsible AI Principles &amp; Ethics</title>
+<meta name="description" content="Privacy risks across the AI lifecycle, safety and robustness, frontier safety frameworks, human oversight, inclusiveness and societal impact.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="responsible-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Privacy, safety and human agency</h1>
+      <p class="lead">Responsible AI protects people's data, keeps them safe and keeps them in control. This module covers those principles and AI's wider impacts.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Identify privacy risks at each stage of the AI lifecycle</li><li>Apply data protection principles and DPIAs to AI</li><li>Explain safety, robustness and fail-safe design</li><li>Describe meaningful human agency and oversight</li><li>Consider inclusiveness, environmental and societal impacts</li></ul>
+      </div>
+
+      <h2>5.1 Privacy</h2>
+      <p>AI systems are hungry for data, and that creates privacy risks across the lifecycle:</p>
+      <ul>
+        <li><strong>Collection:</strong> scraping or repurposing personal data people didn't expect to be used this way.</li>
+        <li><strong>Training:</strong> models can memorise and later reveal personal data from their training sets.</li>
+        <li><strong>Inference:</strong> AI can infer sensitive information — health, sexuality, political views — from seemingly harmless data.</li>
+        <li><strong>Use:</strong> staff pasting personal data into AI tools; chat logs stored and reviewed.</li>
+      </ul>
+      <p>Data protection law (UK GDPR, EU GDPR) applies throughout. Key principles include lawfulness, fairness and transparency; purpose limitation; data minimisation; accuracy; storage limitation; and security. A <strong>Data Protection Impact Assessment (DPIA)</strong> is typically required for high-risk processing, which many AI uses involve.</p>
+      <p><strong>Privacy-enhancing techniques</strong> include anonymisation and pseudonymisation, synthetic data, differential privacy and federated learning — each with trade-offs.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 702 185" style="min-width:560px" role="img" aria-label="Privacy risks appear at every stage of an AI system&#x27;s life; data protection principles and a DPIA address them together."><rect x="20" y="30" width="140" height="44" rx="10" class="b-n"/><text x="90" y="56.55" font-size="13" text-anchor="middle" font-weight="600">Collection</text><rect x="194" y="30" width="140" height="44" rx="10" class="b-a"/><text x="264" y="56.55" font-size="13" text-anchor="middle" font-weight="600">Training</text><rect x="368" y="30" width="140" height="44" rx="10" class="b-w"/><text x="438" y="56.55" font-size="13" text-anchor="middle" font-weight="600">Inference</text><rect x="542" y="30" width="140" height="44" rx="10" class="b-n"/><text x="612" y="56.55" font-size="13" text-anchor="middle" font-weight="600">Use</text><line x1="163" y1="52" x2="185" y2="52" class="ln"/><polygon points="191,52 183,56.4 183,47.6" class="ah"/><line x1="337" y1="52" x2="359" y2="52" class="ln"/><polygon points="365,52 357,56.4 357,47.6" class="ah"/><line x1="511" y1="52" x2="533" y2="52" class="ln"/><polygon points="539,52 531,56.4 531,47.6" class="ah"/><text x="90" y="100.7" font-size="11" text-anchor="middle" class="mut">data used in ways</text><text x="90" y="115" font-size="11" text-anchor="middle" class="mut">people didn&#x27;t expect</text><text x="264" y="100.7" font-size="11" text-anchor="middle" class="mut">model memorises</text><text x="264" y="115" font-size="11" text-anchor="middle" class="mut">personal data</text><text x="438" y="100.7" font-size="11" text-anchor="middle" class="mut">AI infers health,</text><text x="438" y="115" font-size="11" text-anchor="middle" class="mut">beliefs, sexuality</text><text x="612" y="100.7" font-size="11" text-anchor="middle" class="mut">staff paste personal</text><text x="612" y="115" font-size="11" text-anchor="middle" class="mut">data; logs retained</text><rect x="14" y="140" width="674" height="34" rx="8" class="b-g"/><text x="351" y="162" font-size="12" text-anchor="middle" font-weight="600">DPIA · minimisation · anonymisation · security · purpose limits</text></svg></div>
+        <figcaption>Privacy risks appear at every stage of an AI system's life; data protection principles and a DPIA address them together.</figcaption>
+      </figure>
+
+      <h2>5.2 Safety and robustness</h2>
+      <p>A safe AI system works reliably in the conditions it's used in, behaves sensibly in conditions it wasn't designed for, and resists misuse. Key ideas:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Concept</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Reliability</td><td>Consistent performance in expected conditions</td></tr>
+            <tr><td>Robustness</td><td>Holding up under unusual, noisy or adversarial inputs</td></tr>
+            <tr><td>Fail-safe design</td><td>When it fails, it fails in a safe way — e.g. defers to a human</td></tr>
+            <tr><td>Misuse prevention</td><td>Guardrails against harmful use — e.g. generating dangerous instructions or abusive content</td></tr>
+            <tr><td>Monitoring</td><td>Detecting drift, incidents and new failure modes after launch</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For the most capable frontier models, developers have published safety frameworks — such as Anthropic's Responsible Scaling Policy and OpenAI's Preparedness Framework — that set capability thresholds requiring stronger safeguards. The <a href="../ai-security/index.html">AI Security &amp; Safety</a> course covers security in depth.</p>
+
+      <h2>5.3 Human agency and oversight</h2>
+      <p>Responsible AI should <strong>support</strong> human decision-making and autonomy, not quietly replace or manipulate it:</p>
+      <ul>
+        <li><strong>Meaningful oversight</strong> — people with the competence, time and authority to intervene.</li>
+        <li><strong>No manipulation</strong> — AI shouldn't exploit psychological weaknesses. Manipulative AI causing significant harm is prohibited under the EU AI Act.</li>
+        <li><strong>Avoiding over-reliance</strong> — design that encourages users to think critically, not defer automatically.</li>
+        <li><strong>Choice</strong> — where appropriate, people can opt for a human alternative.</li>
+      </ul>
+
+      <h2>5.4 Inclusiveness and accessibility</h2>
+      <p>Microsoft's principles call out <strong>inclusiveness</strong>: AI should empower everyone, including people with disabilities. AI can be a powerful accessibility tool (captions, screen readers, image descriptions) — and can exclude people when, for example, speech recognition fails on atypical speech. Include diverse users in design and testing.</p>
+
+      <h2>5.5 Environmental and societal impact</h2>
+      <ul>
+        <li><strong>Environment:</strong> training and running large models uses significant energy and water for data centres. Choose appropriately sized models, and weigh benefits against costs.</li>
+        <li><strong>Work:</strong> AI changes tasks and jobs. Responsible adoption involves workers, invests in skills and considers who bears the costs.</li>
+        <li><strong>Information ecosystem:</strong> generative AI can spread misinformation and erode trust in genuine content. Labelling and provenance standards help.</li>
+        <li><strong>Creators:</strong> questions about training on copyrighted works, consent and compensation remain contested and are being addressed by courts and lawmakers.</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>AI creates privacy risks in collection, training, inference and use.</li><li>Data protection principles and DPIAs apply to AI.</li><li>Safe systems are reliable, robust, fail safely and resist misuse.</li><li>Frontier developers publish safety frameworks with capability thresholds.</li><li>AI should support human autonomy, include everyone and weigh environmental and social costs.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/responsible-scaling-policy" target="_blank" rel="noopener">Responsible Scaling Policy</a> — how a frontier lab sets safety thresholds</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-ethics" target="_blank" rel="noopener">What is AI ethics?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "An AI infers people's health conditions from their shopping data. This is a privacy risk at which stage?",
+"options": [
+"Collection",
+"Inference",
+"Storage",
+"Printing"
+],
+"answer": 1,
+"explain": "AI can infer sensitive information from innocuous data."
+},
+{
+"q": "What's typically required before high-risk processing of personal data, which many AI uses involve?",
+"options": [
+"A press release",
+"A Data Protection Impact Assessment (DPIA)",
+"A patent",
+"Nothing"
+],
+"answer": 1,
+"explain": "DPIAs are required for high-risk processing under GDPR."
+},
+{
+"q": "'When it fails, it defers to a human rather than acting' describes…",
+"options": [
+"Fail-safe design",
+"Overfitting",
+"Data minimisation",
+"Ethics washing"
+],
+"answer": 0,
+"explain": "Systems should fail safely."
+},
+{
+"q": "Anthropic's Responsible Scaling Policy and OpenAI's Preparedness Framework are examples of…",
+"options": [
+"Marketing campaigns",
+"Frontier AI safety frameworks with capability thresholds for stronger safeguards",
+"Privacy notices",
+"Data protection laws"
+],
+"answer": 1,
+"explain": "They set safeguards as capabilities grow."
+},
+{
+"q": "Which supports human agency?",
+"options": [
+"Designing AI to exploit users' impulses",
+"Offering a human alternative and designing for critical engagement rather than automatic deference",
+"Hiding that AI is used",
+"Removing all human review"
+],
+"answer": 1,
+"explain": "AI should support, not undermine, autonomy."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Ethics in practice →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

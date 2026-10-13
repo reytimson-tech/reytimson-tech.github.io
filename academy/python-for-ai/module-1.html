@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Getting started with Python — Python for AI</title>
+<meta name="description" content="Why Python for AI, Google Colab, first code, variables and types, strings and f-strings, and reading errors.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="python-for-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>Getting started with Python</h1>
+      <p class="lead">No installation, no jargon. By the end of this module you'll be writing and running Python in your browser.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain why Python dominates AI work</li><li>Run code in a Google Colab notebook</li><li>Use variables of different types</li><li>Format text with f-strings and string methods</li><li>Read and fix simple errors</li></ul>
+      </div>
+
+      <h2>1.1 Why Python for AI?</h2>
+      <p>Python is the most widely used language in AI and data science. The Stanford AI Index 2026 (using Lightcast data) reports Python as the most in-demand specialised skill in AI job postings. Reasons:</p>
+      <ul>
+        <li><strong>Readable</strong> — code looks close to plain English.</li>
+        <li><strong>Libraries</strong> — pandas for data, scikit-learn for machine learning, PyTorch for deep learning, and official SDKs from Anthropic, OpenAI, Google and others.</li>
+        <li><strong>Notebooks</strong> — run code a cell at a time and see results immediately.</li>
+        <li><strong>Community</strong> — almost every AI tutorial and course uses it.</li>
+      </ul>
+
+      <h2>1.2 Set up in two minutes: Google Colab</h2>
+      <p>You don't need to install anything. <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> is a free, browser-based notebook. Sign in with a Google account, click <em>New notebook</em>, type code in a cell and press <kbd>Shift</kbd>+<kbd>Enter</kbd> to run it. (Alternatives: Jupyter on your computer, or VS Code with the Python extension.)</p>
+
+      <h2>1.3 Your first lines of code</h2>
+<pre data-copy><code><span class="label">Python · run each cell</span>print("Hello, AI!")
+
+# A comment: Python ignores anything after #
+2 + 3 * 4          # in a notebook, the last line's value is shown: 14</code></pre>
+
+      <h2>1.4 Variables and types</h2>
+      <p>A <strong>variable</strong> is a name for a value. Python works out the type for you.</p>
+<pre data-copy><code>product = "Bamboo board"     # str  (text)
+price = 24.99                # float (decimal number)
+stock = 120                  # int   (whole number)
+in_stock = stock > 0         # bool  (True / False)
+
+print(type(price))           # &lt;class 'float'&gt;
+print(price * 1.2)           # 29.988</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 560 220" style="min-width:560px" role="img" aria-label="A variable is a name pointing at a value. Python works out each value&#x27;s type for you."><text x="80" y="20" font-size="12" text-anchor="middle" class="mut">name</text><text x="290" y="20" font-size="12" text-anchor="middle" class="mut">value</text><text x="470" y="20" font-size="12" text-anchor="middle" class="mut">type</text><rect x="20" y="30" width="120" height="36" rx="10" class="b-s"/><text x="80" y="52.375" font-size="12.5" text-anchor="middle" font-weight="600">product</text><line x1="144" y1="48" x2="190" y2="48" class="ln"/><polygon points="196,48 188,52.4 188,43.6" class="ah"/><text x="170" y="41" font-size="10" text-anchor="middle" class="mut">refers to</text><rect x="200" y="30" width="180" height="36" rx="10" class="b-a"/><text x="290" y="52.55" font-size="13" text-anchor="middle">&quot;Bamboo board&quot;</text><text x="470" y="53" font-size="12.5" text-anchor="middle" font-weight="700">str</text><rect x="20" y="76" width="120" height="36" rx="10" class="b-s"/><text x="80" y="98.375" font-size="12.5" text-anchor="middle" font-weight="600">price</text><line x1="144" y1="94" x2="190" y2="94" class="ln"/><polygon points="196,94 188,98.4 188,89.6" class="ah"/><text x="170" y="87" font-size="10" text-anchor="middle" class="mut">refers to</text><rect x="200" y="76" width="180" height="36" rx="10" class="b-w"/><text x="290" y="98.55" font-size="13" text-anchor="middle">24.99</text><text x="470" y="99" font-size="12.5" text-anchor="middle" font-weight="700">float</text><rect x="20" y="122" width="120" height="36" rx="10" class="b-s"/><text x="80" y="144.375" font-size="12.5" text-anchor="middle" font-weight="600">stock</text><line x1="144" y1="140" x2="190" y2="140" class="ln"/><polygon points="196,140 188,144.4 188,135.6" class="ah"/><text x="170" y="133" font-size="10" text-anchor="middle" class="mut">refers to</text><rect x="200" y="122" width="180" height="36" rx="10" class="b-g"/><text x="290" y="144.55" font-size="13" text-anchor="middle">120</text><text x="470" y="145" font-size="12.5" text-anchor="middle" font-weight="700">int</text><rect x="20" y="168" width="120" height="36" rx="10" class="b-s"/><text x="80" y="190.375" font-size="12.5" text-anchor="middle" font-weight="600">in_stock</text><line x1="144" y1="186" x2="190" y2="186" class="ln"/><polygon points="196,186 188,190.4 188,181.6" class="ah"/><text x="170" y="179" font-size="10" text-anchor="middle" class="mut">refers to</text><rect x="200" y="168" width="180" height="36" rx="10" class="b-n"/><text x="290" y="190.55" font-size="13" text-anchor="middle">True</text><text x="470" y="191" font-size="12.5" text-anchor="middle" font-weight="700">bool</text></svg></div>
+        <figcaption>A variable is a name pointing at a value. Python works out each value's type for you.</figcaption>
+      </figure>
+
+      <h2>1.5 Strings and f-strings</h2>
+<pre data-copy><code>name = "Rey"
+course = "Python for AI"
+message = f"Welcome, {name}! You're taking {course}."
+print(message)
+
+review = "  The board is GREAT but arrived late.  "
+print(review.strip().lower())          # "the board is great but arrived late."
+print("late" in review.lower())        # True
+print(len(review.strip()))             # number of characters</code></pre>
+      <p>f-strings (note the <code>f</code> before the quote) are how you'll build prompts for AI models later.</p>
+
+      <h2>1.6 Reading error messages</h2>
+      <p>Errors are normal. Read the <em>last line</em> first — it names the error type and the problem.</p>
+<pre data-copy><code>print(price + " pounds")
+# TypeError: unsupported operand type(s) for +: 'float' and 'str'
+print(f"{price} pounds")     # fix: convert inside an f-string</code></pre>
+      <div class="callout">
+        <b>Use AI to learn — wisely</b>
+        <p>AI assistants are excellent at explaining error messages and code. Paste the error and ask "explain this like I'm new to Python". But type the fix yourself and make sure you understand it — and never paste API keys or private data.</p>
+      </div>
+<div class="activity"><b>Exercise: price calculator</b><p>Create variables for a product name, a price excluding VAT and a VAT rate of 0.2. Print a sentence like "Bamboo board costs £29.99 including VAT", rounded to 2 decimal places.</p><details><summary>Show a solution</summary><pre data-copy><code>name = "Bamboo board"
+price_ex_vat = 24.99
+vat_rate = 0.2
+price_inc = round(price_ex_vat * (1 + vat_rate), 2)
+print(f"{name} costs £{price_inc:.2f} including VAT")</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Python is the leading language for AI and data.</li><li>Colab runs Python in your browser for free.</li><li>Variables hold strings, numbers and booleans.</li><li>f-strings insert values into text — you'll use them to build prompts.</li><li>Read the last line of an error first.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/python" target="_blank" rel="noopener">Python</a> — free, browser-based exercises</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li><li><span class="provider">IBM SkillsBuild</span><a href="https://skillsbuild.org/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noopener">Free AI learning catalogue</a> — courses and digital credentials, including AI Fundamentals</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-for-builders" target="_blank" rel="noopener">AI Fluency for Builders</a> — from customer problem to shipped product</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "What does print(2 + 3 * 4) output?",
+"options": [
+"20",
+"14",
+"24",
+"9"
+],
+"answer": 1,
+"explain": "Multiplication happens first: 3*4=12, +2=14."
+},
+{
+"q": "Which value is a bool?",
+"options": [
+"\"True\"",
+"True",
+"1.0",
+"'yes'"
+],
+"answer": 1,
+"explain": "True without quotes is a boolean."
+},
+{
+"q": "What does f\"Hi {name}\" do when name = \"Rey\"?",
+"options": [
+"Prints {name}",
+"Produces 'Hi Rey'",
+"Causes an error",
+"Produces 'Hi name'"
+],
+"answer": 1,
+"explain": "f-strings insert variable values."
+},
+{
+"q": "What does \"  Hello  \".strip() return?",
+"options": [
+"'Hello'",
+"'  Hello'",
+"'hello'",
+"'Hello  '"
+],
+"answer": 0,
+"explain": "strip() removes surrounding whitespace."
+},
+{
+"q": "When reading a Python error, where should you look first?",
+"options": [
+"The first line",
+"The last line, which names the error type and problem",
+"The middle",
+"Nowhere — restart"
+],
+"answer": 1,
+"explain": "The final line is the most informative."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Data structures, logic and functions →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

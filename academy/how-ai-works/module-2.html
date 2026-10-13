@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Types of machine learning — How AI and Large Language Models Work</title>
+<meta name="description" content="Supervised, unsupervised, reinforcement and self-supervised learning; testing, overfitting and measuring performance.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 25 minutes</span>
+      <h1>Types of machine learning</h1>
+      <p class="lead">Not all machine learning works the same way. Knowing how a model learned — and how it was tested — tells you how much to trust it.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Distinguish supervised, unsupervised, reinforcement and self-supervised learning</li><li>Explain why models are tested on unseen data</li><li>Recognise overfitting and underfitting</li><li>Explain why accuracy alone can mislead, using precision and recall</li></ul>
+      </div>
+
+      <h2>2.1 Three ways machines learn</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>How it learns</th><th>Typical uses</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Supervised learning</strong></td><td>From labelled examples — inputs paired with the right answers.</td><td>Spam detection, price prediction, medical image classification</td></tr>
+            <tr><td><strong>Unsupervised learning</strong></td><td>From unlabelled data, finding structure on its own.</td><td>Customer segmentation, anomaly detection, topic discovery</td></tr>
+            <tr><td><strong>Reinforcement learning</strong></td><td>By trial and error, receiving rewards or penalties for actions.</td><td>Game-playing, robotics, and fine-tuning LLMs with human feedback</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Supervised learning splits further into <strong>classification</strong> (predicting a category — spam or not) and <strong>regression</strong> (predicting a number — a price). Large language models start with <strong>self-supervised learning</strong>: the "label" is simply the next word in real text, so no one has to label anything by hand. That's what lets them learn from such enormous amounts of data.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 730 270" style="min-width:640px" role="img" aria-label="Supervised: every training example carries a label (the colour), and the model learns a boundary between them. Unsupervised: no labels — the model groups similar points itself. Reinforcement: an agent acts, the environment responds with a reward, and the agent learns which actions pay off."><rect x="10" y="10" width="225" height="250" rx="12" class="b-s"/><text x="122" y="36" font-size="14.5" text-anchor="middle" font-weight="700">Supervised</text><text x="122" y="54" font-size="11" text-anchor="middle" class="mut">learns from labelled examples</text><rect x="250" y="10" width="225" height="250" rx="12" class="b-s"/><text x="362" y="36" font-size="14.5" text-anchor="middle" font-weight="700">Unsupervised</text><text x="362" y="54" font-size="11" text-anchor="middle" class="mut">finds structure in unlabelled data</text><rect x="490" y="10" width="225" height="250" rx="12" class="b-s"/><text x="602" y="36" font-size="14.5" text-anchor="middle" font-weight="700">Reinforcement</text><text x="602" y="54" font-size="11" text-anchor="middle" class="mut">learns from rewards by trial and error</text><circle cx="45" cy="95" r="6" class="d-a"/><circle cx="60" cy="125" r="6" class="d-a"/><circle cx="80" cy="100" r="6" class="d-a"/><circle cx="70" cy="150" r="6" class="d-a"/><circle cx="95" cy="130" r="6" class="d-a"/><circle cx="52" cy="175" r="6" class="d-a"/><circle cx="100" cy="165" r="6" class="d-a"/><circle cx="85" cy="190" r="6" class="d-a"/><circle cx="150" cy="110" r="6" class="d-b"/><circle cx="175" cy="95" r="6" class="d-b"/><circle cx="160" cy="150" r="6" class="d-b"/><circle cx="190" cy="140" r="6" class="d-b"/><circle cx="140" cy="190" r="6" class="d-b"/><circle cx="175" cy="205" r="6" class="d-b"/><circle cx="200" cy="180" r="6" class="d-b"/><circle cx="130" cy="225" r="6" class="d-b"/><line x1="105" y1="80" x2="135" y2="240" class="ln-w dash"/><text x="118" y="252" font-size="10.5" text-anchor="middle" class="mut">learned boundary</text><circle cx="30" cy="238" r="5" class="d-a"/><text x="40" y="242" font-size="10.5" text-anchor="start">spam</text><circle cx="180" cy="238" r="5" class="d-b"/><text x="190" y="242" font-size="10.5" text-anchor="start">not</text><circle cx="300" cy="110" r="34" class="b-none"/><circle cx="300.531" cy="116.04" r="5.5" class="d-n"/><circle cx="294.362" cy="114.314" r="5.5" class="d-n"/><circle cx="310.996" cy="114.883" r="5.5" class="d-n"/><circle cx="317.409" cy="100.136" r="5.5" class="d-n"/><circle cx="300.803" cy="101.6" r="5.5" class="d-n"/><circle cx="290.718" cy="107.822" r="5.5" class="d-n"/><circle cx="390" cy="120" r="34" class="b-none"/><circle cx="392.86" cy="125.415" r="5.5" class="d-n"/><circle cx="395.002" cy="141.988" r="5.5" class="d-n"/><circle cx="399.579" cy="102.292" r="5.5" class="d-n"/><circle cx="392.453" cy="112.523" r="5.5" class="d-n"/><circle cx="383.926" cy="135.384" r="5.5" class="d-n"/><circle cx="387.606" cy="99.0434" r="5.5" class="d-n"/><circle cx="340" cy="195" r="34" class="b-none"/><circle cx="344.181" cy="191.076" r="5.5" class="d-n"/><circle cx="326.282" cy="184.241" r="5.5" class="d-n"/><circle cx="332.449" cy="194.717" r="5.5" class="d-n"/><circle cx="334.293" cy="195.956" r="5.5" class="d-n"/><circle cx="359.535" cy="186.486" r="5.5" class="d-n"/><circle cx="330.44" cy="192.05" r="5.5" class="d-n"/><text x="352" y="248" font-size="10.5" text-anchor="middle" class="mut">groups the model discovered</text><rect x="530" y="80" width="140" height="44" rx="10" class="b-a"/><text x="600" y="106.55" font-size="13" text-anchor="middle" font-weight="600">Agent</text><rect x="530" y="180" width="140" height="44" rx="10" class="b-n"/><text x="600" y="206.55" font-size="13" text-anchor="middle" font-weight="600">Environment</text><polyline points="670,102 692,102 692,202 680,202" class="ln"/><polygon points="674,202 682,197.6 682,206.4" class="ah"/><polyline points="530,202 508,202 508,102 520,102" class="ln"/><polygon points="526,102 518,106.4 518,97.6" class="ah"/><text x="684" y="156" font-size="11" text-anchor="end" class="mut">action</text><text x="516" y="150" font-size="11" text-anchor="start" class="mut">reward</text><text x="516" y="164" font-size="11" text-anchor="start" class="mut">+ state</text></svg></div>
+        <figcaption><strong>Supervised:</strong> every training example carries a label (the colour), and the model learns a boundary between them. <strong>Unsupervised:</strong> no labels — the model groups similar points itself. <strong>Reinforcement:</strong> an agent acts, the environment responds with a reward, and the agent learns which actions pay off.</figcaption>
+      </figure>
+
+      <h2>2.2 Testing a model honestly</h2>
+      <p>A model that scores perfectly on the examples it trained on may still be useless. What matters is how it performs on data it has <em>never seen</em>. So data is split:</p>
+      <ul>
+        <li><strong>Training set</strong> — used to learn the parameters.</li>
+        <li><strong>Validation set</strong> — used to compare versions and tune settings.</li>
+        <li><strong>Test set</strong> — kept locked away until the end, for an honest final score.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 125" style="min-width:560px" role="img" aria-label="A typical split of one dataset. The test set stays untouched until the end, so its score shows how the model will do on data it has never seen."><rect x="20" y="40" width="380" height="46" rx="6" class="b-a"/><rect x="400" y="40" width="120" height="46" rx="0" class="b-w"/><rect x="520" y="40" width="120" height="46" rx="6" class="b-g"/><text x="210" y="68" font-size="13" text-anchor="middle" font-weight="600">Training set · ~70%</text><text x="460" y="68" font-size="12.5" text-anchor="middle" font-weight="600">Validation</text><text x="580" y="68" font-size="12.5" text-anchor="middle" font-weight="600">Test</text><text x="210" y="110" font-size="11.5" text-anchor="middle" class="mut">learn the parameters</text><text x="460" y="110" font-size="11.5" text-anchor="middle" class="mut">compare &amp; tune</text><text x="580" y="110" font-size="11.5" text-anchor="middle" class="mut">final, honest score</text><text x="580" y="28" font-size="11" text-anchor="middle" class="mut">locked away until the end</text></svg></div>
+        <figcaption>A typical split of one dataset. The test set stays untouched until the end, so its score shows how the model will do on data it has never seen.</figcaption>
+      </figure>
+
+      <h2>2.3 Overfitting and underfitting</h2>
+      <div class="compare">
+        <div class="weak"><h4>Overfitting</h4><p>The model memorises the training data, including its noise and quirks — like a student who memorises past exam answers but can't handle a new question. Great training score, poor real-world performance.</p></div>
+        <div class="weak"><h4>Underfitting</h4><p>The model is too simple to capture the real pattern — like predicting every house costs the national average. Poor everywhere.</p></div>
+      </div>
+      <p>The goal is <strong>generalisation</strong>: performing well on new, real-world data.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 670 230" style="min-width:560px" role="img" aria-label="The same data, three models. Underfitting misses the trend; overfitting threads every point, including noise, and will fail on new data. A good fit generalises."><rect x="10" y="10" width="205" height="210" rx="12" class="b-s"/><text x="112" y="34" font-size="14" text-anchor="middle" font-weight="700" class="t-b">Underfitting</text><text x="112" y="52" font-size="11" text-anchor="middle" class="mut">too simple</text><circle cx="40" cy="180" r="5" class="d-a"/><circle cx="60" cy="158" r="5" class="d-a"/><circle cx="80" cy="150" r="5" class="d-a"/><circle cx="100" cy="128" r="5" class="d-a"/><circle cx="120" cy="134" r="5" class="d-a"/><circle cx="140" cy="110" r="5" class="d-a"/><circle cx="160" cy="106" r="5" class="d-a"/><circle cx="180" cy="90" r="5" class="d-a"/><line x1="35" y1="145" x2="190" y2="145" class="ln-w"/><rect x="230" y="10" width="205" height="210" rx="12" class="b-s"/><text x="332" y="34" font-size="14" text-anchor="middle" font-weight="700" class="t-g">Good fit</text><text x="332" y="52" font-size="11" text-anchor="middle" class="mut">captures the pattern</text><circle cx="260" cy="180" r="5" class="d-a"/><circle cx="280" cy="158" r="5" class="d-a"/><circle cx="300" cy="150" r="5" class="d-a"/><circle cx="320" cy="128" r="5" class="d-a"/><circle cx="340" cy="134" r="5" class="d-a"/><circle cx="360" cy="110" r="5" class="d-a"/><circle cx="380" cy="106" r="5" class="d-a"/><circle cx="400" cy="90" r="5" class="d-a"/><line x1="255" y1="186" x2="410" y2="84" class="ln-g"/><rect x="450" y="10" width="205" height="210" rx="12" class="b-s"/><text x="552" y="34" font-size="14" text-anchor="middle" font-weight="700" class="t-b">Overfitting</text><text x="552" y="52" font-size="11" text-anchor="middle" class="mut">memorises the noise</text><circle cx="480" cy="180" r="5" class="d-a"/><circle cx="500" cy="158" r="5" class="d-a"/><circle cx="520" cy="150" r="5" class="d-a"/><circle cx="540" cy="128" r="5" class="d-a"/><circle cx="560" cy="134" r="5" class="d-a"/><circle cx="580" cy="110" r="5" class="d-a"/><circle cx="600" cy="106" r="5" class="d-a"/><circle cx="620" cy="90" r="5" class="d-a"/><polyline points="480,180 500,158 520,150 540,128 560,134 580,110 600,106 620,90" class="ln ln-b"/></svg></div>
+        <figcaption>The same data, three models. Underfitting misses the trend; overfitting threads every point, including noise, and will fail on new data. A good fit generalises.</figcaption>
+      </figure>
+
+      <h2>2.4 Measuring performance</h2>
+      <p>"Accuracy" — the share of predictions that are right — can mislead. If 1 in 1,000 transactions is fraudulent, a model that says "not fraud" every time is 99.9% accurate and completely useless. Practitioners use other measures too:</p>
+      <ul>
+        <li><strong>Precision:</strong> of the cases the model flagged, how many were truly positive? (Low precision = lots of false alarms.)</li>
+        <li><strong>Recall:</strong> of all the truly positive cases, how many did the model catch? (Low recall = missed cases.)</li>
+      </ul>
+      <p>There's usually a trade-off. For cancer screening you might accept more false alarms to miss fewer cases; for a spam filter, you'd rather let some spam through than lose an important email.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 720 285" style="min-width:600px" role="img" aria-label="A confusion matrix for a fraud detector. Precision looks along the top row (false alarms); recall looks down the left column (missed cases)."><text x="285" y="22" font-size="12.5" text-anchor="middle" font-weight="600">What actually happened</text><text x="220" y="46" font-size="12" text-anchor="middle" class="mut">Fraud</text><text x="350" y="46" font-size="12" text-anchor="middle" class="mut">Not fraud</text><text x="70" y="105" font-size="12" text-anchor="middle" class="mut">Model says</text><text x="70" y="121" font-size="12" text-anchor="middle" class="mut">fraud</text><text x="70" y="185" font-size="12" text-anchor="middle" class="mut">Model says</text><text x="70" y="201" font-size="12" text-anchor="middle" class="mut">not fraud</text><rect x="155" y="60" width="130" height="70" rx="10" class="b-g"/><text x="220" y="90.625" font-size="12.5" text-anchor="middle" font-weight="600">True positive</text><text x="220" y="109.925" font-size="10.5" text-anchor="middle" class="mut">caught ✓</text><rect x="290" y="60" width="130" height="70" rx="10" class="b-w"/><text x="355" y="90.625" font-size="12.5" text-anchor="middle" font-weight="600">False positive</text><text x="355" y="109.925" font-size="10.5" text-anchor="middle" class="mut">false alarm</text><rect x="155" y="140" width="130" height="70" rx="10" class="b-b"/><text x="220" y="170.625" font-size="12.5" text-anchor="middle" font-weight="600">False negative</text><text x="220" y="189.925" font-size="10.5" text-anchor="middle" class="mut">missed ✗</text><rect x="290" y="140" width="130" height="70" rx="10" class="b-n"/><text x="355" y="170.625" font-size="12.5" text-anchor="middle" font-weight="600">True negative</text><text x="355" y="189.925" font-size="10.5" text-anchor="middle" class="mut">correctly ignored</text><polyline points="440,95 464,95" class="ln ln-a"/><polygon points="470,95 462,99.4 462,90.6" class="ah-a"/><text x="478" y="92" font-size="12" text-anchor="start" font-weight="600">Precision = TP ÷ (TP + FP)</text><text x="478" y="108" font-size="11" text-anchor="start" class="mut">of the alarms, how many were real?</text><polyline points="220,222 220,234" class="ln ln-a"/><polygon points="220,240 215.6,232 224.4,232" class="ah-a"/><text x="155" y="256" font-size="12" text-anchor="start" font-weight="600">Recall = TP ÷ (TP + FN)</text><text x="155" y="272" font-size="11" text-anchor="start" class="mut">of the real cases, how many did we catch?</text></svg></div>
+        <figcaption>A confusion matrix for a fraud detector. Precision looks along the top row (false alarms); recall looks down the left column (missed cases).</figcaption>
+      </figure>
+
+      <h2>2.5 Garbage in, garbage out</h2>
+      <p>A model can only be as good as its data. If the training data is incomplete, outdated, wrongly labelled or unrepresentative of the people it will be used on, the model inherits those flaws — often invisibly. Performance should be checked not just overall but for different groups of people and situations.</p>
+
+      <div class="activity">
+        <b>Try it: which matters more?</b>
+        <p>For each system, decide whether you'd prioritise precision (fewer false alarms) or recall (fewer misses): (a) an airport security scanner, (b) an email filter that auto-deletes "spam", (c) a tool that flags possible child-safeguarding concerns for human review.</p>
+        <details><summary>Show suggested answers</summary><p>(a) Recall — missing a threat is far worse than a manual bag check. (b) Precision — auto-deleting a real email is costly. (c) Recall — humans review the flags, so catching more cases matters more than some false alarms.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Supervised learning uses labelled examples; unsupervised finds structure; reinforcement learns from rewards.</li><li>LLMs are pre-trained with self-supervised learning on next-token prediction.</li><li>Honest evaluation uses held-out test data.</li><li>Overfitting means memorising rather than generalising.</li><li>Precision and recall reveal what accuracy hides.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">IBM SkillsBuild</span><a href="https://www.ibm.com/training/badge/artificial-intelligence-fundamentals" target="_blank" rel="noopener">Artificial Intelligence Fundamentals badge</a> — core AI concepts and AI ethics</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/get-started-ai-fundamentals/" target="_blank" rel="noopener">Introduction to AI concepts</a> — AI workloads: generative AI, vision, speech, language and responsible AI</li><li><span class="provider">AWS Skill Builder</span><a href="https://skillbuilder.aws/category/exam-prep/ai-practitioner-AIF-C01" target="_blank" rel="noopener">AWS Certified AI Practitioner exam prep plan</a> — free foundational AI training, including responsible AI and AI governance</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "Grouping customers into segments without predefined labels is…",
+"options": [
+"Supervised learning",
+"Unsupervised learning",
+"Reinforcement learning",
+"Regression"
+],
+"answer": 1,
+"explain": "Unsupervised learning finds structure in unlabelled data."
+},
+{
+"q": "Why can LLMs learn from so much text without people labelling it?",
+"options": [
+"They use self-supervised learning — the next token in real text is the label",
+"They don't learn from text",
+"Every sentence was labelled by hand",
+"They only use images"
+],
+"answer": 0,
+"explain": "Next-token prediction creates labels automatically."
+},
+{
+"q": "A model scores 99% on its training data but 60% on new data. This suggests…",
+"options": [
+"Underfitting",
+"Overfitting",
+"Perfect generalisation",
+"Too little training data in the test set"
+],
+"answer": 1,
+"explain": "It has memorised the training data instead of generalising."
+},
+{
+"q": "Only 0.1% of transactions are fraud. A model that predicts 'not fraud' every time has 99.9% accuracy. Why is it useless?",
+"options": [
+"Accuracy is always useless",
+"It catches none of the fraud — its recall is zero",
+"Its precision is 100%",
+"It's too slow"
+],
+"answer": 1,
+"explain": "With rare events, accuracy hides the fact that it misses every positive case."
+},
+{
+"q": "For a tool that flags possible safeguarding concerns for human review, which matters more?",
+"options": [
+"Precision — avoid any false alarms",
+"Recall — catch as many real cases as possible",
+"Neither",
+"Speed only"
+],
+"answer": 1,
+"explain": "Humans review flags, so missing real cases is the bigger risk."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Neural networks and deep learning →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

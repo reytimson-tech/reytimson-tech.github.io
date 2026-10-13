@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Why validation matters — Critical Thinking: Checking and Validating AI Output</title>
+<meta name="description" content="From creator to validator, why AI output is hard to judge, automation bias, and proportionate checking.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="validating-ai-output">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 20 minutes</span>
+      <h1>Why validation matters</h1>
+      <p class="lead">As AI drafts more of our work, the ability to judge it becomes one of the most valuable skills you can have.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain why validation is a growing, valuable skill</li><li>Describe why fluent AI output is hard to judge</li><li>Explain automation bias and its two kinds of error</li><li>Match the level of checking to the stakes</li></ul>
+      </div>
+
+      <h2>1.1 From creator to validator</h2>
+      <p>As generative AI takes on more first drafts, more of our value comes from <strong>judging</strong> work rather than producing every word. Coursera's 2026 job skills research found critical-thinking enrolments growing sharply among generative AI learners, as people shift towards being expert validators of AI. PwC's AI jobs research finds that AI is making human skills like judgement more valuable, not less.</p>
+      <p>In Anthropic's 4D AI Fluency Framework, this skill is called <strong>Discernment</strong>: evaluating AI outputs, the process that produced them, and the AI's behaviour, with a critical eye.</p>
+
+      <h2>1.2 Why AI output is hard to judge</h2>
+      <ul>
+        <li><strong>Fluency hides errors.</strong> AI writes confidently and grammatically whether it's right or wrong. We instinctively trust polished prose.</li>
+        <li><strong>Errors are plausible.</strong> A hallucinated statistic looks just like a real one. A fake court case has a realistic name and citation.</li>
+        <li><strong>Volume and speed.</strong> AI produces far more than we can carefully read, tempting us to skim.</li>
+        <li><strong>It's usually right.</strong> The better AI gets, the easier it is to stop checking — and the more damaging the rare error.</li>
+      </ul>
+
+      <h2>1.3 Automation bias and complacency</h2>
+      <p><strong>Automation bias</strong> is the tendency to favour suggestions from automated systems, even over contradictory evidence. Research in aviation, healthcare and other fields has found people miss errors more often when a reliable-seeming system is involved — both by failing to notice problems the system didn't flag (omission errors) and by following wrong suggestions (commission errors).</p>
+      <div class="callout warn">
+        <b>The irony of good AI</b>
+        <p>A tool that's right 95% of the time can be more dangerous than one that's right 60% of the time — because people stop checking the first one.</p>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 670 245" style="min-width:560px" role="img" aria-label="Automation complacency, illustrated: as a tool proves reliable, people trust it more and check it less — so the rare error is the one nobody catches."><line x1="70" y1="200" x2="600" y2="200" class="ln"/><line x1="70" y1="200" x2="70" y2="30" class="ln"/><text x="335" y="230" font-size="12" text-anchor="middle" class="mut">How often the AI has been right →</text><text x="30" y="115" font-size="11.5" text-anchor="middle" class="mut">level</text><path d="M 80 175 C 250 160 400 70 590 45" class="ln ln-a"/><text x="598" y="49" font-size="12" text-anchor="start" font-weight="600" class="t-a">trust</text><path d="M 80 50 C 250 60 400 150 590 182" class="ln ln-w"/><text x="598" y="186" font-size="12" text-anchor="start" font-weight="600" class="t-w">checking</text><rect x="430" y="30" width="150" height="165" rx="6" class="b-b" style="opacity:.35"/><text x="505" y="100" font-size="12" text-anchor="middle" font-weight="700" class="t-b">danger zone:</text><text x="505" y="116" font-size="11.5" text-anchor="middle" class="t-b">rare errors slip</text><text x="505" y="130" font-size="11.5" text-anchor="middle" class="t-b">through unchecked</text></svg></div>
+        <figcaption>Automation complacency, illustrated: as a tool proves reliable, people trust it more and check it less — so the rare error is the one nobody catches.</figcaption>
+      </figure>
+
+      <h2>1.4 What validation means</h2>
+      <p>Validation isn't re-doing the whole task. It's applying <strong>proportionate</strong> checks, focused on where errors are likely and costly:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stakes</th><th>Example</th><th>Proportionate check</th></tr></thead>
+          <tbody>
+            <tr><td>Low</td><td>Brainstorm for a team social</td><td>Quick read for sense and tone</td></tr>
+            <tr><td>Medium</td><td>Internal report summary</td><td>Check key facts and figures against the source; spot-check quotes</td></tr>
+            <tr><td>High</td><td>Customer advice, legal or financial content, published material, decisions about people</td><td>Verify every claim, figure and reference; expert review; documented sign-off</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 205" style="min-width:560px" role="img" aria-label="Proportionate checking: a brainstorm needs a glance; customer advice, published material and decisions about people need full verification."><rect x="30" y="120" width="180" height="50" rx="6" class="b-n"/><text x="120" y="144" font-size="13" text-anchor="middle" font-weight="700">Low stakes</text><text x="120" y="162" font-size="11" text-anchor="middle" class="mut">quick read for sense</text><rect x="230" y="75" width="180" height="95" rx="6" class="b-w"/><text x="320" y="99" font-size="13" text-anchor="middle" font-weight="700">Medium stakes</text><text x="320" y="117" font-size="11" text-anchor="middle" class="mut">check key facts &amp; figures</text><rect x="430" y="30" width="180" height="140" rx="6" class="b-b"/><text x="520" y="54" font-size="13" text-anchor="middle" font-weight="700">High stakes</text><text x="520" y="72" font-size="11" text-anchor="middle" class="mut">verify all + expert sign-off</text><line x1="20" y1="170" x2="620" y2="170" class="ln"/><text x="325" y="194" font-size="12" text-anchor="middle" class="mut">Effort scales with the cost of being wrong</text></svg></div>
+        <figcaption>Proportionate checking: a brainstorm needs a glance; customer advice, published material and decisions about people need full verification.</figcaption>
+      </figure>
+
+      <h2>1.5 A validation mindset</h2>
+      <ul class="checklist">
+        <li>Treat AI output as a <strong>draft from a talented but unreliable colleague</strong></li>
+        <li>Decide <strong>before</strong> reading what you'll check</li>
+        <li>Be most sceptical where the output <strong>matches what you hoped</strong> to hear</li>
+        <li>Separate "sounds right" from "is verified"</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Discernment — judging AI output — is a core AI fluency skill.</li><li>Fluency hides errors; plausible errors are the hardest to spot.</li><li>Reliable-seeming systems make people stop checking.</li><li>Check proportionately: more where errors are likely and costly.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">AI Fluency: Framework &amp; Foundations</a> — the 4D Framework: Delegation, Description, Discernment and Diligence</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-capabilities-and-limitations" target="_blank" rel="noopener">AI Capabilities and Limitations</a> — a mental model of how generative AI behaves, and why</li><li><span class="provider">Google</span><a href="https://grow.google/ai-essentials/" target="_blank" rel="noopener">Google AI Essentials</a> — self-paced, under 5 hours, no experience needed</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "In Anthropic's 4D Framework, the skill of evaluating AI output is called…",
+"options": [
+"Delegation",
+"Description",
+"Discernment",
+"Diligence"
+],
+"answer": 2,
+"explain": "Discernment is critical evaluation."
+},
+{
+"q": "Why can a tool that's right 95% of the time be riskier than one right 60% of the time?",
+"options": [
+"It's more expensive",
+"People stop checking it, so its rare errors slip through",
+"It's slower",
+"It can't be audited"
+],
+"answer": 1,
+"explain": "High reliability breeds complacency."
+},
+{
+"q": "A reviewer misses an error because the AI didn't flag it. This is…",
+"options": [
+"A commission error",
+"An omission error",
+"Sycophancy",
+"Tokenisation"
+],
+"answer": 1,
+"explain": "Omission errors: failing to notice what the system didn't flag."
+},
+{
+"q": "What level of checking suits an AI-drafted letter advising a customer on a financial product?",
+"options": [
+"Quick read for tone",
+"None",
+"High: verify every claim and get expert review and sign-off",
+"Ask the AI if it's correct"
+],
+"answer": 2,
+"explain": "Customer financial advice is high-stakes."
+},
+{
+"q": "When should you be MOST sceptical of AI output?",
+"options": [
+"When it's short",
+"When it conveniently confirms exactly what you hoped",
+"When it's in bullet points",
+"When it asks a question"
+],
+"answer": 1,
+"explain": "Confirmation bias and sycophancy reinforce each other."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: How AI gets things wrong →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

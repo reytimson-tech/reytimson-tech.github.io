@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Building LLM Applications with RAG</title>
+<meta name="description" content="Key terms from Building LLM Applications with RAG, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>RAG glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. BM25, reranker, recall@k" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Agentic RAG</dt><dd>RAG where an LLM decides when and what to search, possibly running several searches before answering.</dd>
+        <dt>Approximate nearest neighbour (ANN)</dt><dd>Search methods that find very close vectors quickly, trading a little accuracy for speed.</dd>
+        <dt>BM25</dt><dd>A classic lexical ranking function that scores documents by matching query words, weighting rare words more.</dd>
+        <dt>Chunk</dt><dd>A passage of a document indexed as a unit for retrieval.</dd>
+        <dt>Chunk overlap</dt><dd>Repeating the end of one chunk at the start of the next to preserve context across boundaries.</dd>
+        <dt>Citation</dt><dd>A reference in an answer to the source passage that supports a claim.</dd>
+        <dt>Contextual retrieval</dt><dd>Prepending an LLM-written description of each chunk's place in its document before indexing, to improve retrieval.</dd>
+        <dt>Cosine similarity</dt><dd>A measure of how similar two vectors' directions are, from −1 to 1.</dd>
+        <dt>Embedding</dt><dd>A vector of numbers representing the meaning of a piece of text.</dd>
+        <dt>Faithfulness</dt><dd>Whether every claim in an answer is supported by the retrieved sources (also called groundedness).</dd>
+        <dt>HNSW</dt><dd>Hierarchical Navigable Small World — a popular graph-based ANN index.</dd>
+        <dt>Hybrid search</dt><dd>Combining lexical and semantic search results.</dd>
+        <dt>Indexing</dt><dd>Preparing documents for retrieval: cleaning, chunking, embedding and storing them.</dd>
+        <dt>LLM-as-judge</dt><dd>Using a language model, with a rubric, to grade outputs.</dd>
+        <dt>Metadata</dt><dd>Information stored with each chunk — source, date, section, permissions — used for filtering and citations.</dd>
+        <dt>MRR</dt><dd>Mean reciprocal rank: the average of 1/rank of the first relevant result.</dd>
+        <dt>Query rewriting</dt><dd>Transforming a user's question (e.g. a follow-up) into a better standalone search query.</dd>
+        <dt>RAG</dt><dd>Retrieval-augmented generation: retrieving relevant passages and giving them to an LLM to ground its answer.</dd>
+        <dt>Recall@k</dt><dd>The share of test questions where a relevant passage appears in the top k results.</dd>
+        <dt>Reciprocal rank fusion (RRF)</dt><dd>Merging ranked lists by summing 1/(k + rank) for each document.</dd>
+        <dt>Reranker</dt><dd>A model that scores query–passage pairs more accurately than first-stage retrieval, used on a shortlist.</dd>
+        <dt>Semantic search</dt><dd>Search by meaning using embeddings rather than exact words.</dd>
+        <dt>Vector database</dt><dd>A database designed to store vectors and run similarity search, often with metadata filtering.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

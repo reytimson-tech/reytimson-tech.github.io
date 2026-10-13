@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>AI Agents & Agentic Workflows: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "A system classifies support emails, retrieves the relevant policy, and drafts a reply — always in that order. This is…",
+"options": [
+"An autonomous agent",
+"A workflow",
+"A multi-agent system",
+"Fine-tuning"
+],
+"answer": 1,
+"explain": "Predefined code path (Module 1)."
+},
+{
+"q": "Which is the best reason to choose an agent over a workflow?",
+"options": [
+"Agents are newer",
+"The steps can't be predicted and success can be checked",
+"Agents are cheaper",
+"To impress stakeholders"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which three capabilities augment an LLM in agentic systems?",
+"options": [
+"Tools, retrieval, memory",
+"Speed, size, price",
+"Images, audio, video",
+"Plugins, themes, fonts"
+],
+"answer": 0,
+"explain": "Module 1."
+},
+{
+"q": "In tool use, what does the model output when it wants to call a tool?",
+"options": [
+"Executable Python",
+"A structured request with the tool name and arguments",
+"A database",
+"Nothing"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "An agent keeps choosing 'search_products' when it should use 'get_order_status'. What's the first fix to try?",
+"options": [
+"Bigger model",
+"Clearer tool names and descriptions stating when to use each",
+"Remove all tools",
+"Increase max_tokens"
+],
+"answer": 1,
+"explain": "Tool descriptions are prompts (Module 2)."
+},
+{
+"q": "Your company wants several AI assistants to access its CRM. What does MCP let you do?",
+"options": [
+"Write a separate integration for each assistant",
+"Build one MCP server that any MCP-compatible client can use",
+"Avoid authentication",
+"Train a model on the CRM"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which pattern uses one LLM to generate and another to critique, repeatedly?",
+"options": [
+"Routing",
+"Evaluator–optimiser",
+"Sectioning",
+"Prompt chaining"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Splitting a long report into sections that are summarised simultaneously is…",
+"options": [
+"Parallelisation (sectioning)",
+"Routing",
+"Evaluator–optimiser",
+"Orchestrator–workers"
+],
+"answer": 0,
+"explain": "Module 3."
+},
+{
+"q": "In the routing code, the classifier returns 'Refund.' with a full stop. What happens and why is the code safe?",
+"options": [
+"Crash",
+"It falls back to OTHER because unrecognised labels are handled — model output is validated",
+"It issues a refund",
+"It loops forever"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Which element of the minimal agent loop prevents runaway costs?",
+"options": [
+"The system prompt",
+"max_steps",
+"json.dumps",
+"The tool description"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "An agent needs to remember a customer's preferences across weeks. What's needed?",
+"options": [
+"Working memory only",
+"Long-term memory such as a database, read and written deliberately",
+"A bigger context window only",
+"Nothing"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Why might you hand a research sub-task to a sub-agent?",
+"options": [
+"To hide it",
+"To give it focused instructions and a fresh context, keeping the main agent's context clean",
+"It's always cheaper",
+"To avoid logging"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which guardrail limits what a hijacked agent could do?",
+"options": [
+"Friendlier prompts",
+"Least-privilege tools and credentials",
+"More tools",
+"Higher temperature"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "An agent reads public web pages and also has write access to your CRM and email. What's the recommended design change?",
+"options": [
+"None",
+"Separate agents: the one reading untrusted content holds no powerful tools; require approval for sending",
+"Give it admin rights",
+"Remove logging"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "What should happen when a human declines an agent's proposed action?",
+"options": [
+"The agent retries the same action",
+"The agent is told it was declined and asked to explain or suggest alternatives",
+"The system crashes",
+"The action runs anyway"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which should an agent do when a customer's request falls outside policy?",
+"options": [
+"Improvise a new policy",
+"Escalate to a human with a clear summary",
+"Ignore the customer",
+"Issue the maximum refund"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which metric best captures whether an agent reached the right end state?",
+"options": [
+"Tokens used",
+"Task success rate checked against the system state",
+"Number of steps",
+"Response length"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Which test case checks safety?",
+"options": [
+"A routine order lookup",
+"An email containing hidden instructions to forward customer data",
+"A greeting",
+"A spelling check"
+],
+"answer": 1,
+"explain": "Include injection attempts (Module 6)."
+},
+{
+"q": "What is the safest first stage of rolling out a new agent?",
+"options": [
+"Full autonomy",
+"Shadow mode",
+"Unlimited budget",
+"Remove humans"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "An agent will make decisions affecting employees' shifts. Which governance step applies?",
+"options": [
+"None — agents are exempt",
+"Record it in the AI inventory and assess risk, data protection and relevant law",
+"Only check the cost",
+"Only test once"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

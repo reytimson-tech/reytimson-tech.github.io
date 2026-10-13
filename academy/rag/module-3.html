@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Preparing documents: chunking and metadata — Building LLM Applications with RAG</title>
+<meta name="description" content="Loading and cleaning documents, why and how to chunk, chunking strategies and code, metadata, and keeping the index fresh.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Preparing documents: chunking and metadata</h1>
+      <p class="lead">Most RAG quality problems start before a single question is asked — in how documents are cleaned, split and labelled.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Clean and de-duplicate source documents</li><li>Explain why chunking matters</li><li>Compare chunking strategies and implement one</li><li>Design useful chunk metadata</li><li>Plan index updates</li></ul>
+      </div>
+
+      <h2>3.1 Loading and cleaning</h2>
+      <p>Real documents are messy: PDFs with headers and footers on every page, tables, scanned images, HTML menus, duplicate versions. Garbage in the index means garbage in the answers.</p>
+      <ul class="checklist">
+        <li>Extract text with tools suited to each format (PDF parsers, OCR for scans, HTML-to-text)</li>
+        <li>Remove boilerplate: navigation, repeated headers, footers, cookie banners</li>
+        <li>Keep structure that carries meaning: headings, lists, table rows</li>
+        <li>De-duplicate and keep only the current version of each document</li>
+        <li>Respect access rights — record who is allowed to see each document</li>
+      </ul>
+
+      <h2>3.2 Why chunk at all?</h2>
+      <p>Embedding a whole 50-page document gives one vector that blurs every topic in it together. Retrieval works better when each vector represents one focused piece of content. <strong>Chunking</strong> splits documents into passages small enough to be specific, but large enough to make sense on their own.</p>
+
+      <h2>3.3 Chunking strategies</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>How</th><th>Pros / cons</th></tr></thead>
+          <tbody>
+            <tr><td>Fixed size</td><td>Every N tokens or characters</td><td>Simple; may cut sentences and ideas in half</td></tr>
+            <tr><td>Fixed size with overlap</td><td>Each chunk repeats the end of the previous one</td><td>Reduces lost context at boundaries; more storage</td></tr>
+            <tr><td>Recursive / structure-aware</td><td>Split on headings, then paragraphs, then sentences</td><td>Keeps ideas together; a strong default</td></tr>
+            <tr><td>Semantic</td><td>Split where the topic changes (using embeddings)</td><td>Coherent chunks; slower to build</td></tr>
+            <tr><td>Document-specific</td><td>Rows for tables, functions for code, Q&amp;A pairs for FAQs</td><td>Best quality for structured content</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>There's no universal best size. A few hundred tokens with some overlap is a common starting point — then test (Module 6).</p>
+
+<pre data-copy><code><span class="label">Python · a simple paragraph-aware chunker with overlap</span>def chunk_text(text, max_words=180, overlap_words=40):
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    chunks, current = [], []
+    for para in paragraphs:
+        words = para.split()
+        if current and len(current) + len(words) > max_words:
+            chunks.append(" ".join(current))
+            current = current[-overlap_words:]          # carry some context forward
+        current.extend(words)
+    if current:
+        chunks.append(" ".join(current))
+    return chunks</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 690 210" style="min-width:560px" role="img" aria-label="Chunk size is a trade-off. Tiny chunks lose context; huge chunks mix topics. Mid-sized chunks with a little overlap are a good default — then test."><rect x="15" y="10" width="210" height="190" rx="10" class="b-s"/><text x="120" y="34" font-size="13" text-anchor="middle" font-weight="700" class="t-b">Too small</text><text x="120" y="52" font-size="10.5" text-anchor="middle" class="mut">fragments lose meaning</text><rect x="35" y="70" width="38" height="46" rx="4" class="b-a"/><rect x="80" y="70" width="38" height="46" rx="4" class="b-a"/><rect x="125" y="70" width="38" height="46" rx="4" class="b-a"/><rect x="170" y="70" width="38" height="46" rx="4" class="b-a"/><rect x="35" y="130" width="38" height="46" rx="4" class="b-a"/><rect x="80" y="130" width="38" height="46" rx="4" class="b-a"/><rect x="125" y="130" width="38" height="46" rx="4" class="b-a"/><rect x="170" y="130" width="38" height="46" rx="4" class="b-a"/><rect x="240" y="10" width="210" height="190" rx="10" class="b-s"/><text x="345" y="34" font-size="13" text-anchor="middle" font-weight="700" class="t-b">Too large</text><text x="345" y="52" font-size="10.5" text-anchor="middle" class="mut">many topics blurred together</text><rect x="260" y="70" width="170" height="110" rx="4" class="b-w"/><rect x="272" y="84" width="146" height="5" rx="2" class="f-l"/><rect x="272" y="99" width="116" height="5" rx="2" class="f-l"/><rect x="272" y="114" width="86" height="5" rx="2" class="f-l"/><rect x="272" y="129" width="146" height="5" rx="2" class="f-l"/><rect x="272" y="144" width="116" height="5" rx="2" class="f-l"/><rect x="272" y="159" width="86" height="5" rx="2" class="f-l"/><rect x="465" y="10" width="210" height="190" rx="10" class="b-s"/><text x="570" y="34" font-size="13" text-anchor="middle" font-weight="700" class="t-g">Right-sized + overlap</text><text x="570" y="52" font-size="10.5" text-anchor="middle" class="mut">one idea each, context kept</text><rect x="485" y="70" width="170" height="50" rx="4" class="b-a"/><rect x="485" y="112" width="170" height="60" rx="4" class="b-g" style="opacity:.8"/><text x="570" y="120" font-size="10.5" text-anchor="middle" font-weight="600" class="t-a">overlap</text></svg></div>
+        <figcaption>Chunk size is a trade-off. Tiny chunks lose context; huge chunks mix topics. Mid-sized chunks with a little overlap are a good default — then test.</figcaption>
+      </figure>
+
+      <h2>3.4 Metadata: the secret weapon</h2>
+      <p>Store <strong>metadata</strong> with every chunk: source document, title, section heading, date, version, author, product, region and access permissions. Metadata lets you:</p>
+      <ul>
+        <li><strong>filter</strong> retrieval (only current policies; only UK documents; only what this user may see);</li>
+        <li><strong>cite</strong> sources precisely in answers;</li>
+        <li><strong>add context</strong> to chunks — e.g. prefixing each chunk with its document title and heading.</li>
+      </ul>
+<pre data-copy><code>{"id": "returns-policy-v7#3",
+ "text": "Damaged items can be returned within 30 days ...",
+ "source": "Returns Policy v7", "section": "Damaged goods",
+ "updated": "2026-06-01", "region": "UK", "audience": ["staff", "customers"]}</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 232" style="min-width:560px" role="img" aria-label="Each chunk travels with metadata. It powers filtering (including permissions), precise citations and added context."><rect x="20" y="20" width="300" height="130" rx="8" class="b-a"/><text x="36" y="44" font-size="12.5" text-anchor="start" font-weight="700">Chunk text</text><text x="36" y="66" font-size="12" text-anchor="start">&quot;Damaged items can be returned</text><text x="36" y="84" font-size="12" text-anchor="start">within 30 days for a full refund…&quot;</text><rect x="340" y="20" width="280" height="130" rx="8" class="b-w"/><text x="356" y="44" font-size="12" text-anchor="start" class="mut">source</text><text x="440" y="44" font-size="12" text-anchor="start" font-weight="600">Returns Policy v7</text><text x="356" y="66" font-size="12" text-anchor="start" class="mut">section</text><text x="440" y="66" font-size="12" text-anchor="start" font-weight="600">Damaged goods</text><text x="356" y="88" font-size="12" text-anchor="start" class="mut">updated</text><text x="440" y="88" font-size="12" text-anchor="start" font-weight="600">2026-06-01</text><text x="356" y="110" font-size="12" text-anchor="start" class="mut">region</text><text x="440" y="110" font-size="12" text-anchor="start" font-weight="600">UK</text><text x="356" y="132" font-size="12" text-anchor="start" class="mut">audience</text><text x="440" y="132" font-size="12" text-anchor="start" font-weight="600">staff, customers</text><rect x="20" y="170" width="190" height="48" rx="10" class="b-g"/><text x="115" y="189.625" font-size="12.5" text-anchor="middle" font-weight="600">Filter</text><text x="115" y="208.925" font-size="10.5" text-anchor="middle" class="mut">only current, UK, allowed</text><rect x="225" y="170" width="190" height="48" rx="10" class="b-g"/><text x="320" y="189.625" font-size="12.5" text-anchor="middle" font-weight="600">Cite</text><text x="320" y="208.925" font-size="10.5" text-anchor="middle" class="mut">&#x27;Returns Policy v7&#x27;</text><rect x="430" y="170" width="190" height="48" rx="10" class="b-g"/><text x="525" y="189.625" font-size="12.5" text-anchor="middle" font-weight="600">Contextualise</text><text x="525" y="208.925" font-size="10.5" text-anchor="middle" class="mut">prefix title + heading</text></svg></div>
+        <figcaption>Each chunk travels with metadata. It powers filtering (including permissions), precise citations and added context.</figcaption>
+      </figure>
+
+      <h2>3.5 Keeping the index fresh</h2>
+      <p>Documents change. Plan for incremental updates: re-process changed documents, delete chunks from removed ones, and record the version indexed. Stale chunks are a common source of confidently wrong answers.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Clean text, keep meaningful structure, de-duplicate and record permissions.</li><li>Chunks should be specific yet self-contained.</li><li>Structure-aware chunking with overlap is a strong default; test sizes.</li><li>Metadata enables filtering, citations and added context.</li><li>Stale chunks cause confident wrong answers — keep the index fresh.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Introducing Contextual Retrieval</a> — September 2024</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview" target="_blank" rel="noopener">RAG and generative AI in Azure AI Search</a> — classic vs agentic retrieval</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/retrieval-augmented-generation" target="_blank" rel="noopener">What is retrieval augmented generation?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/retrieval-augmented-generation/" target="_blank" rel="noopener">What is retrieval-augmented generation?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Why not embed each 50-page document as a single vector?",
+"options": [
+"It's too expensive to store",
+"One vector blurs many topics together, so retrieval is imprecise",
+"Embeddings can't handle text",
+"It's required by law"
+],
+"answer": 1,
+"explain": "Focused chunks retrieve more precisely."
+},
+{
+"q": "What does chunk overlap help with?",
+"options": [
+"Reducing storage",
+"Keeping context that would otherwise be lost at chunk boundaries",
+"Speeding up generation",
+"Encrypting data"
+],
+"answer": 1,
+"explain": "Overlap repeats the end of the previous chunk."
+},
+{
+"q": "For a product catalogue table, which chunking approach is usually best?",
+"options": [
+"Fixed 1,000-character blocks",
+"One chunk per row, with column names",
+"No chunking",
+"Random splits"
+],
+"answer": 1,
+"explain": "Document-specific chunking suits structured content."
+},
+{
+"q": "Which metadata field is essential for security?",
+"options": [
+"Font",
+"Access permissions (who may see the document)",
+"Word count",
+"Colour"
+],
+"answer": 1,
+"explain": "Retrieval must respect permissions."
+},
+{
+"q": "A policy was updated but the assistant quotes the old version. The likely cause?",
+"options": [
+"The model is broken",
+"The index still contains stale chunks from the old version",
+"The user typed incorrectly",
+"Temperature too high"
+],
+"answer": 1,
+"explain": "Keep the index fresh with versioning and deletion."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Retrieval that works →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

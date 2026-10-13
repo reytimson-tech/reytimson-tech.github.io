@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Labelling and annotation — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Why labels matter, labelling guidelines, Cohen&#x27;s kappa in code, active learning, weak supervision and LLM-assisted labelling, finding label errors, and labellers&#x27; welfare.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 30 minutes</span>
+      <h1>Labelling and annotation</h1>
+      <p class="lead">For supervised learning, labels are the lesson. This module shows how to make them consistent, efficient and trustworthy.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain how label quality limits model quality</li><li>Write effective labelling guidelines</li><li>Measure inter-annotator agreement with Cohen's kappa</li><li>Choose efficient labelling techniques, including LLM assistance</li><li>Detect label errors and treat labellers responsibly</li></ul>
+      </div>
+
+      <h2>4.1 Why labels matter</h2>
+      <p>Supervised learning learns from <strong>labels</strong> — the "right answers" attached to examples: is this email spam, which category is this ticket, is this X-ray abnormal? Inconsistent or wrong labels put a ceiling on model quality, and evaluation against wrong labels gives misleading scores.</p>
+
+      <h2>4.2 Write labelling guidelines</h2>
+      <ul class="checklist">
+        <li>A clear definition of every label, with examples and counter-examples</li>
+        <li>Rules for ambiguous and borderline cases — and an "unsure" option</li>
+        <li>What to do when information is missing</li>
+        <li>Worked examples reviewed by experts</li>
+        <li>A version number — update the guidelines as you learn</li>
+      </ul>
+
+      <h2>4.3 Measure agreement between labellers</h2>
+      <p>Have two or more people label the same sample independently and measure how often they agree. <strong>Cohen's kappa</strong> measures agreement between two labellers while correcting for agreement expected by chance: 1 is perfect, 0 is no better than chance. Low agreement usually means the guidelines — not the labellers — need work.</p>
+<pre data-copy><code><span class="label">Python · inter-annotator agreement</span>from sklearn.metrics import cohen_kappa_score
+
+annotator_a = ["billing", "delivery", "product", "delivery", "other", "billing", "product", "delivery"]
+annotator_b = ["billing", "delivery", "product", "billing",  "other", "billing", "delivery", "delivery"]
+
+agreement = sum(a == b for a, b in zip(annotator_a, annotator_b)) / len(annotator_a)
+kappa = cohen_kappa_score(annotator_a, annotator_b)
+print(f"Raw agreement: {agreement:.0%}   Cohen's kappa: {kappa:.2f}")
+
+# Which items do they disagree on? Discuss them and refine the guidelines.
+print([i for i, (a, b) in enumerate(zip(annotator_a, annotator_b)) if a != b])</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 155" style="min-width:560px" role="img" aria-label="Two labellers, eight tickets. Red marks disagreements — usually a sign the guidelines need a clearer rule."><text x="100" y="50" font-size="12" text-anchor="end" font-weight="600">Labeller A</text><text x="100" y="100" font-size="12" text-anchor="end" font-weight="600">Labeller B</text><rect x="112" y="32" width="62" height="28" rx="10" class="b-s"/><text x="143" y="49.675" font-size="10.5" text-anchor="middle">billing</text><rect x="112" y="82" width="62" height="28" rx="10" class="b-g"/><text x="143" y="99.675" font-size="10.5" text-anchor="middle">billing</text><rect x="178" y="32" width="62" height="28" rx="10" class="b-s"/><text x="209" y="49.675" font-size="10.5" text-anchor="middle">delivery</text><rect x="178" y="82" width="62" height="28" rx="10" class="b-g"/><text x="209" y="99.675" font-size="10.5" text-anchor="middle">delivery</text><rect x="244" y="32" width="62" height="28" rx="10" class="b-s"/><text x="275" y="49.675" font-size="10.5" text-anchor="middle">product</text><rect x="244" y="82" width="62" height="28" rx="10" class="b-g"/><text x="275" y="99.675" font-size="10.5" text-anchor="middle">product</text><rect x="310" y="32" width="62" height="28" rx="10" class="b-s"/><text x="341" y="49.675" font-size="10.5" text-anchor="middle">delivery</text><rect x="310" y="82" width="62" height="28" rx="10" class="b-b"/><text x="341" y="99.675" font-size="10.5" text-anchor="middle">billing</text><rect x="376" y="32" width="62" height="28" rx="10" class="b-s"/><text x="407" y="49.675" font-size="10.5" text-anchor="middle">other</text><rect x="376" y="82" width="62" height="28" rx="10" class="b-g"/><text x="407" y="99.675" font-size="10.5" text-anchor="middle">other</text><rect x="442" y="32" width="62" height="28" rx="10" class="b-s"/><text x="473" y="49.675" font-size="10.5" text-anchor="middle">billing</text><rect x="442" y="82" width="62" height="28" rx="10" class="b-g"/><text x="473" y="99.675" font-size="10.5" text-anchor="middle">billing</text><rect x="508" y="32" width="62" height="28" rx="10" class="b-s"/><text x="539" y="49.675" font-size="10.5" text-anchor="middle">product</text><rect x="508" y="82" width="62" height="28" rx="10" class="b-b"/><text x="539" y="99.675" font-size="10.5" text-anchor="middle">delivery</text><rect x="574" y="32" width="62" height="28" rx="10" class="b-s"/><text x="605" y="49.675" font-size="10.5" text-anchor="middle">delivery</text><rect x="574" y="82" width="62" height="28" rx="10" class="b-g"/><text x="605" y="99.675" font-size="10.5" text-anchor="middle">delivery</text><text x="375" y="140" font-size="12" text-anchor="middle" font-weight="600">6 of 8 agree (75%) · Cohen&#x27;s kappa ≈ 0.65 · discuss items 4 and 7</text></svg></div>
+        <figcaption>Two labellers, eight tickets. Red marks disagreements — usually a sign the guidelines need a clearer rule.</figcaption>
+      </figure>
+
+      <h2>4.4 Making labelling efficient</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Technique</th><th>How it helps</th><th>Watch out for</th></tr></thead>
+          <tbody>
+            <tr><td>Active learning</td><td>The model picks the examples it's least sure about for humans to label next</td><td>Can under-sample easy-but-important cases</td></tr>
+            <tr><td>Weak supervision</td><td>Simple rules or keywords label data roughly at scale</td><td>Rules carry their own biases and errors</td></tr>
+            <tr><td>LLM-assisted labelling</td><td>A language model proposes labels; humans review</td><td>Plausible but wrong labels; check a sample and measure agreement with humans</td></tr>
+            <tr><td>Consensus labelling</td><td>Several labellers per item; take the majority</td><td>More cost per item</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.5 Finding label errors</h2>
+      <p>Even well-run projects contain label errors. Useful checks: examples where a trained model confidently disagrees with the label; duplicates or near-duplicates with different labels; and spot audits of random samples by an expert.</p>
+<pre data-copy><code><span class="label">Python · conflicting labels on duplicate text</span>tickets = pd.DataFrame({
+    "text":  ["Where is my order?", "Where is my order?", "Charged twice", "Refund please"],
+    "label": ["delivery",           "billing",            "billing",       "billing"],
+})
+conflicts = tickets.groupby("text")["label"].nunique()
+print(conflicts[conflicts > 1])     # same text, different labels -> review</code></pre>
+
+      <h2>4.6 Labellers are people</h2>
+      <p>Much labelling work is outsourced. Responsible practice includes fair pay, clear instructions, reasonable workloads, and protection and support for people asked to review distressing content.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Wrong labels cap model quality and distort evaluation.</li><li>Guidelines need definitions, examples, edge-case rules and versions.</li><li>Low agreement usually means unclear guidelines.</li><li>LLM-proposed labels need human review and measured agreement.</li><li>Look for conflicts, confident model disagreements and audit samples.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/classification" target="_blank" rel="noopener">ML Crash Course: Classification</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/machine-learning/" target="_blank" rel="noopener">What is machine learning?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Two labellers agree on 85% of items, but most items are one common class. Which measure corrects for chance agreement?",
+"options": [
+"Accuracy",
+"Cohen's kappa",
+"Recall",
+"Mean"
+],
+"answer": 1,
+"explain": "Kappa adjusts for agreement expected by chance."
+},
+{
+"q": "Labellers disagree a lot. The most likely fix is…",
+"options": [
+"Replace the labellers",
+"Clarify the guidelines, especially for ambiguous cases",
+"Ignore disagreements",
+"Use fewer labels"
+],
+"answer": 1,
+"explain": "Disagreement usually reveals unclear definitions."
+},
+{
+"q": "What does active learning do?",
+"options": [
+"Labels data randomly",
+"Selects the examples the model is least sure about for humans to label next",
+"Removes labels",
+"Trains without data"
+],
+"answer": 1,
+"explain": "It focuses human effort where it helps most."
+},
+{
+"q": "Before using LLM-proposed labels for training, you should…",
+"options": [
+"Use them directly",
+"Review a sample and measure agreement with human labels",
+"Delete half",
+"Translate them"
+],
+"answer": 1,
+"explain": "LLMs can produce plausible but wrong labels."
+},
+{
+"q": "The same ticket text appears twice with different labels. What should happen?",
+"options": [
+"Keep both",
+"Review it and resolve the conflict, possibly updating guidelines",
+"Delete the dataset",
+"Average the labels"
+],
+"answer": 1,
+"explain": "Conflicts signal label errors."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Representativeness, splits and leakage →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Interpreting and deploying models — Machine Learning Fundamentals</title>
+<meta name="description" content="Permutation importance, error analysis by group, saving models safely, deployment and monitoring, model cards, and choosing between classic ML and LLMs.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Interpreting and deploying models</h1>
+      <p class="lead">A model is only valuable if people can trust it, use it and keep it working. This module covers what happens after the accuracy score.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Measure feature importance with permutation importance</li><li>Analyse errors by group</li><li>Save and load models safely</li><li>Plan deployment, monitoring and retraining</li><li>Choose between classic ML and LLMs</li></ul>
+      </div>
+
+      <h2>6.1 Which features matter?</h2>
+      <p><strong>Permutation importance</strong> measures how much a model's score drops when one feature's values are randomly shuffled — breaking its link with the target. It works for any model and is computed on held-out data.</p>
+<pre data-copy><code>from sklearn.inspection import permutation_importance
+
+rf = RandomForestClassifier(n_estimators=300, random_state=0).fit(X_train, y_train)
+imp = permutation_importance(rf, X_test, y_test, scoring="roc_auc", n_repeats=10, random_state=0)
+print(pd.Series(imp.importances_mean, index=features).sort_values(ascending=False).round(3))</code></pre>
+      <p>On our synthetic data you should see <code>tenure_months</code> and <code>support_tickets</code> near the top — matching the hidden pattern. On real data, importance tells you what the model relies on, which is not necessarily what <em>causes</em> the outcome.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 182" style="min-width:560px" role="img" aria-label="Permutation importance: the model leans on tenure and support tickets — matching the hidden pattern in the practice data. (Illustrative values.)"><text x="160" y="37" font-size="12" text-anchor="end" font-weight="600">tenure_months</text><rect x="170" y="20" width="360" height="24" rx="4" class="b-a"/><text x="536" y="37" font-size="11.5" text-anchor="start" class="mut">0.12</text><text x="160" y="73" font-size="12" text-anchor="end" font-weight="600">support_tickets</text><rect x="170" y="56" width="270" height="24" rx="4" class="b-a"/><text x="446" y="73" font-size="11.5" text-anchor="start" class="mut">0.09</text><text x="160" y="109" font-size="12" text-anchor="end" font-weight="600">monthly_spend</text><rect x="170" y="92" width="60" height="24" rx="4" class="b-w"/><text x="236" y="109" font-size="11.5" text-anchor="start" class="mut">0.02</text><text x="160" y="145" font-size="12" text-anchor="end" font-weight="600">on_promo</text><rect x="170" y="128" width="30" height="24" rx="4" class="b-w"/><text x="206" y="145" font-size="11.5" text-anchor="start" class="mut">0.01</text><text x="330" y="172" font-size="11" text-anchor="middle" class="mut">drop in test AUC when the feature is shuffled</text></svg></div>
+        <figcaption>Permutation importance: the model leans on tenure and support tickets — matching the hidden pattern in the practice data. (Illustrative values.)</figcaption>
+      </figure>
+
+      <h2>6.2 Error analysis by group</h2>
+<pre data-copy><code>test = X_test.copy()
+test["actual"] = y_test
+test["pred"] = (rf.predict_proba(X_test)[:, 1] >= 0.5).astype(int)
+test["region"] = customers.loc[X_test.index, "region"]
+
+for region, g in test.groupby("region"):
+    print(region, "n =", len(g),
+          " recall =", round(recall_score(g["actual"], g["pred"]), 2),
+          " precision =", round(precision_score(g["actual"], g["pred"], zero_division=0), 2))</code></pre>
+      <p>Check performance for every group that matters — regions, customer types and, where lawful and appropriate, protected characteristics. Overall scores can hide poor performance for smaller groups (see <a href="../responsible-ai/module-3.html">Responsible AI, Module 3</a>).</p>
+
+      <h2>6.3 Saving and loading a model</h2>
+<pre data-copy><code>import joblib
+
+joblib.dump(rf, "churn_model_v1.joblib")
+loaded = joblib.load("churn_model_v1.joblib")
+print(loaded.predict_proba(X_test.head(3))[:, 1].round(2))</code></pre>
+      <p>Only load model files from sources you trust: like Python pickles, joblib files can execute code when loaded.</p>
+
+      <h2>6.4 Deploying and monitoring</h2>
+      <ul class="checklist">
+        <li><strong>Serve</strong> predictions in batch (e.g. a nightly churn list) or in real time (an API)</li>
+        <li><strong>Monitor</strong> input data for drift, prediction distributions, and real outcomes as they arrive</li>
+        <li><strong>Retrain</strong> on a schedule or when performance drops — and re-evaluate before replacing the live model</li>
+        <li><strong>Version</strong> data, code and models so any prediction can be traced</li>
+        <li><strong>Document</strong> the model in a model card: purpose, data, metrics by group, limitations, owner</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 290" style="min-width:560px" role="img" aria-label="A model in production is never finished: monitor it, retrain it, and re-evaluate before each new version goes live."><polyline points="388,52.0945 390.534,52.918 411.71,82.0639" class="ln"/><polygon points="415.237,86.918 406.975,83.0321 414.094,77.8596" class="ah"/><polyline points="434.127,138.918 434.127,187.082 412.951,216.228" class="ln"/><polygon points="409.424,221.082 410.567,212.024 417.686,217.196" class="ah"/><polyline points="322.534,269.177 320,270 323.172,271.031" class="ln"/><polygon points="317.466,269.177 326.434,267.464 323.715,275.833" class="ah"/><polyline points="230.576,221.082 205.873,187.082 205.873,144.918" class="ln"/><polygon points="205.873,138.918 210.273,146.918 201.473,146.918" class="ah"/><polyline points="224.763,86.918 249.466,52.918 246.294,53.9486" class="ln"/><polygon points="252,52.0945 245.751,58.7513 243.032,50.382" class="ah"/><rect x="255" y="7" width="130" height="46" rx="10" class="b-a"/><text x="320" y="34.2" font-size="12" text-anchor="middle" font-weight="600">Train</text><rect x="369.127" y="89.918" width="130" height="46" rx="10" class="b-w"/><text x="434.127" y="109.318" font-size="12" text-anchor="middle" font-weight="600">Evaluate</text><text x="434.127" y="124.918" font-size="12" text-anchor="middle">by group</text><rect x="325.534" y="224.082" width="130" height="46" rx="10" class="b-g"/><text x="390.534" y="251.282" font-size="12" text-anchor="middle" font-weight="600">Deploy</text><rect x="184.466" y="224.082" width="130" height="46" rx="10" class="b-w"/><text x="249.466" y="243.482" font-size="12" text-anchor="middle" font-weight="600">Monitor</text><text x="249.466" y="259.082" font-size="12" text-anchor="middle">drift &amp; outcomes</text><rect x="140.873" y="89.918" width="130" height="46" rx="10" class="b-a"/><text x="205.873" y="117.118" font-size="12" text-anchor="middle" font-weight="600">Retrain</text><text x="320" y="146" font-size="11" text-anchor="middle" class="mut">version data, code</text><text x="320" y="162" font-size="11" text-anchor="middle" class="mut">and models</text></svg></div>
+        <figcaption>A model in production is never finished: monitor it, retrain it, and re-evaluate before each new version goes live.</figcaption>
+      </figure>
+
+      <h2>6.5 Classic ML or an LLM?</h2>
+      <div class="compare">
+        <div><h4>Classic ML is usually better when…</h4><ul><li>you have structured, tabular data</li><li>you need a number or category at high volume and low cost</li><li>you have labelled historical outcomes</li><li>you need well-understood, auditable behaviour</li></ul></div>
+        <div><h4>An LLM is usually better when…</h4><ul><li>inputs are unstructured text, images or audio</li><li>you have few or no labelled examples</li><li>the task needs language generation or reasoning</li><li>requirements change often and prompting is faster than retraining</li></ul></div>
+      </div>
+      <p>Many strong systems combine both — for example, an LLM extracts structured fields from emails, and a gradient-boosted model scores them.</p>
+<div class="activity"><b>Exercise: a mini model card</b><p>Write a short model card (as a Python dictionary or Markdown) for the churn model: purpose, training data, test AUC, recall by region, known limitations, and owner.</p><details><summary>Show a solution</summary><pre data-copy><code>card = {
+    "model": "churn_model_v1 (random forest, 300 trees)",
+    "purpose": "Rank customers for weekly retention calls; human decides who to call",
+    "data": "Synthetic customers, 2,000 rows; features: tenure, spend, tickets, promo",
+    "test_auc": round(roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1]), 3),
+    "limitations": "Synthetic data; not validated on real customers; association not causation",
+    "owner": "Retention analytics team",
+}
+print(card)</code></pre></details></div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 704 110" style="min-width:620px" role="img" aria-label="Combining both: an LLM turns unstructured text into features; a classic model scores them cheaply and consistently."><rect x="20" y="30" width="112" height="54" rx="10" class="b-n"/><text x="76" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Customer</text><text x="76" y="68.5" font-size="11.5" text-anchor="middle">email</text><rect x="158" y="30" width="112" height="54" rx="10" class="b-w"/><text x="214" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">LLM extracts</text><text x="214" y="68.5" font-size="11.5" text-anchor="middle">fields</text><rect x="296" y="30" width="112" height="54" rx="10" class="b-s"/><text x="352" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Structured</text><text x="352" y="68.5" font-size="11.5" text-anchor="middle">row</text><rect x="434" y="30" width="112" height="54" rx="10" class="b-a"/><text x="490" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Gradient boosting</text><text x="490" y="68.5" font-size="11.5" text-anchor="middle">scores risk</text><rect x="572" y="30" width="112" height="54" rx="10" class="b-g"/><text x="628" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Ranked call</text><text x="628" y="68.5" font-size="11.5" text-anchor="middle">list</text><line x1="135" y1="57" x2="149" y2="57" class="ln"/><polygon points="155,57 147,61.4 147,52.6" class="ah"/><line x1="273" y1="57" x2="287" y2="57" class="ln"/><polygon points="293,57 285,61.4 285,52.6" class="ah"/><line x1="411" y1="57" x2="425" y2="57" class="ln"/><polygon points="431,57 423,61.4 423,52.6" class="ah"/><line x1="549" y1="57" x2="563" y2="57" class="ln"/><polygon points="569,57 561,61.4 561,52.6" class="ah"/></svg></div>
+        <figcaption>Combining both: an LLM turns unstructured text into features; a classic model scores them cheaply and consistently.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Permutation importance shows what a model relies on — not causation.</li><li>Check metrics for every group that matters.</li><li>Only load model files from trusted sources.</li><li>Monitor drift and outcomes; retrain and re-evaluate.</li><li>Classic ML suits tabular, high-volume prediction; LLMs suit unstructured language tasks.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/fairness" target="_blank" rel="noopener">Machine Learning Crash Course: Fairness</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Permutation importance measures…",
+"options": [
+"How a feature causes the outcome",
+"How much the model's score drops when a feature's values are shuffled",
+"The number of features",
+"Training time"
+],
+"answer": 1,
+"explain": "Reliance, not causation."
+},
+{
+"q": "Overall recall is 0.80 but 0.45 for one region. What should you do?",
+"options": [
+"Nothing",
+"Investigate and address the gap before deployment",
+"Remove the region",
+"Report only the overall score"
+],
+"answer": 1,
+"explain": "Aggregates hide group problems."
+},
+{
+"q": "Why only load joblib/pickle model files from trusted sources?",
+"options": [
+"They're large",
+"They can execute code when loaded",
+"They expire",
+"They're encrypted"
+],
+"answer": 1,
+"explain": "A security risk."
+},
+{
+"q": "Which belongs in production monitoring?",
+"options": [
+"Input drift, prediction distributions and real outcomes",
+"Only uptime",
+"Nothing",
+"Only cost"
+],
+"answer": 0,
+"explain": "Models degrade as the world changes."
+},
+{
+"q": "Which task suits classic ML more than an LLM?",
+"options": [
+"Summarising emails",
+"Scoring churn risk from tabular customer data at high volume",
+"Drafting replies",
+"Translating documents"
+],
+"answer": 1,
+"explain": "Structured prediction at scale."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

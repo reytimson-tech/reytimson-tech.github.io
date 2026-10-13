@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: What is the EU AI Act? — EU AI Act Fundamentals</title>
+<meta name="description" content="The purpose of the EU AI Act, the definition of an AI system, territorial scope, exemptions and the roles of provider and deployer.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>What is the EU AI Act?</h1>
+      <p class="lead">The EU Artificial Intelligence Act is the world's first comprehensive, horizontal law on AI. This module explains what it is for, what counts as an "AI system", who it applies to — and who it doesn't.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul>
+          <li>Describe the purpose of the AI Act and how it fits with other EU law</li>
+          <li>Apply the legal definition of an AI system</li>
+          <li>Explain the Act's territorial reach, including outside the EU</li>
+          <li>Distinguish between providers, deployers and other operators</li>
+        </ul>
+      </div>
+
+      <h2>1.1 Why the EU regulated AI</h2>
+      <p>The AI Act — formally <strong>Regulation (EU) 2024/1689</strong> — entered into force on <strong>1 August 2024</strong>. Because it is a <em>regulation</em> rather than a directive, it applies directly in every EU member state without needing national legislation to bring it into effect.</p>
+      <p>Its stated aim is to improve the functioning of the internal market and promote the uptake of <strong>human-centric and trustworthy AI</strong>, while ensuring a high level of protection of health, safety and fundamental rights — including democracy, the rule of law and environmental protection.</p>
+      <p>In practice, the Act tries to do two things at once:</p>
+      <ul>
+        <li><strong>Protect people</strong> from AI that is harmful, manipulative or discriminatory.</li>
+        <li><strong>Support innovation</strong> by creating one set of rules across the EU instead of 27 different ones, with lighter treatment for low-risk AI and support for SMEs.</li>
+      </ul>
+
+      <div class="callout">
+        <b>It's product-safety law, adapted for AI</b>
+        <p>Much of the Act borrows from the EU's "New Legislative Framework" for product safety — think CE marking, conformity assessment and market surveillance. If you've worked with medical devices or machinery regulation, many concepts will feel familiar.</p>
+      </div>
+
+      <h3>How it fits with other law</h3>
+      <p>The AI Act sits <em>alongside</em> other EU law rather than replacing it. The GDPR still governs personal data used by AI systems; consumer protection, product liability, copyright, employment and anti-discrimination law all continue to apply. An AI system can be fully compliant with the AI Act and still breach the GDPR.</p>
+
+      <div class="callout update">
+        <b>2026 update: the Digital Omnibus on AI</b>
+        <p>In July 2026 the EU adopted the Digital Omnibus on AI — <strong>Regulation (EU) 2026/1744</strong>, in force from 27 July 2026. It amends the AI Act: postponing the high-risk deadlines, adding new prohibitions, softening the AI literacy duty and extending SME relief to small mid-caps. This course reflects the amended Act.</p>
+      </div>
+
+      <h2>1.2 What counts as an "AI system"?</h2>
+      <p>Article 3(1) defines an AI system as:</p>
+      <blockquote class="example" style="margin-left:0">
+        <p>"a machine-based system that is designed to operate with varying levels of autonomy and that may exhibit adaptiveness after deployment, and that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations, or decisions that can influence physical or virtual environments."</p>
+      </blockquote>
+      <p>The definition is closely aligned with the OECD's definition. The key elements are:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Element</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr><td>Machine-based</td><td>Runs on hardware and software.</td></tr>
+            <tr><td>Varying levels of autonomy</td><td>Operates with some degree of independence from human involvement.</td></tr>
+            <tr><td>May exhibit adaptiveness</td><td>It <em>may</em> learn or change after deployment — this is optional, not required.</td></tr>
+            <tr><td>Infers how to generate outputs</td><td><strong>The decisive element.</strong> The system derives outputs from inputs using techniques such as machine learning or logic- and knowledge-based approaches, rather than only executing rules written entirely by humans.</td></tr>
+            <tr><td>Outputs that influence environments</td><td>Predictions, content, recommendations or decisions with effects in the physical or digital world.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The European Commission has published guidelines on the definition. They confirm that simple, traditional software — for example basic data processing, or systems that only follow rules defined entirely by humans — generally falls outside it. <strong>Inference</strong> is what separates AI from conventional software.</p>
+
+      <div class="example">
+        <span class="eyebrow">Check your thinking</span>
+        <p><strong>In scope:</strong> a CV-screening tool trained on past hiring data; a chatbot built on a large language model; a computer-vision model that spots defects on a production line.</p>
+        <p><strong>Probably out of scope:</strong> a spreadsheet formula that calculates commission; an "if X then Y" rule written by an analyst; a basic sort-by-date function.</p>
+      </div>
+
+      <h2>1.3 Who does the Act apply to?</h2>
+      <p>Like the GDPR, the AI Act has <strong>extraterritorial reach</strong>. Under Article 2 it applies to:</p>
+      <ul>
+        <li><strong>Providers</strong> placing AI systems or general-purpose AI models on the EU market or putting them into service in the EU — wherever the provider is based.</li>
+        <li><strong>Deployers</strong> of AI systems that are established or located in the EU.</li>
+        <li><strong>Providers and deployers outside the EU</strong> where the <em>output</em> of the AI system is used in the EU.</li>
+        <li><strong>Importers and distributors</strong> of AI systems.</li>
+        <li><strong>Product manufacturers</strong> placing AI on the market with their product under their own name.</li>
+        <li><strong>Authorised representatives</strong> of non-EU providers.</li>
+        <li><strong>Affected persons</strong> located in the EU.</li>
+      </ul>
+
+      <div class="callout warn">
+        <b>The UK perspective</b>
+        <p>The AI Act is not UK law. But a UK business is caught if it places AI on the EU market, or if its AI system's output is used in the EU — for example, a UK fintech scoring the creditworthiness of customers in Ireland.</p>
+      </div>
+
+      <h3>What's excluded</h3>
+      <p>The Act does <strong>not</strong> apply to:</p>
+      <ul>
+        <li>AI used <strong>exclusively for military, defence or national security</strong> purposes.</li>
+        <li>AI developed and used <strong>solely for scientific research and development</strong>.</li>
+        <li>Research, testing and development <strong>before</strong> a system is placed on the market (real-world testing is regulated separately).</li>
+        <li>Individuals using AI for <strong>purely personal, non-professional</strong> activities.</li>
+        <li>AI released under <strong>free and open-source licences</strong> — <em>unless</em> it is high-risk, prohibited, or subject to the Article 50 transparency duties. (Open-source GPAI models have their own, partial carve-out — see Module 5.)</li>
+        <li>Public authorities of third countries and international organisations using AI under international law-enforcement or judicial cooperation agreements, with adequate safeguards.</li>
+      </ul>
+
+      <h2>1.4 Roles: provider, deployer and more</h2>
+      <p>Your obligations depend on your <strong>role</strong> in relation to a specific AI system. The Act calls all of these actors "operators".</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Definition (simplified)</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Provider</strong></td><td>Develops an AI system or GPAI model (or has one developed) and places it on the market or puts it into service under its own name or trademark — whether for payment or free.</td><td>A software company selling an AI recruitment platform.</td></tr>
+            <tr><td><strong>Deployer</strong></td><td>Uses an AI system under its authority in a professional context.</td><td>A retailer using that platform to screen job applicants.</td></tr>
+            <tr><td><strong>Importer</strong></td><td>EU-established; places on the EU market an AI system bearing the name of a non-EU provider.</td><td>An EU reseller of a US-built AI product.</td></tr>
+            <tr><td><strong>Distributor</strong></td><td>Any other actor in the supply chain making an AI system available on the EU market.</td><td>A software marketplace or IT reseller.</td></tr>
+            <tr><td><strong>Authorised representative</strong></td><td>EU-based person mandated to act on behalf of a non-EU provider.</td><td>A compliance firm appointed by an Asian AI developer.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Most of the heaviest obligations fall on <strong>providers</strong>. But deployers have real duties too — especially for high-risk systems.</p>
+
+      <h3>When a deployer becomes a provider</h3>
+      <p>Under Article 25, a distributor, importer or deployer is treated as the <strong>provider</strong> of a high-risk AI system if it:</p>
+      <ol>
+        <li>puts its own name or trademark on a high-risk AI system already on the market;</li>
+        <li>makes a <strong>substantial modification</strong> to a high-risk AI system so that it remains high-risk; or</li>
+        <li>changes the <strong>intended purpose</strong> of an AI system (including a general-purpose AI system) so that it becomes high-risk.</li>
+      </ol>
+
+      <div class="example">
+        <span class="eyebrow">Scenario</span>
+        <p>A bank licenses a general-purpose chatbot for customer service (low risk). Its data team then fine-tunes and repurposes it to decide who gets a loan. The bank has changed the intended purpose into a high-risk use (creditworthiness assessment) — so it now takes on <strong>provider</strong> obligations for that system.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul>
+        <li>The AI Act is a directly applicable EU regulation, in force since 1 August 2024 and amended in 2026.</li>
+        <li>"Inference" is what makes software an AI system under the Act.</li>
+        <li>It reaches non-EU organisations whose AI is placed on the EU market or whose outputs are used in the EU.</li>
+        <li>Obligations follow your role — and your role can change if you rebrand, substantially modify or repurpose a system.</li>
+      </ul>
+
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+        [
+          {"q":"What is the legal form of the EU AI Act?","options":["A regulation that applies directly in all member states","A directive that each member state must transpose into national law","A voluntary code of practice","A recommendation from the European Commission"],"answer":0,"explain":"The AI Act is Regulation (EU) 2024/1689. Regulations apply directly across the EU without national transposition."},
+          {"q":"Which feature is decisive in distinguishing an AI system from traditional software under Article 3(1)?","options":["It always learns after deployment","It infers from inputs how to generate outputs","It is connected to the internet","It processes personal data"],"answer":1,"explain":"Inference is the key element. Adaptiveness after deployment is optional (\"may exhibit\")."},
+          {"q":"A UK company with no EU office sells an AI hiring tool to a company in Germany. Does the AI Act apply to the UK company?","options":["No — it is not based in the EU","Only if it processes EU citizens' personal data","Yes — it is a provider placing an AI system on the EU market","Only after Brexit transition rules expire"],"answer":2,"explain":"The Act applies to providers placing AI systems on the EU market irrespective of where they are established."},
+          {"q":"A hospital uses an AI triage tool bought from a vendor, without changing it. What is the hospital's role?","options":["Provider","Deployer","Distributor","Importer"],"answer":1,"explain":"The hospital uses the system under its own authority in a professional context, so it is a deployer."},
+          {"q":"Which of these could turn a deployer into a provider under Article 25?","options":["Training staff to use the system","Keeping logs generated by the system","Changing the system's intended purpose so it becomes high-risk","Reporting a malfunction to the vendor"],"answer":2,"explain":"Rebranding, substantial modification, or changing the intended purpose so the system becomes high-risk all shift provider obligations to that actor."}
+        ]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: The risk-based approach →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

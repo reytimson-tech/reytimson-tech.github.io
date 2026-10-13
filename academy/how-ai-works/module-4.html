@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Language as numbers — How AI and Large Language Models Work</title>
+<meta name="description" content="Tokens, embeddings, next-token prediction, temperature and context windows — with an optional tiny Python example.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 25 minutes</span>
+      <h1>Language as numbers</h1>
+      <p class="lead">Before a model can 'read', words must become numbers. Understanding tokens and embeddings explains a surprising amount of LLM behaviour — from pricing to odd mistakes.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain what tokens are and why they matter for cost, limits and errors</li><li>Describe embeddings as coordinates in a meaning space</li><li>Explain next-token prediction and sampling temperature</li><li>Describe the context window and its limits</li></ul>
+      </div>
+
+      <h2>4.1 Computers need numbers</h2>
+      <p>Neural networks only work with numbers. So before a language model can process text, the text has to be turned into numbers. This happens in two steps: <strong>tokenisation</strong> and <strong>embedding</strong>.</p>
+
+      <h2>4.2 Tokens</h2>
+      <p>A <strong>token</strong> is a chunk of text — often a whole short word, sometimes part of a longer word, a space or a punctuation mark. For example, a word like <code>unbelievable</code> might be split into pieces such as <code>un</code> + <code>believ</code> + <code>able</code>. As a rough rule of thumb for English, a token averages about three-quarters of a word.</p>
+      <p>Tokens matter in practice because:</p>
+      <ul>
+        <li>AI services usually <strong>charge by the token</strong> — for both input and output.</li>
+        <li>Models have a limit on how many tokens they can handle at once (the <strong>context window</strong>).</li>
+        <li>Tokenisation explains some odd failures. A model that sees <code>strawberry</code> as a couple of chunks, not ten letters, can struggle to count the letters in it.</li>
+        <li>Languages less common in training data often need more tokens for the same meaning, which can make them slower and more expensive to process.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 245" style="min-width:560px" role="img" aria-label="From text to numbers. Text is split into tokens, each token gets an ID, and each ID maps to an embedding — a long list of numbers the network can work with. (IDs here are illustrative.)"><text x="20" y="28" font-size="12" text-anchor="start" class="mut">Text</text><rect x="20" y="38" width="200" height="40" rx="10" class="b-n"/><text x="120" y="62.9" font-size="14" text-anchor="middle" font-weight="600">unbelievable!</text><line x1="222" y1="58" x2="256" y2="58" class="ln"/><polygon points="262,58 254,62.4 254,53.6" class="ah"/><text x="265" y="28" font-size="12" text-anchor="start" class="mut">Tokens</text><rect x="265" y="38" width="50" height="40" rx="10" class="b-a"/><text x="290" y="62.725" font-size="13.5" text-anchor="middle">un</text><rect x="321" y="38" width="74" height="40" rx="10" class="b-a"/><text x="358" y="62.725" font-size="13.5" text-anchor="middle">believ</text><rect x="401" y="38" width="58" height="40" rx="10" class="b-a"/><text x="430" y="62.725" font-size="13.5" text-anchor="middle">able</text><rect x="465" y="38" width="36" height="40" rx="10" class="b-a"/><text x="483" y="62.725" font-size="13.5" text-anchor="middle">!</text><text x="20" y="138" font-size="12" text-anchor="start" class="mut">Token IDs</text><line x1="290" y1="80" x2="290" y2="114" class="ln"/><polygon points="290,120 285.6,112 294.4,112" class="ah"/><text x="290" y="138" font-size="12.5" text-anchor="middle" font-weight="600">403</text><line x1="358" y1="80" x2="358" y2="114" class="ln"/><polygon points="358,120 353.6,112 362.4,112" class="ah"/><text x="358" y="138" font-size="12.5" text-anchor="middle" font-weight="600">33867</text><line x1="430" y1="80" x2="430" y2="114" class="ln"/><polygon points="430,120 425.6,112 434.4,112" class="ah"/><text x="430" y="138" font-size="12.5" text-anchor="middle" font-weight="600">481</text><line x1="483" y1="80" x2="483" y2="114" class="ln"/><polygon points="483,120 478.6,112 487.4,112" class="ah"/><text x="483" y="138" font-size="12.5" text-anchor="middle" font-weight="600">0</text><text x="20" y="205" font-size="12" text-anchor="start" class="mut">Embeddings</text><line x1="290" y1="146" x2="290" y2="180" class="ln"/><polygon points="290,186 285.6,178 294.4,178" class="ah"/><rect x="272" y="192" width="5" height="18" rx="1" class="f-a"/><rect x="278" y="192" width="5" height="25" rx="1" class="f-a"/><rect x="284" y="192" width="5" height="32" rx="1" class="f-a"/><rect x="290" y="192" width="5" height="21" rx="1" class="f-a"/><rect x="296" y="192" width="5" height="28" rx="1" class="f-a"/><rect x="302" y="192" width="5" height="17" rx="1" class="f-a"/><line x1="358" y1="146" x2="358" y2="180" class="ln"/><polygon points="358,186 353.6,178 362.4,178" class="ah"/><rect x="340" y="192" width="5" height="32" rx="1" class="f-a"/><rect x="346" y="192" width="5" height="21" rx="1" class="f-a"/><rect x="352" y="192" width="5" height="28" rx="1" class="f-a"/><rect x="358" y="192" width="5" height="17" rx="1" class="f-a"/><rect x="364" y="192" width="5" height="24" rx="1" class="f-a"/><rect x="370" y="192" width="5" height="31" rx="1" class="f-a"/><line x1="430" y1="146" x2="430" y2="180" class="ln"/><polygon points="430,186 425.6,178 434.4,178" class="ah"/><rect x="412" y="192" width="5" height="32" rx="1" class="f-a"/><rect x="418" y="192" width="5" height="21" rx="1" class="f-a"/><rect x="424" y="192" width="5" height="28" rx="1" class="f-a"/><rect x="430" y="192" width="5" height="17" rx="1" class="f-a"/><rect x="436" y="192" width="5" height="24" rx="1" class="f-a"/><rect x="442" y="192" width="5" height="31" rx="1" class="f-a"/><line x1="483" y1="146" x2="483" y2="180" class="ln"/><polygon points="483,186 478.6,178 487.4,178" class="ah"/><rect x="465" y="192" width="5" height="31" rx="1" class="f-a"/><rect x="471" y="192" width="5" height="20" rx="1" class="f-a"/><rect x="477" y="192" width="5" height="27" rx="1" class="f-a"/><rect x="483" y="192" width="5" height="16" rx="1" class="f-a"/><rect x="489" y="192" width="5" height="23" rx="1" class="f-a"/><rect x="495" y="192" width="5" height="30" rx="1" class="f-a"/><text x="470" y="235" font-size="11" text-anchor="middle" class="mut">each token → a list of numbers</text></svg></div>
+        <figcaption>From text to numbers. Text is split into tokens, each token gets an ID, and each ID maps to an embedding — a long list of numbers the network can work with. (IDs here are illustrative.)</figcaption>
+      </figure>
+
+      <h2>4.3 Embeddings: meaning as coordinates</h2>
+      <p>Each token is turned into an <strong>embedding</strong>: a long list of numbers that acts like coordinates in a "meaning space" with hundreds or thousands of dimensions. Training arranges this space so that related meanings end up close together — <em>doctor</em> near <em>nurse</em> and <em>hospital</em>; <em>Paris</em> near <em>London</em>.</p>
+      <p>Embeddings are also used directly in many AI applications. Search that finds documents by <em>meaning</em> rather than exact keywords — the basis of retrieval-augmented generation (RAG) — compares embeddings.</p>
+      <div class="callout warn">
+        <b>Bias lives here too</b>
+        <p>Embeddings learn associations from real text, including stereotypes. Early research found word embeddings associating some professions more strongly with one gender. Model builders work to reduce this, but it's a reminder that patterns in data become patterns in AI.</p>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 285" style="min-width:560px" role="img" aria-label="A simplified &#x27;meaning space&#x27;. Training places words used in similar contexts near each other, which is why semantic search can find documents by meaning rather than exact keywords."><rect x="20" y="20" width="560" height="250" rx="12" class="b-s"/><circle cx="130" cy="90" r="62" class="b-none"/><circle cx="130" cy="62" r="5" class="d-a"/><text x="138" y="66" font-size="12" text-anchor="start">doctor</text><circle cx="164" cy="90" r="5" class="d-a"/><text x="172" y="94" font-size="12" text-anchor="start">nurse</text><circle cx="130" cy="118" r="5" class="d-a"/><text x="138" y="122" font-size="12" text-anchor="start">hospital</text><circle cx="96" cy="90" r="5" class="d-a"/><text x="104" y="94" font-size="12" text-anchor="start">patient</text><circle cx="430" cy="90" r="62" class="b-none"/><circle cx="430" cy="62" r="5" class="d-b"/><text x="438" y="66" font-size="12" text-anchor="start">Paris</text><circle cx="464" cy="90" r="5" class="d-b"/><text x="472" y="94" font-size="12" text-anchor="start">London</text><circle cx="430" cy="118" r="5" class="d-b"/><text x="438" y="122" font-size="12" text-anchor="start">Berlin</text><circle cx="396" cy="90" r="5" class="d-b"/><text x="404" y="94" font-size="12" text-anchor="start">Madrid</text><circle cx="260" cy="205" r="62" class="b-none"/><circle cx="260" cy="177" r="5" class="d-g"/><text x="268" y="181" font-size="12" text-anchor="start">apple</text><circle cx="289.445" cy="219" r="5" class="d-g"/><text x="297.445" y="223" font-size="12" text-anchor="start">banana</text><circle cx="230.555" cy="219" r="5" class="d-g"/><text x="238.555" y="223" font-size="12" text-anchor="start">pear</text><text x="560" y="260" font-size="10.5" text-anchor="end" class="mut">(shown in 2D; real embeddings have hundreds or thousands)</text></svg></div>
+        <figcaption>A simplified 'meaning space'. Training places words used in similar contexts near each other, which is why semantic search can find documents by meaning rather than exact keywords.</figcaption>
+      </figure>
+
+      <h2>4.4 The core task: predict the next token</h2>
+      <p>At heart, a large language model does one thing: given a sequence of tokens, it predicts a probability for every possible next token. It picks one, adds it to the sequence, and repeats — one token at a time — until it decides to stop.</p>
+      <div class="example">
+        <span class="eyebrow">Example</span>
+        <p>Input: <em>"The capital of France is"</em></p>
+        <p>The model might assign " Paris" a very high probability, " a" a small one, " the" smaller still — and pick " Paris".</p>
+      </div>
+      <p>It sounds simple, but predicting the next token well across trillions of words of text requires learning grammar, facts, styles, reasoning patterns and much more.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 170" style="min-width:560px" role="img" aria-label="A language model assigns a probability to every possible next token. Sampling picks one (usually a likely one), adds it to the text, and repeats. Probabilities here are illustrative."><rect x="20" y="30" width="230" height="44" rx="10" class="b-n"/><text x="135" y="56.55" font-size="13" text-anchor="middle" font-weight="600">The capital of France is</text><line x1="252" y1="52" x2="284" y2="52" class="ln"/><polygon points="290,52 282,56.4 282,47.6" class="ah"/><text x="380" y="34" font-size="13" text-anchor="end" font-weight="600"> Paris</text><rect x="390" y="21" width="239.2" height="18" rx="3" class="f-a"/><text x="635.2" y="34" font-size="11.5" text-anchor="start" class="mut">92%</text><text x="380" y="64" font-size="13" text-anchor="end"> a</text><rect x="390" y="51" width="7.8" height="18" rx="3" class="f-m"/><text x="403.8" y="64" font-size="11.5" text-anchor="start" class="mut">3%</text><text x="380" y="94" font-size="13" text-anchor="end"> the</text><rect x="390" y="81" width="5.2" height="18" rx="3" class="f-m"/><text x="401.2" y="94" font-size="11.5" text-anchor="start" class="mut">2%</text><text x="380" y="124" font-size="13" text-anchor="end"> located</text><rect x="390" y="111" width="3.9" height="18" rx="3" class="f-m"/><text x="399.9" y="124" font-size="11.5" text-anchor="start" class="mut">1.5%</text><text x="380" y="154" font-size="13" text-anchor="end"> Lyon</text><rect x="390" y="141" width="3" height="18" rx="3" class="f-m"/><text x="399" y="154" font-size="11.5" text-anchor="start" class="mut">0.5%</text><text x="20" y="112" font-size="11.5" text-anchor="start" class="mut">Pick one, append it,</text><text x="20" y="128" font-size="11.5" text-anchor="start" class="mut">then predict again —</text><text x="20" y="144" font-size="11.5" text-anchor="start" class="mut">one token at a time.</text></svg></div>
+        <figcaption>A language model assigns a probability to every possible next token. Sampling picks one (usually a likely one), adds it to the text, and repeats. Probabilities here are illustrative.</figcaption>
+      </figure>
+
+      <h2>4.5 Sampling and "temperature"</h2>
+      <p>The model doesn't have to choose the single most likely token. <strong>Sampling</strong> settings control how adventurous it is. A low <strong>temperature</strong> makes it pick likely tokens (more predictable); a higher temperature allows less likely ones (more varied and creative, but more prone to errors). This is why you can ask the same question twice and get different answers.</p>
+
+      <h2>4.6 The context window</h2>
+      <p>The <strong>context window</strong> is everything the model can "see" at once: system instructions, your conversation so far, any documents and its own reply. Current models have windows of hundreds of thousands of tokens or more — enough for long reports or codebases. But the model has no memory beyond it unless the application adds one, and very long contexts can still cause it to miss details.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 620 286" style="min-width:560px" role="img" aria-label="Everything inside the window shapes the answer. Anything outside it — earlier chats, documents you didn&#x27;t attach — is invisible to the model unless the app adds it."><rect x="150" y="20" width="300" height="34" rx="4" class="b-w"/><text x="300" y="41" font-size="12.5" text-anchor="middle">System instructions</text><rect x="150" y="58" width="300" height="52" rx="4" class="b-n"/><text x="300" y="88" font-size="12.5" text-anchor="middle">Conversation so far</text><rect x="150" y="114" width="300" height="70" rx="4" class="b-n"/><text x="300" y="153" font-size="12.5" text-anchor="middle">Uploaded documents</text><rect x="150" y="188" width="300" height="34" rx="4" class="b-a"/><text x="300" y="209" font-size="12.5" text-anchor="middle">Your latest message</text><rect x="150" y="226" width="300" height="40" rx="4" class="b-g"/><text x="300" y="250" font-size="12.5" text-anchor="middle">Model&#x27;s reply (being written)</text><rect x="144" y="14" width="312" height="262" rx="8" class="b-none"/><text x="470" y="30" font-size="13" text-anchor="start" font-weight="700">Context window</text><text x="470" y="48" font-size="11.5" text-anchor="start" class="mut">everything the model</text><text x="470" y="63" font-size="11.5" text-anchor="start" class="mut">can &#x27;see&#x27; at once,</text><text x="470" y="78" font-size="11.5" text-anchor="start" class="mut">measured in tokens</text><text x="130" y="268" font-size="11.5" text-anchor="end" class="mut">limit →</text></svg></div>
+        <figcaption>Everything inside the window shapes the answer. Anything outside it — earlier chats, documents you didn't attach — is invisible to the model unless the app adds it.</figcaption>
+      </figure>
+
+      <div class="activity">
+        <b>For the curious: a tiny next-word predictor</b>
+        <p>This short Python program "learns" which word tends to follow which from a few sentences, then generates text. Real LLMs are vastly more sophisticated, but the core idea — predict the next piece from patterns in data — is the same. Paste it into a free notebook such as <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> and run it.</p>
+<pre data-copy><code>import random
+from collections import defaultdict
+
+text = ("the cat sat on the mat . the dog sat on the rug . "
+        "the cat chased the dog . the dog chased the ball .")
+words = text.split()
+
+# "Training": count which word follows which
+follows = defaultdict(list)
+for current, nxt in zip(words, words[1:]):
+    follows[current].append(nxt)
+
+# "Inference": generate by repeatedly sampling a likely next word
+word = "the"
+output = [word]
+for _ in range(10):
+    word = random.choice(follows[word])
+    output.append(word)
+print(" ".join(output))</code></pre>
+        <p>Run it several times — the output changes, because the next word is sampled. Try adding more sentences and see how the output changes.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Text is split into tokens — roughly three-quarters of a word each in English.</li><li>Embeddings place related meanings close together — and can carry bias.</li><li>LLMs generate one token at a time by predicting probabilities.</li><li>Temperature trades predictability for variety.</li><li>The context window is all the model can see at once.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/539" target="_blank" rel="noopener">Introduction to Large Language Models</a> — one-hour micro-learning course</li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/llm" target="_blank" rel="noopener">Machine Learning Crash Course: Intro to LLMs</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/large-language-models" target="_blank" rel="noopener">What are large language models?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/large-language-model/" target="_blank" rel="noopener">What are large language models?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "What is a token?",
+"options": [
+"A login credential",
+"A chunk of text — a word, part of a word or punctuation — that the model processes",
+"A type of neural network",
+"A training label"
+],
+"answer": 1,
+"explain": "Tokens are the units of text LLMs work with."
+},
+{
+"q": "Why might an LLM struggle to count the letters in a word?",
+"options": [
+"It can't read",
+"It sees the word as a few tokens rather than individual letters",
+"Letters aren't in its training data",
+"Counting is prohibited"
+],
+"answer": 1,
+"explain": "Tokenisation hides individual characters."
+},
+{
+"q": "What does an embedding represent?",
+"options": [
+"The model's file size",
+"A token's position in a learned 'meaning space', with related meanings close together",
+"The user's identity",
+"A password"
+],
+"answer": 1,
+"explain": "Embeddings are numerical representations of meaning."
+},
+{
+"q": "Raising the temperature setting generally makes output…",
+"options": [
+"More predictable",
+"More varied and creative, but more error-prone",
+"Shorter",
+"Always factual"
+],
+"answer": 1,
+"explain": "Higher temperature samples less likely tokens more often."
+},
+{
+"q": "What is the context window?",
+"options": [
+"The model's training cut-off date",
+"Everything the model can see at once — instructions, conversation, documents and its reply",
+"The browser window",
+"The model's long-term memory of all users"
+],
+"answer": 1,
+"explain": "Beyond the context window, the model has no memory unless the app adds one."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Transformers and how LLMs are trained →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

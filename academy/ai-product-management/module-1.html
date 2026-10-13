@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: What makes AI products different — AI Product Management</title>
+<meta name="description" content="Probabilistic behaviour, the AI PM&#x27;s extra responsibilities, the quality–cost–latency triangle, and common AI feature patterns.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>What makes AI products different</h1>
+      <p class="lead">AI products are right most of the time, not all of the time. That one fact changes how product managers specify, design, test and launch.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Contrast deterministic software with probabilistic AI products</li><li>List the extra responsibilities of an AI PM</li><li>Explain the quality–cost–latency trade-off</li><li>Recognise common AI feature patterns</li></ul>
+      </div>
+
+      <h2>1.1 Why AI products are different</h2>
+      <p>Traditional software is <strong>deterministic</strong>: the same input gives the same output, and a bug is reproducible. AI products are <strong>probabilistic</strong>: they're right most of the time, wrong some of the time, and the output can vary. That changes how you specify, test, design and launch.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Traditional software</th><th>AI product</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Behaviour</strong></td><td>Defined by code</td><td>Learned from data or steered by prompts</td></tr>
+            <tr><td><strong>Correctness</strong></td><td>Pass or fail</td><td>A distribution: accuracy, error types, edge cases</td></tr>
+            <tr><td><strong>Specification</strong></td><td>Requirements and acceptance tests</td><td>Examples, evaluation sets and quality thresholds</td></tr>
+            <tr><td><strong>After launch</strong></td><td>Stable until changed</td><td>Can drift as data, users or models change</td></tr>
+            <tr><td><strong>Cost</strong></td><td>Mostly fixed</td><td>Often per request (tokens, compute)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 162" style="min-width:560px" role="img" aria-label="Traditional software either works or has a bug. An AI feature produces a distribution of outcomes that must be measured and designed around."><text x="150" y="20" font-size="13" text-anchor="middle" font-weight="700">Traditional software</text><text x="470" y="20" font-size="13" text-anchor="middle" font-weight="700">AI product</text><rect x="20" y="50" width="80" height="40" rx="10" class="b-n"/><text x="60" y="74.2" font-size="12" text-anchor="middle" font-weight="600">input</text><rect x="120" y="50" width="80" height="40" rx="10" class="b-a"/><text x="160" y="74.2" font-size="12" text-anchor="middle" font-weight="600">code</text><rect x="220" y="50" width="80" height="40" rx="10" class="b-g"/><text x="260" y="74.2" font-size="12" text-anchor="middle" font-weight="600">output</text><line x1="103" y1="70" x2="111" y2="70" class="ln"/><polygon points="117,70 109,74.4 109,65.6" class="ah"/><line x1="203" y1="70" x2="211" y2="70" class="ln"/><polygon points="217,70 209,74.4 209,65.6" class="ah"/><text x="160" y="120" font-size="11" text-anchor="middle" class="mut">same input → same output, every time</text><rect x="340" y="60" width="70" height="40" rx="10" class="b-n"/><text x="375" y="84.2" font-size="12" text-anchor="middle" font-weight="600">input</text><rect x="430" y="60" width="70" height="40" rx="10" class="b-a"/><text x="465" y="84.2" font-size="12" text-anchor="middle" font-weight="600">model</text><line x1="413" y1="80" x2="421" y2="80" class="ln"/><polygon points="427,80 419,84.4 419,75.6" class="ah"/><line x1="504" y1="80" x2="538.027" y2="41.496" class="ln"/><polygon points="542,37 539.999,45.9083 533.405,40.081" class="ah"/><rect x="546" y="28" width="70" height="18" rx="4" class="b-g"/><text x="581" y="41" font-size="10.5" text-anchor="middle">good</text><line x1="504" y1="80" x2="536.749" y2="61.9021" class="ln"/><polygon points="542,59 537.126,66.7206 532.87,59.0184" class="ah"/><rect x="546" y="50" width="70" height="18" rx="4" class="b-g"/><text x="581" y="63" font-size="10.5" text-anchor="middle">good</text><line x1="504" y1="80" x2="536.002" y2="80.8422" class="ln"/><polygon points="542,81 533.887,85.188 534.119,76.3911" class="ah"/><rect x="546" y="72" width="70" height="18" rx="4" class="b-g"/><text x="581" y="85" font-size="10.5" text-anchor="middle">good</text><line x1="504" y1="80" x2="536.867" y2="99.8932" class="ln"/><polygon points="542,103 532.878,102.622 537.434,95.0934" class="ah"/><rect x="546" y="94" width="70" height="18" rx="4" class="b-w"/><text x="581" y="107" font-size="10.5" text-anchor="middle">partly</text><line x1="504" y1="80" x2="538.129" y2="120.416" class="ln"/><polygon points="542,125 533.477,121.727 540.2,116.049" class="ah"/><rect x="546" y="116" width="70" height="18" rx="4" class="b-b"/><text x="581" y="129" font-size="10.5" text-anchor="middle">wrong</text><text x="478" y="150" font-size="11" text-anchor="middle" class="mut">a distribution of outcomes — measure it</text></svg></div>
+        <figcaption>Traditional software either works or has a bug. An AI feature produces a distribution of outcomes that must be measured and designed around.</figcaption>
+      </figure>
+
+      <h2>1.2 The AI product manager's job</h2>
+      <p>An AI PM does everything a product manager does — understand users, define the problem, prioritise, align the team, measure outcomes — plus:</p>
+      <ul class="checklist">
+        <li>Decide <strong>whether</strong> AI is the right solution at all</li>
+        <li>Define what "good enough" means, with examples and evaluation sets</li>
+        <li>Design for errors: what happens when the AI is wrong?</li>
+        <li>Balance quality, latency and cost per request</li>
+        <li>Own the risks: fairness, privacy, safety and regulation, with the right experts</li>
+        <li>Plan for continuous improvement after launch</li>
+      </ul>
+
+      <h2>1.3 The quality–cost–latency triangle</h2>
+      <p>Bigger models are usually more capable but slower and more expensive per request. Techniques like retrieval, better prompts, caching or smaller specialised models can shift the balance. A PM must decide which corner matters most for each feature: a real-time autocomplete needs speed; an overnight contract review needs quality.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 222" style="min-width:560px" role="img" aria-label="The quality–cost–latency triangle. Retrieval, caching, prompt design and model choice move a feature within it."><path d="M320 24 L120 196 L520 196 Z" class="b-s"/><rect x="250" y="8" width="140" height="34" rx="10" class="b-g"/><text x="320" y="29.55" font-size="13" text-anchor="middle" font-weight="600">Quality</text><rect x="50" y="180" width="140" height="34" rx="10" class="b-a"/><text x="120" y="201.55" font-size="13" text-anchor="middle" font-weight="600">Low cost</text><rect x="450" y="180" width="140" height="34" rx="10" class="b-w"/><text x="520" y="201.55" font-size="13" text-anchor="middle" font-weight="600">Low latency</text><text x="320" y="130" font-size="11.5" text-anchor="middle" class="mut">pick the corner that</text><text x="320" y="146" font-size="11.5" text-anchor="middle" class="mut">matters for this feature</text><text x="160" y="100" font-size="11" text-anchor="end" font-weight="600" class="t-g">contract review</text><text x="480" y="100" font-size="11" text-anchor="start" font-weight="600" class="t-w">autocomplete</text></svg></div>
+        <figcaption>The quality–cost–latency triangle. Retrieval, caching, prompt design and model choice move a feature within it.</figcaption>
+      </figure>
+
+      <h2>1.4 Types of AI features</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pattern</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Generate</strong></td><td>Draft an email, write a product description</td></tr>
+            <tr><td><strong>Transform</strong></td><td>Summarise, translate, rewrite in a different tone</td></tr>
+            <tr><td><strong>Classify &amp; extract</strong></td><td>Route tickets, pull fields from invoices</td></tr>
+            <tr><td><strong>Answer</strong></td><td>Q&amp;A over help articles or company documents (RAG)</td></tr>
+            <tr><td><strong>Predict &amp; recommend</strong></td><td>Churn risk, next-best product</td></tr>
+            <tr><td><strong>Act</strong></td><td>Agents that complete multi-step tasks with tools</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Technical background for each pattern is in Path 3: <a href="../rag/index.html">RAG</a>, <a href="../ai-agents/index.html">AI Agents</a>, <a href="../fine-tuning/index.html">Fine-tuning</a> and <a href="../llmops/index.html">LLMOps</a>.</p>
+<div class="activity"><b>Activity: spot the differences</b><p>Take a feature you know (in your product or one you use). Describe how it would change if AI powered it: what could go wrong, how you'd specify 'good', and what each request would cost.</p><details><summary>See a worked example</summary><p><b>Example — help-centre search:</b> Today: keyword search, predictable. With AI answers: can answer in natural language but may be wrong or invent policy. Spec: 200 real questions with approved answers; target ≥ 90% correct and grounded, 0 invented policies. Cost: about 1–3p per question at expected volume; cache common questions.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>AI outputs are a distribution, not pass/fail.</li><li>AI PMs define 'good enough' with examples and evals.</li><li>Every feature trades quality, cost and latency.</li><li>Generate, transform, classify, answer, predict, act.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-for-builders" target="_blank" rel="noopener">AI Fluency for Builders</a> — from customer problem to shipped product</li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener">All courses</a> — including Apply AI at Work and Lead AI Adoption</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Why are AI products called probabilistic?",
+"options": [
+"They use statistics homework",
+"They're right most of the time, not always, and outputs can vary",
+"They're random",
+"They never change"
+],
+"answer": 1,
+"explain": "A distribution of outcomes."
+},
+{
+"q": "Which is an extra responsibility of an AI PM?",
+"options": [
+"Writing all the code",
+"Defining 'good enough' with examples and evaluation sets",
+"Choosing fonts",
+"Approving holidays"
+],
+"answer": 1,
+"explain": "Quality must be specified with examples."
+},
+{
+"q": "A real-time autocomplete feature should prioritise…",
+"options": [
+"Maximum quality at any latency",
+"Low latency",
+"Highest cost",
+"No limits"
+],
+"answer": 1,
+"explain": "Speed is critical for this use."
+},
+{
+"q": "Routing tickets is which pattern?",
+"options": [
+"Generate",
+"Classify & extract",
+"Act",
+"Predict"
+],
+"answer": 1,
+"explain": "Assigning categories."
+},
+{
+"q": "Why can AI products change after launch without code changes?",
+"options": [
+"They can't",
+"Data, users and underlying models shift",
+"Bugs fix themselves",
+"Marketing"
+],
+"answer": 1,
+"explain": "Drift."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Discovery: the right problem →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Transformers and LLMs for NLP — NLP Fundamentals</title>
+<meta name="description" content="From counts to transformers, attention, tokens and cost, zero- and few-shot classification, and choosing between classic NLP and LLMs.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 35 minutes</span>
+      <h1>Transformers and LLMs for NLP</h1>
+      <p class="lead">LLMs can do many NLP tasks with no training data. This module shows how to use them for classic tasks — and when a cheaper model is the better choice.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Outline the evolution from bag of words to transformers</li><li>Explain attention in plain language</li><li>Run zero- and few-shot classification</li><li>Choose between classic NLP and LLMs</li></ul>
+      </div>
+
+      <h2>5.1 From word counts to transformers</h2>
+      <p>NLP moved through three broad stages: <strong>rules and counts</strong> (regex, bag of words, TF-IDF), <strong>learned representations</strong> (word embeddings and recurrent networks that read text in order) and, since 2017, <strong>transformers</strong> — the architecture behind today's LLMs. The background is covered in <a href="../how-ai-works/index.html">How AI and LLMs Work</a>; here we focus on what it means for practical NLP.</p>
+
+      <h2>5.2 Attention in one idea</h2>
+      <p>A transformer's key mechanism, <strong>attention</strong>, lets every token look at every other token and decide which ones matter for its meaning. In "The parcel didn't fit in the box because it was too big", attention helps the model link "it" to "parcel". Because attention handles context directly and runs in parallel, transformers can be trained on enormous amounts of text.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 652 178" style="min-width:600px" role="img" aria-label="Attention lets the token “it” weigh every other token; the strongest link is to “parcel”. This is how transformers use context."><rect x="20" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="40.25" y="139.2" font-size="12" text-anchor="middle">The</text><rect x="66.5" y="120" width="63" height="30" rx="6" class="b-a"/><text x="98" y="139.2" font-size="12" text-anchor="middle" font-weight="600">parcel</text><rect x="135.5" y="120" width="63" height="30" rx="6" class="b-s"/><text x="167" y="139.2" font-size="12" text-anchor="middle">didn&#x27;t</text><rect x="204.5" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="224.75" y="139.2" font-size="12" text-anchor="middle">fit</text><rect x="251" y="120" width="33" height="30" rx="6" class="b-s"/><text x="267.5" y="139.2" font-size="12" text-anchor="middle">in</text><rect x="290" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="310.25" y="139.2" font-size="12" text-anchor="middle">the</text><rect x="336.5" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="356.75" y="139.2" font-size="12" text-anchor="middle">box</text><rect x="383" y="120" width="70.5" height="30" rx="6" class="b-s"/><text x="418.25" y="139.2" font-size="12" text-anchor="middle">because</text><rect x="459.5" y="120" width="33" height="30" rx="6" class="b-a"/><text x="476" y="139.2" font-size="12" text-anchor="middle" font-weight="600">it</text><rect x="498.5" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="518.75" y="139.2" font-size="12" text-anchor="middle">was</text><rect x="545" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="565.25" y="139.2" font-size="12" text-anchor="middle">too</text><rect x="591.5" y="120" width="40.5" height="30" rx="6" class="b-s"/><text x="611.75" y="139.2" font-size="12" text-anchor="middle">big</text><path d="M476 116 Q287 -56.864 98 116" class="ln ln-a"/><path d="M476 116 Q416.375 17.656 356.75 116" class="ln dash"/><path d="M476 116 Q543.875 12.904 611.75 116" class="ln dash"/><text x="98" y="166" font-size="11" text-anchor="middle" font-weight="700" class="t-a">strong link</text><text x="476" y="166" font-size="11" text-anchor="middle" class="mut">what does “it” refer to?</text></svg></div>
+        <figcaption>Attention lets the token “it” weigh every other token; the strongest link is to “parcel”. This is how transformers use context.</figcaption>
+      </figure>
+
+      <h2>5.3 Tokens, again — and why they cost money</h2>
+      <p>LLMs read <strong>subword tokens</strong>, not words: common words are one token, rare words and names split into several. API pricing, speed limits and context windows are all measured in tokens, so long inputs cost more and run slower. Non-English text and code often use more tokens per word.</p>
+
+      <h2>5.4 Zero-shot and few-shot classification</h2>
+      <p>An LLM can classify text with no training data (<strong>zero-shot</strong>) or with a handful of examples in the prompt (<strong>few-shot</strong>) — ideal when you have no labels or categories change often.</p>
+<pre data-copy><code><span class="label">Python · few-shot classification with an LLM (optional — needs an API key)</span>EXAMPLES = """Message: The kettle stopped working after two days -> product
+Message: I was billed twice this month -> billing
+Message: Courier left my parcel in the rain -> delivery"""
+
+def llm_classify(message):
+    prompt = (f"Classify the customer message as delivery, product or billing. "
+              f"Reply with one word.\n\n{EXAMPLES}\nMessage: {message} ->")
+    reply = client.messages.create(model=MODEL, max_tokens=5,
+                                   messages=[{"role": "user", "content": prompt}])
+    return reply.content[0].text.strip().lower()
+
+sample = X_test.head(20)
+llm_preds = [llm_classify(m) for m in sample]
+print("Agreement with labels:", np.mean(np.array(llm_preds) == y_test.head(20).values).round(2))</code></pre>
+      <p>Always measure an LLM classifier on labelled examples exactly as you would a classic model — prompts that look fine on three messages can fail on the three-hundredth.</p>
+
+      <h2>5.5 Classic NLP, LLM, or both?</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>TF-IDF + classic model</th><th>LLM (prompted)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Labelled data needed</strong></td><td>Hundreds or more</td><td>None to a few examples</td></tr>
+            <tr><td><strong>Cost per message</strong></td><td>Almost zero</td><td>Paid per token</td></tr>
+            <tr><td><strong>Speed</strong></td><td>Thousands per second</td><td>Seconds per call (batching helps)</td></tr>
+            <tr><td><strong>Handles nuance, new categories, other languages</strong></td><td>Poorly</td><td>Well</td></tr>
+            <tr><td><strong>Predictability</strong></td><td>Same input, same output</td><td>Can vary; needs validation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A common pattern: use an LLM to label a few thousand examples, have humans check a sample, then train a cheap classic model on those labels for high-volume use — and send low-confidence cases back to the LLM or a person.</p>
+<div class="activity"><b>Exercise: route by confidence</b><p>Using <code>clf</code> from Module 2, write <code>route(messages, threshold=0.7)</code> that returns a DataFrame with each message's predicted category and confidence, plus a column <code>needs_review</code> that is True when confidence is below the threshold. What share of the test set would go to review?</p><details><summary>Show a solution</summary><pre data-copy><code>def route(texts, threshold=0.7):
+    probs = clf.predict_proba(texts)
+    out = pd.DataFrame({"text": list(texts),
+                        "predicted": clf.classes_[probs.argmax(axis=1)],
+                        "confidence": probs.max(axis=1).round(2)})
+    out["needs_review"] = out["confidence"] &lt; threshold
+    return out
+
+r = route(X_test)
+print(r["needs_review"].mean().round(2), "of messages need review")
+print(r.sort_values("confidence").head())</code></pre></details></div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 718 110" style="min-width:620px" role="img" aria-label="A common hybrid: an LLM provides labels, people verify them, and a classic model handles volume."><rect x="20" y="30" width="118" height="56" rx="10" class="b-w"/><text x="79" y="54.55" font-size="11.5" text-anchor="middle" font-weight="600">LLM labels a</text><text x="79" y="69.5" font-size="11.5" text-anchor="middle">sample</text><rect x="160" y="30" width="118" height="56" rx="10" class="b-g"/><text x="219" y="54.55" font-size="11.5" text-anchor="middle" font-weight="600">Humans check</text><text x="219" y="69.5" font-size="11.5" text-anchor="middle">labels</text><rect x="300" y="30" width="118" height="56" rx="10" class="b-a"/><text x="359" y="54.55" font-size="11.5" text-anchor="middle" font-weight="600">Train cheap</text><text x="359" y="69.5" font-size="11.5" text-anchor="middle">classifier</text><rect x="440" y="30" width="118" height="56" rx="10" class="b-a"/><text x="499" y="54.55" font-size="11.5" text-anchor="middle" font-weight="600">Score all</text><text x="499" y="69.5" font-size="11.5" text-anchor="middle">messages</text><rect x="580" y="30" width="118" height="56" rx="10" class="b-b"/><text x="639" y="54.55" font-size="11.5" text-anchor="middle" font-weight="600">Low confidence?</text><text x="639" y="69.5" font-size="11.5" text-anchor="middle">→ LLM / person</text><line x1="141" y1="58" x2="151" y2="58" class="ln"/><polygon points="157,58 149,62.4 149,53.6" class="ah"/><line x1="281" y1="58" x2="291" y2="58" class="ln"/><polygon points="297,58 289,62.4 289,53.6" class="ah"/><line x1="421" y1="58" x2="431" y2="58" class="ln"/><polygon points="437,58 429,62.4 429,53.6" class="ah"/><line x1="561" y1="58" x2="571" y2="58" class="ln"/><polygon points="577,58 569,62.4 569,53.6" class="ah"/></svg></div>
+        <figcaption>A common hybrid: an LLM provides labels, people verify them, and a classic model handles volume.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Transformers use attention to model context.</li><li>LLM cost, speed and limits are measured in tokens.</li><li>Few-shot prompts classify without training data — but measure them.</li><li>Classic models are cheap and predictable; LLMs handle nuance.</li><li>Combine them: LLM labels, classic model at scale, humans for edge cases.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/natural-language-processing" target="_blank" rel="noopener">What is NLP?</a></li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/embeddings" target="_blank" rel="noopener">ML Crash Course: Embeddings</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "What does attention let a transformer do?",
+"options": [
+"Read text one letter at a time",
+"Weigh how much each token relates to every other token",
+"Skip long words",
+"Store files"
+],
+"answer": 1,
+"explain": "Context handled directly."
+},
+{
+"q": "Few-shot classification means…",
+"options": [
+"Training on millions of examples",
+"Including a handful of examples in the prompt",
+"Using few features",
+"Running on a phone"
+],
+"answer": 1,
+"explain": "Examples in context, no training."
+},
+{
+"q": "Why do long inputs cost more with an LLM API?",
+"options": [
+"They don't",
+"Pricing is per token",
+"Longer words are taxed",
+"Random"
+],
+"answer": 1,
+"explain": "Tokens drive cost and speed."
+},
+{
+"q": "For millions of messages a day with stable categories and plenty of labels, the usual best fit is…",
+"options": [
+"An LLM call per message",
+"A classic classifier, with LLM or human fallback",
+"Manual reading",
+"Topic modelling"
+],
+"answer": 1,
+"explain": "Cheap and fast at volume."
+},
+{
+"q": "Your few-shot prompt worked on three test messages. Next step?",
+"options": [
+"Deploy",
+"Measure it on a labelled sample",
+"Remove the examples",
+"Raise the temperature"
+],
+"answer": 1,
+"explain": "Evaluate like any model."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: NLP in practice →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

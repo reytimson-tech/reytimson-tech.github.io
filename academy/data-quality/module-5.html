@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Representativeness, splits and leakage — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Comparing data with the population served, proxies and historical bias, stratified, time-based and entity splits, data leakage, and leakage-safe preprocessing pipelines.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 35 minutes</span>
+      <h1>Representativeness, splits and leakage</h1>
+      <p class="lead">Clean data can still mislead if it's unrepresentative or leaks the answer. This module covers the checks that separate trustworthy models from impressive-looking ones.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Compare a dataset's make-up with the population the model will serve</li><li>Recognise proxies and historical bias in data</li><li>Choose stratified, time-based or entity-based splits</li><li>Identify four kinds of data leakage</li><li>Build a leakage-safe preprocessing pipeline</li></ul>
+      </div>
+
+      <h2>5.1 Is your data representative?</h2>
+      <p>A dataset can be clean and still give a misleading picture if it doesn't reflect the people and situations the model will meet. Compare the make-up of your data with the population the model will serve: regions, age groups, languages, device types, customer segments, time periods.</p>
+<pre data-copy><code><span class="label">Python · compare data with the population you'll serve</span>data_share = clean["country"].value_counts(normalize=True)
+target_share = pd.Series({"UK": 0.70, "IE": 0.30})      # from business records
+print(pd.DataFrame({"in_data": data_share, "target": target_share}).round(2))</code></pre>
+      <p>If a group is under-represented, consider collecting more data, re-weighting, or at least measuring performance for that group separately — and documenting the limitation.</p>
+
+      <h2>5.2 Watch for proxies and historical bias</h2>
+      <p>Features like postcode, school or employment gaps can act as proxies for protected characteristics. Labels based on past human decisions can carry past unfairness. These are data problems before they are model problems — see <a href="../responsible-ai/module-3.html">Responsible AI, Module 3</a>.</p>
+
+      <h2>5.3 Splitting data correctly</h2>
+<pre data-copy><code><span class="label">Python · a stratified train/test split</span>from sklearn.model_selection import train_test_split
+
+X = clean[["age", "monthly_spend", "country"]]
+y = clean["churned"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)   # keeps the churn rate similar in both</code></pre>
+      <ul>
+        <li><strong>Stratify</strong> on the label (and sometimes key groups) so rare classes appear in both splits.</li>
+        <li><strong>Split by time</strong> when predicting the future: train on older data, test on newer — never the reverse.</li>
+        <li><strong>Split by entity</strong> (customer, patient) so the same person doesn't appear in both training and testing.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 232" style="min-width:560px" role="img" aria-label="Three ways to split data. The right one depends on how the model will be used."><text x="20" y="20" font-size="12.5" text-anchor="start" font-weight="700">Random (stratified)</text><rect x="20" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="50" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="80" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="110" y="28" width="26" height="24" rx="3" class="b-g"/><rect x="140" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="170" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="200" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="230" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="260" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="290" y="28" width="26" height="24" rx="3" class="b-g"/><rect x="320" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="350" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="380" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="410" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="440" y="28" width="26" height="24" rx="3" class="b-g"/><rect x="470" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="500" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="530" y="28" width="26" height="24" rx="3" class="b-a"/><rect x="560" y="28" width="26" height="24" rx="3" class="b-g"/><rect x="590" y="28" width="26" height="24" rx="3" class="b-a"/><text x="20" y="82" font-size="12.5" text-anchor="start" font-weight="700">By time — for forecasting</text><rect x="20" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="50" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="80" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="110" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="140" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="170" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="200" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="230" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="260" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="290" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="320" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="350" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="380" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="410" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="440" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="470" y="90" width="26" height="24" rx="3" class="b-a"/><rect x="500" y="90" width="26" height="24" rx="3" class="b-g"/><rect x="530" y="90" width="26" height="24" rx="3" class="b-g"/><rect x="560" y="90" width="26" height="24" rx="3" class="b-g"/><rect x="590" y="90" width="26" height="24" rx="3" class="b-g"/><text x="20" y="132" font-size="10.5" text-anchor="start" class="mut">older →</text><text x="620" y="132" font-size="10.5" text-anchor="end" class="mut">→ newer</text><text x="20" y="158" font-size="12.5" text-anchor="start" font-weight="700">By entity — same customer never in both</text><rect x="20" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="50" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="80" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="110" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="140" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="176" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="206" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="236" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="272" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="302" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="332" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="362" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="398" y="166" width="26" height="24" rx="3" class="b-g"/><rect x="428" y="166" width="26" height="24" rx="3" class="b-g"/><rect x="464" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="494" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="524" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="554" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="584" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="614" y="166" width="26" height="24" rx="3" class="b-a"/><rect x="500" y="210" width="16" height="14" rx="3" class="b-a"/><text x="522" y="222" font-size="11.5" text-anchor="start">train</text><rect x="570" y="210" width="16" height="14" rx="3" class="b-g"/><text x="592" y="222" font-size="11.5" text-anchor="start">test</text></svg></div>
+        <figcaption>Three ways to split data. The right one depends on how the model will be used.</figcaption>
+      </figure>
+
+      <h2>5.4 Data leakage</h2>
+      <p><strong>Leakage</strong> happens when information that wouldn't be available at prediction time sneaks into training — producing models that look brilliant in testing and fail in reality.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Leak</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Target leakage</td><td>Using "cancellation_reason" to predict churn — it only exists after churn</td></tr>
+            <tr><td>Train–test contamination</td><td>Duplicates or the same customer in both splits</td></tr>
+            <tr><td>Preprocessing leakage</td><td>Calculating means or scaling on the full dataset before splitting</td></tr>
+            <tr><td>Time leakage</td><td>Using next month's data to predict this month</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 630 232" style="min-width:560px" role="img" aria-label="Preprocessing leakage: if test rows help compute the medians or scaling, test scores are flattering. Split first, fit on training data only — a pipeline does this for you."><rect x="20" y="40" width="140" height="50" rx="10" class="b-n"/><text x="90" y="69.375" font-size="12.5" text-anchor="middle" font-weight="600">Full dataset</text><text x="310" y="22" font-size="13" text-anchor="middle" font-weight="700" class="t-b">Wrong</text><rect x="220" y="40" width="180" height="50" rx="10" class="b-b"/><text x="310" y="61.4" font-size="12" text-anchor="middle" font-weight="600">Scale / impute</text><text x="310" y="77" font-size="12" text-anchor="middle">using ALL rows</text><rect x="450" y="40" width="160" height="50" rx="10" class="b-n"/><text x="530" y="69.375" font-size="12.5" text-anchor="middle" font-weight="600">Then split</text><line x1="163" y1="65" x2="211" y2="65" class="ln"/><polygon points="217,65 209,69.4 209,60.6" class="ah"/><line x1="403" y1="65" x2="441" y2="65" class="ln"/><polygon points="447,65 439,69.4 439,60.6" class="ah"/><text x="310" y="128" font-size="13" text-anchor="middle" font-weight="700" class="t-g">Right</text><rect x="20" y="146" width="140" height="50" rx="10" class="b-n"/><text x="90" y="175.375" font-size="12.5" text-anchor="middle" font-weight="600">Full dataset</text><rect x="220" y="146" width="120" height="50" rx="10" class="b-a"/><text x="280" y="175.375" font-size="12.5" text-anchor="middle" font-weight="600">Split first</text><rect x="390" y="120" width="220" height="44" rx="10" class="b-g"/><text x="500" y="146.2" font-size="12" text-anchor="middle" font-weight="600">Fit pipeline on TRAIN</text><rect x="390" y="176" width="220" height="44" rx="10" class="b-g"/><text x="500" y="202.2" font-size="12" text-anchor="middle" font-weight="600">Apply (transform) to TEST</text><line x1="163" y1="171" x2="211" y2="171" class="ln"/><polygon points="217,171 209,175.4 209,166.6" class="ah"/><line x1="343" y1="162.695" x2="381.051" y2="157.68" class="ln"/><polygon points="387,156.895 379.644,162.303 378.494,153.579" class="ah"/><line x1="343" y1="178.732" x2="381.045" y2="183.401" class="ln"/><polygon points="387,184.132 378.524,187.525 379.596,178.79" class="ah"/></svg></div>
+        <figcaption>Preprocessing leakage: if test rows help compute the medians or scaling, test scores are flattering. Split first, fit on training data only — a pipeline does this for you.</figcaption>
+      </figure>
+
+      <h2>5.5 Preparing features: encoding and scaling inside a pipeline</h2>
+      <p>Models need numbers. Categories are commonly <strong>one-hot encoded</strong> (a 0/1 column per category), and numeric features are often <strong>scaled</strong> to similar ranges. Wrapping these steps in a scikit-learn <strong>pipeline</strong> fits them on training data only — the standard defence against preprocessing leakage.</p>
+<pre data-copy><code><span class="label">Python · leakage-safe preprocessing pipeline</span>from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer
+
+numeric = ["age", "monthly_spend"]
+categorical = ["country"]
+
+preprocess = ColumnTransformer([
+    ("num", Pipeline([("impute", SimpleImputer(strategy="median")),
+                      ("scale", StandardScaler())]), numeric),
+    ("cat", OneHotEncoder(handle_unknown="ignore"), categorical),
+])
+
+preprocess.fit(X_train)                 # learns medians, scales and categories from TRAINING data only
+X_train_ready = preprocess.transform(X_train)
+X_test_ready = preprocess.transform(X_test)</code></pre>
+      <p>You'll attach a model to the end of this pipeline in <a href="../ml-fundamentals/index.html">Machine Learning Fundamentals</a>.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Representativeness is a data quality issue — measure it.</li><li>Proxies and historical labels can encode unfairness.</li><li>Stratify; split by time for forecasting; split by entity.</li><li>Leakage produces great test scores and poor real-world performance.</li><li>Pipelines fit preprocessing on training data only.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/overfitting" target="_blank" rel="noopener">ML Crash Course: Datasets, generalization and overfitting</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/fairness" target="_blank" rel="noopener">Machine Learning Crash Course: Fairness</a></li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "Your data is 95% UK customers, but 30% of users will be in Ireland. What should you do?",
+"options": [
+"Nothing",
+"Collect more Irish data or re-weight, and measure performance for Irish customers separately",
+"Delete the UK data",
+"Change the labels"
+],
+"answer": 1,
+"explain": "Address and measure representativeness."
+},
+{
+"q": "You're predicting next month's sales. How should you split?",
+"options": [
+"Randomly",
+"By time: train on earlier periods, test on later ones",
+"Alphabetically",
+"Test on the oldest data"
+],
+"answer": 1,
+"explain": "Never use the future to predict the past."
+},
+{
+"q": "Using 'cancellation_reason' to predict churn is…",
+"options": [
+"Good feature engineering",
+"Target leakage — it only exists after the outcome",
+"Stratification",
+"Imputation"
+],
+"answer": 1,
+"explain": "It wouldn't be available at prediction time."
+},
+{
+"q": "Why put scaling and imputation inside a scikit-learn pipeline?",
+"options": [
+"It looks neater",
+"So they're fitted on training data only, preventing leakage",
+"It's faster",
+"It's required for one-hot encoding"
+],
+"answer": 1,
+"explain": "Pipelines enforce correct fitting."
+},
+{
+"q": "What does stratify=y do in train_test_split?",
+"options": [
+"Shuffles columns",
+"Keeps class proportions similar in training and test sets",
+"Removes the label",
+"Scales features"
+],
+"answer": 1,
+"explain": "Rare classes appear in both splits."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Documenting and governing data →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

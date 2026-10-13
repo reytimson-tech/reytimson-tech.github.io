@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Evaluating and improving RAG — Building LLM Applications with RAG</title>
+<meta name="description" content="Retrieval and generation metrics, building a test set, recall@k and MRR in code, LLM-as-judge, the improvement loop, advanced RAG and a production checklist.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 35 minutes</span>
+      <h1>Evaluating and improving RAG</h1>
+      <p class="lead">You can't improve what you don't measure. This module shows how to test a RAG system properly — and how to make it better, one fix at a time.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Separate retrieval failures from generation failures</li><li>Build a representative RAG test set</li><li>Compute recall@k and MRR</li><li>Use an LLM judge responsibly</li><li>Run an evidence-based improvement loop</li></ul>
+      </div>
+
+      <h2>6.1 Evaluate retrieval and generation separately</h2>
+      <p>A wrong answer could be the retriever's fault (the right passage never arrived) or the generator's (it was there, but ignored or misread). Measure both.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stage</th><th>Metric</th><th>Question it answers</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="2">Retrieval</td><td>Recall@k (hit rate)</td><td>Is a relevant passage in the top k results?</td></tr>
+            <tr><td>Mean reciprocal rank (MRR)</td><td>How high does the first relevant passage appear?</td></tr>
+            <tr><td rowspan="3">Generation</td><td>Faithfulness (groundedness)</td><td>Is every claim supported by the retrieved passages?</td></tr>
+            <tr><td>Answer relevance / correctness</td><td>Does it actually answer the question, correctly?</td></tr>
+            <tr><td>Citation accuracy</td><td>Do citations point to passages that support the claim?</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 250" style="min-width:560px" role="img" aria-label="Three relationships to evaluate in RAG: is the context relevant to the question, is the answer faithful to the context, and does the answer address the question?"><rect x="250" y="14" width="140" height="44" rx="10" class="b-n"/><text x="320" y="40.55" font-size="13" text-anchor="middle" font-weight="600">Question</text><rect x="40" y="160" width="160" height="44" rx="10" class="b-w"/><text x="120" y="186.375" font-size="12.5" text-anchor="middle" font-weight="600">Retrieved context</text><rect x="440" y="160" width="160" height="44" rx="10" class="b-a"/><text x="520" y="186.55" font-size="13" text-anchor="middle" font-weight="600">Answer</text><line x1="285.753" y1="61" x2="159.093" y2="153.462" class="ln"/><polygon points="154.247,157 158.114,148.729 163.302,155.837" class="ah"/><text x="220" y="103" font-size="11.5" text-anchor="middle" class="mut">context relevance</text><line x1="203" y1="182" x2="431" y2="182" class="ln"/><polygon points="437,182 429,186.4 429,177.6" class="ah"/><text x="320" y="175" font-size="11.5" text-anchor="middle" class="mut">faithfulness</text><line x1="354.247" y1="61" x2="480.907" y2="153.462" class="ln"/><polygon points="485.753,157 476.698,155.837 481.886,148.729" class="ah"/><text x="420" y="102" font-size="11.5" text-anchor="middle" class="mut">answer relevance</text><text x="320" y="236" font-size="11.5" text-anchor="middle" class="mut">Plus retrieval metrics: recall@k and MRR</text></svg></div>
+        <figcaption>Three relationships to evaluate in RAG: is the context relevant to the question, is the answer faithful to the context, and does the answer address the question?</figcaption>
+      </figure>
+
+      <h2>6.2 Build a test set</h2>
+      <p>Collect 50–200 realistic questions with the passage(s) that answer them and a reference answer. Include: common questions, paraphrases, exact identifiers, questions spanning two documents, questions the documents <em>can't</em> answer, and tricky or adversarial ones. You can use an LLM to draft questions from your documents — then review them by hand.</p>
+<pre data-copy><code><span class="label">Python · recall@k and MRR</span>test_set = [
+    {"q": "Can I return a cracked board?", "relevant": "Returns Policy v7"},
+    {"q": "How long is UK delivery?",     "relevant": "Delivery FAQ"},
+]
+
+def evaluate_retrieval(test_set, k=3):
+    hits, rr = 0, 0.0
+    for t in test_set:
+        sources = [c["source"] for c in retrieve(t["q"], k=k)]
+        if t["relevant"] in sources:
+            hits += 1
+            rr += 1 / (sources.index(t["relevant"]) + 1)
+    n = len(test_set)
+    return {"recall@k": hits / n, "MRR": rr / n}
+
+print(evaluate_retrieval(test_set))</code></pre>
+
+      <h2>6.3 LLM-as-judge for answers</h2>
+      <p>Grading answer quality by hand doesn't scale. A common approach is an <strong>LLM judge</strong> with a clear rubric — for example, "Is every factual claim in the answer supported by the sources? Answer SUPPORTED or UNSUPPORTED, then explain." Anthropic's guidance on evaluations recommends detailed rubrics, simple outputs (e.g. correct/incorrect or 1–5), letting the grader reason first, and using a different model to grade than the one that generated. Always check a sample of the judge's verdicts against human judgement before trusting it.</p>
+
+      <h2>6.4 The improvement loop</h2>
+      <ol>
+        <li>Run the test set; record metrics.</li>
+        <li>Look at failures and classify them: retrieval miss, bad chunk, ignored context, hallucination, refusal when it shouldn't.</li>
+        <li>Fix the biggest category — chunking, hybrid search, reranking, prompt or metadata.</li>
+        <li>Re-run and compare. Keep changes that help.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 620 330" style="min-width:560px" role="img" aria-label="Evidence-based improvement: never change three things at once and guess which one helped."><polyline points="384.841,76 398.388,81.6117 419.863,133.457" class="ln"/><polygon points="422.159,139 415.033,133.293 423.163,129.925" class="ah"/><polyline points="422.159,201 398.388,258.388 390.384,261.704" class="ln"/><polygon points="384.841,264 390.548,256.873 393.915,265.004" class="ah"/><polyline points="235.159,264 221.612,258.388 200.137,206.543" class="ln"/><polygon points="197.841,201 204.967,206.707 196.837,210.075" class="ah"/><polyline points="197.841,139 221.612,81.6117 229.616,78.2961" class="ln"/><polygon points="235.159,76 229.452,83.1265 226.085,74.9964" class="ah"/><rect x="225" y="17" width="170" height="56" rx="10" class="b-a"/><text x="310" y="40.45" font-size="13" text-anchor="middle" font-weight="600">Run test set</text><text x="310" y="60.55" font-size="11" text-anchor="middle" class="mut">recall@k, faithfulness</text><rect x="350" y="142" width="170" height="56" rx="10" class="b-w"/><text x="435" y="165.45" font-size="13" text-anchor="middle" font-weight="600">Classify failures</text><text x="435" y="185.55" font-size="11" text-anchor="middle" class="mut">what went wrong?</text><rect x="225" y="267" width="170" height="56" rx="10" class="b-g"/><text x="310" y="291.1" font-size="13" text-anchor="middle" font-weight="600">Fix biggest</text><text x="310" y="308" font-size="13" text-anchor="middle">category</text><rect x="100" y="142" width="170" height="56" rx="10" class="b-n"/><text x="185" y="165.45" font-size="13" text-anchor="middle" font-weight="600">Re-measure</text><text x="185" y="185.55" font-size="11" text-anchor="middle" class="mut">keep what helps</text><text x="310" y="175" font-size="13" text-anchor="middle" font-weight="700">Improve</text></svg></div>
+        <figcaption>Evidence-based improvement: never change three things at once and guess which one helped.</figcaption>
+      </figure>
+
+      <h2>6.5 Beyond basic RAG</h2>
+      <ul>
+        <li><strong>Agentic RAG:</strong> an LLM decides when and what to search, runs several searches, and checks whether it has enough information before answering.</li>
+        <li><strong>Structured data:</strong> for questions about numbers in databases, let the model write and run queries (with strict, read-only permissions) instead of embedding table rows.</li>
+        <li><strong>Knowledge graphs:</strong> represent entities and relationships for questions that need connecting many facts.</li>
+        <li><strong>Long-context models:</strong> very large context windows sometimes make it practical to include whole documents; RAG still wins on cost, freshness, scale and citations for large collections.</li>
+      </ul>
+
+      <h2>6.6 Production checklist</h2>
+      <ul class="checklist">
+        <li>Permissions enforced at retrieval time</li>
+        <li>Documents labelled as untrusted data in the prompt</li>
+        <li>Fresh index with versioning and deletion</li>
+        <li>Visible citations and an "I can't find that" path</li>
+        <li>Retrieval and answer metrics tracked on a test set</li>
+        <li>User feedback captured and reviewed</li>
+        <li>Personal data handled in line with data protection law</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Measure retrieval (recall@k, MRR) and generation (faithfulness, correctness, citations) separately.</li><li>Test sets need paraphrases, identifiers, multi-document and unanswerable questions.</li><li>LLM judges need clear rubrics and human spot-checks.</li><li>Classify failures, fix the biggest category, re-measure.</li><li>Production RAG needs permissions, freshness, citations and feedback.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/retrieval-augmented-generation" target="_blank" rel="noopener">What is retrieval augmented generation?</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview" target="_blank" rel="noopener">RAG and generative AI in Azure AI Search</a> — classic vs agentic retrieval</li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "The right passage was retrieved but the answer contradicts it. Which stage failed?",
+"options": [
+"Retrieval",
+"Generation",
+"Indexing",
+"Chunking"
+],
+"answer": 1,
+"explain": "The evidence arrived; the generator ignored or misread it."
+},
+{
+"q": "What does recall@5 measure?",
+"options": [
+"Answer length",
+"Whether a relevant passage appears in the top 5 retrieved results",
+"Model speed",
+"Cost per query"
+],
+"answer": 1,
+"explain": "A core retrieval metric."
+},
+{
+"q": "Which question belongs in a RAG test set?",
+"options": [
+"Only easy, common questions",
+"A question the documents can't answer, to test the refusal path",
+"Questions about unrelated topics only",
+"None — testing isn't needed"
+],
+"answer": 1,
+"explain": "Unanswerable questions test grounding."
+},
+{
+"q": "Which is good practice for an LLM judge?",
+"options": [
+"Vague rubric, free-text grade",
+"Detailed rubric, simple output, reasoning first, different model from the generator, human spot-checks",
+"Use the same model and never check",
+"Only grade length"
+],
+"answer": 1,
+"explain": "As recommended in Anthropic's evaluation guidance."
+},
+{
+"q": "Users ask 'what was our total revenue by region last quarter?' over a sales database. What's usually better than embedding table rows?",
+"options": [
+"Bigger chunks",
+"Letting the model write and run a read-only database query",
+"Fine-tuning",
+"A larger temperature"
+],
+"answer": 1,
+"explain": "Structured questions suit structured queries."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

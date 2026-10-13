@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Making models smaller, faster and cheaper — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Quantisation, distillation, pruning and smaller models, routing, caching and batching, a cost calculation in Python and a decision checklist.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Making models smaller, faster and cheaper</h1>
+      <p class="lead">At scale, every token costs money and time. This module covers the techniques that make AI affordable — many of which don't need fine-tuning at all.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain quantisation and estimate memory savings</li><li>Describe distillation from teacher to student</li><li>Use pruning and smaller models appropriately</li><li>Apply routing, caching, batching and output limits</li><li>Estimate and compare running costs</li></ul>
+      </div>
+
+      <h2>6.1 Why optimise?</h2>
+      <p>At scale, the cost and speed of each model call dominate. A model that's 10× cheaper and 3× faster can change what's economically possible. Fine-tuning is one route; there are several others — often simpler.</p>
+
+      <h2>6.2 Quantisation</h2>
+      <p>Models store parameters as numbers with a certain precision — commonly 16 bits each. <strong>Quantisation</strong> stores them with fewer bits (8 or 4), cutting memory and often speeding up inference, usually with a small loss in quality. A 7-billion-parameter model needs roughly 14 GB of memory at 16-bit, about 7 GB at 8-bit and about 3.5 GB at 4-bit (before overheads) — the difference between needing a data-centre GPU and running on a laptop.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 165" style="min-width:560px" role="img" aria-label="Quantisation trades a little quality for big memory savings — often the difference between a data-centre GPU and a laptop."><text x="20" y="22" font-size="12.5" text-anchor="start" font-weight="600">Approximate memory for a 7-billion-parameter model&#x27;s weights</text><text x="80" y="60" font-size="12.5" text-anchor="end" font-weight="600">16-bit</text><rect x="90" y="44" width="420" height="24" rx="4" class="f-m"/><text x="518" y="61" font-size="12" text-anchor="start">≈ 14 GB</text><text x="80" y="100" font-size="12.5" text-anchor="end" font-weight="600">8-bit</text><rect x="90" y="84" width="210" height="24" rx="4" class="f-a"/><text x="308" y="101" font-size="12" text-anchor="start">≈ 7 GB</text><text x="80" y="140" font-size="12.5" text-anchor="end" font-weight="600">4-bit</text><rect x="90" y="124" width="105" height="24" rx="4" class="f-g"/><text x="203" y="141" font-size="12" text-anchor="start">≈ 3.5 GB</text></svg></div>
+        <figcaption>Quantisation trades a little quality for big memory savings — often the difference between a data-centre GPU and a laptop.</figcaption>
+      </figure>
+
+      <h2>6.3 Distillation</h2>
+      <p>In <strong>distillation</strong>, a large, capable "teacher" model generates high-quality outputs for many examples of your task, and a small "student" model is fine-tuned on them. The student learns to imitate the teacher on that narrow task at a fraction of the cost. Check the teacher's terms of use permit this.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 560 190" style="min-width:560px" role="img" aria-label="Distillation: a small model learns to imitate a large one on your task."><rect x="20" y="70" width="120" height="50" rx="10" class="b-n"/><text x="80" y="99.375" font-size="12.5" text-anchor="middle" font-weight="600">Task inputs</text><rect x="190" y="20" width="140" height="50" rx="10" class="b-a"/><text x="260" y="41.4" font-size="12" text-anchor="middle" font-weight="600">Teacher</text><text x="260" y="57" font-size="12" text-anchor="middle">(large model)</text><rect x="190" y="120" width="140" height="50" rx="10" class="b-w"/><text x="260" y="141.4" font-size="12" text-anchor="middle" font-weight="600">High-quality</text><text x="260" y="157" font-size="12" text-anchor="middle">outputs</text><rect x="400" y="70" width="140" height="50" rx="10" class="b-g"/><text x="470" y="91.4" font-size="12" text-anchor="middle" font-weight="600">Student</text><text x="470" y="107" font-size="12" text-anchor="middle">(small model)</text><line x1="143" y1="77.5" x2="181.219" y2="66.8836" class="ln"/><polygon points="187,65.2778 180.469,71.6584 178.114,63.1794" class="ah"/><line x1="260" y1="73" x2="260" y2="111" class="ln"/><polygon points="260,117 255.6,109 264.4,109" class="ah"/><text x="268" y="99" font-size="11.5" text-anchor="start" class="mut">generates</text><line x1="333" y1="127.619" x2="391.163" y2="113.771" class="ln"/><polygon points="397,112.381 390.237,118.514 388.198,109.954" class="ah"/><text x="470" y="140" font-size="11.5" text-anchor="middle" class="mut">fine-tuned on outputs:</text><text x="470" y="156" font-size="11.5" text-anchor="middle" class="t-g">cheap, fast, narrow</text></svg></div>
+        <figcaption>Distillation: a small model learns to imitate a large one on your task.</figcaption>
+      </figure>
+
+      <h2>6.4 Pruning and smaller models</h2>
+      <p><strong>Pruning</strong> removes weights or whole components that contribute little. In practice, the easiest win is often simply <strong>choosing a smaller model</strong> from the same family and testing whether it's good enough — perhaps with a better prompt or a light fine-tune.</p>
+
+      <h2>6.5 System-level optimisations</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Technique</th><th>How it saves</th></tr></thead>
+          <tbody>
+            <tr><td>Model routing</td><td>Send easy requests to a small model and hard ones to a large model</td></tr>
+            <tr><td>Prompt caching</td><td>Reuse the processed form of a long, repeated prompt prefix — supported by several providers to cut cost and latency</td></tr>
+            <tr><td>Shorter prompts</td><td>Fewer tokens per call; fine-tuning can replace long instructions and examples</td></tr>
+            <tr><td>Batching</td><td>Process non-urgent requests in bulk, often at a discount</td></tr>
+            <tr><td>Response caching</td><td>Store answers to identical requests</td></tr>
+            <tr><td>Output limits</td><td>Cap maximum output length; ask for concise formats</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>6.6 Do the maths</h2>
+<pre data-copy><code><span class="label">Python · rough monthly cost comparison</span>def monthly_cost(requests_per_day, in_tokens, out_tokens, price_in, price_out):
+    # prices are per million tokens
+    per_call = in_tokens / 1e6 * price_in + out_tokens / 1e6 * price_out
+    return requests_per_day * 30 * per_call
+
+# Illustrative US-dollar prices per million tokens — check your provider's current price list
+large = monthly_cost(50_000, in_tokens=1_500, out_tokens=200, price_in=3.00, price_out=15.00)
+small = monthly_cost(50_000, in_tokens=300,   out_tokens=200, price_in=0.25, price_out=1.25)
+print(f"Large model, long prompt: ${large:,.0f}/month")
+print(f"Small tuned model, short prompt: ${small:,.0f}/month")</code></pre>
+      <p>Include the one-off costs (data, training, evaluation) and ongoing costs (hosting, re-tuning) to find the break-even point.</p>
+
+      <h2>6.7 A decision checklist</h2>
+      <ul class="checklist">
+        <li>Is the task well defined, with a test set and success criteria?</li>
+        <li>Have prompting, a better model and RAG been tried?</li>
+        <li>Do you have enough high-quality, lawful examples?</li>
+        <li>Does the tuned model beat baselines on quality, cost or speed?</li>
+        <li>Have general ability, safety and memorisation been re-checked?</li>
+        <li>Is there an owner and a plan for when the base model changes?</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Quantisation stores weights in fewer bits — roughly 16-bit → 4-bit cuts memory by about 4×.</li><li>Distillation teaches a small model to imitate a large one on a task.</li><li>Often the simplest win is a smaller model with a better prompt.</li><li>Routing, prompt caching, batching and output limits cut cost at system level.</li><li>Do the maths, including one-off and ongoing costs.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/llmops" target="_blank" rel="noopener">What is LLMOps?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Roughly how much memory do a 7-billion-parameter model's weights need at 4-bit precision?",
+"options": [
+"About 3.5 GB",
+"About 14 GB",
+"About 28 GB",
+"About 700 MB"
+],
+"answer": 0,
+"explain": "7B × 0.5 bytes ≈ 3.5 GB, before overheads."
+},
+{
+"q": "In distillation, the student model learns from…",
+"options": [
+"Random data",
+"Outputs generated by a larger teacher model",
+"Only human labels",
+"Its own mistakes only"
+],
+"answer": 1,
+"explain": "The student imitates the teacher on the task."
+},
+{
+"q": "Which technique sends easy requests to a small model and hard ones to a large model?",
+"options": [
+"Quantisation",
+"Model routing",
+"Pruning",
+"Batching"
+],
+"answer": 1,
+"explain": "Routing matches cost to difficulty."
+},
+{
+"q": "What does prompt caching save?",
+"options": [
+"Storage of training data",
+"The cost and latency of reprocessing a long, repeated prompt prefix",
+"GPU purchase costs",
+"Nothing"
+],
+"answer": 1,
+"explain": "Supported by several providers."
+},
+{
+"q": "Which is usually the easiest optimisation to try first?",
+"options": [
+"Training a model from scratch",
+"Testing a smaller model from the same family with a better prompt",
+"Pruning by hand",
+"Writing a custom GPU kernel"
+],
+"answer": 1,
+"explain": "Simple and often effective."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Build, buy and foundations — AI Business Strategy</title>
+<meta name="description" content="Build, buy, platform and partner options, data foundations, platform choices, vendor evaluation and skills.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-business-strategy">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 30 minutes</span>
+      <h1>Build, buy and foundations</h1>
+      <p class="lead">Most organisations buy more AI than they build. This module helps you decide which is which — and what foundations you need either way.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Choose between buy, build-on-platform, build-custom and partner</li><li>Explain why data foundations matter</li><li>Outline key platform decisions</li><li>Evaluate AI vendors on data, security, quality and exit</li></ul>
+      </div>
+
+      <h2>4.1 Build, buy or partner?</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Option</th><th>Best when</th><th>Watch out for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Buy</strong> (AI features in existing software, AI assistants)</td><td>The need is common across companies; speed matters</td><td>Lock-in, limited customisation, data terms</td></tr>
+            <tr><td><strong>Build on a platform</strong> (model APIs, cloud AI services)</td><td>You need integration with your data and processes</td><td>Skills, ongoing maintenance, usage costs</td></tr>
+            <tr><td><strong>Build custom</strong> (fine-tuned or own models)</td><td>It's a core differentiator and you have unique data</td><td>Cost, talent, time, responsibility for everything</td></tr>
+            <tr><td><strong>Partner</strong></td><td>You lack skills now but want to build capability</td><td>Knowledge transfer, dependency</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A useful rule: buy for parity, build for differentiation. Most organisations mostly buy and build on platforms, and custom-build rarely.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 172" style="min-width:560px" role="img" aria-label="Buy, build on a platform, or build custom: a trade-off between speed and control. Buy for parity, build for differentiation."><rect x="20" y="30" width="190" height="56" rx="10" class="b-g"/><text x="115" y="53.45" font-size="13" text-anchor="middle" font-weight="600">Buy</text><text x="115" y="73.55" font-size="11" text-anchor="middle" class="mut">AI in existing tools</text><rect x="230" y="30" width="190" height="56" rx="10" class="b-a"/><text x="325" y="53.45" font-size="13" text-anchor="middle" font-weight="600">Build on platform</text><text x="325" y="73.55" font-size="11" text-anchor="middle" class="mut">APIs, cloud AI services</text><rect x="440" y="30" width="190" height="56" rx="10" class="b-w"/><text x="535" y="53.45" font-size="13" text-anchor="middle" font-weight="600">Build custom</text><text x="535" y="73.55" font-size="11" text-anchor="middle" class="mut">fine-tuned / own models</text><line x1="26" y1="110" x2="614" y2="110" class="ln"/><polygon points="620,110 612,114.4 612,105.6" class="ah"/><polygon points="20,110 28,105.6 28,114.4" class="ah"/><text x="24" y="130" font-size="11.5" text-anchor="start" class="mut">faster · cheaper · less control</text><text x="616" y="130" font-size="11.5" text-anchor="end" class="mut">slower · costlier · more control &amp; differentiation</text><text x="320" y="160" font-size="11.5" text-anchor="middle" font-weight="600" class="mut">Partnering can sit anywhere on this line while you build your own skills</text></svg></div>
+        <figcaption>Buy, build on a platform, or build custom: a trade-off between speed and control. Buy for parity, build for differentiation.</figcaption>
+      </figure>
+
+      <h2>4.2 Data is the foundation</h2>
+      <p>Most AI value depends on your own data: documents for an assistant to answer from, records for a model to learn from, context for agents to act on. Before scaling, check that data is <strong>findable, accessible, good enough in quality</strong>, and <strong>governed</strong> — with clear ownership, access rules and lawful basis for use. See <a href="../data-quality/index.html">Data Quality &amp; Preparation</a>.</p>
+
+      <h2>4.3 Platform choices</h2>
+      <ul class="checklist">
+        <li><strong>Model access</strong> — which providers and models, through which channels (direct API, cloud marketplace)</li>
+        <li><strong>Retrieval and integration</strong> — connecting models to your documents and systems (see <a href="../rag/index.html">RAG</a> and <a href="../ai-agents/index.html">AI Agents</a>)</li>
+        <li><strong>Security and identity</strong> — single sign-on, permissions, logging, data residency</li>
+        <li><strong>Operations</strong> — evaluation, monitoring and cost control (see <a href="../llmops/index.html">LLMOps</a>)</li>
+      </ul>
+      <p>Avoid betting everything on one model: capabilities and prices change quickly. Designing so you can switch models is cheap insurance.</p>
+
+      <h2>4.4 Evaluating vendors</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Questions to ask</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fit</strong></td><td>Does it solve our use case on our data? Can we trial it with real examples?</td></tr>
+            <tr><td><strong>Data</strong></td><td>Is our data used for training? Where is it stored and for how long? Can we delete it?</td></tr>
+            <tr><td><strong>Security &amp; compliance</strong></td><td>Certifications, access controls, audit logs, regulatory support</td></tr>
+            <tr><td><strong>Quality &amp; safety</strong></td><td>How is accuracy measured? What guardrails exist? How are incidents handled?</td></tr>
+            <tr><td><strong>Cost &amp; exit</strong></td><td>Pricing at our volume, price-change terms, data export, switching costs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.5 Skills and talent</h2>
+      <p>You'll need a blend: product owners who understand the business, engineers who can integrate AI safely, data specialists, risk and legal partners, and — most of all — <strong>AI-literate staff across the business</strong>. Upskilling existing people who know the work is usually faster than hiring. See <a href="../leading-ai-adoption/index.html">Leading AI Adoption &amp; Change</a>.</p>
+<div class="activity"><b>Activity: build, buy or partner</b><p>For three use cases, decide build, buy, build-on-platform or partner. Justify each in one sentence using differentiation, data, speed and skills.</p><details><summary>See a worked example</summary><p><b>Example:</b> Meeting summaries → buy (common need, built into existing tools). Support drafting on our knowledge base → build on a platform (needs our data and CRM integration). Pricing optimisation using 10 years of sales data → build custom with a partner (differentiating, unique data, skills gap).</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Buy for parity, build for differentiation.</li><li>Your data — findable, accessible, good, governed — is the foundation.</li><li>Design to switch models as the market changes.</li><li>Ask vendors about data use, security, quality and exit.</li><li>Upskilling people who know the work is often fastest.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">AWS</span><a href="https://docs.aws.amazon.com/whitepapers/latest/aws-caf-for-ai/aws-caf-for-ai.html" target="_blank" rel="noopener">Cloud Adoption Framework for AI, ML and generative AI (CAF-AI)</a> — a whitepaper on moving beyond proofs of concept</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/foundation-models/" target="_blank" rel="noopener">What are foundation models?</a></li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/deploying-claude-enterprise-with-confidence" target="_blank" rel="noopener">Deploying Claude Enterprise with Confidence</a> — the five decisions that shape a rollout</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/paths/transform-your-business-with-microsoft-ai/" target="_blank" rel="noopener">Transform your business with AI</a> — 4 modules for business leaders</li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Meeting summarisation for all staff is usually best…",
+"options": [
+"Built custom",
+"Bought (common need)",
+"Ignored",
+"Fine-tuned"
+],
+"answer": 1,
+"explain": "Common needs → buy."
+},
+{
+"q": "When does custom building make most sense?",
+"options": [
+"Always",
+"When it's a core differentiator and you have unique data",
+"Never",
+"When speed is all that matters"
+],
+"answer": 1,
+"explain": "Build for differentiation."
+},
+{
+"q": "Why design so you can switch models?",
+"options": [
+"It's free",
+"Capabilities and prices change quickly",
+"Regulators require it",
+"No reason"
+],
+"answer": 1,
+"explain": "Cheap insurance against lock-in."
+},
+{
+"q": "A key vendor question about data is…",
+"options": [
+"Its logo colour",
+"Whether our data is used for training, where it's stored, and whether we can delete it",
+"Office location",
+"Number of employees"
+],
+"answer": 1,
+"explain": "Data terms matter."
+},
+{
+"q": "AI value most depends on…",
+"options": [
+"The newest model",
+"Your own data being accessible, good quality and governed",
+"Screen size",
+"Marketing"
+],
+"answer": 1,
+"explain": "Data is the foundation."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Operating model, governance and risk →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

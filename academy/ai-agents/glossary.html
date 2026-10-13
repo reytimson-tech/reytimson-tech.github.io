@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="Key terms from AI Agents &amp; Agentic Workflows, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>AI agents glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. MCP, routing, trajectory" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Agent</dt><dd>A system where an LLM dynamically directs its own process and tool use, typically in a loop with environmental feedback.</dd>
+        <dt>Agent loop</dt><dd>The cycle of deciding, acting with a tool, observing the result and repeating until done or a limit is reached.</dd>
+        <dt>Augmented LLM</dt><dd>An LLM enhanced with tools, retrieval and memory — the basic building block of agentic systems.</dd>
+        <dt>Escalation</dt><dd>Handing a task to a human, with a summary, when an agent should not proceed alone.</dd>
+        <dt>Evaluator–optimiser</dt><dd>A pattern where one LLM generates and another evaluates and gives feedback, iteratively.</dd>
+        <dt>Function calling</dt><dd>Another name for tool use: the model outputs a structured request to call a function.</dd>
+        <dt>Guardrail</dt><dd>A control that constrains what an AI system can do, such as permissions, validation or approval.</dd>
+        <dt>Human-in-the-loop</dt><dd>Requiring human approval or input at defined points in an AI process.</dd>
+        <dt>Idempotent</dt><dd>An action that has the same effect whether performed once or several times.</dd>
+        <dt>Long-term memory</dt><dd>Information an agent stores and retrieves across sessions, e.g. in a database.</dd>
+        <dt>Model Context Protocol (MCP)</dt><dd>An open standard for connecting AI applications to servers that expose tools, resources and prompts.</dd>
+        <dt>Orchestrator–workers</dt><dd>A pattern where a central LLM dynamically breaks down a task and delegates to worker LLMs.</dd>
+        <dt>Parallelisation</dt><dd>Running LLM calls simultaneously — sectioning into subtasks or voting across attempts.</dd>
+        <dt>Prompt chaining</dt><dd>A workflow of sequential LLM calls, each processing the previous output.</dd>
+        <dt>Routing</dt><dd>Classifying an input and directing it to a specialised prompt, tool or model.</dd>
+        <dt>Shadow mode</dt><dd>Running an agent to propose actions without executing them, to compare with human decisions.</dd>
+        <dt>Skill</dt><dd>A packaged, reusable set of instructions (and optionally scripts) an agent can load when relevant.</dd>
+        <dt>Sub-agent</dt><dd>An agent invoked by another agent to handle a sub-task with its own instructions and context.</dd>
+        <dt>Tool</dt><dd>A function an LLM can request, described by a name, description and input schema.</dd>
+        <dt>Trace</dt><dd>A record of an agent run: prompts, tool calls, results, decisions, timing and cost.</dd>
+        <dt>Trajectory</dt><dd>The sequence of steps and tool calls an agent takes to complete a task.</dd>
+        <dt>Workflow</dt><dd>A system where LLMs and tools are orchestrated through predefined code paths.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — NLP Fundamentals</title>
+<meta name="description" content="Key terms from NLP Fundamentals, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>NLP glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="Search terms, e.g. TF-IDF" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Attention</dt><dd>The transformer mechanism that lets each token weigh how relevant every other token is to its meaning.</dd>
+        <dt>Bag of words</dt><dd>Representing text by counting how often each word appears, ignoring order.</dd>
+        <dt>Bigram / n-gram</dt><dd>A sequence of two (or n) adjacent words used as a single feature.</dd>
+        <dt>Corpus</dt><dd>A collection of texts used for analysis or training.</dd>
+        <dt>Cosine similarity</dt><dd>A measure of how closely two vectors point in the same direction, from −1 to 1; the standard way to compare embeddings.</dd>
+        <dt>Embedding</dt><dd>A vector of numbers representing a word, sentence or document, learned so that similar meanings are close together.</dd>
+        <dt>Few-shot</dt><dd>Giving a model a handful of examples in the prompt instead of training it.</dd>
+        <dt>Grounding check</dt><dd>Verifying that extracted or generated values are supported by the source text.</dd>
+        <dt>Hallucination</dt><dd>A model producing plausible-sounding content that is not supported by its input or by fact.</dd>
+        <dt>Hybrid search</dt><dd>Combining keyword search (such as BM25) with embedding search for better retrieval.</dd>
+        <dt>Information extraction</dt><dd>Pulling structured facts — IDs, dates, amounts, names — out of free text.</dd>
+        <dt>Lemmatisation / stemming</dt><dd>Reducing words to a base form (running → run) so variants are treated alike.</dd>
+        <dt>NER</dt><dd>Named entity recognition: finding people, organisations, places, dates and other entities in text.</dd>
+        <dt>NLP</dt><dd>Natural language processing: techniques that let computers work with human language.</dd>
+        <dt>NMF</dt><dd>Non-negative matrix factorisation: a method that can discover topics as groups of co-occurring words.</dd>
+        <dt>Normalisation</dt><dd>Standardising text before processing, e.g. lowercasing or removing punctuation.</dd>
+        <dt>PII</dt><dd>Personally identifiable information, such as names, emails and phone numbers.</dd>
+        <dt>Redaction</dt><dd>Replacing personal or sensitive details in text with placeholders.</dd>
+        <dt>Regular expression</dt><dd>A pattern language for matching precisely defined text, such as order numbers or dates.</dd>
+        <dt>Semantic search</dt><dd>Search by meaning, using embeddings, rather than exact keyword matches.</dd>
+        <dt>Sentiment analysis</dt><dd>Classifying text by the opinion or emotion it expresses.</dd>
+        <dt>Stop words</dt><dd>Very common words often removed before analysis; standard lists may include negations like 'not'.</dd>
+        <dt>TF-IDF</dt><dd>Term frequency × inverse document frequency: weights words that are frequent in a document but rare across the corpus.</dd>
+        <dt>Token</dt><dd>A unit of text — a word, subword or character — that a model processes.</dd>
+        <dt>Topic modelling</dt><dd>Unsupervised discovery of themes as groups of words that tend to appear together.</dd>
+        <dt>Transformer</dt><dd>The neural network architecture, built on attention, behind modern LLMs.</dd>
+        <dt>Vector database</dt><dd>A store optimised for finding the nearest vectors to a query embedding.</dd>
+        <dt>Zero-shot</dt><dd>Asking a model to perform a task from instructions alone, with no examples.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

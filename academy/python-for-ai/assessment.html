@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Python for AI</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="python-for-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Python for AI: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "Which tool lets you run Python in a browser without installing anything?",
+"options": [
+"Microsoft Word",
+"Google Colab",
+"Excel",
+"Notepad"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "price = 24.99. What type is price?",
+"options": [
+"int",
+"str",
+"float",
+"bool"
+],
+"answer": 2,
+"explain": "Module 1."
+},
+{
+"q": "Which line raises a TypeError?",
+"options": [
+"print(f\"{24.99} pounds\")",
+"print(24.99 + \" pounds\")",
+"print(str(24.99) + \" pounds\")",
+"print(24.99, \"pounds\")"
+],
+"answer": 1,
+"explain": "You can't add a float and a string (Module 1)."
+},
+{
+"q": "order = {'qty': 2}. What does order.get('discount', 0) return?",
+"options": [
+"Error",
+"None",
+"0",
+"2"
+],
+"answer": 2,
+"explain": "Module 2."
+},
+{
+"q": "What does len(['a', 'b', 'c']) return?",
+"options": [
+"2",
+"3",
+"'abc'",
+"Error"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which loop prints each review with a number starting at 1?",
+"options": [
+"for r in reviews: print(r)",
+"for i, r in enumerate(reviews, start=1): print(i, r)",
+"while reviews: print(1)",
+"print(reviews[1:])"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "def double(x): return x * 2. What is double(double(3))?",
+"options": [
+"6",
+"9",
+"12",
+"3"
+],
+"answer": 2,
+"explain": "double(3)=6, double(6)=12 (Module 2)."
+},
+{
+"q": "Which converts a Python dict to JSON text?",
+"options": [
+"json.loads",
+"json.dumps",
+"json.read",
+"dict.json()"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "An AI returns 'Sure! Here's the JSON: {...}'. json.loads fails. Best response?",
+"options": [
+"Crash",
+"Catch the error, then retry with a stricter prompt or use structured-output features",
+"Ignore all AI output",
+"Delete the data"
+],
+"answer": 1,
+"explain": "Module 3/5."
+},
+{
+"q": "re.findall(r'GFY-\\d{5}', 'GFY-12345 and GFY-1') returns…",
+"options": [
+"['GFY-12345', 'GFY-1']",
+"['GFY-12345']",
+"[]",
+"Error"
+],
+"answer": 1,
+"explain": "\\d{5} needs exactly five digits (Module 3)."
+},
+{
+"q": "Why specify encoding='utf-8' when opening text files?",
+"options": [
+"It's faster",
+"To handle accents, symbols and emojis correctly",
+"It encrypts the file",
+"It's required for CSV only"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Which pandas code keeps only rows where qty is greater than 1?",
+"options": [
+"df[df['qty'] > 1]",
+"df['qty' > 1]",
+"df.qty(1)",
+"df.filter(1)"
+],
+"answer": 0,
+"explain": "Module 4."
+},
+{
+"q": "df['revenue'] = df['qty'] * df['price'] does what?",
+"options": [
+"Deletes columns",
+"Creates a revenue column from two others, row by row",
+"Sums all prices",
+"Plots a chart"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which method fills missing values in a column?",
+"options": [
+"dropna",
+"fillna",
+"isna",
+"head"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "What does df.groupby('region')['revenue'].sum().idxmax() return?",
+"options": [
+"The highest revenue amount",
+"The region with the highest total revenue",
+"The number of regions",
+"An error"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Your notebook will be shared with colleagues. Where's the API key?",
+"options": [
+"In a cell at the top",
+"In Colab Secrets or an environment variable, not in the notebook",
+"In a comment",
+"In the prompt"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which field tells you how many tokens a call used?",
+"options": [
+"response.content",
+"response.usage",
+"response.model",
+"response.key"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "What does max_tokens limit?",
+"options": [
+"The length of the model's output",
+"The number of API calls",
+"The prompt length",
+"The price per token"
+],
+"answer": 0,
+"explain": "Module 5."
+},
+{
+"q": "After AI-classifying reviews, 3 of 200 have sentiment = None. What does that suggest?",
+"options": [
+"Nothing",
+"Three responses couldn't be parsed — inspect them and improve the prompt or retry",
+"The model is perfect",
+"pandas is broken"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Which habit keeps project packages separate and reproducible?",
+"options": [
+"Installing everything globally",
+"Virtual environments with a requirements.txt",
+"Emailing code",
+"Never updating"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

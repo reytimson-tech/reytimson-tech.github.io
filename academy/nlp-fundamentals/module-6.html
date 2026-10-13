@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: NLP in practice — NLP Fundamentals</title>
+<meta name="description" content="Topic modelling with NMF, tracking language over time, personal data and redaction, bias across languages and dialects, and running NLP in production.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 35 minutes</span>
+      <h1>NLP in practice</h1>
+      <p class="lead">Real NLP systems discover themes, feed dashboards and handle personal data. This module brings it together responsibly.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Discover topics with NMF and name them</li><li>Track predicted categories over time</li><li>Redact personal data before analysis</li><li>Plan evaluation, routing and monitoring for production NLP</li></ul>
+      </div>
+
+      <h2>6.1 Discovering topics without labels</h2>
+      <p>When you don't know the categories in advance — open-ended survey comments, for example — <strong>topic modelling</strong> groups words that tend to appear together. Non-negative matrix factorisation (NMF) on TF-IDF is a simple, effective method:</p>
+<pre data-copy><code>from sklearn.decomposition import NMF
+
+topic_vec = TfidfVectorizer(stop_words="english", min_df=3)
+Xt = topic_vec.fit_transform(messages["text"])
+nmf = NMF(n_components=3, random_state=0, max_iter=500).fit(Xt)
+terms = topic_vec.get_feature_names_out()
+for i, comp in enumerate(nmf.components_):
+    print(f"Topic {i}:", ", ".join(terms[comp.argsort()[-6:][::-1]]))</code></pre>
+      <p>Topics are lists of words that a human must interpret and name. Clustering embeddings (Module 3) is a modern alternative, and an LLM can suggest names for each cluster — which a person should then check.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 650 194" style="min-width:560px" role="img" aria-label="Topic modelling finds groups of words that occur together. A person (or an LLM, checked by a person) turns them into meaningful names."><rect x="20" y="14" width="196" height="96" rx="8" class="b-s"/><text x="118" y="34" font-size="12" text-anchor="middle" font-weight="700" class="mut">Topic 0</text><text x="118" y="58" font-size="12" text-anchor="middle">late, delivery,</text><text x="118" y="78" font-size="12" text-anchor="middle">days, courier</text><line x1="118" y1="114" x2="118" y2="136" class="ln"/><polygon points="118,142 113.6,134 122.4,134" class="ah"/><text x="126" y="132" font-size="10.5" text-anchor="start" class="mut">human names it</text><rect x="38" y="146" width="160" height="36" rx="10" class="b-a"/><text x="118" y="168.375" font-size="12.5" text-anchor="middle" font-weight="600">Delivery delays</text><rect x="230" y="14" width="196" height="96" rx="8" class="b-s"/><text x="328" y="34" font-size="12" text-anchor="middle" font-weight="700" class="mut">Topic 1</text><text x="328" y="58" font-size="12" text-anchor="middle">order, refund,</text><text x="328" y="78" font-size="12" text-anchor="middle">charged, invoice</text><line x1="328" y1="114" x2="328" y2="136" class="ln"/><polygon points="328,142 323.6,134 332.4,134" class="ah"/><text x="336" y="132" font-size="10.5" text-anchor="start" class="mut">human names it</text><rect x="248" y="146" width="160" height="36" rx="10" class="b-w"/><text x="328" y="168.375" font-size="12.5" text-anchor="middle" font-weight="600">Billing problems</text><rect x="440" y="14" width="196" height="96" rx="8" class="b-s"/><text x="538" y="34" font-size="12" text-anchor="middle" font-weight="700" class="mut">Topic 2</text><text x="538" y="58" font-size="12" text-anchor="middle">broke, quality,</text><text x="538" y="78" font-size="12" text-anchor="middle">works, photos</text><line x1="538" y1="114" x2="538" y2="136" class="ln"/><polygon points="538,142 533.6,134 542.4,134" class="ah"/><text x="546" y="132" font-size="10.5" text-anchor="start" class="mut">human names it</text><rect x="458" y="146" width="160" height="36" rx="10" class="b-g"/><text x="538" y="168.375" font-size="12.5" text-anchor="middle" font-weight="600">Product quality</text></svg></div>
+        <figcaption>Topic modelling finds groups of words that occur together. A person (or an LLM, checked by a person) turns them into meaningful names.</figcaption>
+      </figure>
+
+      <h2>6.2 Tracking language over time</h2>
+<pre data-copy><code>rng = np.random.default_rng(0)
+messages["week"] = rng.integers(1, 9, len(messages))
+messages["predicted"] = clf.predict(messages["text"])
+trend = pd.crosstab(messages["week"], messages["predicted"], normalize="index").round(2)
+print(trend)</code></pre>
+      <p>Dashboards of predicted categories or sentiment by week turn thousands of messages into a signal managers can act on — "billing complaints doubled after the price change". Always show volumes alongside percentages, and remember the model has errors of its own.</p>
+
+      <h2>6.3 Personal data in text</h2>
+      <p>Free text is full of personal data: names, emails, phone numbers, addresses, and sometimes health or financial details customers volunteer. Under data protection law (such as UK and EU GDPR), processing it needs a lawful basis, minimisation and security. Redact what you don't need before analysis or sending text to an external API:</p>
+<pre data-copy><code>def redact(text):
+    text = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[EMAIL]", text)
+    text = re.sub(r"\b(?:\+44\s?7\d{3}|07\d{3})\s?\d{3}\s?\d{3}\b", "[PHONE]", text)
+    return text
+
+print(redact("Call me on 07700 900123 or email sam.lee@example.com about GFY-48213"))</code></pre>
+      <p>Regex redaction catches well-formed patterns but misses names and free-form details; dedicated PII-detection tools (and checking samples by hand) are needed for higher-risk data. See <a href="../responsible-ai/index.html">Responsible AI</a> for the wider picture.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 160" style="min-width:560px" role="img" aria-label="Redact personal data before analysis or before sending text to an external API."><rect x="20" y="20" width="600" height="36" rx="8" class="b-b"/><text x="320" y="43" font-size="12" text-anchor="middle">Call me on 07700 900123 or email sam.lee@example.com about GFY-48213</text><line x1="320" y1="60" x2="320" y2="82" class="ln"/><polygon points="320,88 315.6,80 324.4,80" class="ah"/><text x="328" y="78" font-size="11.5" text-anchor="start" class="mut">redact()</text><rect x="20" y="92" width="600" height="36" rx="8" class="b-g"/><text x="320" y="115" font-size="12" text-anchor="middle" font-weight="600">Call me on [PHONE] or email [EMAIL] about GFY-48213</text><text x="320" y="150" font-size="11.5" text-anchor="middle" class="mut">keep what the task needs (the order ID); remove what it doesn&#x27;t</text></svg></div>
+        <figcaption>Redact personal data before analysis or before sending text to an external API.</figcaption>
+      </figure>
+
+      <h2>6.4 Bias, language and fairness</h2>
+      <ul class="checklist">
+        <li>Models trained mostly on standard English may perform worse on dialects, non-native writing or other languages — measure accuracy by group</li>
+        <li>Sentiment and toxicity models have been shown to score some identity terms as negative regardless of context</li>
+        <li>Keep a human route for customers whose messages the system misunderstands</li>
+        <li>Document intended use, languages covered and known weaknesses</li>
+      </ul>
+
+      <h2>6.5 Putting an NLP system into production</h2>
+      <ul class="checklist">
+        <li><strong>Evaluate</strong> on a held-out, hand-checked sample that reflects real traffic</li>
+        <li><strong>Route</strong> low-confidence or high-risk cases to people</li>
+        <li><strong>Monitor</strong> category mix, confidence and error rates — language drifts with new products, campaigns and slang</li>
+        <li><strong>Re-label and retrain</strong> regularly; keep a log of label guideline changes</li>
+        <li><strong>Protect</strong> personal data at every step, especially before calling external APIs</li>
+      </ul>
+<div class="activity"><b>Exercise: a weekly insight brief</b><p>Combine what you've built: for the latest week in <code>messages</code>, report the number of messages, the share of each predicted category, the most common product mentioned (search for each name in <code>products</code>), and how many messages would need human review using <code>route()</code>.</p><details><summary>Show a solution</summary><pre data-copy><code>latest = messages[messages["week"] == messages["week"].max()]
+print("Messages:", len(latest))
+print(latest["predicted"].value_counts(normalize=True).round(2))
+mentions = {p: latest["text"].str.contains(p, case=False).sum() for p in products}
+print("Most mentioned product:", max(mentions, key=mentions.get))
+print("Needs review:", route(latest["text"])["needs_review"].sum())</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Topic models find word groups; humans name them.</li><li>Trends need volumes and known error rates.</li><li>Redact personal data you don't need — especially before external APIs.</li><li>Measure performance across dialects and languages.</li><li>Route low-confidence cases, monitor drift, retrain.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/nlp/" target="_blank" rel="noopener">What is natural language processing?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/natural-language-processing" target="_blank" rel="noopener">What is NLP?</a></li><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "What does topic modelling produce?",
+"options": [
+"Final labels",
+"Groups of words that tend to appear together, for humans to interpret",
+"Translations",
+"Embeddings only"
+],
+"answer": 1,
+"explain": "Naming topics is a human job."
+},
+{
+"q": "Why redact emails and phone numbers before sending text to an external API?",
+"options": [
+"To save tokens only",
+"Data minimisation and protecting personal data",
+"APIs reject them",
+"No reason"
+],
+"answer": 1,
+"explain": "Process only what you need."
+},
+{
+"q": "A limitation of regex redaction is…",
+"options": [
+"It's slow",
+"It misses names and free-form personal details",
+"It deletes everything",
+"It needs a GPU"
+],
+"answer": 1,
+"explain": "Use dedicated tools and checks for higher risk."
+},
+{
+"q": "Your classifier performs worse on non-native English writing. You should…",
+"options": [
+"Ignore it",
+"Measure by group, improve data, and keep a human route",
+"Remove those customers",
+"Raise the threshold only"
+],
+"answer": 1,
+"explain": "Fairness needs measurement and recourse."
+},
+{
+"q": "Why monitor an NLP system after launch?",
+"options": [
+"It's optional",
+"Language drifts with new products, campaigns and slang",
+"Models improve on their own",
+"To use the GPU"
+],
+"answer": 1,
+"explain": "Drift degrades performance."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

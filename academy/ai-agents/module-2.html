@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Tool use and the Model Context Protocol — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="How function calling works, defining tools, a full round of tool use in Python, designing good tools, and MCP.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 35 minutes</span>
+      <h1>Tool use and the Model Context Protocol</h1>
+      <p class="lead">Tools are how models reach beyond text. This module shows exactly how tool calls flow — and how to design tools models use correctly.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain the tool-use cycle</li><li>Define a tool with a schema and description</li><li>Implement a round of tool use in Python</li><li>Apply tool design best practices</li><li>Explain what MCP standardises</li></ul>
+      </div>
+
+      <h2>2.1 How tool use works</h2>
+      <p>The model never runs code itself. Instead:</p>
+      <ol>
+        <li>You describe available <strong>tools</strong> — each with a name, a description and a JSON schema for its inputs.</li>
+        <li>The model, seeing the user's request, decides to call a tool and outputs a structured request: tool name plus arguments.</li>
+        <li><strong>Your code</strong> runs the tool and sends the result back.</li>
+        <li>The model uses the result to continue — calling more tools or answering.</li>
+      </ol>
+      <p>This is often called <strong>function calling</strong>. Your code stays in control of what actually happens.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 215" style="min-width:560px" role="img" aria-label="Tool use: the model only asks for a tool call. Your code validates and runs it, then returns the result for the model to use."><rect x="20" y="30" width="120" height="46" rx="10" class="b-n"/><text x="80" y="57.375" font-size="12.5" text-anchor="middle" font-weight="600">User request</text><rect x="200" y="30" width="130" height="46" rx="10" class="b-s"/><text x="265" y="57.55" font-size="13" text-anchor="middle" font-weight="600">Your app</text><rect x="420" y="30" width="130" height="46" rx="10" class="b-a"/><text x="485" y="57.55" font-size="13" text-anchor="middle" font-weight="600">Model</text><rect x="200" y="150" width="130" height="46" rx="10" class="b-w"/><text x="265" y="169.25" font-size="12.5" text-anchor="middle" font-weight="600">Tool runs</text><text x="265" y="185.5" font-size="12.5" text-anchor="middle">(your code)</text><line x1="143" y1="53" x2="191" y2="53" class="ln"/><polygon points="197,53 189,57.4 189,48.6" class="ah"/><line x1="332" y1="44" x2="412" y2="44" class="ln"/><polygon points="418,44 410,48.4 410,39.6" class="ah"/><text x="375" y="37" font-size="11.5" text-anchor="middle" class="mut">request + tools</text><line x1="418" y1="64" x2="338" y2="64" class="ln"/><polygon points="332,64 340,59.6 340,68.4" class="ah"/><text x="375" y="80" font-size="11.5" text-anchor="middle" class="mut">tool call</text><line x1="265" y1="79" x2="265" y2="141" class="ln"/><polygon points="265,147 260.6,139 269.4,139" class="ah"/><text x="273" y="117" font-size="11.5" text-anchor="start" class="mut">execute</text><polyline points="330,173 485,173 485,86" class="ln ln-a"/><polygon points="485,80 489.4,88 480.6,88" class="ah-a"/><text x="500" y="140" font-size="11" text-anchor="start" class="t-a">result sent back</text><text x="485" y="100" font-size="1" text-anchor="middle"></text></svg></div>
+        <figcaption>Tool use: the model only <em>asks</em> for a tool call. Your code validates and runs it, then returns the result for the model to use.</figcaption>
+      </figure>
+
+      <h2>2.2 Defining a tool</h2>
+<pre data-copy><code><span class="label">Python · a tool definition (Anthropic format)</span>tools = [{
+    "name": "get_order_status",
+    "description": ("Look up the delivery status of a customer order. "
+                    "Use when the customer asks where their order is."),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "order_id": {"type": "string", "description": "Order number, e.g. GFY-10422"}
+        },
+        "required": ["order_id"],
+    },
+}]</code></pre>
+      <p>Tool descriptions are prompts. Say clearly <em>what the tool does, when to use it and what inputs mean</em>. Vague descriptions are a top cause of agents picking the wrong tool.</p>
+
+      <h2>2.3 One round of tool use</h2>
+<pre data-copy><code><span class="label">Python · call the model, run the tool it asks for, send back the result</span># !pip install anthropic
+import anthropic, json
+client = anthropic.Anthropic()          # reads ANTHROPIC_API_KEY
+MODEL = "YOUR-MODEL-NAME"
+
+def get_order_status(order_id):         # your real system would query a database
+    return {"order_id": order_id, "status": "dispatched", "eta": "Thursday"}
+
+messages = [{"role": "user", "content": "Where's my order GFY-10422?"}]
+response = client.messages.create(model=MODEL, max_tokens=500, tools=tools, messages=messages)
+
+if response.stop_reason == "tool_use":
+    call = next(b for b in response.content if b.type == "tool_use")
+    result = get_order_status(**call.input)                 # YOUR code runs the tool
+    messages += [
+        {"role": "assistant", "content": response.content},
+        {"role": "user", "content": [{"type": "tool_result", "tool_use_id": call.id,
+                                      "content": json.dumps(result)}]},
+    ]
+    final = client.messages.create(model=MODEL, max_tokens=500, tools=tools, messages=messages)
+    print(final.content[0].text)    # e.g. "Your order was dispatched and should arrive Thursday."</code></pre>
+
+      <h2>2.4 Designing good tools</h2>
+      <ul class="checklist">
+        <li><strong>Few, clear tools</strong> beat many overlapping ones</li>
+        <li><strong>Meaningful names and descriptions</strong>, with examples of when to use each</li>
+        <li><strong>Strict input schemas</strong> — enums, formats, required fields</li>
+        <li><strong>Helpful results</strong> — return what the model needs, with clear error messages it can act on ("Order not found — check the format GFY-#####")</li>
+        <li><strong>Least privilege</strong> — read-only where possible; separate tools for risky actions so they can require approval</li>
+        <li><strong>Validate inputs in your code</strong> — never trust the model's arguments blindly</li>
+      </ul>
+
+      <h2>2.5 The Model Context Protocol (MCP)</h2>
+      <p>Writing custom integrations for every app and every model doesn't scale. The <strong>Model Context Protocol</strong>, an open standard introduced by Anthropic in 2024 and now supported across many AI tools, defines a common way for AI applications (clients) to connect to <strong>servers</strong> that expose tools, resources (data) and prompts. Build an MCP server for your system once, and any MCP-compatible assistant or agent can use it.</p>
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 220" style="min-width:560px" role="img" aria-label="MCP replaces many one-off integrations with one standard: any MCP client can use any MCP server&#x27;s tools, resources and prompts."><text x="100" y="20" font-size="12.5" text-anchor="middle" font-weight="700">MCP clients</text><text x="540" y="20" font-size="12.5" text-anchor="middle" font-weight="700">MCP servers</text><rect x="30" y="36" width="140" height="42" rx="10" class="b-a"/><text x="100" y="61.375" font-size="12.5" text-anchor="middle" font-weight="600">Claude</text><rect x="30" y="94" width="140" height="42" rx="10" class="b-a"/><text x="100" y="119.375" font-size="12.5" text-anchor="middle" font-weight="600">ChatGPT</text><rect x="30" y="152" width="140" height="42" rx="10" class="b-a"/><text x="100" y="177.375" font-size="12.5" text-anchor="middle" font-weight="600">Your agent</text><rect x="470" y="36" width="140" height="42" rx="10" class="b-n"/><text x="540" y="52.625" font-size="12.5" text-anchor="middle" font-weight="600">CRM server</text><text x="540" y="71.925" font-size="10.5" text-anchor="middle" class="mut">tools · resources · prompts</text><rect x="470" y="94" width="140" height="42" rx="10" class="b-n"/><text x="540" y="110.625" font-size="12.5" text-anchor="middle" font-weight="600">Files server</text><text x="540" y="129.925" font-size="10.5" text-anchor="middle" class="mut">tools · resources · prompts</text><rect x="470" y="152" width="140" height="42" rx="10" class="b-n"/><text x="540" y="168.625" font-size="12.5" text-anchor="middle" font-weight="600">Database server</text><text x="540" y="187.925" font-size="10.5" text-anchor="middle" class="mut">tools · resources · prompts</text><rect x="250" y="70" width="140" height="80" rx="10" class="b-w"/><text x="320" y="106" font-size="12.5" text-anchor="middle" font-weight="700">One open</text><text x="320" y="124" font-size="12.5" text-anchor="middle" font-weight="700">protocol</text><line x1="173" y1="57" x2="243.1" y2="106.537" class="ln"/><polygon points="248,110 238.927,108.976 244.006,101.79" class="ah"/><line x1="173" y1="115" x2="242.013" y2="110.399" class="ln"/><polygon points="248,110 240.31,114.922 239.725,106.142" class="ah"/><line x1="173" y1="173" x2="243.406" y2="113.859" class="ln"/><polygon points="248,110 244.704,118.515 239.044,111.776" class="ah"/><line x1="392" y1="110" x2="462.1" y2="60.4627" class="ln"/><polygon points="467,57 463.006,65.2102 457.927,58.0236" class="ah"/><line x1="392" y1="110" x2="461.013" y2="114.601" class="ln"/><polygon points="467,115 458.725,118.858 459.31,110.078" class="ah"/><line x1="392" y1="110" x2="462.406" y2="169.141" class="ln"/><polygon points="467,173 458.044,171.224 463.704,164.485" class="ah"/></svg></div>
+        <figcaption>MCP replaces many one-off integrations with one standard: any MCP client can use any MCP server's tools, resources and prompts.</figcaption>
+      </figure>
+
+      <div class="callout warn">
+        <b>Security reminder</b>
+        <p>Every tool — and every MCP server — extends what a manipulated model could do. Use trusted servers, review permissions and see Module 5 and the <a href="../ai-security/module-5.html">AI Security course</a>.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>The model requests tool calls; your code executes them and returns results.</li><li>Tool names, descriptions and schemas are prompts — make them clear.</li><li>Return helpful results and actionable errors.</li><li>Validate arguments in code; keep risky actions in separate tools.</li><li>MCP standardises how AI applications connect to tools, data and prompts.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener">Introduction to Model Context Protocol</a> — build MCP servers and clients in Python</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">AI Agents for Beginners (18 lessons, GitHub)</a></li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/agents" target="_blank" rel="noopener">Agents guide</a> — Agents API, Agents SDK and Responses API compared</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "In tool use, who actually runs the tool?",
+"options": [
+"The model",
+"Your application code",
+"The user",
+"The cloud provider automatically"
+],
+"answer": 1,
+"explain": "The model only requests; your code executes."
+},
+{
+"q": "What should a tool description include?",
+"options": [
+"Nothing — the name is enough",
+"What the tool does, when to use it and what its inputs mean",
+"The API key",
+"Marketing copy"
+],
+"answer": 1,
+"explain": "Descriptions guide tool selection."
+},
+{
+"q": "A tool returns 'Error 500'. What's better?",
+"options": [
+"Return nothing",
+"Return an actionable message such as 'Order not found — check the format GFY-#####'",
+"Crash the app",
+"Return random data"
+],
+"answer": 1,
+"explain": "Actionable errors let the agent recover."
+},
+{
+"q": "Why validate tool arguments in code?",
+"options": [
+"Models never make mistakes",
+"Model-generated arguments can be wrong or manipulated",
+"It's faster",
+"Schemas aren't allowed"
+],
+"answer": 1,
+"explain": "Never trust arguments blindly."
+},
+{
+"q": "What does the Model Context Protocol provide?",
+"options": [
+"A new language model",
+"An open standard for connecting AI applications to tools, data and prompts via servers",
+"A vector database",
+"A billing system"
+],
+"answer": 1,
+"explain": "Build once, use from any MCP-compatible client."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Workflow patterns →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

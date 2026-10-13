@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Neural networks and deep learning — How AI and Large Language Models Work</title>
+<meta name="description" content="Artificial neurons, layers, learned features, parameters and scale, interpretability, and common architectures.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 25 minutes</span>
+      <h1>Neural networks and deep learning</h1>
+      <p class="lead">Neural networks power nearly every AI breakthrough of the last decade. Here's how they work — and why even their builders can't fully explain them.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Describe an artificial neuron and how layers build up features</li><li>Explain parameters and the role of scale</li><li>Explain why neural networks are 'black boxes' and what interpretability research does</li><li>Match common architectures to the data they handle</li></ul>
+      </div>
+
+      <h2>3.1 Artificial neurons</h2>
+      <p>A <strong>neural network</strong> is a model loosely inspired by the brain. Its basic unit, an artificial neuron, does something very simple: it takes some numbers in, multiplies each by a <strong>weight</strong> (how important it is), adds them up, and passes the result through a simple function that decides how strongly to "fire".</p>
+      <p>On its own, one neuron is not clever. The power comes from connecting very many of them in <strong>layers</strong>.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 220" style="min-width:560px" role="img" aria-label="One artificial neuron: each input is multiplied by a learned weight, the results are summed, and an activation function decides how strongly the neuron fires. The weights are the parameters training adjusts."><rect x="20" y="30" width="110" height="40" rx="10" class="b-n"/><text x="75" y="54.375" font-size="12.5" text-anchor="middle" font-weight="600">bedrooms</text><line x1="132" y1="50" x2="262.51" y2="107.578" class="ln"/><polygon points="268,110 258.905,110.797 262.457,102.745" class="ah"/><text x="200" y="74" font-size="12" text-anchor="middle" font-weight="600" class="t-a">× w₁</text><rect x="20" y="90" width="110" height="40" rx="10" class="b-n"/><text x="75" y="114.375" font-size="12.5" text-anchor="middle" font-weight="600">floor area</text><line x1="132" y1="110" x2="262" y2="110" class="ln"/><polygon points="268,110 260,114.4 260,105.6" class="ah"/><text x="200" y="104" font-size="12" text-anchor="middle" font-weight="600" class="t-a">× w₂</text><rect x="20" y="150" width="110" height="40" rx="10" class="b-n"/><text x="75" y="174.375" font-size="12.5" text-anchor="middle" font-weight="600">garden</text><line x1="132" y1="170" x2="262.51" y2="112.422" class="ln"/><polygon points="268,110 262.457,117.255 258.905,109.203" class="ah"/><text x="200" y="134" font-size="12" text-anchor="middle" font-weight="600" class="t-a">× w₃</text><circle cx="305" cy="110" r="36" class="b-a"/><text x="305" y="108" font-size="20" text-anchor="middle" font-weight="700">Σ</text><text x="305" y="126" font-size="10.5" text-anchor="middle" class="mut">sum</text><line x1="342" y1="110" x2="404" y2="110" class="ln"/><polygon points="410,110 402,114.4 402,105.6" class="ah"/><rect x="412" y="88" width="120" height="44" rx="10" class="b-w"/><text x="472" y="114.375" font-size="12.5" text-anchor="middle" font-weight="600">activation</text><line x1="534" y1="110" x2="594" y2="110" class="ln"/><polygon points="600,110 592,114.4 592,105.6" class="ah"/><text x="567" y="103" font-size="11.5" text-anchor="middle" class="mut">output</text><rect x="602" y="90" width="80" height="40" rx="10" class="b-g"/><text x="642" y="114.55" font-size="13" text-anchor="middle" font-weight="600">0.83</text></svg></div>
+        <figcaption>One artificial neuron: each input is multiplied by a learned weight, the results are summed, and an activation function decides how strongly the neuron fires. The weights are the parameters training adjusts.</figcaption>
+      </figure>
+
+      <h2>3.2 Layers learn features</h2>
+      <p>In an image-recognition network:</p>
+      <ul>
+        <li>early layers learn to detect simple patterns — edges, colours, textures;</li>
+        <li>middle layers combine these into shapes — eyes, wheels, letters;</li>
+        <li>later layers combine shapes into whole concepts — a face, a car, a word.</li>
+      </ul>
+      <p>Nobody programs these features. They emerge during training because they help reduce the error. <strong>Deep learning</strong> simply means using networks with many layers.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 290" style="min-width:560px" role="img" aria-label="A small neural network. Each connection carries a weight; layers build simple features into complex ones. Today&#x27;s LLMs have billions of these weights."><text x="70" y="24" font-size="12.5" text-anchor="middle" font-weight="600">Input layer</text><text x="70" y="40" font-size="11" text-anchor="middle" class="mut">pixels / features</text><text x="230" y="24" font-size="12.5" text-anchor="middle" font-weight="600">Hidden layer 1</text><text x="230" y="40" font-size="11" text-anchor="middle" class="mut">edges, textures</text><text x="390" y="24" font-size="12.5" text-anchor="middle" font-weight="600">Hidden layer 2</text><text x="390" y="40" font-size="11" text-anchor="middle" class="mut">shapes, parts</text><text x="550" y="24" font-size="12.5" text-anchor="middle" font-weight="600">Output layer</text><text x="550" y="40" font-size="11" text-anchor="middle" class="mut">cat? dog?</text><line x1="70" y1="89" x2="230" y2="67" class="ln-m"/><line x1="70" y1="89" x2="230" y2="111" class="ln-m"/><line x1="70" y1="89" x2="230" y2="155" class="ln-m"/><line x1="70" y1="89" x2="230" y2="199" class="ln-m"/><line x1="70" y1="89" x2="230" y2="243" class="ln-m"/><line x1="70" y1="133" x2="230" y2="67" class="ln-m"/><line x1="70" y1="133" x2="230" y2="111" class="ln-m"/><line x1="70" y1="133" x2="230" y2="155" class="ln-m"/><line x1="70" y1="133" x2="230" y2="199" class="ln-m"/><line x1="70" y1="133" x2="230" y2="243" class="ln-m"/><line x1="70" y1="177" x2="230" y2="67" class="ln-m"/><line x1="70" y1="177" x2="230" y2="111" class="ln-m"/><line x1="70" y1="177" x2="230" y2="155" class="ln-m"/><line x1="70" y1="177" x2="230" y2="199" class="ln-m"/><line x1="70" y1="177" x2="230" y2="243" class="ln-m"/><line x1="70" y1="221" x2="230" y2="67" class="ln-m"/><line x1="70" y1="221" x2="230" y2="111" class="ln-m"/><line x1="70" y1="221" x2="230" y2="155" class="ln-m"/><line x1="70" y1="221" x2="230" y2="199" class="ln-m"/><line x1="70" y1="221" x2="230" y2="243" class="ln-m"/><line x1="230" y1="67" x2="390" y2="67" class="ln-m"/><line x1="230" y1="67" x2="390" y2="111" class="ln-m"/><line x1="230" y1="67" x2="390" y2="155" class="ln-m"/><line x1="230" y1="67" x2="390" y2="199" class="ln-m"/><line x1="230" y1="67" x2="390" y2="243" class="ln-m"/><line x1="230" y1="111" x2="390" y2="67" class="ln-m"/><line x1="230" y1="111" x2="390" y2="111" class="ln-m"/><line x1="230" y1="111" x2="390" y2="155" class="ln-m"/><line x1="230" y1="111" x2="390" y2="199" class="ln-m"/><line x1="230" y1="111" x2="390" y2="243" class="ln-m"/><line x1="230" y1="155" x2="390" y2="67" class="ln-m"/><line x1="230" y1="155" x2="390" y2="111" class="ln-m"/><line x1="230" y1="155" x2="390" y2="155" class="ln-m"/><line x1="230" y1="155" x2="390" y2="199" class="ln-m"/><line x1="230" y1="155" x2="390" y2="243" class="ln-m"/><line x1="230" y1="199" x2="390" y2="67" class="ln-m"/><line x1="230" y1="199" x2="390" y2="111" class="ln-m"/><line x1="230" y1="199" x2="390" y2="155" class="ln-m"/><line x1="230" y1="199" x2="390" y2="199" class="ln-m"/><line x1="230" y1="199" x2="390" y2="243" class="ln-m"/><line x1="230" y1="243" x2="390" y2="67" class="ln-m"/><line x1="230" y1="243" x2="390" y2="111" class="ln-m"/><line x1="230" y1="243" x2="390" y2="155" class="ln-m"/><line x1="230" y1="243" x2="390" y2="199" class="ln-m"/><line x1="230" y1="243" x2="390" y2="243" class="ln-m"/><line x1="390" y1="67" x2="550" y2="133" class="ln-m"/><line x1="390" y1="67" x2="550" y2="177" class="ln-m"/><line x1="390" y1="111" x2="550" y2="133" class="ln-m"/><line x1="390" y1="111" x2="550" y2="177" class="ln-m"/><line x1="390" y1="155" x2="550" y2="133" class="ln-m"/><line x1="390" y1="155" x2="550" y2="177" class="ln-m"/><line x1="390" y1="199" x2="550" y2="133" class="ln-m"/><line x1="390" y1="199" x2="550" y2="177" class="ln-m"/><line x1="390" y1="243" x2="550" y2="133" class="ln-m"/><line x1="390" y1="243" x2="550" y2="177" class="ln-m"/><circle cx="70" cy="89" r="13" class="b-n"/><circle cx="70" cy="133" r="13" class="b-n"/><circle cx="70" cy="177" r="13" class="b-n"/><circle cx="70" cy="221" r="13" class="b-n"/><circle cx="230" cy="67" r="13" class="b-a"/><circle cx="230" cy="111" r="13" class="b-a"/><circle cx="230" cy="155" r="13" class="b-a"/><circle cx="230" cy="199" r="13" class="b-a"/><circle cx="230" cy="243" r="13" class="b-a"/><circle cx="390" cy="67" r="13" class="b-a"/><circle cx="390" cy="111" r="13" class="b-a"/><circle cx="390" cy="155" r="13" class="b-a"/><circle cx="390" cy="199" r="13" class="b-a"/><circle cx="390" cy="243" r="13" class="b-a"/><circle cx="550" cy="133" r="13" class="b-g"/><circle cx="550" cy="177" r="13" class="b-g"/><text x="140" y="275" font-size="11" text-anchor="middle" class="mut">every line is a weight (parameter)</text><text x="570" y="137" font-size="11" text-anchor="start" font-weight="600" class="t-g">0.9</text></svg></div>
+        <figcaption>A small neural network. Each connection carries a weight; layers build simple features into complex ones. Today's LLMs have billions of these weights.</figcaption>
+      </figure>
+
+      <h2>3.3 Parameters and scale</h2>
+      <p>Every connection weight is a <strong>parameter</strong> learned in training. Early image networks had millions of parameters; today's large language models have billions, and the largest are thought to have far more. Broadly, more parameters, more data and more compute have produced more capable models — though efficiency improvements mean smaller models keep getting better too.</p>
+
+      <h2>3.4 Why neural networks are hard to explain</h2>
+      <p>A rule-based system can point to the rule it used. A neural network's "reasoning" is spread across millions or billions of weights, none of which means much on its own. This is why they're often called <strong>black boxes</strong>.</p>
+      <p>The field of <strong>interpretability</strong> tries to look inside. In 2025, Anthropic published research tracing some of the internal steps of its Claude model. Among the findings: when writing rhyming poetry, the model appeared to plan the rhyming word ahead of time; and when asked how it had solved a sum, its explanation described the standard school method even though its internal process worked differently. In other words, <em>a model's explanation of its own reasoning may not reflect what actually happened inside it.</em></p>
+      <div class="callout warn">
+        <b>Why this matters to you</b>
+        <p>When an AI tool "explains its reasoning", treat that explanation as another output to evaluate — useful, but not a guaranteed window into how the answer was produced.</p>
+      </div>
+
+      <h2>3.5 Different architectures for different data</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Architecture</th><th>Good for</th></tr></thead>
+          <tbody>
+            <tr><td>Convolutional neural networks (CNNs)</td><td>Images and video — they scan for local patterns</td></tr>
+            <tr><td>Recurrent neural networks (RNNs)</td><td>Sequences such as text and speech — largely replaced by transformers</td></tr>
+            <tr><td><strong>Transformers</strong></td><td>Language, and now images, audio, code and more — the basis of today's LLMs (Module 5)</td></tr>
+            <tr><td>Diffusion models</td><td>Generating images and video by gradually removing noise</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Neurons weight and combine inputs; layers learn increasingly complex features.</li><li>Parameters are learned weights — today's LLMs have billions.</li><li>A model's own explanation of its reasoning may not reflect its internal process.</li><li>Transformers now dominate language and much else; diffusion models generate images.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/research/tracing-thoughts-language-model" target="_blank" rel="noopener">Tracing the thoughts of a large language model</a> — interpretability research, March 2025</li><li><span class="provider">IBM SkillsBuild</span><a href="https://www.ibm.com/training/badge/artificial-intelligence-fundamentals" target="_blank" rel="noopener">Artificial Intelligence Fundamentals badge</a> — core AI concepts and AI ethics</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/fundamentals-generative-ai/" target="_blank" rel="noopener">Introduction to generative AI and agents</a> — LLMs, prompts and agents</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What does an artificial neuron do?",
+"options": [
+"Stores a fact",
+"Weights its inputs, adds them up and passes the result through a simple function",
+"Runs a web search",
+"Labels data"
+],
+"answer": 1,
+"explain": "It's a simple weighted sum plus an activation function."
+},
+{
+"q": "In an image network, what do the early layers typically learn?",
+"options": [
+"Whole objects like faces",
+"Simple patterns like edges and colours",
+"Text captions",
+"Nothing"
+],
+"answer": 1,
+"explain": "Features build up from simple to complex across layers."
+},
+{
+"q": "What is a parameter?",
+"options": [
+"A setting chosen by the user at runtime",
+"A learned weight inside the model",
+"A training example",
+"A prompt"
+],
+"answer": 1,
+"explain": "Parameters are the weights learned during training."
+},
+{
+"q": "Anthropic's 2025 interpretability research found that a model's explanation of how it solved a sum…",
+"options": [
+"Always matched its internal process",
+"Could describe a standard method that differed from what happened internally",
+"Was always blank",
+"Proved models can't do maths"
+],
+"answer": 1,
+"explain": "Self-explanations aren't a guaranteed window into internal processes."
+},
+{
+"q": "Which architecture underpins today's large language models?",
+"options": [
+"Convolutional neural networks",
+"Transformers",
+"Decision trees",
+"Spreadsheets"
+],
+"answer": 1,
+"explain": "Transformers, introduced in 2017."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Language as numbers →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

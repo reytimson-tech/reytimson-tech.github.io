@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Running a fine-tune — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="A LoRA fine-tune in Python with open-source libraries, key hyperparameters, reading loss curves, hosted fine-tuning, and forgetting and safety erosion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 35 minutes</span>
+      <h1>Running a fine-tune</h1>
+      <p class="lead">Time to train. This module walks through a real LoRA fine-tune and the few settings and signals that decide whether it works.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Run a supervised LoRA fine-tune with open-source libraries</li><li>Explain learning rate, epochs, LoRA rank and batch size</li><li>Diagnose overfitting from training and validation loss</li><li>Describe the hosted fine-tuning workflow</li><li>Recognise forgetting and safety erosion risks</li></ul>
+      </div>
+
+      <h2>4.1 A LoRA fine-tune with open-source tools</h2>
+      <p>This example uses Hugging Face's open-source libraries — <code>transformers</code>, <code>peft</code> (for LoRA) and <code>trl</code> (for supervised fine-tuning) — on a small open-weight model so it can run on a single cloud GPU (e.g. a Colab GPU runtime). Library APIs evolve; check each library's documentation for current arguments.</p>
+<pre data-copy><code><span class="label">Python · supervised fine-tuning with LoRA</span># !pip install transformers peft trl datasets accelerate
+from datasets import load_dataset
+from peft import LoraConfig
+from trl import SFTTrainer, SFTConfig
+
+BASE = "an-open-instruct-model"         # e.g. a small instruction-tuned model whose licence allows tuning
+
+data = load_dataset("json", data_files={"train": "train.jsonl", "validation": "val.jsonl"})
+
+lora = LoraConfig(
+    r=16,                 # rank of the low-rank update: capacity vs size
+    lora_alpha=32,        # scaling of the update
+    lora_dropout=0.05,
+    target_modules="all-linear",
+    task_type="CAUSAL_LM",
+)
+
+args = SFTConfig(
+    output_dir="gfy-descriptions-lora",
+    num_train_epochs=3,
+    learning_rate=2e-4,
+    per_device_train_batch_size=4,
+    eval_strategy="epoch",          # report validation loss each epoch
+    logging_steps=10,
+)
+
+trainer = SFTTrainer(model=BASE, args=args, peft_config=lora,
+                     train_dataset=data["train"], eval_dataset=data["validation"])
+trainer.train()
+trainer.save_model("gfy-descriptions-lora")   # saves the small adapter, not the whole model</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 740 110" style="min-width:640px" role="img" aria-label="The fine-tuning workflow, end to end."><rect x="20" y="30" width="100" height="54" rx="10" class="b-n"/><text x="70" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Prepare</text><text x="70" y="68.5" font-size="11.5" text-anchor="middle">JSONL</text><rect x="140" y="30" width="100" height="54" rx="10" class="b-n"/><text x="190" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Choose base</text><text x="190" y="68.5" font-size="11.5" text-anchor="middle">model</text><rect x="260" y="30" width="100" height="54" rx="10" class="b-a"/><text x="310" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Configure</text><text x="310" y="68.5" font-size="11.5" text-anchor="middle">LoRA + settings</text><rect x="380" y="30" width="100" height="54" rx="10" class="b-w"/><text x="430" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Train &amp;</text><text x="430" y="68.5" font-size="11.5" text-anchor="middle">watch loss</text><rect x="500" y="30" width="100" height="54" rx="10" class="b-g"/><text x="550" y="61.025" font-size="11.5" text-anchor="middle" font-weight="600">Save adapter</text><rect x="620" y="30" width="100" height="54" rx="10" class="b-a"/><text x="670" y="53.55" font-size="11.5" text-anchor="middle" font-weight="600">Evaluate</text><text x="670" y="68.5" font-size="11.5" text-anchor="middle">(Module 5)</text><line x1="123" y1="57" x2="131" y2="57" class="ln"/><polygon points="137,57 129,61.4 129,52.6" class="ah"/><line x1="243" y1="57" x2="251" y2="57" class="ln"/><polygon points="257,57 249,61.4 249,52.6" class="ah"/><line x1="363" y1="57" x2="371" y2="57" class="ln"/><polygon points="377,57 369,61.4 369,52.6" class="ah"/><line x1="483" y1="57" x2="491" y2="57" class="ln"/><polygon points="497,57 489,61.4 489,52.6" class="ah"/><line x1="603" y1="57" x2="611" y2="57" class="ln"/><polygon points="617,57 609,61.4 609,52.6" class="ah"/></svg></div>
+        <figcaption>The fine-tuning workflow, end to end.</figcaption>
+      </figure>
+
+      <h2>4.2 The settings that matter most</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Setting</th><th>What it controls</th><th>If too high / too low</th></tr></thead>
+          <tbody>
+            <tr><td>Learning rate</td><td>How big each update step is</td><td>Too high: unstable, forgets; too low: barely learns</td></tr>
+            <tr><td>Epochs</td><td>How many passes over the data</td><td>Too many: overfits and memorises; too few: underfits</td></tr>
+            <tr><td>LoRA rank (r)</td><td>Capacity of the adapter</td><td>Too high: more memory, overfitting risk; too low: can't capture the task</td></tr>
+            <tr><td>Batch size</td><td>Examples per update</td><td>Limited by GPU memory; affects stability</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Change one setting at a time, and keep a log of every run and its results.</p>
+
+      <h2>4.3 Reading the loss curves</h2>
+      <p>Watch <strong>training loss</strong> and <strong>validation loss</strong> together. Both falling is good. If training loss keeps falling while validation loss starts rising, the model is <strong>overfitting</strong> — memorising the training set. Stop at (or roll back to) the checkpoint with the lowest validation loss.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 240" style="min-width:560px" role="img" aria-label="Training loss keeps falling, but validation loss turns upward when the model starts memorising. Keep the checkpoint where validation loss was lowest."><line x1="60" y1="200" x2="600" y2="200" class="ln"/><line x1="60" y1="200" x2="60" y2="20" class="ln"/><text x="330" y="228" font-size="12" text-anchor="middle" class="mut">training steps / epochs →</text><text x="30" y="110" font-size="11.5" text-anchor="middle" class="mut">loss</text><path d="M 70 40 C 200 120 350 170 590 188" class="ln ln-a"/><text x="596" y="192" font-size="11.5" text-anchor="start" font-weight="600" class="t-a">training</text><path d="M 70 46 C 200 120 280 150 340 150 C 420 150 500 120 590 92" class="ln ln-w"/><text x="596" y="96" font-size="11.5" text-anchor="start" font-weight="600" class="t-w">validation</text><line x1="340" y1="30" x2="340" y2="200" class="ln-g dash"/><text x="340" y="26" font-size="11.5" text-anchor="middle" font-weight="600" class="t-g">best checkpoint</text><text x="470" y="60" font-size="11.5" text-anchor="middle" font-weight="600" class="t-b">overfitting →</text></svg></div>
+        <figcaption>Training loss keeps falling, but validation loss turns upward when the model starts memorising. Keep the checkpoint where validation loss was lowest.</figcaption>
+      </figure>
+
+      <h2>4.4 Hosted fine-tuning</h2>
+      <p>With a managed service, the steps are the same but simpler: upload training and validation files in the required format, choose a base model and a few hyperparameters, start the job, and monitor the reported losses. You then call the tuned model by its new identifier. The data preparation and evaluation work doesn't get any smaller.</p>
+
+      <h2>4.5 Catastrophic forgetting and safety erosion</h2>
+      <p>Narrow tuning can degrade a model's general abilities — and research has shown that fine-tuning can weaken safety behaviours learned in post-training, even with benign data. Always re-check general capability and safety after tuning (Module 5), and prefer PEFT methods and modest training where possible.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>LoRA fine-tuning needs a dataset, a base model, a LoRA config and a trainer.</li><li>Learning rate and epochs are the most influential settings.</li><li>Rising validation loss with falling training loss means overfitting.</li><li>Hosted services simplify training but not data or evaluation.</li><li>Re-check general ability and safety after tuning.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/fine-tuning" target="_blank" rel="noopener">What is fine-tuning?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/overfitting" target="_blank" rel="noopener">ML Crash Course: Datasets, generalization and overfitting</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "What does trainer.save_model() save in the LoRA example?",
+"options": [
+"A full copy of the base model",
+"The small adapter weights",
+"The training data",
+"Nothing"
+],
+"answer": 1,
+"explain": "Adapters are megabytes, not gigabytes."
+},
+{
+"q": "Training loss keeps falling but validation loss starts rising after epoch 2. What's happening?",
+"options": [
+"Underfitting",
+"Overfitting — use the checkpoint with the lowest validation loss",
+"Perfect training",
+"A data loading bug always"
+],
+"answer": 1,
+"explain": "The model is memorising training data."
+},
+{
+"q": "What happens if the learning rate is far too high?",
+"options": [
+"Training is unstable and the model may forget general abilities",
+"Nothing",
+"It learns too slowly",
+"It uses less memory"
+],
+"answer": 0,
+"explain": "Big steps overshoot."
+},
+{
+"q": "What does LoRA rank (r) control?",
+"options": [
+"The number of epochs",
+"The capacity of the adapter",
+"The temperature",
+"The batch size"
+],
+"answer": 1,
+"explain": "Higher rank, more capacity — and more overfitting risk."
+},
+{
+"q": "Why re-run safety tests after fine-tuning?",
+"options": [
+"Safety can't change",
+"Fine-tuning can weaken safety behaviours, even with benign data",
+"To use up budget",
+"Regulators require it daily"
+],
+"answer": 1,
+"explain": "Research has shown safety erosion from tuning."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Evaluating fine-tuned models →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

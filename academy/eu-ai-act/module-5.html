@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Transparency &amp; general-purpose AI — EU AI Act Fundamentals</title>
+<meta name="description" content="Article 50 transparency duties for chatbots, deepfakes and AI-generated content, and the EU AI Act obligations for general-purpose AI models and systemic risk.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Transparency &amp; general-purpose AI</h1>
+      <p class="lead">Generative AI made two questions urgent: how do people know when they're dealing with AI, and what should the makers of powerful foundation models be responsible for? Article 50 and Chapter V answer them.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul>
+          <li>Describe the four Article 50 transparency duties and who they fall on</li>
+          <li>Explain the obligations for all general-purpose AI model providers</li>
+          <li>Define "systemic risk" and the extra duties it brings</li>
+          <li>Describe the role of the GPAI Code of Practice</li>
+        </ul>
+      </div>
+
+      <h2>5.1 Article 50: transparency obligations</h2>
+      <p>These duties apply from <strong>2 August 2026</strong> and sit on top of any other tier — a high-risk system can carry them too.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Who</th><th>Duty</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Providers</strong> of AI that interacts directly with people</td><td>Design the system so people are told they are interacting with AI — unless that is obvious from the context.</td></tr>
+            <tr><td><strong>Providers</strong> of AI generating synthetic audio, images, video or text</td><td>Mark outputs in a <strong>machine-readable</strong> format so they are <strong>detectable as AI-generated</strong> (e.g. watermarks, metadata, fingerprints), as far as technically feasible.</td></tr>
+            <tr><td><strong>Deployers</strong> of emotion recognition or biometric categorisation</td><td>Inform the people exposed to the system (where the use is not prohibited).</td></tr>
+            <tr><td><strong>Deployers</strong> of deepfakes and certain AI-generated text</td><td>Disclose that image, audio or video content is artificially generated or manipulated. For text published to inform the public on matters of public interest, disclose that it is AI-generated — unless it has undergone human review and someone holds editorial responsibility.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For evidently <strong>artistic, creative, satirical or fictional</strong> works, the deepfake disclosure is lighter: it only needs to be done in a way that doesn't spoil the display or enjoyment of the work.</p>
+
+      <div class="callout update">
+        <b>Watermarking grace period</b>
+        <p>Under the 2026 amendments, generative AI systems placed on the market <strong>before 2 August 2026</strong> have until <strong>2 December 2026</strong> to meet the machine-readable marking duty. New systems must comply from 2 August 2026.</p>
+      </div>
+
+      <div class="example">
+        <span class="eyebrow">Scenario</span>
+        <p>An online retailer adds an AI shopping assistant to its website and uses an image generator to create lifestyle photos of a "model" wearing its trainers.</p>
+        <p><strong>Assistant:</strong> the provider must make sure users are told they're chatting with AI (e.g. "I'm an AI assistant").<br>
+        <strong>Images:</strong> the image-generator provider must embed machine-readable marks. If the images realistically depict a person who appears real, the retailer, as deployer, should disclose that they are AI-generated.</p>
+      </div>
+
+      <h2>5.2 General-purpose AI models</h2>
+      <p>A <strong>general-purpose AI model</strong> is one trained on large amounts of data (typically with self-supervision at scale) that displays significant generality and can competently perform a wide range of distinct tasks — and can be integrated into many downstream systems. Large language models are the classic example.</p>
+      <p>GPAI obligations have applied since <strong>2 August 2025</strong>. Models already on the market before that date have until <strong>2 August 2027</strong> to comply. The Commission's power to fine GPAI providers applies from <strong>2 August 2026</strong>.</p>
+
+      <h3>Obligations for all GPAI model providers (Article 53)</h3>
+      <ol>
+        <li><strong>Technical documentation</strong> about the model, its training and testing, for the AI Office and national authorities.</li>
+        <li><strong>Information and documentation for downstream providers</strong> who build AI systems on the model, so they understand its capabilities and limitations and can meet their own obligations.</li>
+        <li>A <strong>copyright policy</strong>, including respecting text-and-data-mining opt-outs expressed by rights holders.</li>
+        <li>A publicly available, <strong>sufficiently detailed summary of the content used for training</strong>, using the AI Office's template.</li>
+      </ol>
+      <p><strong>Open-source models</strong> released under a free and open licence with public weights are exempt from duties 1 and 2 — but not from the copyright policy or the training summary, and not if the model has systemic risk.</p>
+
+      <h3>GPAI models with systemic risk (Articles 51 &amp; 55)</h3>
+      <p>A model has <strong>systemic risk</strong> if it has high-impact capabilities. This is presumed when the cumulative compute used to train it exceeds <strong>10<sup>25</sup> floating-point operations (FLOPs)</strong>. The Commission can also designate models based on other criteria. Providers must notify the Commission within two weeks of meeting the threshold.</p>
+      <p>On top of Article 53, these providers must:</p>
+      <ul>
+        <li>perform <strong>model evaluations</strong>, including <strong>adversarial testing</strong> (red-teaming);</li>
+        <li><strong>assess and mitigate</strong> possible systemic risks at EU level;</li>
+        <li>track, document and <strong>report serious incidents</strong> to the AI Office without undue delay;</li>
+        <li>ensure an adequate level of <strong>cybersecurity</strong> for the model and its physical infrastructure.</li>
+      </ul>
+
+      <h3>The GPAI Code of Practice</h3>
+      <p>Published in July 2025, the <strong>General-Purpose AI Code of Practice</strong> was drafted by independent experts with input from industry, academia and civil society. It has three chapters — <strong>transparency</strong>, <strong>copyright</strong>, and <strong>safety and security</strong> (the last for systemic-risk models only). Signing is voluntary, but following it is a recognised way to demonstrate compliance with Articles 53 and 55.</p>
+
+      <div class="callout">
+        <b>Model vs system</b>
+        <p>Chapter V regulates the <strong>model</strong>. Once a model is built into an AI <strong>system</strong>, the system is classified in its own right. A company that builds an HR screening tool on top of a third-party LLM is the provider of a high-risk system — and relies on the documentation the model provider must supply. Following the 2026 amendments, the AI Office directly supervises AI systems built on a GPAI model by the same provider or group.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul>
+        <li>From 2 August 2026, people must be told when they interact with AI, and synthetic content must be machine-detectable and — for deepfakes — disclosed.</li>
+        <li>All GPAI model providers need documentation, downstream information, a copyright policy and a training-content summary.</li>
+        <li>Models above 10<sup>25</sup> FLOPs are presumed to have systemic risk and face evaluation, risk mitigation, incident reporting and cybersecurity duties.</li>
+        <li>The GPAI Code of Practice is a voluntary route to show compliance.</li>
+      </ul>
+
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+        [
+          {"q":"A company launches a customer-service chatbot. What does Article 50 require of the provider?","options":["A conformity assessment and CE mark","That users are informed they are interacting with AI, unless obvious","A fundamental rights impact assessment","Nothing — chatbots are exempt"],"answer":1,"explain":"Providers of AI that interacts directly with people must ensure people are informed, unless it's obvious from the context."},
+          {"q":"What is the compute threshold above which a GPAI model is presumed to have systemic risk?","options":["10^18 FLOPs","10^21 FLOPs","10^25 FLOPs","10^30 FLOPs"],"answer":2,"explain":"Article 51 presumes high-impact capabilities when cumulative training compute exceeds 10^25 FLOPs."},
+          {"q":"Which obligation applies to ALL providers of general-purpose AI models, including open-source ones?","options":["Adversarial testing","Publishing a summary of training content","Reporting serious incidents","Registering in the high-risk database"],"answer":1,"explain":"The copyright policy and training-content summary apply to all GPAI providers. Open-source models are exempt only from the documentation duties (unless they have systemic risk)."},
+          {"q":"A generative image tool was on the EU market before 2 August 2026. By when must its outputs carry machine-readable marks?","options":["2 February 2025","2 August 2026","2 December 2026","2 December 2027"],"answer":2,"explain":"The 2026 amendments give systems already on the market a grace period until 2 December 2026."},
+          {"q":"What is the status of the GPAI Code of Practice?","options":["Mandatory for all AI providers","A voluntary tool to demonstrate compliance with GPAI obligations","A replacement for the AI Act","Only applicable to EU-based companies"],"answer":1,"explain":"The Code is voluntary, but adherence is a recognised way to demonstrate compliance with Articles 53 and 55."}
+        ]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Governance &amp; compliance →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

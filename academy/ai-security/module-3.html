@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Attacks on data and models — AI Security &amp; Safety</title>
+<meta name="description" content="Data poisoning and backdoors, model extraction and theft, privacy attacks, adversarial examples and AI supply-chain risk.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-security">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Attacks on data and models</h1>
+      <p class="lead">Attackers don't only target prompts. They target the data models learn from, the models themselves, and the supply chain that assembles them.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain data and model poisoning, including backdoors</li><li>Describe model theft, extraction and system prompt leakage</li><li>Describe training-data extraction, membership inference and model inversion</li><li>Explain adversarial examples</li><li>Manage AI supply-chain risks</li></ul>
+      </div>
+
+      <h2>3.1 Data poisoning</h2>
+      <p><strong>Data and model poisoning</strong> (OWASP LLM04:2025) means manipulating training, fine-tuning or retrieval data to change a model's behaviour — degrading performance, introducing bias, or planting a hidden <strong>backdoor</strong> that activates on a specific trigger.</p>
+      <p>Poisoning may need less data than you'd think. In 2025, research by Anthropic with the UK AI Security Institute and The Alan Turing Institute found that a small, roughly constant number of malicious documents — around 250 in their experiments — could implant a simple backdoor in language models across a range of sizes. Large models trained on scraped web data are therefore exposed to anyone who can publish content online.</p>
+      <ul class="checklist">
+        <li>Know the provenance of training and fine-tuning data</li>
+        <li>Validate, filter and version datasets; restrict who can change them</li>
+        <li>Protect retrieval (RAG) sources — poisoning a knowledge base is often easier than poisoning a model</li>
+        <li>Test models for unexpected behaviour on trigger-like inputs</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 750 150" style="min-width:620px" role="img" aria-label="Data poisoning: a few malicious documents in a vast training set can implant a backdoor that only activates on a trigger — invisible in normal testing."><rect x="20" y="40" width="150" height="60" rx="10" class="b-n"/><text x="95" y="66.4" font-size="12" text-anchor="middle" font-weight="600">Training data</text><text x="95" y="82" font-size="12" text-anchor="middle">(millions of docs)</text><rect x="78" y="108" width="10" height="10" rx="2" class="f-b"/><rect x="92" y="108" width="10" height="10" rx="2" class="f-b"/><text x="95" y="136" font-size="11" text-anchor="middle" font-weight="600" class="t-b">+ ~250 poisoned docs</text><rect x="220" y="40" width="120" height="60" rx="10" class="b-a"/><text x="280" y="74.55" font-size="13" text-anchor="middle" font-weight="600">Training</text><rect x="390" y="40" width="150" height="60" rx="10" class="b-w"/><text x="465" y="66.4" font-size="12" text-anchor="middle" font-weight="600">Model with a</text><text x="465" y="82" font-size="12" text-anchor="middle">hidden backdoor</text><rect x="590" y="10" width="140" height="44" rx="10" class="b-g"/><text x="660" y="28.55" font-size="11.5" text-anchor="middle" font-weight="600">Normal input →</text><text x="660" y="43.5" font-size="11.5" text-anchor="middle">normal output</text><rect x="590" y="86" width="140" height="44" rx="10" class="b-b"/><text x="660" y="104.55" font-size="11.5" text-anchor="middle" font-weight="600">Trigger phrase →</text><text x="660" y="119.5" font-size="11.5" text-anchor="middle">attacker&#x27;s output</text><line x1="173" y1="70" x2="211" y2="70" class="ln"/><polygon points="217,70 209,74.4 209,65.6" class="ah"/><line x1="343" y1="70" x2="381" y2="70" class="ln"/><polygon points="387,70 379,74.4 379,65.6" class="ah"/><line x1="543" y1="54.8" x2="581.111" y2="47.3733" class="ln"/><polygon points="587,46.2256 579.989,52.0746 578.306,43.4371" class="ah"/><line x1="543" y1="85.2" x2="581.111" y2="92.6267" class="ln"/><polygon points="587,93.7744 578.306,96.5629 579.989,87.9254" class="ah"/></svg></div>
+        <figcaption>Data poisoning: a few malicious documents in a vast training set can implant a backdoor that only activates on a trigger — invisible in normal testing.</figcaption>
+      </figure>
+
+      <h2>3.2 Model extraction and theft</h2>
+      <p>Trained models are valuable intellectual property. Attackers may:</p>
+      <ul>
+        <li><strong>steal model files</strong> (weights) through conventional breaches — protect them like any crown-jewel asset;</li>
+        <li><strong>extract</strong> a model's behaviour by querying it many times and training a copy on the outputs ("distillation" without permission);</li>
+        <li>extract the <strong>system prompt</strong> (OWASP LLM07:2025 System Prompt Leakage) — never put secrets, credentials or security logic in a system prompt.</li>
+      </ul>
+
+      <h2>3.3 Privacy attacks on models</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Attack</th><th>What the attacker learns</th></tr></thead>
+          <tbody>
+            <tr><td>Training data extraction</td><td>Verbatim memorised content, such as personal data or secrets, from the training set</td></tr>
+            <tr><td>Membership inference</td><td>Whether a specific record was in the training data (e.g. a patient in a hospital dataset)</td></tr>
+            <tr><td>Model inversion</td><td>Reconstructs sensitive features of training data from model outputs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Mitigations include minimising sensitive data in training, de-duplication, differential privacy, output filtering and rate limiting.</p>
+
+      <h2>3.4 Evasion (adversarial examples)</h2>
+      <p>For classic machine learning, <strong>adversarial examples</strong> are inputs crafted to fool a model — small changes, often invisible to people, that cause misclassification. Researchers have shown stickers on road signs that confuse image classifiers, and malware tweaked to evade ML-based detection. Defences include adversarial training, input validation and not relying on a single model for security decisions.</p>
+
+      <h2>3.5 The AI supply chain</h2>
+      <p><strong>Supply chain</strong> risks (OWASP LLM03:2025) are growing as organisations assemble AI from many parts:</p>
+      <ul>
+        <li><strong>Pre-trained models from public hubs</strong> may be tampered with or contain malicious code. Some model file formats (such as Python "pickle" files) can execute code when loaded — prefer safer formats such as safetensors and scan files.</li>
+        <li><strong>Datasets</strong> may be poisoned or have unclear licences.</li>
+        <li><strong>Libraries and packages</strong> — including fake packages with names that AI coding assistants hallucinate, which attackers can register.</li>
+        <li><strong>Plugins, tools and MCP servers</strong> that connect models to other systems (Module 5).</li>
+        <li><strong>Third-party AI APIs</strong> whose models change without notice.</li>
+      </ul>
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 250" style="min-width:620px" role="img" aria-label="The AI supply chain. Each component you pull in is a place an attacker can get in."><rect x="20" y="46" width="120" height="50" rx="10" class="b-n"/><text x="80" y="75.2" font-size="12" text-anchor="middle" font-weight="600">Datasets</text><rect x="155" y="46" width="120" height="50" rx="10" class="b-n"/><text x="215" y="67.4" font-size="12" text-anchor="middle" font-weight="600">Pre-trained</text><text x="215" y="83" font-size="12" text-anchor="middle">models</text><rect x="290" y="46" width="120" height="50" rx="10" class="b-n"/><text x="350" y="67.4" font-size="12" text-anchor="middle" font-weight="600">Libraries &amp;</text><text x="350" y="83" font-size="12" text-anchor="middle">packages</text><rect x="425" y="46" width="120" height="50" rx="10" class="b-n"/><text x="485" y="67.4" font-size="12" text-anchor="middle" font-weight="600">Plugins / MCP</text><text x="485" y="83" font-size="12" text-anchor="middle">servers</text><rect x="560" y="46" width="120" height="50" rx="10" class="b-n"/><text x="620" y="67.4" font-size="12" text-anchor="middle" font-weight="600">Third-party</text><text x="620" y="83" font-size="12" text-anchor="middle">AI APIs</text><rect x="250" y="160" width="190" height="54" rx="10" class="b-a"/><text x="345" y="191.725" font-size="13.5" text-anchor="middle" font-weight="600">Your AI system</text><line x1="143" y1="98.5774" x2="270.969" y2="154.594" class="ln"/><polygon points="276.466,157 267.372,157.823 270.901,149.761" class="ah"/><line x1="246.379" y1="99" x2="306.902" y2="153.005" class="ln"/><polygon points="311.379,157 302.481,154.957 308.34,148.391" class="ah"/><line x1="348.793" y1="99" x2="346.551" y2="151.006" class="ln"/><polygon points="346.293,157 342.242,148.818 351.034,149.197" class="ah"/><line x1="451.207" y1="99" x2="385.827" y2="153.172" class="ln"/><polygon points="381.207,157 384.56,148.508 390.174,155.284" class="ah"/><line x1="557" y1="97.5745" x2="421.649" y2="154.668" class="ln"/><polygon points="416.121,157 421.782,149.837 425.202,157.945" class="ah"/><text x="80" y="25.675" font-size="10.5" text-anchor="middle" class="t-b">poisoned?</text><text x="215" y="18.85" font-size="10.5" text-anchor="middle" class="t-b">tampered /</text><text x="215" y="32.5" font-size="10.5" text-anchor="middle" class="t-b">unsafe format?</text><text x="350" y="18.85" font-size="10.5" text-anchor="middle" class="t-b">fake or</text><text x="350" y="32.5" font-size="10.5" text-anchor="middle" class="t-b">hallucinated?</text><text x="485" y="18.85" font-size="10.5" text-anchor="middle" class="t-b">malicious</text><text x="485" y="32.5" font-size="10.5" text-anchor="middle" class="t-b">tools?</text><text x="620" y="18.85" font-size="10.5" text-anchor="middle" class="t-b">silent model</text><text x="620" y="32.5" font-size="10.5" text-anchor="middle" class="t-b">changes?</text><text x="345" y="238" font-size="11.5" text-anchor="middle" class="mut">Keep an AI bill of materials for every system</text></svg></div>
+        <figcaption>The AI supply chain. Each component you pull in is a place an attacker can get in.</figcaption>
+      </figure>
+
+      <p>Keep an <strong>AI bill of materials</strong>: which models, datasets, libraries and services each system depends on, with versions and sources.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Poisoning can need surprisingly few malicious documents — protect data provenance, including RAG sources.</li><li>Protect model weights; never put secrets in system prompts.</li><li>Models can leak training data; minimise sensitive data and filter outputs.</li><li>Adversarial examples fool classic ML models.</li><li>Keep an AI bill of materials; prefer safe model formats; verify packages and tools.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">MITRE</span><a href="https://atlas.mitre.org/" target="_blank" rel="noopener">ATLAS: Adversarial Threat Landscape for AI Systems</a></li><li><span class="provider">OWASP</span><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">Top 10 for LLM Applications 2025</a></li><li><span class="provider">NIST</span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a> — AI RMF 1.0 and the Generative AI Profile (NIST AI 600-1)</li><li><span class="provider">Google</span><a href="https://safety.google/cybersecurity-advancements/saif/" target="_blank" rel="noopener">Secure AI Framework (SAIF)</a> — six core elements for securing AI</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "A model behaves normally except when a specific trigger phrase appears, then produces attacker-chosen output. This is…",
+"options": [
+"A backdoor from poisoning",
+"Rate limiting",
+"Hallucination",
+"Model card"
+],
+"answer": 0,
+"explain": "Poisoned training can implant hidden triggers."
+},
+{
+"q": "2025 research by Anthropic, the UK AI Security Institute and the Alan Turing Institute found that implanting a simple backdoor…",
+"options": [
+"Required poisoning most of the training data",
+"Could take a small, roughly constant number of malicious documents across model sizes",
+"Was impossible",
+"Only worked on tiny models"
+],
+"answer": 1,
+"explain": "Around 250 documents in their experiments."
+},
+{
+"q": "Learning whether a specific patient's record was in a model's training data is…",
+"options": [
+"Membership inference",
+"Prompt injection",
+"Denial of wallet",
+"Evasion"
+],
+"answer": 0,
+"explain": "A privacy attack on models."
+},
+{
+"q": "Why prefer formats like safetensors over pickle for downloaded models?",
+"options": [
+"They're smaller",
+"Pickle files can execute code when loaded",
+"Pickle is illegal",
+"Safetensors are faster to train"
+],
+"answer": 1,
+"explain": "Loading untrusted pickles can run malicious code."
+},
+{
+"q": "What is an AI bill of materials?",
+"options": [
+"An invoice from an AI vendor",
+"A record of the models, datasets, libraries and services a system depends on",
+"A pricing sheet",
+"A model card"
+],
+"answer": 1,
+"explain": "It supports supply-chain risk management."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Securing LLM applications →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

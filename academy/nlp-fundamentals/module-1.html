@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Text as data — NLP Fundamentals</title>
+<meta name="description" content="What NLP is used for, the practice dataset, tokenisation and normalisation, bag of words, stop words and n-grams.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 30 minutes</span>
+      <h1>Text as data</h1>
+      <p class="lead">Before any model can work with language, text has to become numbers. This module shows the simplest ways to do that — and the choices that matter.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Name common business NLP tasks</li><li>Tokenise and normalise text</li><li>Build a bag-of-words matrix</li><li>Use stop words and n-grams appropriately</li></ul>
+      </div>
+
+      <div class="callout">
+        <b>Before you start</b>
+        <p>This course uses Python, pandas and scikit-learn in <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a>. If you're new to them, take <a href="../python-for-ai/index.html">Python for AI</a> and <a href="../ml-fundamentals/index.html">Machine Learning Fundamentals</a> first. Modules 4 and 5 include optional examples that call an AI API; you can follow the ideas without running them.</p>
+      </div>
+
+      <h2>1.1 What is natural language processing?</h2>
+      <p><strong>Natural language processing (NLP)</strong> is the set of techniques that let computers work with human language: classifying messages, finding information, measuring sentiment, searching by meaning, translating, summarising and generating text. Large language models are the newest and most powerful NLP tools — but classic techniques remain fast, cheap and surprisingly strong for many business tasks.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Task</th><th>Business example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Classification</strong></td><td>Route each customer email to billing, delivery or product teams</td></tr>
+            <tr><td><strong>Sentiment analysis</strong></td><td>Track whether reviews are getting more negative</td></tr>
+            <tr><td><strong>Information extraction</strong></td><td>Pull order numbers, dates and amounts out of messages</td></tr>
+            <tr><td><strong>Semantic search</strong></td><td>Find help articles that answer a question, even with different wording</td></tr>
+            <tr><td><strong>Topic discovery</strong></td><td>Find out what thousands of survey comments are about</td></tr>
+            <tr><td><strong>Generation</strong></td><td>Draft replies or summaries (usually with an LLM)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>1.2 The practice dataset</h2>
+      <p>You'll use 400 synthetic customer messages, each labelled delivery, product or billing. About 8% of the labels are deliberately wrong — real labels are never perfect.</p>
+<pre data-copy><code><span class="label">Python · practice data: synthetic customer messages (run this first)</span>import random
+import re
+import numpy as np
+import pandas as pd
+
+random.seed(7)
+templates = {
+    "delivery": ["My parcel arrived {d} days late and the box was crushed",
+                 "Delivery took {d} days and the courier left it in the rain",
+                 "Still waiting for my order after {d} days, no update",
+                 "The tracking link never updated and delivery was {d} days late"],
+    "product":  ["The {p} broke after a week",
+                 "Love the {p}, great quality and well made",
+                 "The {p} is much smaller than the photos suggest",
+                 "Excellent {p}, works perfectly"],
+    "billing":  ["I was charged twice for order {o}",
+                 "Refund for order {o} still not received",
+                 "The discount code did not apply at checkout",
+                 "Invoice for order {o} shows the wrong amount"],
+}
+products = ["chopping board", "kettle", "desk lamp", "backpack", "water bottle"]
+rows = []
+for i in range(400):
+    cat = random.choice(list(templates))
+    msg = random.choice(templates[cat]).format(
+        d=random.randint(2, 9), p=random.choice(products), o="GFY-%05d" % random.randint(10000, 99999))
+    label = cat if random.random() &gt; 0.08 else random.choice(list(templates))  # ~8% noisy labels
+    rows.append({"text": msg, "category": label})
+messages = pd.DataFrame(rows)
+print(messages.sample(5, random_state=1))
+print(messages["category"].value_counts())</code></pre>
+
+      <h2>1.3 From text to tokens</h2>
+      <p>Computers can't do arithmetic on sentences, so the first step is to break text into <strong>tokens</strong> — usually words or pieces of words — and often to <strong>normalise</strong> them (lowercase, remove punctuation).</p>
+<pre data-copy><code>def simple_tokens(text):
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9\s-]", " ", text)   # keep letters, digits, spaces, hyphens
+    return text.split()
+
+print(simple_tokens("Refund for order GFY-12345 still NOT received!"))</code></pre>
+      <p>Choices like these matter. Removing punctuation helps matching but can destroy meaning ("not" vs "not!" is harmless; "can't" becoming "can t" is not). Lowercasing merges "Apple" the company with "apple" the fruit. There's no universally right answer — check what your task needs.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 156" style="min-width:560px" role="img" aria-label="Tokenisation: one message becomes a list of normalised tokens."><rect x="20" y="16" width="600" height="36" rx="8" class="b-s"/><text x="320" y="39" font-size="13" text-anchor="middle" font-weight="600">Refund for order GFY-12345 still NOT received!</text><line x1="320" y1="56" x2="320" y2="78" class="ln"/><polygon points="320,84 315.6,76 324.4,76" class="ah"/><text x="328" y="74" font-size="11.5" text-anchor="start" class="mut">lowercase · strip punctuation · split</text><rect x="20" y="90" width="71.6" height="30" rx="15" class="b-a"/><text x="55.8" y="109.2" font-size="12" text-anchor="middle">refund</text><rect x="99.6" y="90" width="48.8" height="30" rx="15" class="b-a"/><text x="124" y="109.2" font-size="12" text-anchor="middle">for</text><rect x="156.4" y="90" width="64" height="30" rx="15" class="b-a"/><text x="188.4" y="109.2" font-size="12" text-anchor="middle">order</text><rect x="228.4" y="90" width="94.4" height="30" rx="15" class="b-a"/><text x="275.6" y="109.2" font-size="12" text-anchor="middle">gfy-12345</text><rect x="330.8" y="90" width="64" height="30" rx="15" class="b-a"/><text x="362.8" y="109.2" font-size="12" text-anchor="middle">still</text><rect x="402.8" y="90" width="48.8" height="30" rx="15" class="b-a"/><text x="427.2" y="109.2" font-size="12" text-anchor="middle">not</text><rect x="459.6" y="90" width="86.8" height="30" rx="15" class="b-a"/><text x="503" y="109.2" font-size="12" text-anchor="middle">received</text><text x="320" y="146" font-size="11.5" text-anchor="middle" class="mut">7 tokens</text></svg></div>
+        <figcaption>Tokenisation: one message becomes a list of normalised tokens.</figcaption>
+      </figure>
+
+      <h2>1.4 Bag of words</h2>
+      <p>The simplest way to turn text into numbers is a <strong>bag of words</strong>: count how often each word appears, ignoring order. Each message becomes a row; each word in the vocabulary becomes a column.</p>
+<pre data-copy><code>from sklearn.feature_extraction.text import CountVectorizer
+
+docs = ["parcel arrived late", "refund not received", "parcel late again"]
+cv = CountVectorizer()
+counts = cv.fit_transform(docs)
+print(pd.DataFrame(counts.toarray(), columns=cv.get_feature_names_out()))</code></pre>
+      <p>Bag of words loses word order — "not good, bad" and "not bad, good" look identical — but for many classification tasks it works remarkably well.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 176" style="min-width:560px" role="img" aria-label="A bag-of-words matrix: each message becomes a row of word counts. Word order is lost."><rect x="200" y="20" width="58" height="28" rx="3" class="b-a"/><text x="229" y="38" font-size="11" text-anchor="middle" font-weight="700">arrived</text><rect x="262" y="20" width="58" height="28" rx="3" class="b-a"/><text x="291" y="38" font-size="11" text-anchor="middle" font-weight="700">late</text><rect x="324" y="20" width="58" height="28" rx="3" class="b-a"/><text x="353" y="38" font-size="11" text-anchor="middle" font-weight="700">not</text><rect x="386" y="20" width="58" height="28" rx="3" class="b-a"/><text x="415" y="38" font-size="11" text-anchor="middle" font-weight="700">parcel</text><rect x="448" y="20" width="58" height="28" rx="3" class="b-a"/><text x="477" y="38" font-size="11" text-anchor="middle" font-weight="700">received</text><rect x="510" y="20" width="58" height="28" rx="3" class="b-a"/><text x="539" y="38" font-size="11" text-anchor="middle" font-weight="700">refund</text><rect x="572" y="20" width="58" height="28" rx="3" class="b-a"/><text x="601" y="38" font-size="11" text-anchor="middle" font-weight="700">again</text><text x="190" y="73" font-size="11.5" text-anchor="end">&quot;parcel arrived late&quot;</text><rect x="200" y="54" width="58" height="28" rx="3" class="b-g"/><text x="229" y="73" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="262" y="54" width="58" height="28" rx="3" class="b-g"/><text x="291" y="73" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="324" y="54" width="58" height="28" rx="3" class="b-s"/><text x="353" y="73" font-size="12" text-anchor="middle">0</text><rect x="386" y="54" width="58" height="28" rx="3" class="b-g"/><text x="415" y="73" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="448" y="54" width="58" height="28" rx="3" class="b-s"/><text x="477" y="73" font-size="12" text-anchor="middle">0</text><rect x="510" y="54" width="58" height="28" rx="3" class="b-s"/><text x="539" y="73" font-size="12" text-anchor="middle">0</text><rect x="572" y="54" width="58" height="28" rx="3" class="b-s"/><text x="601" y="73" font-size="12" text-anchor="middle">0</text><text x="190" y="105" font-size="11.5" text-anchor="end">&quot;refund not received&quot;</text><rect x="200" y="86" width="58" height="28" rx="3" class="b-s"/><text x="229" y="105" font-size="12" text-anchor="middle">0</text><rect x="262" y="86" width="58" height="28" rx="3" class="b-s"/><text x="291" y="105" font-size="12" text-anchor="middle">0</text><rect x="324" y="86" width="58" height="28" rx="3" class="b-g"/><text x="353" y="105" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="386" y="86" width="58" height="28" rx="3" class="b-s"/><text x="415" y="105" font-size="12" text-anchor="middle">0</text><rect x="448" y="86" width="58" height="28" rx="3" class="b-g"/><text x="477" y="105" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="510" y="86" width="58" height="28" rx="3" class="b-g"/><text x="539" y="105" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="572" y="86" width="58" height="28" rx="3" class="b-s"/><text x="601" y="105" font-size="12" text-anchor="middle">0</text><text x="190" y="137" font-size="11.5" text-anchor="end">&quot;parcel late again&quot;</text><rect x="200" y="118" width="58" height="28" rx="3" class="b-s"/><text x="229" y="137" font-size="12" text-anchor="middle">0</text><rect x="262" y="118" width="58" height="28" rx="3" class="b-g"/><text x="291" y="137" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="324" y="118" width="58" height="28" rx="3" class="b-s"/><text x="353" y="137" font-size="12" text-anchor="middle">0</text><rect x="386" y="118" width="58" height="28" rx="3" class="b-g"/><text x="415" y="137" font-size="12" text-anchor="middle" font-weight="600">1</text><rect x="448" y="118" width="58" height="28" rx="3" class="b-s"/><text x="477" y="137" font-size="12" text-anchor="middle">0</text><rect x="510" y="118" width="58" height="28" rx="3" class="b-s"/><text x="539" y="137" font-size="12" text-anchor="middle">0</text><rect x="572" y="118" width="58" height="28" rx="3" class="b-g"/><text x="601" y="137" font-size="12" text-anchor="middle" font-weight="600">1</text><text x="417" y="166" font-size="11" text-anchor="middle" class="mut">one column per vocabulary word · one row per message</text></svg></div>
+        <figcaption>A bag-of-words matrix: each message becomes a row of word counts. Word order is lost.</figcaption>
+      </figure>
+
+      <h2>1.5 Stop words and n-grams</h2>
+      <p><strong>Stop words</strong> are very common words ("the", "and", "for") that often add little meaning. <strong>N-grams</strong> keep short sequences of words together, so "not received" or "charged twice" become features in their own right — partly recovering word order.</p>
+<pre data-copy><code>cv2 = CountVectorizer(stop_words="english", ngram_range=(1, 2), min_df=3)
+X_counts = cv2.fit_transform(messages["text"])
+print(X_counts.shape)                                  # (messages, features)
+top = np.asarray(X_counts.sum(axis=0)).ravel()
+print(pd.Series(top, index=cv2.get_feature_names_out()).sort_values(ascending=False).head(10))</code></pre>
+      <p>Be careful with stop-word lists: scikit-learn's English list includes "not" and "no", which flip meaning in sentiment tasks.</p>
+<div class="activity"><b>Exercise: explore the vocabulary</b><p>Using <code>cv2</code>, find the five most frequent features within each category. Do they match what you'd expect?</p><details><summary>Show a solution</summary><pre data-copy><code>for cat, group in messages.groupby("category"):
+    m = cv2.transform(group["text"])
+    freq = pd.Series(np.asarray(m.sum(axis=0)).ravel(), index=cv2.get_feature_names_out())
+    print(cat, list(freq.sort_values(ascending=False).head(5).index))</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>NLP covers classification, extraction, search, topics and generation.</li><li>Tokenisation and normalisation choices change meaning — test them.</li><li>Bag of words counts words and ignores order.</li><li>N-grams recover some word order; stop-word lists can remove 'not'.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/natural-language-processing" target="_blank" rel="noopener">What is NLP?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/nlp/" target="_blank" rel="noopener">What is natural language processing?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "What is a token?",
+"options": [
+"A password",
+"A unit of text such as a word or part of a word",
+"A type of model",
+"A database row"
+],
+"answer": 1,
+"explain": "Text is split into tokens before processing."
+},
+{
+"q": "What does a bag-of-words representation ignore?",
+"options": [
+"Which words appear",
+"How often words appear",
+"Word order",
+"Vocabulary"
+],
+"answer": 2,
+"explain": "Counts only — order is lost."
+},
+{
+"q": "Why use bigrams such as 'not received'?",
+"options": [
+"To shrink the vocabulary",
+"To keep short word sequences that carry meaning",
+"To remove punctuation",
+"They're required"
+],
+"answer": 1,
+"explain": "N-grams partly recover word order."
+},
+{
+"q": "What's a risk of a standard English stop-word list in sentiment analysis?",
+"options": [
+"It's too short",
+"It can remove negations like 'not' and 'no'",
+"It adds words",
+"None"
+],
+"answer": 1,
+"explain": "Removing 'not' can flip meaning."
+},
+{
+"q": "Lowercasing everything can…",
+"options": [
+"Never cause problems",
+"Merge words with different meanings, like Apple and apple",
+"Translate text",
+"Remove numbers"
+],
+"answer": 1,
+"explain": "Every normalisation step is a trade-off."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Text classification →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

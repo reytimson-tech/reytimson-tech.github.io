@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — AI Product Management</title>
+<meta name="description" content="Key terms from AI Product Management, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>AI product glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="Search terms, e.g. eval set" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>A/B test</dt><dd>An experiment comparing outcomes for users with and without a feature (or between versions).</dd>
+        <dt>Acceptance criteria</dt><dd>Measurable conditions a feature must meet before launch, including thresholds and must-never conditions.</dd>
+        <dt>Augmentation</dt><dd>AI helping a person do a task better while the person stays in control.</dd>
+        <dt>Automation</dt><dd>AI completing a task on its own, with humans monitoring rather than approving each output.</dd>
+        <dt>Data flywheel</dt><dd>A loop where more usage produces more examples that improve the product, which attracts more usage.</dd>
+        <dt>Deterministic</dt><dd>Producing the same output every time for the same input, as traditional software does.</dd>
+        <dt>Dogfooding</dt><dd>Using your own product internally before releasing it to customers.</dd>
+        <dt>Drift</dt><dd>Changes in data, users or models over time that degrade an AI product's performance.</dd>
+        <dt>Evaluation set (eval)</dt><dd>Realistic inputs with expected outputs or grading rubrics, used to measure AI quality.</dd>
+        <dt>Graceful failure</dt><dd>Handling errors or uncertainty in a way that keeps users safe and able to continue.</dd>
+        <dt>Guardrail</dt><dd>A check or limit on inputs, outputs, actions or costs that keeps an AI feature within safe bounds.</dd>
+        <dt>Human in the loop</dt><dd>A design where people review, approve or can override AI outputs or actions.</dd>
+        <dt>Implicit feedback</dt><dd>Signals from user behaviour — accepting, editing, regenerating, abandoning — rather than explicit ratings.</dd>
+        <dt>Kill switch</dt><dd>A mechanism to quickly disable an AI feature or fall back to a non-AI path.</dd>
+        <dt>Latency</dt><dd>How long a user waits for a response.</dd>
+        <dt>LLM as judge</dt><dd>Using a language model with a rubric to grade outputs; must be validated against human judgement.</dd>
+        <dt>Mental model</dt><dd>A user's understanding of what a product can do and how it works.</dd>
+        <dt>Must-never condition</dt><dd>A launch criterion that allows zero occurrences of a particular failure.</dd>
+        <dt>Probabilistic</dt><dd>Producing outputs that are usually but not always correct, and that may vary for the same input.</dd>
+        <dt>Staged rollout</dt><dd>Releasing a feature to increasing shares of users while monitoring for problems.</dd>
+        <dt>System card</dt><dd>Documentation of an AI system's purpose, data, evaluation results, limitations and owner.</dd>
+        <dt>Unit economics</dt><dd>The cost and revenue per unit — per request, per user — that determine whether a feature is sustainable.</dd>
+        <dt>Vibe check</dt><dd>An informal early test of a prompt or model on real examples, useful for feasibility but not a formal evaluation.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

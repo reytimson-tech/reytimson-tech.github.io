@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: What AI governance is — AI Governance, Risk &amp; Compliance</title>
+<meta name="description" content="Definition, why now, governance as an enabler, operating models, key roles and the three lines model.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-governance">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>What AI governance is</h1>
+      <p class="lead">Every organisation using AI needs to know what AI it has, who's responsible, and how risks are managed. That's AI governance.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Define AI governance and the questions it answers</li><li>Explain why AI governance is urgent now</li><li>Compare centralised, federated and decentralised operating models</li><li>Describe key governance roles</li><li>Apply the three lines model to AI</li></ul>
+      </div>
+
+      <h2>1.1 What AI governance is</h2>
+      <p><strong>AI governance</strong> is the system of structures, policies, processes and controls an organisation uses to make sure its AI is developed, procured and used in line with its values, its risk appetite and the law. IBM puts it simply: the processes, standards and guardrails that help ensure AI systems are safe and ethical.</p>
+      <p>Governance answers practical questions:</p>
+      <ul>
+        <li>What AI are we using, and where? (inventory)</li>
+        <li>Which uses are acceptable, and which are not? (policy and risk appetite)</li>
+        <li>Who decides, and who is accountable? (roles and decision rights)</li>
+        <li>How do we assess and manage risks before and after launch? (risk management)</li>
+        <li>How do we show we're compliant? (documentation, assurance and audit)</li>
+      </ul>
+
+      <h2>1.2 Why now</h2>
+      <ul>
+        <li><strong>AI is everywhere:</strong> it arrives through new features in existing software, staff using generative AI tools, and vendors — not just in-house data science projects.</li>
+        <li><strong>Regulation is arriving:</strong> the EU AI Act's obligations are phasing in through 2028; regulators worldwide are applying existing laws to AI.</li>
+        <li><strong>Customers and partners ask:</strong> procurement questionnaires increasingly ask about AI governance, and certifications such as ISO/IEC 42001 are becoming a differentiator.</li>
+        <li><strong>Risk is real:</strong> data leakage, discrimination, inaccurate outputs, IP infringement, security vulnerabilities and reputational damage.</li>
+      </ul>
+
+      <h2>1.3 Governance enables, not just restricts</h2>
+      <p>Good governance makes it <em>easier</em> to use AI: clear rules mean teams know what's allowed, low-risk uses go through quickly, and leaders can approve ambitious projects with confidence. The aim is <strong>proportionate</strong> governance — light-touch for low-risk uses, rigorous for high-risk ones.</p>
+
+      <h2>1.4 Operating models</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Model</th><th>How it works</th><th>Suits</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Centralised</strong></td><td>A central AI governance team reviews and approves all AI uses</td><td>Smaller organisations, early stages, highly regulated sectors</td></tr>
+            <tr><td><strong>Federated (hub and spoke)</strong></td><td>A central hub sets standards and handles high-risk cases; business units have trained "spokes" who handle routine reviews</td><td>Larger, diverse organisations — the most common mature model</td></tr>
+            <tr><td><strong>Decentralised</strong></td><td>Each business unit governs its own AI against shared principles</td><td>Rare; risks inconsistency</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 280" style="min-width:560px" role="img" aria-label="A federated (hub-and-spoke) operating model: the hub sets standards and reviews high-risk cases; trained spokes in each business unit handle routine reviews."><rect x="250" y="110" width="160" height="64" rx="10" class="b-a"/><text x="330" y="138.1" font-size="13" text-anchor="middle" font-weight="600">Central AI</text><text x="330" y="155" font-size="13" text-anchor="middle">governance hub</text><text x="330" y="196" font-size="11" text-anchor="middle" class="mut">standards · high-risk reviews</text><rect x="40" y="20" width="150" height="46" rx="10" class="b-n"/><text x="115" y="38.625" font-size="12.5" text-anchor="middle" font-weight="600">HR spoke</text><text x="115" y="57.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="248.54" y1="104.49" x2="176.915" y2="71.5095" class="ln"/><polygon points="171.465,69 180.572,68.3494 176.891,76.3427" class="ah"/><polygon points="253.99,107 244.883,107.651 248.564,99.6573" class="ah"/><rect x="460" y="20" width="150" height="46" rx="10" class="b-n"/><text x="535" y="38.625" font-size="12.5" text-anchor="middle" font-weight="600">Finance spoke</text><text x="535" y="57.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="407.878" y1="104.391" x2="475.759" y2="71.6092" class="ln"/><polygon points="481.162,69 475.871,76.4411 472.044,68.5168" class="ah"/><polygon points="402.475,107 407.765,99.5589 411.592,107.483" class="ah"/><rect x="20" y="120" width="150" height="46" rx="10" class="b-n"/><text x="95" y="138.625" font-size="12.5" text-anchor="middle" font-weight="600">Marketing spoke</text><text x="95" y="157.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="241" y1="142.379" x2="179" y2="142.643" class="ln"/><polygon points="173,142.668 180.981,138.234 181.019,147.034" class="ah"/><polygon points="247,142.353 239.019,146.787 238.981,137.987" class="ah"/><rect x="480" y="120" width="150" height="46" rx="10" class="b-n"/><text x="555" y="138.625" font-size="12.5" text-anchor="middle" font-weight="600">Product spoke</text><text x="555" y="157.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="419" y1="142.396" x2="471" y2="142.627" class="ln"/><polygon points="477,142.653 468.981,147.018 469.02,138.218" class="ah"/><polygon points="413,142.369 421.019,138.004 420.98,146.804" class="ah"/><rect x="40" y="220" width="150" height="46" rx="10" class="b-n"/><text x="115" y="238.625" font-size="12.5" text-anchor="middle" font-weight="600">Operations spoke</text><text x="115" y="257.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="250.064" y1="179.551" x2="175.777" y2="214.449" class="ln"/><polygon points="170.347,217 175.717,209.616 179.458,217.581" class="ah"/><polygon points="255.495,177 250.125,184.384 246.383,176.419" class="ah"/><rect x="460" y="220" width="150" height="46" rx="10" class="b-n"/><text x="535" y="238.625" font-size="12.5" text-anchor="middle" font-weight="600">IT spoke</text><text x="535" y="257.925" font-size="10.5" text-anchor="middle" class="mut">routine reviews</text><line x1="406.422" y1="179.652" x2="476.845" y2="214.348" class="ln"/><polygon points="482.228,217 473.107,217.411 476.996,209.517" class="ah"/><polygon points="401.04,177 410.161,176.589 406.271,184.483" class="ah"/></svg></div>
+        <figcaption>A federated (hub-and-spoke) operating model: the hub sets standards and reviews high-risk cases; trained spokes in each business unit handle routine reviews.</figcaption>
+      </figure>
+
+      <h2>1.5 Key roles</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Responsibilities</th></tr></thead>
+          <tbody>
+            <tr><td>Board / executive sponsor</td><td>Sets AI strategy and risk appetite; receives reporting; ultimately accountable</td></tr>
+            <tr><td>AI governance committee or council</td><td>Cross-functional body (legal, risk, privacy, security, technology, business, HR) that sets policy and reviews high-risk cases</td></tr>
+            <tr><td>Head of AI governance / responsible AI lead</td><td>Runs the programme day to day</td></tr>
+            <tr><td>AI system owner</td><td>Accountable for a specific system throughout its life</td></tr>
+            <tr><td>Builders and buyers</td><td>Follow lifecycle requirements; document and test</td></tr>
+            <tr><td>Internal audit</td><td>Independent assurance that governance works</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>1.6 The three lines model</h2>
+      <p>Many organisations map AI governance onto the Institute of Internal Auditors' <strong>three lines model</strong>:</p>
+      <ol>
+        <li><strong>First line:</strong> teams that build, buy and use AI own and manage its risks.</li>
+        <li><strong>Second line:</strong> risk, compliance, privacy and security functions set frameworks, advise and challenge.</li>
+        <li><strong>Third line:</strong> internal audit provides independent assurance to the board.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 225" style="min-width:560px" role="img" aria-label="The three lines model applied to AI: those who use AI own its risks, specialist functions set frameworks and challenge, and internal audit gives the board independent assurance."><rect x="170" y="14" width="340" height="44" rx="10" class="b-w"/><text x="340" y="31.45" font-size="13" text-anchor="middle" font-weight="600">Board &amp; executive sponsor</text><text x="340" y="51.55" font-size="11" text-anchor="middle" class="mut">strategy, risk appetite, accountability</text><rect x="20" y="110" width="200" height="80" rx="10" class="b-a"/><text x="120" y="137.85" font-size="13.5" text-anchor="middle" font-weight="600">1st line</text><text x="120" y="158.7" font-size="11.5" text-anchor="middle" class="mut">Teams that build,</text><text x="120" y="173.65" font-size="11.5" text-anchor="middle" class="mut">buy and use AI</text><text x="120" y="210" font-size="11.5" text-anchor="middle" class="mut">own &amp; manage risk</text><rect x="240" y="110" width="200" height="80" rx="10" class="b-n"/><text x="340" y="137.85" font-size="13.5" text-anchor="middle" font-weight="600">2nd line</text><text x="340" y="158.7" font-size="11.5" text-anchor="middle" class="mut">Risk, compliance,</text><text x="340" y="173.65" font-size="11.5" text-anchor="middle" class="mut">privacy, security</text><text x="340" y="210" font-size="11.5" text-anchor="middle" class="mut">frameworks, advice &amp; challenge</text><rect x="460" y="110" width="200" height="80" rx="10" class="b-g"/><text x="560" y="145.275" font-size="13.5" text-anchor="middle" font-weight="600">3rd line</text><text x="560" y="166.175" font-size="11.5" text-anchor="middle" class="mut">Internal audit</text><text x="560" y="210" font-size="11.5" text-anchor="middle" class="mut">independent assurance</text><polyline points="560,108 560,84 430,84 430,68" class="ln"/><polygon points="430,62 434.4,70 425.6,70" class="ah"/><text x="560" y="80" font-size="11" text-anchor="middle" class="mut">reports independently</text><polyline points="120,108 120,84 250,84 250,68" class="ln"/><polygon points="250,62 254.4,70 245.6,70" class="ah"/></svg></div>
+        <figcaption>The three lines model applied to AI: those who use AI own its risks, specialist functions set frameworks and challenge, and internal audit gives the board independent assurance.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Governance covers inventory, policy, roles, risk management and assurance.</li><li>AI arrives through vendors and features, not just in-house projects.</li><li>Good governance is proportionate — and speeds up safe adoption.</li><li>Federated hub-and-spoke models are common in larger organisations.</li><li>First line owns risk; second line advises and challenges; third line assures.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-governance" target="_blank" rel="noopener">What is AI governance?</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">AWS Skill Builder</span><a href="https://skillbuilder.aws/category/exam-prep/ai-practitioner-AIF-C01" target="_blank" rel="noopener">AWS Certified AI Practitioner exam prep plan</a> — free foundational AI training, including responsible AI and AI governance</li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener">All courses</a> — including Apply AI at Work and Lead AI Adoption</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Which question is NOT a core AI governance question?",
+"options": [
+"What AI are we using?",
+"Who is accountable?",
+"Which font should the chatbot use?",
+"How do we show compliance?"
+],
+"answer": 2,
+"explain": "Governance covers inventory, accountability, risk and assurance."
+},
+{
+"q": "Why can't AI governance focus only on in-house data science projects?",
+"options": [
+"They don't use AI",
+"Much AI arrives through vendor tools, new features in existing software and staff use of generative AI",
+"Data scientists are exempt",
+"Regulators only care about vendors"
+],
+"answer": 1,
+"explain": "Most organisations buy more AI than they build."
+},
+{
+"q": "In a federated (hub-and-spoke) model…",
+"options": [
+"Every decision goes to one central team",
+"A central hub sets standards and handles high-risk cases; trained business-unit spokes handle routine reviews",
+"There are no standards",
+"Only IT governs AI"
+],
+"answer": 1,
+"explain": "It balances consistency and scale."
+},
+{
+"q": "Who is the 'first line' in the three lines model?",
+"options": [
+"Internal audit",
+"Risk and compliance",
+"Teams that build, buy and use AI",
+"The regulator"
+],
+"answer": 2,
+"explain": "The first line owns and manages the risk."
+},
+{
+"q": "What does 'proportionate' governance mean?",
+"options": [
+"Same process for every AI use",
+"Light-touch for low-risk uses, rigorous for high-risk ones",
+"No governance for vendors",
+"Banning AI"
+],
+"answer": 1,
+"explain": "Effort should match risk."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: The regulatory landscape →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Profiling and exploring data — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Structural profiling, categorical value counts, numerical summaries and outliers, validity checks, visual profiling and data quality reports.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 30 minutes</span>
+      <h1>Profiling and exploring data</h1>
+      <p class="lead">Measure before you change. Profiling turns a vague sense that 'the data's a bit messy' into a precise list of problems.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Profile structure, types, missing values and duplicates</li><li>Use value counts to find inconsistent categories</li><li>Find impossible values and statistical outliers</li><li>Check validity of formats such as dates</li><li>Write a data quality report</li></ul>
+      </div>
+
+      <h2>2.1 Profile before you change anything</h2>
+      <p><strong>Data profiling</strong> means systematically measuring a dataset: its size, types, missing values, distributions, unique values and relationships. It tells you what needs fixing — and gives you a baseline to compare against after cleaning.</p>
+
+      <h2>2.2 A first look</h2>
+<pre data-copy><code><span class="label">Python · structural profile</span>print(customers.shape)            # (rows, columns)
+customers.info()                  # types and non-null counts
+print(customers.isna().sum())     # missing values per column
+print(customers.isna().mean().round(2))   # share missing
+print(customers.duplicated().sum(), "fully duplicated rows")
+print(customers["customer_id"].duplicated().sum(), "repeated IDs")</code></pre>
+
+      <h2>2.3 Categorical columns</h2>
+<pre data-copy><code>for col in ["country", "churned"]:
+    print(customers[col].value_counts(dropna=False), "\n")</code></pre>
+      <p>Value counts instantly expose inconsistent spellings and unexpected categories.</p>
+
+      <h2>2.4 Numerical columns and outliers</h2>
+<pre data-copy><code>print(customers[["age", "monthly_spend"]].describe())
+
+# Rule-based checks: values outside what's possible
+print(customers[(customers["age"] &lt; 16) | (customers["age"] > 110)])
+
+# Statistical check: the IQR rule flags unusually large or small values
+q1, q3 = customers["monthly_spend"].quantile([0.25, 0.75])
+iqr = q3 - q1
+low, high = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+print(customers[(customers["monthly_spend"] &lt; low) | (customers["monthly_spend"] > high)])</code></pre>
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 210" style="min-width:560px" role="img" aria-label="The IQR rule flags values far beyond the middle half of the data. Flagged values are leads to investigate — not automatic deletions."><line x1="40" y1="120" x2="640" y2="120" class="ln"/><circle cx="108" cy="120" r="6" class="d-a"/><circle cx="132" cy="120" r="6" class="d-a"/><circle cx="148" cy="120" r="6" class="d-a"/><circle cx="160" cy="120" r="6" class="d-a"/><circle cx="185.6" cy="120" r="6" class="d-a"/><circle cx="230" cy="120" r="6" class="d-a"/><circle cx="251.6" cy="120" r="6" class="d-a"/><circle cx="312.8" cy="120" r="6" class="d-a"/><rect x="144" y="105" width="107.6" height="30" rx="4" class="b-none"/><text x="196" y="96" font-size="11" text-anchor="middle" class="mut">middle 50% (IQR)</text><circle cx="620" cy="120" r="8" class="d-r"/><text x="620" y="100" font-size="12" text-anchor="middle" font-weight="700" class="t-b">12,000?</text><text x="620" y="150" font-size="11" text-anchor="middle" class="t-b">flag → investigate</text><line x1="440" y1="90" x2="440" y2="150" class="ln-w dash"/><text x="440" y="166" font-size="11" text-anchor="middle" class="t-w">upper fence (Q3 + 1.5 × IQR)</text><text x="340" y="196" font-size="11" text-anchor="middle" class="mut">monthly spend (£) — axis not to scale beyond the fence</text></svg></div>
+        <figcaption>The IQR rule flags values far beyond the middle half of the data. Flagged values are leads to investigate — not automatic deletions.</figcaption>
+      </figure>
+
+      <div class="callout">
+        <b>Outlier ≠ error</b>
+        <p>A value can be unusual but real — a genuine big-spending customer. Use rules (an age of 230 is impossible) to find errors, and statistics to find values worth <em>investigating</em>. Ask someone who knows the business before deleting anything.</p>
+      </div>
+
+      <h2>2.5 Validity checks</h2>
+<pre data-copy><code><span class="label">Python · which dates don't parse?</span>parsed = pd.to_datetime(customers["signup_date"], format="%Y-%m-%d", errors="coerce")
+bad_dates = customers.loc[parsed.isna() &amp; customers["signup_date"].notna(), "signup_date"]
+print(bad_dates)      # "04/02/2025" (different format) and "2025-13-01" (invalid month)</code></pre>
+
+      <h2>2.6 Visual profiling</h2>
+<pre data-copy><code>import matplotlib.pyplot as plt
+
+customers["monthly_spend"].plot(kind="hist", bins=20, title="Monthly spend")
+plt.show()
+customers.boxplot(column="age")
+plt.show()</code></pre>
+      <p>Histograms reveal skew and spikes (e.g. lots of zeros or a default like 999); box plots show outliers at a glance.</p>
+
+      <h2>2.7 Write a data quality report</h2>
+      <p>Summarise each issue: the column, the problem, how many rows, the likely cause, and the proposed fix. Share it with the data's owners — they often know causes you can't see (a system migration, a form default, a manual entry step).</p>
+<div class="activity"><b>Exercise: a reusable profile function</b><p>Write a function <code>profile(df)</code> that returns a DataFrame with one row per column showing its type, number missing, percentage missing and number of unique values.</p><details><summary>Show a solution</summary><pre data-copy><code>def profile(df):
+    return pd.DataFrame({
+        "dtype": df.dtypes.astype(str),
+        "missing": df.isna().sum(),
+        "missing_pct": (df.isna().mean() * 100).round(1),
+        "unique": df.nunique(dropna=True),
+    })
+
+print(profile(customers))</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>info(), isna() and duplicated() give a structural profile.</li><li>value_counts exposes inconsistent categories.</li><li>Rules find errors; statistics find values to investigate.</li><li>Coercing dates reveals invalid and mixed formats.</li><li>Share a data quality report with data owners.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/numerical-data" target="_blank" rel="noopener">ML Crash Course: Working with numerical data</a></li><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/pandas" target="_blank" rel="noopener">Pandas</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "Which shows the share of missing values per column?",
+"options": [
+"df.describe()",
+"df.isna().mean()",
+"df.head()",
+"df.shape"
+],
+"answer": 1,
+"explain": "Mean of a True/False mask gives the share."
+},
+{
+"q": "What's the IQR rule used for?",
+"options": [
+"Filling missing values",
+"Flagging unusually large or small values to investigate",
+"Encoding categories",
+"Splitting data"
+],
+"answer": 1,
+"explain": "A statistical outlier check."
+},
+{
+"q": "A customer spends £9,000 a month — far above others. What should you do first?",
+"options": [
+"Delete the row",
+"Investigate with someone who knows the business — it may be real",
+"Replace with the mean",
+"Ignore the column"
+],
+"answer": 1,
+"explain": "Outlier ≠ error."
+},
+{
+"q": "What does pd.to_datetime(..., errors='coerce') do with an invalid date?",
+"options": [
+"Crashes",
+"Turns it into a missing value (NaT)",
+"Keeps it as text",
+"Fixes it automatically"
+],
+"answer": 1,
+"explain": "Coercion reveals invalid values."
+},
+{
+"q": "Why share a data quality report with the data's owners?",
+"options": [
+"Formality",
+"They often know the causes, such as system migrations or form defaults",
+"To assign blame",
+"It's required by pandas"
+],
+"answer": 1,
+"explain": "Context improves fixes."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Cleaning data →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

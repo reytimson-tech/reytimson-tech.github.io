@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Key terms from Data Quality &amp; Preparation for AI, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>Data quality glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. leakage, kappa, imputation" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Active learning</dt><dd>Choosing the most informative unlabelled examples for humans to label next.</dd>
+        <dt>Cohen's kappa</dt><dd>A measure of agreement between two labellers that corrects for chance.</dd>
+        <dt>Completeness</dt><dd>The extent to which required data is present.</dd>
+        <dt>Consistency</dt><dd>Whether the same thing is recorded the same way across records and systems.</dd>
+        <dt>Data drift</dt><dd>A shift in the data a model sees compared with its training data.</dd>
+        <dt>Data leakage</dt><dd>Information unavailable at prediction time influencing training or evaluation.</dd>
+        <dt>Data lineage</dt><dd>A record of where data came from and how it was transformed.</dd>
+        <dt>Data profiling</dt><dd>Systematically measuring a dataset's structure, completeness, distributions and anomalies.</dd>
+        <dt>Data-centric AI</dt><dd>Improving AI by improving data rather than only models.</dd>
+        <dt>Datasheet for datasets</dt><dd>Documentation of a dataset's motivation, composition, collection, preparation, uses and maintenance.</dd>
+        <dt>Imputation</dt><dd>Filling missing values using a rule or model.</dd>
+        <dt>Inter-annotator agreement</dt><dd>How consistently different people label the same items.</dd>
+        <dt>IQR rule</dt><dd>Flags values more than 1.5 × the interquartile range below the first or above the third quartile.</dd>
+        <dt>Label</dt><dd>The target answer attached to an example in supervised learning.</dd>
+        <dt>One-hot encoding</dt><dd>Representing a category as a set of 0/1 columns.</dd>
+        <dt>Outlier</dt><dd>A value far from most others — which may be an error or a genuine extreme.</dd>
+        <dt>Pipeline</dt><dd>A chained sequence of preprocessing and modelling steps fitted together.</dd>
+        <dt>Proxy</dt><dd>A feature that indirectly encodes another attribute, such as a protected characteristic.</dd>
+        <dt>Pseudonymisation</dt><dd>Replacing identifiers with codes that can only be re-linked using separate information.</dd>
+        <dt>Representativeness</dt><dd>How well a dataset reflects the population and situations a model will serve.</dd>
+        <dt>Stratified split</dt><dd>A split that preserves class proportions in each part.</dd>
+        <dt>Target leakage</dt><dd>Using a feature that is only known after the outcome being predicted.</dd>
+        <dt>Validity</dt><dd>Whether data follows required formats, types and rules.</dd>
+        <dt>Weak supervision</dt><dd>Labelling data at scale with rules or heuristics that are noisy but cheap.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

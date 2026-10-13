@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Transformers and how LLMs are trained — How AI and Large Language Models Work</title>
+<meta name="description" content="Attention, pre-training, instruction tuning, RLHF and Constitutional AI, reasoning models, multimodality, tools and agents.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Transformers and how LLMs are trained</h1>
+      <p class="lead">How does a next-token predictor become a helpful assistant? This module follows a large language model from raw text to finished product.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain the transformer and the idea of attention</li><li>Distinguish pre-training from post-training</li><li>Describe RLHF and principle-based approaches such as Constitutional AI</li><li>Explain reasoning and multimodal models</li><li>Describe how tools turn models into agents</li></ul>
+      </div>
+
+      <h2>5.1 The transformer</h2>
+      <p>In 2017, Google researchers published a paper titled <em>"Attention Is All You Need"</em>, introducing the <strong>transformer</strong>. It's the "T" in GPT (Generative Pre-trained Transformer) and the foundation of essentially every major LLM today.</p>
+      <p>Its key idea is <strong>attention</strong>: when processing each token, the model looks at all the other tokens in the context and weighs how relevant each one is. In <em>"The trophy didn't fit in the suitcase because it was too big"</em>, attention helps the model work out that "it" refers to the trophy. Transformers also process tokens in parallel, which made it practical to train on vastly more data using GPUs.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 623 200" style="min-width:620px" role="img" aria-label="Attention, simplified: when processing the token &quot;it&quot;, the model weighs every other token. Here most attention goes to &quot;trophy&quot; — which is how it works out what &quot;it&quot; refers to. (Weights illustrative.)"><rect x="20" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="37.3" y="171.375" font-size="12.5" text-anchor="middle">The</text><rect x="60.6" y="150" width="59.2" height="34" rx="6" class="b-n"/><text x="90.2" y="171.375" font-size="12.5" text-anchor="middle">trophy</text><rect x="125.8" y="150" width="59.2" height="34" rx="6" class="b-n"/><text x="155.4" y="171.375" font-size="12.5" text-anchor="middle">didn&#x27;t</text><rect x="191" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="208.3" y="171.375" font-size="12.5" text-anchor="middle">fit</text><rect x="231.6" y="150" width="26.4" height="34" rx="6" class="b-n"/><text x="244.8" y="171.375" font-size="12.5" text-anchor="middle">in</text><rect x="264" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="281.3" y="171.375" font-size="12.5" text-anchor="middle">the</text><rect x="304.6" y="150" width="75.6" height="34" rx="6" class="b-n"/><text x="342.4" y="171.375" font-size="12.5" text-anchor="middle">suitcase</text><rect x="386.2" y="150" width="67.4" height="34" rx="6" class="b-n"/><text x="419.9" y="171.375" font-size="12.5" text-anchor="middle">because</text><rect x="459.6" y="150" width="26.4" height="34" rx="6" class="b-a"/><text x="472.8" y="171.375" font-size="12.5" text-anchor="middle" font-weight="600">it</text><rect x="492" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="509.3" y="171.375" font-size="12.5" text-anchor="middle">was</text><rect x="532.6" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="549.9" y="171.375" font-size="12.5" text-anchor="middle">too</text><rect x="573.2" y="150" width="34.6" height="34" rx="6" class="b-n"/><text x="590.5" y="171.375" font-size="12.5" text-anchor="middle">big</text><path d="M 472.8 148 Q 281.5 -26.1888 90.2 148" class="ln ln-a" style="stroke-width:5.5"/><text x="281.5" y="56.9056" font-size="11" text-anchor="middle" font-weight="600" class="t-a">0.90</text><path d="M 472.8 148 Q 407.6 46.4448 342.4 148" class="ln ln-m" style="stroke-width:2.75"/><text x="407.6" y="93.2224" font-size="11" text-anchor="middle" font-weight="600" class="mut">0.35</text><path d="M 472.8 148 Q 531.65 50.1024 590.5 148" class="ln ln-m" style="stroke-width:2.25"/><text x="531.65" y="95.0512" font-size="11" text-anchor="middle" font-weight="600" class="mut">0.25</text></svg></div>
+        <figcaption>Attention, simplified: when processing the token "it", the model weighs every other token. Here most attention goes to "trophy" — which is how it works out what "it" refers to. (Weights illustrative.)</figcaption>
+      </figure>
+
+      <h2>5.2 Stage 1: pre-training</h2>
+      <p>A <strong>base model</strong> is trained on a huge corpus — web pages, books, code, articles and other sources — to predict the next token. This stage uses enormous amounts of compute and produces a model with broad knowledge and language ability. But a base model isn't a helpful assistant: ask it a question and it might just continue with more questions, as if completing a web page.</p>
+
+      <h2>5.3 Stage 2: post-training</h2>
+      <p>To turn a base model into an assistant like ChatGPT, Claude or Gemini, developers apply further training:</p>
+      <ul>
+        <li><strong>Instruction tuning (supervised fine-tuning):</strong> training on examples of good instructions and helpful responses.</li>
+        <li><strong>Reinforcement learning from human feedback (RLHF):</strong> people compare pairs of responses; a reward model learns their preferences; the LLM is then trained to produce responses the reward model rates highly.</li>
+        <li><strong>AI feedback and principles:</strong> Anthropic's "Constitutional AI" approach uses a written set of principles, with AI-generated feedback, to train the model towards helpful, honest and harmless behaviour. Anthropic now publishes the constitution it uses for Claude.</li>
+        <li><strong>Safety training:</strong> teaching models to refuse clearly harmful requests and to resist manipulation.</li>
+      </ul>
+      <div class="callout">
+        <b>Why this matters</b>
+        <p>Post-training shapes an assistant's personality, its helpfulness and its weaknesses. For example, training on human approval can reward answers that <em>please</em> people — one cause of <strong>sycophancy</strong>, where a model agrees with you even when you're wrong (Module 6).</p>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 240" style="min-width:560px" role="img" aria-label="Reinforcement learning from human feedback (RLHF): people compare responses, a reward model learns their preferences, and the LLM is trained to produce responses the reward model rates highly."><rect x="20" y="70" width="120" height="50" rx="10" class="b-n"/><text x="80" y="99.55" font-size="13" text-anchor="middle" font-weight="600">Prompt</text><rect x="190" y="20" width="140" height="46" rx="10" class="b-s"/><text x="260" y="47.375" font-size="12.5" text-anchor="middle" font-weight="600">Response A</text><rect x="190" y="120" width="140" height="46" rx="10" class="b-s"/><text x="260" y="147.375" font-size="12.5" text-anchor="middle" font-weight="600">Response B</text><line x1="143" y1="76.8" x2="181.236" y2="65.7541" class="ln"/><polygon points="187,64.0889 180.535,70.5363 178.093,62.0821" class="ah"/><line x1="143" y1="111.8" x2="181.203" y2="121.987" class="ln"/><polygon points="187,123.533 178.136,125.723 180.404,117.221" class="ah"/><rect x="380" y="70" width="120" height="50" rx="10" class="b-w"/><text x="440" y="91.25" font-size="12.5" text-anchor="middle" font-weight="600">People</text><text x="440" y="107.5" font-size="12.5" text-anchor="middle">compare</text><line x1="333" y1="64.0889" x2="371.236" y2="75.1348" class="ln"/><polygon points="377,76.8 368.093,78.8068 370.535,70.3525" class="ah"/><line x1="333" y1="123.533" x2="371.203" y2="113.346" class="ln"/><polygon points="377,111.8 370.404,118.113 368.136,109.61" class="ah"/><rect x="570" y="70" width="120" height="50" rx="10" class="b-a"/><text x="630" y="91.25" font-size="12.5" text-anchor="middle" font-weight="600">Reward</text><text x="630" y="107.5" font-size="12.5" text-anchor="middle">model</text><line x1="503" y1="95" x2="561" y2="95" class="ln"/><polygon points="567,95 559,99.4 559,90.6" class="ah"/><text x="535" y="88" font-size="11.5" text-anchor="middle" class="mut">prefers A</text><rect x="570" y="180" width="120" height="50" rx="10" class="b-g"/><text x="630" y="209.375" font-size="12.5" text-anchor="middle" font-weight="600">LLM updated</text><line x1="630" y1="123" x2="630" y2="171" class="ln"/><polygon points="630,177 625.6,169 634.4,169" class="ah"/><text x="638" y="154" font-size="11.5" text-anchor="start" class="mut">scores</text><polyline points="570,205 80,205 80,130" class="ln dash"/><polygon points="80,124 84.4,132 75.6,132" class="ah"/><text x="300" y="222" font-size="11" text-anchor="middle" class="mut">the improved model generates new responses</text></svg></div>
+        <figcaption>Reinforcement learning from human feedback (RLHF): people compare responses, a reward model learns their preferences, and the LLM is trained to produce responses the reward model rates highly.</figcaption>
+      </figure>
+
+      <h2>5.4 Reasoning models</h2>
+      <p>Since 2024, developers have released <strong>reasoning models</strong> that are trained (largely with reinforcement learning) to work through problems step by step before answering — spending more computation "thinking" on harder questions. They tend to do better on maths, coding and multi-step analysis, at the cost of speed and price. OpenAI's prompting guidance compares them to a senior colleague you can give a goal to, while faster general models need more explicit instructions.</p>
+
+      <h2>5.5 Multimodal models</h2>
+      <p>Modern frontier models are <strong>multimodal</strong>. Images, audio and documents are converted into token-like representations the transformer can attend to alongside text. That's how you can upload a chart and ask what it shows, or photograph a whiteboard and get a summary.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 130" style="min-width:560px" role="img" aria-label="The three stages from raw text to the assistant you use."><rect x="20" y="40" width="180" height="60" rx="10" class="b-n"/><text x="110" y="58.3" font-size="13" text-anchor="middle" font-weight="600">Pre-training</text><text x="110" y="78.4" font-size="11" text-anchor="middle" class="mut">trillions of tokens</text><text x="110" y="92.7" font-size="11" text-anchor="middle" class="mut">→ base model</text><rect x="250" y="40" width="180" height="60" rx="10" class="b-a"/><text x="340" y="58.3" font-size="13" text-anchor="middle" font-weight="600">Post-training</text><text x="340" y="78.4" font-size="11" text-anchor="middle" class="mut">instructions, feedback,</text><text x="340" y="92.7" font-size="11" text-anchor="middle" class="mut">safety → assistant</text><rect x="480" y="40" width="180" height="60" rx="10" class="b-g"/><text x="570" y="58.3" font-size="13" text-anchor="middle" font-weight="600">Application</text><text x="570" y="78.4" font-size="11" text-anchor="middle" class="mut">system prompt, tools,</text><text x="570" y="92.7" font-size="11" text-anchor="middle" class="mut">retrieval → product</text><line x1="203" y1="70" x2="241" y2="70" class="ln"/><polygon points="247,70 239,74.4 239,65.6" class="ah"/><line x1="433" y1="70" x2="471" y2="70" class="ln"/><polygon points="477,70 469,74.4 469,65.6" class="ah"/></svg></div>
+        <figcaption>The three stages from raw text to the assistant you use.</figcaption>
+      </figure>
+
+      <h2>5.6 From models to tools and agents</h2>
+      <p>On its own, an LLM only produces text. Applications extend it with <strong>tools</strong>: web search, code execution, file access and connections to other systems (for example through the open Model Context Protocol). An LLM that decides which tools to call, in a loop, to achieve a goal is an <strong>agent</strong>. The model's knowledge is frozen at training time, but tools let it look things up and act.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stage</th><th>What goes in</th><th>What comes out</th></tr></thead>
+          <tbody>
+            <tr><td>Pre-training</td><td>Trillions of tokens of text and code; lots of compute</td><td>Base model with broad knowledge</td></tr>
+            <tr><td>Post-training</td><td>Instruction examples, human and AI feedback, safety data, RL</td><td>Helpful assistant model</td></tr>
+            <tr><td>Application</td><td>System prompt, tools, retrieval, guardrails</td><td>Product: chatbot, copilot or agent</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Transformers (2017) use attention to weigh relevant context, and train efficiently at scale.</li><li>Pre-training gives broad knowledge; post-training makes a helpful, safer assistant.</li><li>Training on human approval can encourage sycophancy.</li><li>Reasoning models spend more computation thinking step by step.</li><li>Tools and agents extend a frozen model with search and actions.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/536" target="_blank" rel="noopener">Introduction to Generative AI</a> — a short introductory course</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/fundamentals-generative-ai/" target="_blank" rel="noopener">Introduction to generative AI and agents</a> — LLMs, prompts and agents</li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/constitution" target="_blank" rel="noopener">Claude&#x27;s Constitution</a> — the values and priorities an AI model is trained to follow</li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt engineering guide</a> — message roles, formatting, few-shot examples and reasoning models</li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "What does 'attention' let a transformer do?",
+"options": [
+"Pay attention to the user's mood",
+"Weigh how relevant every other token in the context is when processing each token",
+"Browse the internet",
+"Store passwords"
+],
+"answer": 1,
+"explain": "Attention connects each token to the relevant context."
+},
+{
+"q": "A base model fresh from pre-training…",
+"options": [
+"Is already a polished assistant",
+"Has broad knowledge but tends to continue text rather than follow instructions",
+"Has no knowledge",
+"Can only do maths"
+],
+"answer": 1,
+"explain": "Post-training turns it into an instruction-following assistant."
+},
+{
+"q": "In RLHF, what do humans provide?",
+"options": [
+"The model's source code",
+"Comparisons or ratings of model responses, used to train a reward model",
+"GPUs",
+"Tokens"
+],
+"answer": 1,
+"explain": "Human preferences train a reward model that guides further training."
+},
+{
+"q": "Anthropic's Constitutional AI approach uses…",
+"options": [
+"A national constitution as training data",
+"A written set of principles with AI-generated feedback to guide training",
+"No training at all",
+"Only human labellers"
+],
+"answer": 1,
+"explain": "Principles plus AI feedback shape the model's behaviour."
+},
+{
+"q": "What turns an LLM into an agent?",
+"options": [
+"A larger context window",
+"The ability to decide which tools to call, in a loop, to reach a goal",
+"A higher temperature",
+"Multilingual training"
+],
+"answer": 1,
+"explain": "Agents combine a model with tools and a loop."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Why LLMs get things wrong →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

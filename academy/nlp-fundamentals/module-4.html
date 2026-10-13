@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Information extraction — NLP Fundamentals</title>
+<meta name="description" content="Regular expressions for precise patterns, named entity recognition, LLM extraction to JSON, validation and grounding checks.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 35 minutes</span>
+      <h1>Information extraction</h1>
+      <p class="lead">Extraction turns free text into fields you can count, join and act on. Pick the simplest method that works — and validate everything.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Use regular expressions to extract well-defined patterns</li><li>Explain named entity recognition</li><li>Extract structured JSON with an LLM</li><li>Validate and ground extracted values</li></ul>
+      </div>
+
+      <h2>4.1 Turning text into structured data</h2>
+      <p><strong>Information extraction</strong> pulls specific facts out of free text — order numbers, dates, amounts, product names, people and organisations — so they can be counted, joined to other data and acted on. It's often the step that makes text useful to the rest of the business.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 650 178" style="min-width:560px" role="img" aria-label="Information extraction turns free text into fields other systems can use."><rect x="20" y="20" width="290" height="120" rx="8" class="b-s"/><text x="36" y="42" font-size="12" text-anchor="start" font-weight="700">Customer message</text><text x="36" y="66" font-size="12" text-anchor="start">Hi, the desk lamp from order</text><text x="36" y="86" font-size="12" text-anchor="start">GFY-48213 arrived broken. I&#x27;d</text><text x="36" y="106" font-size="12" text-anchor="start">like my money back.</text><rect x="400" y="20" width="230" height="120" rx="8" class="b-a"/><text x="416" y="42" font-size="12" text-anchor="start" font-weight="700">Structured record</text><text x="416" y="66" font-size="11.5" text-anchor="start" class="mut">order_id:</text><text x="520" y="66" font-size="11.5" text-anchor="start" font-weight="600">GFY-48213</text><text x="416" y="84" font-size="11.5" text-anchor="start" class="mut">issue:</text><text x="520" y="84" font-size="11.5" text-anchor="start" font-weight="600">product</text><text x="416" y="102" font-size="11.5" text-anchor="start" class="mut">product:</text><text x="520" y="102" font-size="11.5" text-anchor="start" font-weight="600">desk lamp</text><text x="416" y="120" font-size="11.5" text-anchor="start" class="mut">wants_refund:</text><text x="520" y="120" font-size="11.5" text-anchor="start" font-weight="600">true</text><line x1="314" y1="80" x2="390" y2="80" class="ln"/><polygon points="396,80 388,84.4 388,75.6" class="ah"/><text x="355" y="73" font-size="11.5" text-anchor="middle" class="mut">extract</text><text x="325" y="166" font-size="11.5" text-anchor="middle" class="mut">regex for fixed patterns · NER for names and places · LLM for flexible fields</text></svg></div>
+        <figcaption>Information extraction turns free text into fields other systems can use.</figcaption>
+      </figure>
+
+      <h2>4.2 Regular expressions for well-defined patterns</h2>
+      <p>When the pattern is precise, a <strong>regular expression</strong> is fast, free and fully predictable:</p>
+<pre data-copy><code>order_re = re.compile(r"\bGFY-\d{5}\b")
+messages["order_id"] = messages["text"].str.extract(r"(GFY-\d{5})", expand=False)
+print(messages["order_id"].notna().mean().round(2), "of messages mention an order")
+
+text = "Order GFY-48213 was charged £24.99 twice on 03/10/2026. Email me at sam@example.com"
+print(order_re.findall(text))
+print(re.findall(r"£\d+(?:\.\d{2})?", text))
+print(re.findall(r"\b\d{2}/\d{2}/\d{4}\b", text))</code></pre>
+      <p>Test patterns against real examples, including awkward ones. "03/10/2026" is 3 October in the UK and 10 March in the US — extraction is only half the job; interpretation is the other half.</p>
+
+      <h2>4.3 Named entity recognition</h2>
+      <p><strong>Named entity recognition (NER)</strong> finds names of people, organisations, places, products, dates and amounts — things too varied for a regex. Libraries such as spaCy ship pre-trained NER models, and cloud services offer it as an API (for example Amazon Comprehend and Azure AI Language). Pre-trained models know general entities; for your own product names or contract terms you'll usually need custom training or an LLM.</p>
+
+      <h2>4.4 Extraction with an LLM</h2>
+      <p>LLMs are excellent at flexible extraction: you describe the fields, and they return structured output — even from messy, multilingual text. Ask for JSON and validate it.</p>
+<pre data-copy><code><span class="label">Python · LLM extraction (optional — needs an API key)</span>import json
+import anthropic
+
+client = anthropic.Anthropic()   # reads ANTHROPIC_API_KEY from the environment
+MODEL = "YOUR-MODEL-NAME"        # copy a current model name from the provider's docs
+
+def extract(message):
+    prompt = f"""Extract these fields from the customer message and reply with JSON only:
+{{"order_id": string or null, "issue": "delivery" | "product" | "billing" | "other",
+  "product": string or null, "wants_refund": true | false}}
+
+&lt;message&gt;{message}&lt;/message&gt;"""
+    reply = client.messages.create(model=MODEL, max_tokens=200,
+                                   messages=[{"role": "user", "content": prompt}])
+    return json.loads(reply.content[0].text)
+
+print(extract("Hi, the desk lamp from order GFY-48213 arrived broken. I'd like my money back."))</code></pre>
+
+      <h2>4.5 Validate everything</h2>
+      <p>Whatever the method, check the output before it flows into other systems:</p>
+<pre data-copy><code>ALLOWED = {"delivery", "product", "billing", "other"}
+
+def validate(record):
+    problems = []
+    if record.get("order_id") and not re.fullmatch(r"GFY-\d{5}", record["order_id"]):
+        problems.append("bad order_id format")
+    if record.get("issue") not in ALLOWED:
+        problems.append("unknown issue type")
+    if not isinstance(record.get("wants_refund"), bool):
+        problems.append("wants_refund must be true/false")
+    return problems
+
+print(validate({"order_id": "GFY-48213", "issue": "product", "product": "desk lamp", "wants_refund": True}))
+print(validate({"order_id": "48213", "issue": "complaint", "wants_refund": "yes"}))</code></pre>
+      <p>Measure extraction quality on a hand-labelled sample: for each field, how often is it correct, missing, or invented? LLMs occasionally <em>hallucinate</em> a plausible order number that isn't in the text — a check that the value actually appears in the source catches this.</p>
+<div class="activity"><b>Exercise: catch invented values</b><p>Write <code>grounded(record, message)</code> that returns False if <code>order_id</code> or <code>product</code> is not null but does not appear (case-insensitively) in the original message.</p><details><summary>Show a solution</summary><pre data-copy><code>def grounded(record, message):
+    low = message.lower()
+    for field in ("order_id", "product"):
+        value = record.get(field)
+        if value and value.lower() not in low:
+            return False
+    return True
+
+msg = "The desk lamp from order GFY-48213 arrived broken"
+print(grounded({"order_id": "GFY-48213", "product": "desk lamp"}, msg))   # True
+print(grounded({"order_id": "GFY-99999", "product": "desk lamp"}, msg))   # False</code></pre></details></div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 184" style="min-width:560px" role="img" aria-label="Never trust extracted fields blindly: check format, allowed values and grounding before they reach other systems."><rect x="20" y="40" width="110" height="50" rx="10" class="b-n"/><text x="75" y="61.4" font-size="12" text-anchor="middle" font-weight="600">Extracted</text><text x="75" y="77" font-size="12" text-anchor="middle">JSON</text><rect x="170" y="40" width="130" height="50" rx="10" class="b-w"/><text x="235" y="61.55" font-size="11.5" text-anchor="middle" font-weight="600">Valid format &amp;</text><text x="235" y="76.5" font-size="11.5" text-anchor="middle">allowed values?</text><rect x="340" y="40" width="130" height="50" rx="10" class="b-w"/><text x="405" y="61.55" font-size="11.5" text-anchor="middle" font-weight="600">Values appear</text><text x="405" y="76.5" font-size="11.5" text-anchor="middle">in source?</text><rect x="510" y="40" width="110" height="50" rx="10" class="b-g"/><text x="565" y="61.4" font-size="12" text-anchor="middle" font-weight="600">Into the</text><text x="565" y="77" font-size="12" text-anchor="middle">system</text><rect x="300" y="130" width="170" height="42" rx="10" class="b-b"/><text x="385" y="155.2" font-size="12" text-anchor="middle" font-weight="600">Human review / retry</text><line x1="133" y1="65" x2="161" y2="65" class="ln"/><polygon points="167,65 159,69.4 159,60.6" class="ah"/><line x1="303" y1="65" x2="331" y2="65" class="ln"/><polygon points="337,65 329,69.4 329,60.6" class="ah"/><text x="320" y="58" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="473" y1="65" x2="501" y2="65" class="ln"/><polygon points="507,65 499,69.4 499,60.6" class="ah"/><text x="490" y="58" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="235" y1="94" x2="324.351" y2="125.978" class="ln"/><polygon points="330,128 320.985,129.447 323.951,121.162" class="ah"/><text x="273" y="100.6" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="405" y1="94" x2="396.79" y2="120.273" class="ln"/><polygon points="395,126 393.186,117.052 401.586,119.677" class="ah"/><text x="408" y="114" font-size="11.5" text-anchor="start" class="mut">no</text></svg></div>
+        <figcaption>Never trust extracted fields blindly: check format, allowed values and grounding before they reach other systems.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Regex is fast and predictable for precise patterns.</li><li>NER finds names, places, organisations and dates.</li><li>LLMs handle messy, varied text — ask for JSON.</li><li>Validate formats and allowed values.</li><li>Check extracted values actually appear in the source.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/nlp/" target="_blank" rel="noopener">What is natural language processing?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/natural-language-processing" target="_blank" rel="noopener">What is NLP?</a></li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Best tool for extracting order IDs that always look like GFY-12345?",
+"options": [
+"An LLM",
+"A regular expression",
+"Topic modelling",
+"PCA"
+],
+"answer": 1,
+"explain": "Precise pattern → regex."
+},
+{
+"q": "What does NER find?",
+"options": [
+"Spelling errors",
+"Named entities such as people, organisations, places and dates",
+"Topics",
+"Duplicates"
+],
+"answer": 1,
+"explain": "Named entity recognition."
+},
+{
+"q": "Why validate LLM-extracted JSON?",
+"options": [
+"It's always perfect",
+"Fields can be missing, malformed or invented",
+"To slow it down",
+"It's a legal requirement in all cases"
+],
+"answer": 1,
+"explain": "Check before it flows downstream."
+},
+{
+"q": "An LLM returns an order number that isn't in the message. This is…",
+"options": [
+"A grounding failure (hallucination)",
+"Correct",
+"A regex error",
+"Tokenisation"
+],
+"answer": 0,
+"explain": "Check values appear in the source."
+},
+{
+"q": "'03/10/2026' is ambiguous because…",
+"options": [
+"It has slashes",
+"Date formats differ between countries",
+"It's in the future",
+"It's too long"
+],
+"answer": 1,
+"explain": "Extraction needs interpretation."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Transformers and LLMs for NLP →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

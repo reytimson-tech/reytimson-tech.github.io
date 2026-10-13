@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: The NIST AI Risk Management Framework — AI Governance, Risk &amp; Compliance</title>
+<meta name="description" content="Trustworthy AI characteristics, the Govern–Map–Measure–Manage functions, a worked example, the Generative AI Profile and profiles.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-governance">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>The NIST AI Risk Management Framework</h1>
+      <p class="lead">The NIST AI RMF is one of the most widely used frameworks for managing AI risk. This module shows how to apply it in practice.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Describe the purpose and status of the NIST AI RMF</li><li>List the seven characteristics of trustworthy AI</li><li>Explain and apply the Govern, Map, Measure and Manage functions</li><li>Use the Generative AI Profile's twelve risks</li><li>Explain how profiles tailor the framework</li></ul>
+      </div>
+
+      <h2>3.1 What the AI RMF is</h2>
+      <p>The <strong>NIST AI Risk Management Framework (AI RMF 1.0)</strong>, published by the US National Institute of Standards and Technology in January 2023, is a voluntary, sector-agnostic framework for managing AI risks. It's widely used internationally because it's practical, free and compatible with other standards. NIST has signalled that the framework is being revised, so check for updates.</p>
+
+      <h2>3.2 Characteristics of trustworthy AI</h2>
+      <p>The AI RMF describes seven characteristics of trustworthy AI systems:</p>
+      <ul>
+        <li><strong>Valid and reliable</strong> (the foundation for the others)</li>
+        <li><strong>Safe</strong></li>
+        <li><strong>Secure and resilient</strong></li>
+        <li><strong>Accountable and transparent</strong></li>
+        <li><strong>Explainable and interpretable</strong></li>
+        <li><strong>Privacy-enhanced</strong></li>
+        <li><strong>Fair, with harmful bias managed</strong></li>
+      </ul>
+
+      <h2>3.3 The four core functions</h2>
+      <div class="grid grid-2" style="margin:20px 0">
+        <div class="card"><h3>GOVERN</h3><p style="margin:0">Cultivate a risk management culture: policies, accountability, roles, workforce diversity and training, stakeholder engagement, third-party risk. Govern runs across all the others.</p></div>
+        <div class="card"><h3>MAP</h3><p style="margin:0">Establish context: intended purpose, users and affected people, legal requirements, potential benefits and harms, and the AI system's categorisation.</p></div>
+        <div class="card"><h3>MEASURE</h3><p style="margin:0">Analyse, assess and track risks with quantitative and qualitative methods: testing, evaluation, verification and validation (TEVV), including for trustworthiness characteristics.</p></div>
+        <div class="card"><h3>MANAGE</h3><p style="margin:0">Prioritise and act on risks: mitigate, transfer, avoid or accept; plan responses and recovery; monitor and communicate.</p></div>
+      </div>
+      <p>Each function breaks down into categories and subcategories. NIST's companion <strong>Playbook</strong> suggests concrete actions for each.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 290" style="min-width:560px" role="img" aria-label="The NIST AI RMF&#x27;s four functions. GOVERN surrounds and informs the cycle of MAP (establish context), MEASURE (analyse and test) and MANAGE (prioritise and act)."><circle cx="300" cy="150" r="135" class="b-w"/><text x="300" y="34" font-size="14" text-anchor="middle" font-weight="700" class="t-w">GOVERN</text><text x="300" y="52" font-size="11" text-anchor="middle" class="mut">culture, policies, roles</text><text x="300" y="250" font-size="11" text-anchor="middle" class="mut">runs across everything</text><polyline points="339.837,113 360.622,125 360.622,166" class="ln"/><polygon points="360.622,172 356.222,164 365.022,164" class="ah"/><polyline points="320.785,218 300,230 284.412,221" class="ln"/><polygon points="279.215,218 288.344,218.189 283.944,225.811" class="ah"/><polyline points="239.378,172 239.378,125 254.967,116" class="ln"/><polygon points="260.163,113 255.435,120.811 251.035,113.189" class="ah"/><rect x="245" y="70" width="110" height="40" rx="10" class="b-a"/><text x="300" y="94.55" font-size="13" text-anchor="middle" font-weight="600">MAP</text><rect x="305.622" y="175" width="110" height="40" rx="10" class="b-a"/><text x="360.622" y="199.55" font-size="13" text-anchor="middle" font-weight="600">MEASURE</text><rect x="184.378" y="175" width="110" height="40" rx="10" class="b-a"/><text x="239.378" y="199.55" font-size="13" text-anchor="middle" font-weight="600">MANAGE</text></svg></div>
+        <figcaption>The NIST AI RMF's four functions. GOVERN surrounds and informs the cycle of MAP (establish context), MEASURE (analyse and test) and MANAGE (prioritise and act).</figcaption>
+      </figure>
+
+      <div class="example">
+        <span class="eyebrow">Applying the functions: an AI triage tool for customer complaints</span>
+        <p><strong>Govern:</strong> the complaints director is the system owner; the AI policy requires risk review before launch.</p>
+        <p><strong>Map:</strong> purpose is routing, not deciding outcomes; affected people include vulnerable customers; consumer duty applies; potential harm: urgent complaints misrouted.</p>
+        <p><strong>Measure:</strong> test routing accuracy on 2,000 historical complaints, broken down by complaint type and customer vulnerability flags; measure how often urgent cases are missed.</p>
+        <p><strong>Manage:</strong> keyword safety net for urgent terms; human review of low-confidence cases; weekly monitoring; rollback plan.</p>
+      </div>
+
+      <h2>3.4 The Generative AI Profile (NIST AI 600-1)</h2>
+      <p>In July 2024, NIST published a <strong>Generative AI Profile</strong> applying the AI RMF to generative AI. It identifies twelve risks that are unique to, or made worse by, generative AI:</p>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><td>1. CBRN information or capabilities</td><td>7. Human–AI configuration (e.g. over-reliance)</td></tr>
+            <tr><td>2. Confabulation (hallucination)</td><td>8. Information integrity (mis- and disinformation)</td></tr>
+            <tr><td>3. Dangerous, violent or hateful content</td><td>9. Information security</td></tr>
+            <tr><td>4. Data privacy</td><td>10. Intellectual property</td></tr>
+            <tr><td>5. Environmental impacts</td><td>11. Obscene, degrading and/or abusive content</td></tr>
+            <tr><td>6. Harmful bias or homogenisation</td><td>12. Value chain and component integration</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The profile then suggests actions for each risk, mapped to the four functions — a useful checklist for any organisation adopting generative AI.</p>
+
+      <h2>3.5 Profiles and tiers</h2>
+      <p>Organisations create <strong>profiles</strong>: tailored versions of the framework for a sector, use case or technology (like the GenAI Profile). NIST has also released concept work on a profile for trustworthy AI in critical infrastructure (2026). Using the RMF is about fitting it to your context, not ticking every subcategory.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>AI RMF 1.0 (January 2023) is voluntary, sector-agnostic and widely used; a revision is under way.</li><li>Seven trustworthiness characteristics, with 'valid and reliable' as the base.</li><li>Govern runs across Map, Measure and Manage.</li><li>The GenAI Profile (NIST AI 600-1, July 2024) lists twelve generative AI risks.</li><li>Tailor the framework through profiles.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">NIST</span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a> — AI RMF 1.0 and the Generative AI Profile (NIST AI 600-1)</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-governance" target="_blank" rel="noopener">What is AI governance?</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/responsible-ai/" target="_blank" rel="noopener">Responsible AI</a> — AWS's eight dimensions of responsible AI</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Which are the four core functions of the NIST AI RMF?",
+"options": [
+"Plan, Do, Check, Act",
+"Govern, Map, Measure, Manage",
+"Identify, Protect, Detect, Respond",
+"Design, Build, Test, Deploy"
+],
+"answer": 1,
+"explain": "Govern runs across Map, Measure and Manage."
+},
+{
+"q": "Establishing a system's intended purpose, affected people and legal requirements happens in which function?",
+"options": [
+"Govern",
+"Map",
+"Measure",
+"Manage"
+],
+"answer": 1,
+"explain": "Map establishes context."
+},
+{
+"q": "Testing routing accuracy by customer vulnerability is an activity in…",
+"options": [
+"Govern",
+"Map",
+"Measure",
+"Manage"
+],
+"answer": 2,
+"explain": "Measure analyses and tracks risks through testing and evaluation."
+},
+{
+"q": "In the NIST Generative AI Profile, 'confabulation' refers to…",
+"options": [
+"Data leaks",
+"Confidently stated false content — hallucination",
+"Copyright infringement",
+"Energy use"
+],
+"answer": 1,
+"explain": "NIST's term for hallucination."
+},
+{
+"q": "Is the NIST AI RMF legally mandatory?",
+"options": [
+"Yes, worldwide",
+"No — it's voluntary, though widely adopted and referenced",
+"Only in the EU",
+"Only for banks"
+],
+"answer": 1,
+"explain": "It's a voluntary framework."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: ISO/IEC 42001 and AI management systems →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

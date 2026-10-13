@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Evaluating fine-tuned models — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Baselines, task metrics, comparing models in code, regression checks for ability, safety, fairness and memorisation, blind review, A/B tests and documentation.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Evaluating fine-tuned models</h1>
+      <p class="lead">A fine-tune is an experiment. This module shows how to prove it worked — and that it didn't break anything else.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Compare a tuned model against prompt-only baselines</li><li>Choose task-appropriate metrics</li><li>Run a comparison on a held-out test set</li><li>Check for regressions in ability, safety, fairness and memorisation</li><li>Use blind review, A/B tests and model cards</li></ul>
+      </div>
+
+      <h2>5.1 Compare against baselines</h2>
+      <p>A fine-tuned model is only worth it if it beats the alternatives on <em>your</em> task. Evaluate, on the same held-out test set:</p>
+      <ol>
+        <li>The base model with your best prompt (no tuning)</li>
+        <li>A stronger general model with your best prompt</li>
+        <li>Your fine-tuned model</li>
+      </ol>
+      <p>If the fine-tuned model doesn't clearly win on quality, cost or speed, don't ship it.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 240" style="min-width:560px" role="img" aria-label="Illustrative results on a held-out test set. A fine-tune is worth shipping only if it clearly beats the baselines on quality, cost or speed."><line x1="60" y1="190" x2="560" y2="190" class="ln"/><rect x="100" y="60.4" width="90" height="129.6" rx="4" class="f-m"/><text x="145" y="52.4" font-size="12.5" text-anchor="middle" font-weight="700">72%</text><text x="145" y="218.025" font-size="11.5" text-anchor="middle">Base + prompt</text><rect x="260" y="35.2" width="90" height="154.8" rx="4" class="f-m"/><text x="305" y="27.2" font-size="12.5" text-anchor="middle" font-weight="700">86%</text><text x="305" y="210.55" font-size="11.5" text-anchor="middle">Stronger model</text><text x="305" y="225.5" font-size="11.5" text-anchor="middle">+ prompt</text><rect x="420" y="29.8" width="90" height="160.2" rx="4" class="f-a"/><text x="465" y="21.8" font-size="12.5" text-anchor="middle" font-weight="700">89%</text><text x="465" y="210.55" font-size="11.5" text-anchor="middle">Fine-tuned</text><text x="465" y="225.5" font-size="11.5" text-anchor="middle">small model</text><text x="690" y="60" font-size="12" text-anchor="end" font-weight="600">Also compare:</text><text x="690" y="78" font-size="11.5" text-anchor="end" class="mut">cost per 1k calls</text><text x="690" y="94" font-size="11.5" text-anchor="end" class="mut">latency</text><text x="690" y="110" font-size="11.5" text-anchor="end" class="mut">safety &amp; regressions</text></svg></div>
+        <figcaption>Illustrative results on a held-out test set. A fine-tune is worth shipping only if it clearly beats the baselines on quality, cost or speed.</figcaption>
+      </figure>
+
+      <h2>5.2 Choose task metrics</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Task type</th><th>Metrics</th></tr></thead>
+          <tbody>
+            <tr><td>Classification</td><td>Accuracy, precision, recall, F1 per class</td></tr>
+            <tr><td>Extraction</td><td>Field-level exact match; valid-format rate</td></tr>
+            <tr><td>Generation (style, descriptions)</td><td>Rubric scores from human reviewers or a validated LLM judge; format compliance</td></tr>
+            <tr><td>Efficiency</td><td>Latency, tokens per call, cost per 1,000 requests</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+<pre data-copy><code><span class="label">Python · compare models on a held-out test set</span>import json
+from sklearn.metrics import classification_report
+
+test = [json.loads(l) for l in open("test.jsonl")]
+inputs = [t["messages"][-2]["content"] for t in test]      # last user turn
+gold   = [t["messages"][-1]["content"] for t in test]      # expected label
+
+for name, predict in {"base + prompt": base_predict, "fine-tuned": tuned_predict}.items():
+    preds = [predict(x) for x in inputs]
+    print(f"\n=== {name} ===")
+    print(classification_report(gold, preds, zero_division=0))</code></pre>
+
+      <h2>5.3 Check for regressions</h2>
+      <ul class="checklist">
+        <li><strong>General ability:</strong> a small set of everyday tasks outside your domain — has it got worse?</li>
+        <li><strong>Safety:</strong> red-team prompts the base model refused — does the tuned model still refuse?</li>
+        <li><strong>Fairness:</strong> performance across relevant groups and languages</li>
+        <li><strong>Memorisation:</strong> does it reproduce training examples verbatim, including personal data?</li>
+        <li><strong>Robustness:</strong> unusual inputs, typos, very long inputs</li>
+      </ul>
+
+      <h2>5.4 Human review and A/B testing</h2>
+      <p>For subjective outputs, have reviewers compare outputs <em>blind</em> (without knowing which model produced which). Before full roll-out, run an A/B test on a slice of real traffic and compare business metrics — such as edits needed, resolution rate or complaints.</p>
+
+      <h2>5.5 Document it</h2>
+      <p>Record the base model and version, data sources and size, training settings, evaluation results against baselines, known limitations and the owner — a lightweight <strong>model card</strong>. You'll need it when the base model changes, when auditors ask, or when something goes wrong.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Always compare against base-model-plus-prompt and a stronger model.</li><li>Pick metrics that match the task — and include cost and latency.</li><li>Check general ability, safety, fairness, memorisation and robustness.</li><li>Use blind human review and A/B tests for subjective outputs.</li><li>Document it in a model card.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/fine-tuning" target="_blank" rel="noopener">What is fine-tuning?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "Your fine-tuned model scores 91%; the base model with a good prompt scores 90% at a tenth of the effort. What should you conclude?",
+"options": [
+"Ship the fine-tune",
+"The gain may not justify the cost and maintenance — consider the prompt-only option",
+"Fine-tune again with more epochs immediately",
+"Evaluation is wrong"
+],
+"answer": 1,
+"explain": "Fine-tuning must clearly win."
+},
+{
+"q": "Which metric fits a fine-tuned invoice field extractor?",
+"options": [
+"BLEU score of the whole invoice",
+"Field-level exact match and valid-format rate",
+"Word count",
+"Temperature"
+],
+"answer": 1,
+"explain": "Task-appropriate metrics."
+},
+{
+"q": "Why include prompts the base model refused in post-tuning tests?",
+"options": [
+"To check whether safety behaviours survived tuning",
+"To slow the evaluation",
+"They're required for training",
+"To test formatting"
+],
+"answer": 0,
+"explain": "Safety regression check."
+},
+{
+"q": "Why should human reviewers compare outputs blind?",
+"options": [
+"It's faster",
+"To avoid bias towards the model they expect to be better",
+"To hide the results",
+"Because outputs are encrypted"
+],
+"answer": 1,
+"explain": "Blind review reduces bias."
+},
+{
+"q": "What belongs in a fine-tuned model's documentation?",
+"options": [
+"Only the model name",
+"Base model and version, data, settings, results vs baselines, limitations and owner",
+"Users' passwords",
+"Nothing"
+],
+"answer": 1,
+"explain": "A lightweight model card."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Making models smaller, faster and cheaper →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

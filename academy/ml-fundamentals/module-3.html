@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Classification and evaluation — Machine Learning Fundamentals</title>
+<meta name="description" content="Logistic regression and probabilities, decision trees, confusion matrices, precision, recall, F1 and ROC-AUC, choosing thresholds, and imbalanced classes.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 35 minutes</span>
+      <h1>Classification and evaluation</h1>
+      <p class="lead">Yes or no? Fraud or not? Classification drives many business decisions — and choosing how to evaluate it is as important as choosing the model.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain logistic regression and predicted probabilities</li><li>Train and read a decision tree</li><li>Interpret a confusion matrix, precision, recall, F1 and AUC</li><li>Choose a threshold based on business costs</li><li>Handle imbalanced classes</li></ul>
+      </div>
+
+      <h2>3.1 Logistic regression</h2>
+      <p>Despite its name, <strong>logistic regression</strong> is a classification model. It combines features in a weighted sum, then squashes the result into a <strong>probability</strong> between 0 and 1. By default, probabilities above 0.5 become "yes".</p>
+<pre data-copy><code>proba = model.predict_proba(X_test)[:, 1]      # probability of churn for each customer
+print(proba[:5].round(2))</code></pre>
+
+      <h2>3.2 Decision trees</h2>
+      <p>A <strong>decision tree</strong> learns a flowchart of yes/no questions ("tenure under 8 months?", "more than 2 tickets?"). Trees are intuitive and capture non-linear patterns and interactions, but a single deep tree overfits easily (Module 4).</p>
+<pre data-copy><code>from sklearn.tree import DecisionTreeClassifier, export_text
+
+tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(X_train, y_train)
+print(export_text(tree, feature_names=features))
+print("Tree accuracy:", round(tree.score(X_test, y_test), 3))</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 244" style="min-width:560px" role="img" aria-label="A depth-2 decision tree: a learned flowchart of yes/no questions. (Illustrative splits — your tree&#x27;s thresholds will differ.)"><rect x="220" y="14" width="200" height="44" rx="10" class="b-a"/><text x="320" y="40.375" font-size="12.5" text-anchor="middle" font-weight="600">tenure &lt; 8 months?</text><rect x="80" y="100" width="190" height="44" rx="10" class="b-a"/><text x="175" y="126.375" font-size="12.5" text-anchor="middle" font-weight="600">support tickets ≥ 2?</text><rect x="390" y="100" width="190" height="44" rx="10" class="b-g"/><text x="485" y="126.375" font-size="12.5" text-anchor="middle" font-weight="600">Low churn risk</text><rect x="10" y="186" width="160" height="44" rx="10" class="b-b"/><text x="90" y="212.375" font-size="12.5" text-anchor="middle" font-weight="600">High churn risk</text><rect x="190" y="186" width="160" height="44" rx="10" class="b-w"/><text x="270" y="212.375" font-size="12.5" text-anchor="middle" font-weight="600">Medium risk</text><line x1="277.849" y1="61" x2="222.312" y2="93.9392" class="ln"/><polygon points="217.151,97 221.787,89.1345 226.277,96.7034" class="ah"/><text x="247.5" y="71" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="367.965" y1="61" x2="431.714" y2="94.2268" class="ln"/><polygon points="437.035,97 427.907,97.2042 431.974,89.4006" class="ah"/><text x="402.5" y="71" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="150.291" y1="147" x2="118.927" y2="178.733" class="ln"/><polygon points="114.709,183 117.204,174.217 123.462,180.403" class="ah"/><text x="132.5" y="157" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="202.616" y1="147" x2="237.936" y2="178.973" class="ln"/><polygon points="242.384,183 233.5,180.893 239.406,174.369" class="ah"/><text x="222.5" y="157" font-size="11.5" text-anchor="middle" class="mut">no</text></svg></div>
+        <figcaption>A depth-2 decision tree: a learned flowchart of yes/no questions. (Illustrative splits — your tree's thresholds will differ.)</figcaption>
+      </figure>
+
+      <h2>3.3 Beyond accuracy: the confusion matrix</h2>
+<pre data-copy><code>from sklearn.metrics import confusion_matrix, classification_report
+
+pred = model.predict(X_test)
+print(confusion_matrix(y_test, pred))          # rows = actual, columns = predicted
+print(classification_report(y_test, pred, digits=3))</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th>Question</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Precision</strong></td><td>Of customers we flagged as churners, how many actually churned?</td></tr>
+            <tr><td><strong>Recall</strong></td><td>Of customers who churned, how many did we flag?</td></tr>
+            <tr><td><strong>F1</strong></td><td>A single score balancing precision and recall</td></tr>
+            <tr><td><strong>ROC-AUC</strong></td><td>How well the model ranks positives above negatives, across all thresholds (0.5 = random, 1 = perfect)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 220" style="min-width:560px" role="img" aria-label="The confusion matrix: rows are what actually happened, columns are what the model predicted."><text x="275" y="40" font-size="12" text-anchor="middle" font-weight="700">predicted: stay</text><text x="467" y="40" font-size="12" text-anchor="middle" font-weight="700">predicted: churn</text><text x="170" y="86" font-size="12" text-anchor="end" font-weight="700">actual: stayed</text><text x="170" y="152" font-size="12" text-anchor="end" font-weight="700">actual: churned</text><rect x="180" y="50" width="190" height="62" rx="6" class="b-g"/><text x="275" y="76.625" font-size="12.5" text-anchor="middle" font-weight="600">True negative</text><text x="275" y="95.925" font-size="10.5" text-anchor="middle" class="mut">correctly left alone</text><rect x="372" y="50" width="190" height="62" rx="6" class="b-w"/><text x="467" y="76.625" font-size="12.5" text-anchor="middle" font-weight="600">False positive</text><text x="467" y="95.925" font-size="10.5" text-anchor="middle" class="mut">a wasted call</text><rect x="180" y="116" width="190" height="62" rx="6" class="b-b"/><text x="275" y="142.625" font-size="12.5" text-anchor="middle" font-weight="600">False negative</text><text x="275" y="161.925" font-size="10.5" text-anchor="middle" class="mut">a missed churner</text><rect x="372" y="116" width="190" height="62" rx="6" class="b-g"/><text x="467" y="142.625" font-size="12.5" text-anchor="middle" font-weight="600">True positive</text><text x="467" y="161.925" font-size="10.5" text-anchor="middle" class="mut">a churner caught</text><text x="275" y="206" font-size="12" text-anchor="middle" font-weight="600">Precision = TP ÷ (TP + FP)</text><text x="467" y="206" font-size="12" text-anchor="middle" font-weight="600">Recall = TP ÷ (TP + FN)</text></svg></div>
+        <figcaption>The confusion matrix: rows are what actually happened, columns are what the model predicted.</figcaption>
+      </figure>
+
+      <h2>3.4 Choosing the threshold is a business decision</h2>
+      <p>0.5 is just a default. If a retention call is cheap and losing a customer is expensive, flag more people (lower threshold, higher recall). If the team can only make 50 calls a week, flag only the most likely (higher threshold, higher precision).</p>
+<pre data-copy><code>from sklearn.metrics import precision_score, recall_score, roc_auc_score
+
+print("ROC-AUC:", round(roc_auc_score(y_test, proba), 3))
+for t in [0.3, 0.5, 0.7]:
+    p = (proba >= t).astype(int)
+    print(f"threshold {t}: precision {precision_score(y_test, p):.2f}  "
+          f"recall {recall_score(y_test, p):.2f}  flagged {p.sum()}")</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 620 205" style="min-width:560px" role="img" aria-label="Each dot is a customer placed by predicted churn probability. Everyone right of the threshold gets flagged — moving the line trades recall against precision."><text x="80" y="64" font-size="12" text-anchor="end" font-weight="600">stayed</text><text x="80" y="104" font-size="12" text-anchor="end" font-weight="600">churned</text><circle cx="115" cy="60" r="6" class="d-g"/><circle cx="130" cy="60" r="6" class="d-g"/><circle cx="150" cy="60" r="6" class="d-g"/><circle cx="165" cy="60" r="6" class="d-g"/><circle cx="190" cy="60" r="6" class="d-g"/><circle cx="200" cy="60" r="6" class="d-g"/><circle cx="230" cy="60" r="6" class="d-g"/><circle cx="255" cy="60" r="6" class="d-g"/><circle cx="290" cy="60" r="6" class="d-g"/><circle cx="315" cy="60" r="6" class="d-g"/><circle cx="350" cy="60" r="6" class="d-g"/><circle cx="395" cy="60" r="6" class="d-g"/><circle cx="215" cy="100" r="6" class="d-r"/><circle cx="280" cy="100" r="6" class="d-r"/><circle cx="330" cy="100" r="6" class="d-r"/><circle cx="365" cy="100" r="6" class="d-r"/><circle cx="405" cy="100" r="6" class="d-r"/><circle cx="440" cy="100" r="6" class="d-r"/><circle cx="470" cy="100" r="6" class="d-r"/><circle cx="500" cy="100" r="6" class="d-r"/><circle cx="540" cy="100" r="6" class="d-r"/><line x1="90" y1="130" x2="590" y2="130" class="ln"/><line x1="90" y1="126" x2="90" y2="134" class="ln"/><text x="90" y="148" font-size="11" text-anchor="middle" class="mut">0</text><line x1="340" y1="126" x2="340" y2="134" class="ln"/><text x="340" y="148" font-size="11" text-anchor="middle" class="mut">0.5</text><line x1="590" y1="126" x2="590" y2="134" class="ln"/><text x="590" y="148" font-size="11" text-anchor="middle" class="mut">1</text><line x1="240" y1="40" x2="240" y2="130" class="ln-a dash"/><line x1="440" y1="40" x2="440" y2="130" class="ln-w dash"/><text x="240" y="34" font-size="11.5" text-anchor="middle" font-weight="700" class="t-a">0.3</text><text x="440" y="34" font-size="11.5" text-anchor="middle" font-weight="700" class="t-w">0.7</text><text x="240" y="172" font-size="11" text-anchor="middle" font-weight="600" class="t-a">low threshold → higher recall, more calls</text><text x="440" y="192" font-size="11" text-anchor="middle" font-weight="600" class="t-w">high threshold → higher precision, fewer calls</text></svg></div>
+        <figcaption>Each dot is a customer placed by predicted churn probability. Everyone right of the threshold gets flagged — moving the line trades recall against precision.</figcaption>
+      </figure>
+
+      <h2>3.5 Imbalanced classes</h2>
+      <p>When the positive class is rare (fraud, rare diseases), accuracy is misleading. Use precision, recall and AUC; stratify splits; consider <code>class_weight="balanced"</code>; and evaluate at the threshold you'll actually use.</p>
+<div class="activity"><b>Exercise: cost-based threshold</b><p>A missed churner costs £200; a retention call costs £10. Using <code>proba</code>, find the threshold between 0.05 and 0.95 that minimises total cost on the test set.</p><details><summary>Show a solution</summary><pre data-copy><code>best = None
+for t in np.arange(0.05, 0.96, 0.05):
+    p = (proba >= t).astype(int)
+    missed = ((p == 0) &amp; (y_test == 1)).sum()
+    calls = p.sum()
+    cost = missed * 200 + calls * 10
+    if best is None or cost &lt; best[1]:
+        best = (round(t, 2), cost)
+print("Best threshold and cost:", best)</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Logistic regression outputs probabilities; 0.5 is just a default threshold.</li><li>Decision trees are readable flowcharts that can overfit.</li><li>Precision: of flagged, how many right? Recall: of real, how many caught?</li><li>Thresholds are business decisions — use costs and capacity.</li><li>With rare classes, ignore raw accuracy.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/classification" target="_blank" rel="noopener">ML Crash Course: Classification</a></li><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" rel="noopener">Intro to Machine Learning</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What does predict_proba return for a classifier?",
+"options": [
+"Only labels",
+"Predicted probabilities for each class",
+"The training data",
+"Coefficients"
+],
+"answer": 1,
+"explain": "Use them to set your own thresholds."
+},
+{
+"q": "Of 100 customers flagged as churners, 60 churned. What's the precision?",
+"options": [
+"0.4",
+"0.6",
+"1.0",
+"Unknown"
+],
+"answer": 1,
+"explain": "60 / 100."
+},
+{
+"q": "Losing a customer costs far more than a retention call. How should you move the threshold?",
+"options": [
+"Raise it",
+"Lower it to catch more churners (higher recall)",
+"Keep 0.5",
+"Remove it"
+],
+"answer": 1,
+"explain": "Cheap actions, expensive misses → favour recall."
+},
+{
+"q": "An ROC-AUC of 0.5 indicates…",
+"options": [
+"Perfect ranking",
+"Ranking no better than random",
+"50% precision",
+"Overfitting"
+],
+"answer": 1,
+"explain": "AUC 0.5 = random."
+},
+{
+"q": "Fraud is 0.2% of transactions. Which metric is least useful on its own?",
+"options": [
+"Recall",
+"Precision",
+"Accuracy",
+"AUC"
+],
+"answer": 2,
+"explain": "Predicting 'not fraud' always gives 99.8% accuracy."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Better models: overfitting, ensembles and validation →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

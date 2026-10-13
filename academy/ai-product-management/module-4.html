@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Specifying quality with evals — AI Product Management</title>
+<meta name="description" content="Evaluation sets as specifications, building and grading them, acceptance criteria with must-nevers, and post-launch success metrics.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 30 minutes</span>
+      <h1>Specifying quality with evals</h1>
+      <p class="lead">For AI features, the evaluation set is the specification. This module shows product managers how to define, measure and agree 'good enough'.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain why evals act as AI specifications</li><li>Build a representative evaluation set</li><li>Choose grading methods</li><li>Write launch criteria and success metrics</li></ul>
+      </div>
+
+      <h2>4.1 Evals are the new spec</h2>
+      <p>For AI features, the most precise specification is an <strong>evaluation set</strong>: a collection of realistic inputs with expected outputs or clear grading criteria. It turns "make it good" into something the team can measure on every change. Anthropic's guidance on <a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">defining success and building evaluations</a> is a good starting point.</p>
+
+      <h2>4.2 Building an evaluation set</h2>
+      <ul class="checklist">
+        <li>Start with 50–200 real, representative inputs (anonymised)</li>
+        <li>Include the hard cases: ambiguous inputs, edge cases, adversarial attempts, different user groups and languages</li>
+        <li>Write expected outputs, or a rubric describing what makes an output acceptable</li>
+        <li>Have domain experts agree the expectations — product, legal or support, not only engineers</li>
+        <li>Keep growing it: every production failure becomes a new test case</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 290" style="min-width:560px" role="img" aria-label="The evaluation loop: every change is re-run against the same eval set, so decisions rest on evidence. Passing thresholds is the launch gate."><polyline points="388,52.0945 390.534,52.918 411.71,82.0639" class="ln"/><polygon points="415.237,86.918 406.975,83.0321 414.094,77.8596" class="ah"/><polyline points="434.127,138.918 434.127,187.082 412.951,216.228" class="ln"/><polygon points="409.424,221.082 410.567,212.024 417.686,217.196" class="ah"/><polyline points="322.534,269.177 320,270 323.172,271.031" class="ln"/><polygon points="317.466,269.177 326.434,267.464 323.715,275.833" class="ah"/><polyline points="230.576,221.082 205.873,187.082 205.873,144.918" class="ln"/><polygon points="205.873,138.918 210.273,146.918 201.473,146.918" class="ah"/><polyline points="224.763,86.918 249.466,52.918 246.294,53.9486" class="ln"/><polygon points="252,52.0945 245.751,58.7513 243.032,50.382" class="ah"/><rect x="255" y="7" width="130" height="46" rx="10" class="b-a"/><text x="320" y="34.2" font-size="12" text-anchor="middle" font-weight="600">Eval set</text><rect x="369.127" y="89.918" width="130" height="46" rx="10" class="b-n"/><text x="434.127" y="117.118" font-size="12" text-anchor="middle" font-weight="600">Run feature</text><rect x="325.534" y="224.082" width="130" height="46" rx="10" class="b-w"/><text x="390.534" y="251.282" font-size="12" text-anchor="middle" font-weight="600">Grade outputs</text><rect x="184.466" y="224.082" width="130" height="46" rx="10" class="b-g"/><text x="249.466" y="243.482" font-size="12" text-anchor="middle" font-weight="600">Meet</text><text x="249.466" y="259.082" font-size="12" text-anchor="middle">thresholds?</text><rect x="140.873" y="89.918" width="130" height="46" rx="10" class="b-s"/><text x="205.873" y="109.318" font-size="12" text-anchor="middle" font-weight="600">Change prompt /</text><text x="205.873" y="124.918" font-size="12" text-anchor="middle">context / model</text><text x="320" y="154" font-size="11.5" text-anchor="middle" class="mut">every change</text></svg></div>
+        <figcaption>The evaluation loop: every change is re-run against the same eval set, so decisions rest on evidence. Passing thresholds is the launch gate.</figcaption>
+      </figure>
+
+      <h2>4.3 How to grade</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Good for</th><th>Watch out for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Exact or code-based checks</strong></td><td>Categories, extracted fields, formats</td><td>Can't judge open-ended text</td></tr>
+            <tr><td><strong>Human review</strong></td><td>Nuance, tone, domain correctness</td><td>Slow, costly, reviewers disagree — use clear rubrics</td></tr>
+            <tr><td><strong>LLM as judge</strong></td><td>Scaling rubric-based grading</td><td>Must itself be validated against human judgements</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.4 Acceptance criteria for AI</h2>
+      <p>Write launch criteria as thresholds on the eval set, including <strong>must-never</strong> conditions:</p>
+      <div class="callout"><b>Example launch criteria — help-centre answers</b><p>≥ 90% of answers rated correct and complete · ≥ 98% grounded in cited articles · 0 answers inventing refund or legal policy · p95 response time under 4 seconds · average cost under 2p per answer · no significant quality gap between English and Spanish questions.</p></div>
+
+      <h2>4.5 Success metrics after launch</h2>
+      <p>Eval scores show the AI is good; product metrics show it's <em>useful</em>. Pair them: task success rate, time saved, acceptance or edit rate, deflection or resolution rate, retention of users who adopt the feature, satisfaction, and guardrail metrics (complaints, escalations, harmful outputs, cost per active user).</p>
+<div class="activity"><b>Activity: write an eval plan</b><p>For your feature, write: ten example eval inputs (including three hard cases), how each will be graded, and your launch criteria with at least one must-never condition.</p><details><summary>See a worked example</summary><p><b>Example — expense categorisation:</b> Inputs include a clear taxi receipt, a blurry hotel bill, a foreign-currency restaurant receipt, a mixed meal-and-alcohol bill, and a handwritten receipt. Grading: exact match on category; human check on 'unreadable' handling. Launch: ≥ 95% top-1 correct, ≥ 99% top-3, 0 auto-submitted claims, under 2 seconds.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>An eval set turns 'make it good' into a measurable target.</li><li>Include hard cases and agree expectations with experts.</li><li>Use code checks, humans and validated LLM judges.</li><li>Launch criteria need thresholds and must-nevers.</li><li>Pair eval scores with product outcome metrics.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-agent-evaluation" target="_blank" rel="noopener">What is AI agent evaluation?</a></li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener">All courses</a> — including Apply AI at Work and Lead AI Adoption</li><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "What is an evaluation set?",
+"options": [
+"A list of features",
+"Realistic inputs with expected outputs or grading criteria",
+"A budget",
+"A server log"
+],
+"answer": 1,
+"explain": "The measurable spec."
+},
+{
+"q": "Which belongs in an eval set?",
+"options": [
+"Only easy examples",
+"Representative inputs plus hard and edge cases",
+"Only synthetic text",
+"Only one example"
+],
+"answer": 1,
+"explain": "Hard cases reveal weaknesses."
+},
+{
+"q": "An LLM-as-judge should be…",
+"options": [
+"Trusted blindly",
+"Validated against human judgements",
+"Avoided always",
+"Used without rubrics"
+],
+"answer": 1,
+"explain": "Check the judge."
+},
+{
+"q": "A 'must-never' launch condition is, for example…",
+"options": [
+"Under 4 seconds",
+"0 answers inventing refund policy",
+"90% accuracy",
+"Low cost"
+],
+"answer": 1,
+"explain": "Zero-tolerance failures."
+},
+{
+"q": "Every production failure should…",
+"options": [
+"Be ignored",
+"Become a new eval test case",
+"Be deleted",
+"Trigger a new model"
+],
+"answer": 1,
+"explain": "Evals grow over time."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Building and launching →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

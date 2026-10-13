@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Machine Learning Fundamentals</title>
+<meta name="description" content="Key terms from Machine Learning Fundamentals, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>Machine learning glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. recall, random forest, PCA" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Baseline</dt><dd>A simple reference model, such as always predicting the mean or most common class.</dd>
+        <dt>Classification</dt><dd>Predicting a category.</dd>
+        <dt>Coefficient</dt><dd>A learned weight showing how a feature affects a linear model's prediction.</dd>
+        <dt>Confusion matrix</dt><dd>A table of actual vs predicted classes: true/false positives and negatives.</dd>
+        <dt>Cross-validation</dt><dd>Repeatedly training and validating on different splits of the training data to estimate performance.</dd>
+        <dt>Decision tree</dt><dd>A model that predicts by following a learned sequence of yes/no questions.</dd>
+        <dt>F1 score</dt><dd>The harmonic mean of precision and recall.</dd>
+        <dt>Feature</dt><dd>An input variable used by a model.</dd>
+        <dt>Gradient boosting</dt><dd>An ensemble that builds trees sequentially, each correcting previous errors.</dd>
+        <dt>Hyperparameter</dt><dd>A setting chosen before training, such as tree depth.</dd>
+        <dt>Isolation forest</dt><dd>An unsupervised method that flags unusual examples.</dd>
+        <dt>k-means</dt><dd>A clustering method that assigns points to the nearest of k centres.</dd>
+        <dt>Linear regression</dt><dd>A model predicting a number as a weighted sum of features.</dd>
+        <dt>Logistic regression</dt><dd>A classification model that outputs probabilities.</dd>
+        <dt>MAE</dt><dd>Mean absolute error: the average size of prediction errors.</dd>
+        <dt>Model card</dt><dd>Documentation of a model's purpose, data, performance, limitations and ownership.</dd>
+        <dt>Overfitting</dt><dd>Learning training data too closely, so performance on new data suffers.</dd>
+        <dt>PCA</dt><dd>Principal component analysis: compressing features into fewer components that keep most variation.</dd>
+        <dt>Permutation importance</dt><dd>The drop in a model's score when a feature's values are shuffled.</dd>
+        <dt>Precision</dt><dd>Of predicted positives, the share that are actually positive.</dd>
+        <dt>Random forest</dt><dd>An ensemble of decision trees trained on random samples, which vote.</dd>
+        <dt>Recall</dt><dd>Of actual positives, the share the model identified.</dd>
+        <dt>Regression</dt><dd>Predicting a number.</dd>
+        <dt>RMSE</dt><dd>Root mean squared error: penalises large errors more than MAE.</dd>
+        <dt>ROC-AUC</dt><dd>A measure of how well a classifier ranks positives above negatives across thresholds.</dd>
+        <dt>R²</dt><dd>The share of variation in the target explained by a model, relative to predicting the mean.</dd>
+        <dt>Silhouette score</dt><dd>A measure of how well points fit their clusters, from −1 to 1.</dd>
+        <dt>Target</dt><dd>The value a supervised model learns to predict.</dd>
+        <dt>Threshold</dt><dd>The probability above which a classifier predicts the positive class.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

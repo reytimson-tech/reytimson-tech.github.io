@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: How AI gets things wrong — Critical Thinking: Checking and Validating AI Output</title>
+<meta name="description" content="A taxonomy of AI errors — fabrication, misattribution, contextual and reasoning errors, omissions, sycophancy — and red flags.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="validating-ai-output">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 25 minutes</span>
+      <h1>How AI gets things wrong</h1>
+      <p class="lead">AI errors aren't random. They fall into recognisable types, and knowing them tells you exactly where to look.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Classify common types of AI error</li><li>Explain why each type occurs</li><li>Spot red flags in AI-generated text</li><li>Learn from real-world verification failures</li></ul>
+      </div>
+
+      <h2>2.1 A taxonomy of AI errors</h2>
+      <p>Knowing the common types of error tells you where to look.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Error type</th><th>What it looks like</th><th>Where to look</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fabrication</strong></td><td>Invented facts, statistics, quotes, people, case law or references</td><td>Every specific claim with a number, name, date or citation</td></tr>
+            <tr><td><strong>Misattribution</strong></td><td>A real source cited for something it doesn't say</td><td>Citations — open and read them</td></tr>
+            <tr><td><strong>Contextual errors</strong></td><td>Ignoring, misreading or mixing up the documents you provided</td><td>Compare summaries against the source</td></tr>
+            <tr><td><strong>Outdated information</strong></td><td>Old prices, laws, leaders or product details</td><td>Anything time-sensitive</td></tr>
+            <tr><td><strong>Reasoning errors</strong></td><td>Logical leaps, wrong maths, conclusions that don't follow</td><td>Calculations and "therefore" statements</td></tr>
+            <tr><td><strong>Omissions</strong></td><td>Leaving out important caveats, risks or counter-evidence</td><td>Ask: what would an expert add?</td></tr>
+            <tr><td><strong>Overgeneralisation</strong></td><td>"Always", "never", "all experts agree"</td><td>Absolute or sweeping claims</td></tr>
+            <tr><td><strong>Inconsistency</strong></td><td>Contradicting itself within or across answers</td><td>Compare sections; ask again differently</td></tr>
+            <tr><td><strong>Sycophancy</strong></td><td>Agreeing with your mistaken premise or flattering weak work</td><td>Answers that conveniently confirm your view</td></tr>
+            <tr><td><strong>Bias</strong></td><td>Stereotypes, one-sided perspectives, unequal treatment</td><td>Content about people and groups (Module 4)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>IBM groups hallucinations into <em>factual</em>, <em>contextual</em> and <em>consistency</em> types — a helpful shorthand for the first rows above.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 255" style="min-width:600px" role="img" aria-label="An invented AI answer, annotated. Errors hide in specifics: numbers, citations, quotes from real people and sweeping claims. That&#x27;s where to look first."><rect x="20" y="20" width="400" height="220" rx="10" class="b-s"/><text x="38" y="50" font-size="13">Remote work boosts productivity by <tspan class="t-a" font-weight="700">47.3%</tspan></text><text x="38" y="76" font-size="13">according to a <tspan class="t-b" font-weight="700">2024 Harbourne University study</tspan></text><text x="38" y="102" font-size="13"><tspan class="t-b" font-weight="700">(Ellis et al., J. Work Econ., 2024).</tspan></text><text x="38" y="128" font-size="13">As the CEO of Acme said: <tspan class="t-w" font-weight="700">&quot;Offices are</tspan></text><text x="38" y="154" font-size="13"><tspan class="t-w" font-weight="700">finished.&quot;</tspan></text><text x="38" y="180" font-size="13"><tspan class="t-g" font-weight="700">All experts agree</tspan></text><text x="38" y="206" font-size="13">it is the future of work.</text><text x="450" y="50" font-size="12" text-anchor="start" font-weight="600" class="t-a">Precise number, no source?</text><text x="450" y="89" font-size="12" text-anchor="start" font-weight="600" class="t-b">Does this study exist? Does it</text><text x="450" y="103" font-size="12" text-anchor="start" font-weight="600" class="t-b">say this? (citations: Module 3)</text><text x="450" y="141" font-size="12" text-anchor="start" font-weight="600" class="t-w">Quote from a named person —</text><text x="450" y="155" font-size="12" text-anchor="start" font-weight="600" class="t-w">verify or remove</text><text x="450" y="193" font-size="12" text-anchor="start" font-weight="600" class="t-g">Absolute claim — overgeneralised</text><line x1="425" y1="46" x2="445" y2="46" class="ln-m"/><line x1="425" y1="92" x2="445" y2="92" class="ln-m"/><line x1="425" y1="144" x2="445" y2="144" class="ln-m"/><line x1="425" y1="189" x2="445" y2="189" class="ln-m"/></svg></div>
+        <figcaption>An invented AI answer, annotated. Errors hide in specifics: numbers, citations, quotes from real people and sweeping claims. That's where to look first.</figcaption>
+      </figure>
+
+      <h2>2.2 Why these errors happen</h2>
+      <p>As the <a href="../how-ai-works/index.html">How AI Works</a> course explains, LLMs generate the most plausible continuation, not verified facts. OpenAI's 2025 research argues that training and evaluation often reward confident guessing over admitting uncertainty. Models also have a training cut-off, and post-training can reward agreeable answers.</p>
+
+      <h2>2.3 Red flags in the text itself</h2>
+      <ul>
+        <li>Very specific numbers with no source ("73.4% of UK SMEs…")</li>
+        <li>References you can't immediately find, or that look slightly wrong (author, year or journal mismatches)</li>
+        <li>Quotes attributed to named people</li>
+        <li>Confident claims about recent events</li>
+        <li>Neat, symmetrical lists that look too tidy for a messy topic</li>
+        <li>An answer that perfectly matches the assumption in your question</li>
+      </ul>
+
+      <div class="example">
+        <span class="eyebrow">Case study: invented case law</span>
+        <p>Lawyers in the US, the UK and elsewhere have submitted court documents citing cases generated by AI that did not exist. In 2025 the High Court of England and Wales warned that lawyers who cite fake AI-generated cases could face serious consequences, and that freely available generative AI tools are not capable of reliable legal research. The tools weren't "lying" — they generated plausible-looking citations. The failure was the missing verification step.</p>
+      </div>
+
+      <div class="activity">
+        <b>Try it: error hunt</b>
+        <p>Ask an AI tool for "five statistics about AI adoption in UK small businesses, with sources". For each statistic, find the original source. How many exist, are current and say exactly what was claimed?</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Fabrication and misattribution are the most dangerous errors — check specifics and citations.</li><li>Contextual errors misread the material you supplied.</li><li>Watch for outdated facts, reasoning slips, omissions and absolute claims.</li><li>Answers that echo your assumption may be sycophantic.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-hallucinations" target="_blank" rel="noopener">What are AI hallucinations?</a> — causes, types and mitigation</li><li><span class="provider">OpenAI</span><a href="https://openai.com/index/why-language-models-hallucinate/" target="_blank" rel="noopener">Why language models hallucinate</a> — research, September 2025</li><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/539" target="_blank" rel="noopener">Introduction to Large Language Models</a> — one-hour micro-learning course</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-capabilities-and-limitations" target="_blank" rel="noopener">AI Capabilities and Limitations</a> — a mental model of how generative AI behaves, and why</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "An AI cites a real government report for a statistic the report doesn't contain. This is…",
+"options": [
+"Fabrication of a source",
+"Misattribution",
+"Sycophancy",
+"Bias"
+],
+"answer": 1,
+"explain": "The source is real but doesn't say what's claimed."
+},
+{
+"q": "You give an AI a contract and its summary includes a clause that isn't in it. This is a…",
+"options": [
+"Contextual error",
+"Outdated information error",
+"Bias",
+"Correct summary"
+],
+"answer": 0,
+"explain": "It misrepresented the material provided."
+},
+{
+"q": "Which is a red flag?",
+"options": [
+"A claim with a working link to an official statistics page",
+"A very precise statistic with no source",
+"A clearly stated uncertainty",
+"A suggestion to consult an expert"
+],
+"answer": 1,
+"explain": "Specific, unsourced numbers often signal fabrication."
+},
+{
+"q": "You ask 'Why is remote work bad for productivity?' and get a one-sided answer. Which error is likely?",
+"options": [
+"Tokenisation",
+"Sycophancy and one-sided framing following your premise",
+"Contextual error",
+"Outdated information"
+],
+"answer": 1,
+"explain": "Leading questions shape answers."
+},
+{
+"q": "What was the root failure in cases of fake AI-generated case law in court?",
+"options": [
+"The AI was hacked",
+"Lawyers didn't verify the citations",
+"Courts banned AI",
+"The cases were classified"
+],
+"answer": 1,
+"explain": "The missing step was verification."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Fact-checking AI output →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

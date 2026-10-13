@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Cleaning data — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Logging decisions, duplicates, standardising categories, fixing types and invalid values, missing value strategies and outliers.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 35 minutes</span>
+      <h1>Cleaning data</h1>
+      <p class="lead">Cleaning is a series of judgement calls. This module shows how to make them well — and how to leave a trail others can follow.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Clean on a copy and log every decision</li><li>Remove duplicates and standardise categories</li><li>Fix types and invalid values</li><li>Choose a missing-value strategy</li><li>Investigate and handle outliers</li></ul>
+      </div>
+
+      <h2>3.1 Work on a copy and log every decision</h2>
+<pre data-copy><code>clean = customers.copy()
+decisions = []      # keep a log: what, why, how many rows
+
+def log(step, reason, rows):
+    decisions.append({"step": step, "reason": reason, "rows_affected": int(rows)})</code></pre>
+
+      <h2>3.2 Duplicates</h2>
+<pre data-copy><code>n = clean.duplicated().sum()
+clean = clean.drop_duplicates()
+log("drop exact duplicates", "customer 103 appeared twice", n)</code></pre>
+      <p>Watch for <em>near</em>-duplicates too — the same person with a slightly different email or name spelling — which need matching rules or record-linkage tools.</p>
+
+      <h2>3.3 Standardise categories</h2>
+<pre data-copy><code>country_map = {"uk": "UK", "united kingdom": "UK", "u.k.": "UK",
+               "ireland": "IE", "ie": "IE"}
+before = clean["country"].copy()
+clean["country"] = clean["country"].str.strip().str.lower().map(country_map).fillna(clean["country"])
+log("standardise country", "five spellings of UK, two of Ireland", (before != clean["country"]).sum())
+
+clean["churned"] = clean["churned"].str.strip().str.lower().map({"yes": True, "no": False})</code></pre>
+
+      <h2>3.4 Fix types and invalid values</h2>
+<pre data-copy><code>dates = pd.to_datetime(clean["signup_date"], format="%Y-%m-%d", errors="coerce")
+alt   = pd.to_datetime(clean["signup_date"], format="%d/%m/%Y", errors="coerce")   # UK day/month format
+clean["signup_date"] = dates.fillna(alt)          # "2025-13-01" stays missing: invalid
+
+invalid_age = (clean["age"] &lt; 16) | (clean["age"] > 110)
+log("set impossible ages to missing", "230 and -1 are not valid ages", invalid_age.sum())
+clean.loc[invalid_age, "age"] = np.nan</code></pre>
+      <p>Note: "04/02/2025" could mean 4 February (UK) or 2 April (US). Ambiguous formats must be resolved by knowing the source system — don't guess.</p>
+
+      <h2>3.5 Missing values: choose a strategy</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>When it fits</th><th>Risk</th></tr></thead>
+          <tbody>
+            <tr><td>Drop rows</td><td>Few rows affected, missing at random</td><td>Loses data; can bias the sample if missingness isn't random</td></tr>
+            <tr><td>Drop column</td><td>Mostly empty and not essential</td><td>Loses a possibly useful signal</td></tr>
+            <tr><td>Fill with median / mode</td><td>Small gaps in numeric or categorical data</td><td>Shrinks variation; hides uncertainty</td></tr>
+            <tr><td>Fill with a model (imputation)</td><td>Values predictable from other columns</td><td>More complex; can leak information if done before splitting</td></tr>
+            <tr><td>Keep and flag</td><td>Missingness itself may be meaningful</td><td>Models must handle the flag</td></tr>
+          </tbody>
+        </table>
+      </div>
+<pre data-copy><code>clean["age_missing"] = clean["age"].isna()                 # keep the signal
+median_age = clean["age"].median()
+clean["age"] = clean["age"].fillna(median_age)
+log("fill missing age with median", f"median = {median_age}", clean["age_missing"].sum())</code></pre>
+      <div class="callout warn">
+        <b>Fit cleaning on training data only</b>
+        <p>Statistics used to fill values (medians, means, scalers) should be calculated from the <em>training</em> data and then applied to test data. Calculating them on all data leaks information from the test set (Module 5).</p>
+      </div>
+
+      <h2>3.6 Outliers: investigate, then decide</h2>
+<pre data-copy><code>suspect = clean["monthly_spend"] > 1000
+print(clean[suspect])
+# After checking with the finance team: 12000.0 was entered in pence, not pounds.
+clean.loc[suspect, "monthly_spend"] = clean.loc[suspect, "monthly_spend"] / 100
+log("convert spend entered in pence", "confirmed with finance team", suspect.sum())
+
+print(pd.DataFrame(decisions))</code></pre>
+      <p>Other options include capping (winsorising) extreme values, transforming skewed data (e.g. log), or keeping genuine extremes and using models that are robust to them.</p>
+<div class="activity"><b>Exercise: clean the churn column safely</b><p>Some systems export churn as 'Y', 'N', 'true', 'false', '1' or '0'. Write a function that maps all of these (case-insensitive) to True/False and leaves anything else as missing.</p><details><summary>Show a solution</summary><pre data-copy><code>def to_bool(series):
+    mapping = {"yes": True, "y": True, "true": True, "1": True,
+               "no": False, "n": False, "false": False, "0": False}
+    return series.astype(str).str.strip().str.lower().map(mapping)
+
+print(to_bool(pd.Series(["Y", "no", "TRUE", "0", "maybe"])).tolist())
+# [True, False, True, False, nan]</code></pre></details></div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 210" style="min-width:560px" role="img" aria-label="The decision log from this module&#x27;s cleaning code. Anyone can now see — and challenge — exactly what changed and why."><rect x="20" y="14" width="600" height="30" rx="6" class="b-a"/><text x="36" y="34" font-size="12" text-anchor="start" font-weight="700">step</text><text x="600" y="34" font-size="12" text-anchor="end" font-weight="700">rows affected</text><rect x="20" y="50" width="600" height="26" rx="4" class="b-s"/><text x="36" y="68" font-size="12" text-anchor="start">drop exact duplicates</text><text x="600" y="68" font-size="12" text-anchor="end" font-weight="600">1</text><rect x="20" y="80" width="600" height="26" rx="4" class="b-s"/><text x="36" y="98" font-size="12" text-anchor="start">standardise country</text><text x="600" y="98" font-size="12" text-anchor="end" font-weight="600">4</text><rect x="20" y="110" width="600" height="26" rx="4" class="b-s"/><text x="36" y="128" font-size="12" text-anchor="start">set impossible ages to missing</text><text x="600" y="128" font-size="12" text-anchor="end" font-weight="600">2</text><rect x="20" y="140" width="600" height="26" rx="4" class="b-s"/><text x="36" y="158" font-size="12" text-anchor="start">fill missing age with median</text><text x="600" y="158" font-size="12" text-anchor="end" font-weight="600">3</text><rect x="20" y="170" width="600" height="26" rx="4" class="b-s"/><text x="36" y="188" font-size="12" text-anchor="start">convert spend entered in pence</text><text x="600" y="188" font-size="12" text-anchor="end" font-weight="600">1</text></svg></div>
+        <figcaption>The decision log from this module's cleaning code. Anyone can now see — and challenge — exactly what changed and why.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Work on a copy; log what, why and how many rows.</li><li>Map messy categories to standard codes.</li><li>Ambiguous formats need source knowledge, not guesses.</li><li>Every missing-value strategy has risks — consider flagging.</li><li>Fit cleaning statistics on training data only.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/numerical-data" target="_blank" rel="noopener">ML Crash Course: Working with numerical data</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/categorical-data" target="_blank" rel="noopener">ML Crash Course: Working with categorical data</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/pandas" target="_blank" rel="noopener">Pandas</a></li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "Why keep a decision log while cleaning?",
+"options": [
+"It's decorative",
+"So others can understand, reproduce and challenge each change",
+"pandas requires it",
+"To slow down work"
+],
+"answer": 1,
+"explain": "Cleaning is a set of judgement calls."
+},
+{
+"q": "'04/02/2025' appears in a UK dataset. What's the safest approach?",
+"options": [
+"Assume US format",
+"Confirm the source system's format before converting",
+"Delete it",
+"Use today's date"
+],
+"answer": 1,
+"explain": "Ambiguous formats need context."
+},
+{
+"q": "Why add an 'age_missing' flag before filling missing ages?",
+"options": [
+"To keep the signal that the value was missing",
+"To delete rows",
+"It's required by law",
+"To change the median"
+],
+"answer": 0,
+"explain": "Missingness can be informative."
+},
+{
+"q": "Where should the median used to fill missing values be calculated?",
+"options": [
+"On the full dataset",
+"On the training data only, then applied to test data",
+"On the test data",
+"On a random sample of the test set"
+],
+"answer": 1,
+"explain": "Avoid preprocessing leakage."
+},
+{
+"q": "A spend value of 12,000 turns out to be pence entered as pounds. The right fix is…",
+"options": [
+"Delete it",
+"Convert it and log the decision with its confirmation",
+"Replace with the median",
+"Leave it"
+],
+"answer": 1,
+"explain": "Fix the cause, document the fix."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Labelling and annotation →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

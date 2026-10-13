@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Retrieval that works — Building LLM Applications with RAG</title>
+<meta name="description" content="Lexical vs semantic search, hybrid search and reciprocal rank fusion, reranking, contextual retrieval, query rewriting, filters and permissions.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 35 minutes</span>
+      <h1>Retrieval that works</h1>
+      <p class="lead">Getting the right passage into the prompt is most of the battle. This module covers the techniques that make retrieval reliable.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Compare lexical (BM25) and semantic search</li><li>Implement hybrid search with reciprocal rank fusion</li><li>Explain reranking and the retrieval funnel</li><li>Describe contextual retrieval and its reported impact</li><li>Apply query rewriting, filters and permission checks</li></ul>
+      </div>
+
+      <h2>4.1 Lexical vs semantic search</h2>
+      <div class="compare">
+        <div><h4>Lexical (keyword) search, e.g. BM25</h4><p>Matches exact words, weighting rare words more. Excellent for product codes, names, error messages and jargon. Misses synonyms and paraphrases.</p></div>
+        <div><h4>Semantic (vector) search</h4><p>Matches meaning. Excellent for paraphrased questions. Can miss exact identifiers and rare terms.</p></div>
+      </div>
+
+      <h2>4.2 Hybrid search</h2>
+      <p><strong>Hybrid search</strong> runs both and merges the results. A simple, robust way to merge ranked lists is <strong>reciprocal rank fusion (RRF)</strong>: each document scores 1/(k + rank) in each list, and scores are added up.</p>
+<pre data-copy><code><span class="label">Python · reciprocal rank fusion</span>def rrf(rankings, k=60):
+    """rankings: list of ranked lists of doc ids, e.g. [bm25_ids, vector_ids]"""
+    scores = {}
+    for ranked in rankings:
+        for rank, doc_id in enumerate(ranked, start=1):
+            scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank)
+    return sorted(scores, key=scores.get, reverse=True)
+
+print(rrf([["d3", "d1", "d7"], ["d1", "d9", "d3"]]))   # d1 and d3 rise to the top</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 180" style="min-width:560px" role="img" aria-label="Hybrid search runs lexical and semantic search side by side and fuses the rankings, so you catch both exact identifiers and paraphrased questions."><rect x="20" y="70" width="120" height="46" rx="10" class="b-a"/><text x="80" y="97.375" font-size="12.5" text-anchor="middle" font-weight="600">Query</text><rect x="190" y="20" width="160" height="46" rx="10" class="b-n"/><text x="270" y="38.625" font-size="12.5" text-anchor="middle" font-weight="600">BM25</text><text x="270" y="57.925" font-size="10.5" text-anchor="middle" class="mut">exact words, codes</text><rect x="190" y="120" width="160" height="46" rx="10" class="b-n"/><text x="270" y="138.625" font-size="12.5" text-anchor="middle" font-weight="600">Vector search</text><text x="270" y="157.925" font-size="10.5" text-anchor="middle" class="mut">meaning, paraphrase</text><rect x="400" y="70" width="120" height="46" rx="10" class="b-w"/><text x="460" y="97.375" font-size="12.5" text-anchor="middle" font-weight="600">RRF merge</text><rect x="560" y="70" width="100" height="46" rx="10" class="b-g"/><text x="610" y="89.4" font-size="12" text-anchor="middle" font-weight="600">Ranked</text><text x="610" y="105" font-size="12" text-anchor="middle">results</text><line x1="143" y1="76.4211" x2="181.198" y2="66.3691" class="ln"/><polygon points="187,64.8421 180.383,71.1332 178.144,62.6229" class="ah"/><line x1="143" y1="109.579" x2="181.198" y2="119.631" class="ln"/><polygon points="187,121.158 178.144,123.377 180.383,114.867" class="ah"/><line x1="353" y1="64.8421" x2="391.198" y2="74.8941" class="ln"/><polygon points="397,76.4211 388.144,78.6402 390.383,70.13" class="ah"/><line x1="353" y1="121.158" x2="391.198" y2="111.106" class="ln"/><polygon points="397,109.579 390.383,115.87 388.144,107.36" class="ah"/><line x1="523" y1="93" x2="551" y2="93" class="ln"/><polygon points="557,93 549,97.4 549,88.6" class="ah"/></svg></div>
+        <figcaption>Hybrid search runs lexical and semantic search side by side and fuses the rankings, so you catch both exact identifiers and paraphrased questions.</figcaption>
+      </figure>
+
+      <h2>4.3 Reranking</h2>
+      <p>Retrieval is a funnel. First, cheap search pulls back many candidates (say, the top 50–150). Then a <strong>reranker</strong> — a model that reads the query and each candidate together — scores them more accurately, and you keep the best handful (say, 5–20) for the prompt. Rerankers are slower per document, which is why they're applied only to the shortlist.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 210" style="min-width:560px" role="img" aria-label="The retrieval funnel: cast a wide net cheaply, rank precisely, and send only the best passages to the LLM."><rect x="30" y="16" width="500" height="52" rx="8" class="b-n"/><text x="280" y="40" font-size="13" text-anchor="middle" font-weight="700">Hybrid retrieval</text><text x="280" y="57" font-size="11" text-anchor="middle" class="mut">BM25 + vectors, merged with RRF</text><text x="540" y="47" font-size="11.5" text-anchor="start" font-weight="600" class="t-a">~150 candidates</text><rect x="90" y="78" width="380" height="52" rx="8" class="b-a"/><text x="280" y="102" font-size="13" text-anchor="middle" font-weight="700">Reranker</text><text x="280" y="119" font-size="11" text-anchor="middle" class="mut">reads query + passage together</text><text x="480" y="109" font-size="11.5" text-anchor="start" font-weight="600" class="t-a">top ~20</text><rect x="150" y="140" width="260" height="52" rx="8" class="b-g"/><text x="280" y="164" font-size="13" text-anchor="middle" font-weight="700">Prompt</text><text x="280" y="181" font-size="11" text-anchor="middle" class="mut">most relevant first</text><text x="420" y="171" font-size="11.5" text-anchor="start" font-weight="600" class="t-a">5–20 chunks</text></svg></div>
+        <figcaption>The retrieval funnel: cast a wide net cheaply, rank precisely, and send only the best passages to the LLM.</figcaption>
+      </figure>
+
+      <h2>4.4 Contextual retrieval</h2>
+      <p>A chunk like "Revenue grew 3% over the previous quarter" is ambiguous on its own: which company? which quarter? In 2024 Anthropic described <strong>contextual retrieval</strong>: before indexing, an LLM writes a short sentence situating each chunk within its document, and that context is prepended to the chunk for both embedding and BM25. In Anthropic's experiments, measured on the top 20 retrieved chunks:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Technique</th><th>Reduction in retrieval failures</th></tr></thead>
+          <tbody>
+            <tr><td>Contextual embeddings</td><td>35%</td></tr>
+            <tr><td>+ contextual BM25 (hybrid)</td><td>49%</td></tr>
+            <tr><td>+ reranking</td><td>67%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Results will vary with your data — but the lesson generalises: <em>give chunks context, combine search methods, and rerank</em>.</p>
+
+      <h2>4.5 Improving the query</h2>
+      <ul>
+        <li><strong>Query rewriting:</strong> turn a chatty follow-up ("what about for furniture?") into a standalone query using the conversation history.</li>
+        <li><strong>Multi-query:</strong> generate several phrasings and merge results.</li>
+        <li><strong>Decomposition:</strong> split a complex question into sub-questions and retrieve for each. Agentic retrieval systems — where an LLM plans and runs several searches — take this further.</li>
+      </ul>
+
+      <h2>4.6 Filters and permissions</h2>
+      <p>Apply metadata filters <em>before</em> or during retrieval: date ranges, document types, regions — and, crucially, <strong>access control</strong>. A RAG system must never retrieve a document the user isn't allowed to see; the LLM cannot be trusted to keep secrets it has been shown. (See OWASP LLM08 in the <a href="../ai-security/module-4.html">AI Security course</a>.)</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>BM25 catches exact terms; vectors catch meaning — use both.</li><li>Reciprocal rank fusion is a simple, robust way to merge rankings.</li><li>Retrieve broadly, then rerank a shortlist.</li><li>Adding context to chunks reduced retrieval failures substantially in Anthropic's tests.</li><li>Rewrite conversational queries; filter by metadata and permissions.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">Introducing Contextual Retrieval</a> — September 2024</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview" target="_blank" rel="noopener">RAG and generative AI in Azure AI Search</a> — classic vs agentic retrieval</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/vector-database" target="_blank" rel="noopener">What is a vector database?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "Which search method is strongest for an error code like 'E-4021'?",
+"options": [
+"Semantic search alone",
+"Lexical search such as BM25",
+"Random sampling",
+"Image search"
+],
+"answer": 1,
+"explain": "Exact rare tokens favour lexical search."
+},
+{
+"q": "In reciprocal rank fusion, a document ranked 1st in both lists will…",
+"options": [
+"Be removed",
+"Score highest after fusion",
+"Score lowest",
+"Be ignored"
+],
+"answer": 1,
+"explain": "It gets the largest 1/(k+rank) contribution from both."
+},
+{
+"q": "Why is a reranker applied only to a shortlist?",
+"options": [
+"It's less accurate",
+"It's slower per document, so it's used on the top candidates only",
+"It can't read documents",
+"It's free"
+],
+"answer": 1,
+"explain": "The funnel balances speed and accuracy."
+},
+{
+"q": "What does contextual retrieval add to each chunk?",
+"options": [
+"A random ID",
+"A short LLM-written note situating the chunk within its document",
+"Images",
+"Its translation"
+],
+"answer": 1,
+"explain": "Context makes ambiguous chunks retrievable."
+},
+{
+"q": "A user asks 'what about for furniture?' in a conversation. What should the system do before retrieval?",
+"options": [
+"Search for 'what about for furniture'",
+"Rewrite it into a standalone query using conversation history",
+"Refuse",
+"Ask for a password"
+],
+"answer": 1,
+"explain": "Query rewriting fixes context-dependent follow-ups."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Generating grounded answers →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

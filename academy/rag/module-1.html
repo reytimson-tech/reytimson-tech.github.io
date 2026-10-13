@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Why LLMs need your data — Building LLM Applications with RAG</title>
+<meta name="description" content="What LLMs don&#x27;t know, prompt-stuffing vs RAG vs fine-tuning, the two halves of the RAG pipeline, and where RAG fails.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>Why LLMs need your data</h1>
+      <p class="lead">LLMs are brilliant generalists that know nothing about your organisation. Retrieval-augmented generation fixes that by looking things up first.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain the knowledge limits of LLMs</li><li>Compare prompt-stuffing, RAG and fine-tuning</li><li>Describe the indexing and query halves of a RAG pipeline</li><li>Identify the common failure points of RAG</li></ul>
+      </div>
+
+      <div class="callout">
+        <b>Running the code</b>
+        <p>All examples are Python and run in a free notebook such as <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a>. Where an example calls an LLM, it uses a small <code>call_llm()</code> helper (Module 5) that you can point at Claude, GPT, Gemini or a local model. You'll need your own API key for generation; everything else runs free.</p>
+      </div>
+
+      <h2>1.1 What an LLM doesn't know</h2>
+      <p>A large language model is trained on a huge snapshot of public text. Out of the box it knows nothing about:</p>
+      <ul>
+        <li><strong>Your private information</strong> — policies, contracts, product specs, tickets, wikis.</li>
+        <li><strong>Anything after its training cut-off</strong> — new prices, regulations, decisions.</li>
+        <li><strong>Exact details it saw rarely</strong> — and it may confidently invent them (hallucinate).</li>
+      </ul>
+      <p>Ask a general assistant "What's our refund window for damaged items?" and the best it can do is guess what companies usually do.</p>
+
+      <h2>1.2 Three ways to give a model your knowledge</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Approach</th><th>How it works</th><th>Good for</th><th>Limits</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Put it in the prompt</strong></td><td>Paste the relevant document into the context</td><td>One-off questions; small document sets</td><td>Doesn't scale to thousands of documents; cost grows with every token</td></tr>
+            <tr><td><strong>Retrieval-augmented generation (RAG)</strong></td><td>Search your documents for the most relevant passages and put <em>only those</em> into the prompt</td><td>Large, changing knowledge bases; answers with citations</td><td>Only as good as the retrieval step</td></tr>
+            <tr><td><strong>Fine-tuning</strong></td><td>Further train the model on your examples</td><td>Style, format, specialised behaviour</td><td>Poor at adding facts that change; expensive to update (see the <a href="../fine-tuning/index.html">Fine-tuning course</a>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For "answer questions from our documents", RAG is usually the right starting point: it's cheaper, easier to update (just change the documents) and lets you show sources.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 580 190" style="min-width:560px" role="img" aria-label="Three ways to give a model your knowledge. For &#x27;answer from our documents&#x27;, RAG is usually the starting point."><text x="110" y="20" font-size="12" text-anchor="middle" class="mut">Approach</text><text x="400" y="20" font-size="12" text-anchor="middle" class="mut">Best for</text><rect x="20" y="32" width="180" height="40" rx="10" class="b-n"/><text x="110" y="56.55" font-size="13" text-anchor="middle" font-weight="600">Put it in the prompt</text><line x1="204" y1="52" x2="244" y2="52" class="ln"/><polygon points="250,52 242,56.4 242,47.6" class="ah"/><rect x="256" y="32" width="300" height="40" rx="10" class="b-s"/><text x="406" y="56.375" font-size="12.5" text-anchor="middle">one document, one-off</text><rect x="20" y="82" width="180" height="40" rx="10" class="b-g"/><text x="110" y="106.55" font-size="13" text-anchor="middle" font-weight="600">RAG</text><line x1="204" y1="102" x2="244" y2="102" class="ln"/><polygon points="250,102 242,106.4 242,97.6" class="ah"/><rect x="256" y="82" width="300" height="40" rx="10" class="b-s"/><text x="406" y="106.375" font-size="12.5" text-anchor="middle">large, changing knowledge + citations</text><rect x="20" y="132" width="180" height="40" rx="10" class="b-a"/><text x="110" y="156.55" font-size="13" text-anchor="middle" font-weight="600">Fine-tuning</text><line x1="204" y1="152" x2="244" y2="152" class="ln"/><polygon points="250,152 242,156.4 242,147.6" class="ah"/><rect x="256" y="132" width="300" height="40" rx="10" class="b-s"/><text x="406" y="156.375" font-size="12.5" text-anchor="middle">style, format, behaviour</text></svg></div>
+        <figcaption>Three ways to give a model your knowledge. For 'answer from our documents', RAG is usually the starting point.</figcaption>
+      </figure>
+
+      <h2>1.3 The RAG pipeline</h2>
+      <p>Every RAG system has two halves:</p>
+      <ol>
+        <li><strong>Indexing (done ahead of time):</strong> load documents → split them into chunks → turn each chunk into an embedding → store chunks and embeddings in an index.</li>
+        <li><strong>Query time (on every question):</strong> embed the question → retrieve the most similar chunks → put them into a prompt with the question → the LLM writes an answer grounded in those chunks, ideally with citations.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 750 210" style="min-width:640px" role="img" aria-label="The two halves of RAG. Documents are indexed once; each question is embedded, matched against the index, and the best chunks are handed to the LLM with the question."><text x="20" y="22" font-size="13" text-anchor="start" font-weight="700">Indexing — done ahead of time</text><rect x="20" y="34" width="130" height="50" rx="10" class="b-n"/><text x="85" y="63.375" font-size="12.5" text-anchor="middle" font-weight="600">Documents</text><rect x="190" y="34" width="130" height="50" rx="10" class="b-n"/><text x="255" y="55.25" font-size="12.5" text-anchor="middle" font-weight="600">Clean &amp;</text><text x="255" y="71.5" font-size="12.5" text-anchor="middle">chunk</text><rect x="360" y="34" width="130" height="50" rx="10" class="b-a"/><text x="425" y="63.375" font-size="12.5" text-anchor="middle" font-weight="600">Embed</text><rect x="530" y="34" width="130" height="50" rx="10" class="b-w"/><text x="595" y="63.375" font-size="12.5" text-anchor="middle" font-weight="600">Vector index</text><line x1="153" y1="59" x2="181" y2="59" class="ln"/><polygon points="187,59 179,63.4 179,54.6" class="ah"/><line x1="323" y1="59" x2="351" y2="59" class="ln"/><polygon points="357,59 349,63.4 349,54.6" class="ah"/><line x1="493" y1="59" x2="521" y2="59" class="ln"/><polygon points="527,59 519,63.4 519,54.6" class="ah"/><text x="20" y="130" font-size="13" text-anchor="start" font-weight="700">Query time — every question</text><rect x="20" y="142" width="100" height="52" rx="10" class="b-n"/><text x="70" y="172.025" font-size="11.5" text-anchor="middle" font-weight="600">Question</text><rect x="142" y="142" width="100" height="52" rx="10" class="b-a"/><text x="192" y="172.025" font-size="11.5" text-anchor="middle" font-weight="600">Embed</text><rect x="264" y="142" width="100" height="52" rx="10" class="b-w"/><text x="314" y="164.55" font-size="11.5" text-anchor="middle" font-weight="600">Retrieve</text><text x="314" y="179.5" font-size="11.5" text-anchor="middle">top-k chunks</text><rect x="386" y="142" width="100" height="52" rx="10" class="b-n"/><text x="436" y="164.55" font-size="11.5" text-anchor="middle" font-weight="600">Prompt =</text><text x="436" y="179.5" font-size="11.5" text-anchor="middle">chunks + question</text><rect x="508" y="142" width="100" height="52" rx="10" class="b-a"/><text x="558" y="172.025" font-size="11.5" text-anchor="middle" font-weight="600">LLM</text><rect x="630" y="142" width="100" height="52" rx="10" class="b-g"/><text x="680" y="164.55" font-size="11.5" text-anchor="middle" font-weight="600">Answer +</text><text x="680" y="179.5" font-size="11.5" text-anchor="middle">citations</text><line x1="123" y1="168" x2="133" y2="168" class="ln"/><polygon points="139,168 131,172.4 131,163.6" class="ah"/><line x1="245" y1="168" x2="255" y2="168" class="ln"/><polygon points="261,168 253,172.4 253,163.6" class="ah"/><line x1="367" y1="168" x2="377" y2="168" class="ln"/><polygon points="383,168 375,172.4 375,163.6" class="ah"/><line x1="489" y1="168" x2="499" y2="168" class="ln"/><polygon points="505,168 497,172.4 497,163.6" class="ah"/><line x1="611" y1="168" x2="621" y2="168" class="ln"/><polygon points="627,168 619,172.4 619,163.6" class="ah"/><polyline points="595,86 595,112 314,112 314,134" class="ln dash"/><polygon points="314,140 309.6,132 318.4,132" class="ah"/><text x="601" y="106" font-size="11" text-anchor="start" class="mut">searched</text></svg></div>
+        <figcaption>The two halves of RAG. Documents are indexed once; each question is embedded, matched against the index, and the best chunks are handed to the LLM with the question.</figcaption>
+      </figure>
+
+      <h2>1.4 Where RAG goes wrong</h2>
+      <p>When a RAG system gives a bad answer, the cause is usually one of these — and each module of this course tackles one:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Failure</th><th>Symptom</th><th>Module</th></tr></thead>
+          <tbody>
+            <tr><td>Poor embeddings or similarity search</td><td>Irrelevant passages come back</td><td>2</td></tr>
+            <tr><td>Bad chunking</td><td>The answer is split across chunks, or chunks lack context</td><td>3</td></tr>
+            <tr><td>Weak retrieval</td><td>Exact terms (product codes, names) are missed</td><td>4</td></tr>
+            <tr><td>Ungrounded generation</td><td>The model ignores the passages or adds facts</td><td>5</td></tr>
+            <tr><td>No evaluation</td><td>You can't tell if a change helped</td><td>6</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="activity">
+        <b>Try it: is RAG the right tool?</b>
+        <p>For each, choose prompt-stuffing, RAG or fine-tuning: (a) an HR assistant answering from 400 policy documents updated monthly; (b) summarising one 20-page contract; (c) making every output follow your house style for product descriptions.</p>
+        <details><summary>Show answers</summary><p>(a) RAG — large, changing knowledge base. (b) Put it in the prompt — one document fits easily. (c) Fine-tuning (or a strong prompt with examples) — it's about style, not facts.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>LLMs don't know your private, recent or rare information.</li><li>RAG retrieves relevant passages and puts only those into the prompt.</li><li>RAG suits large, changing knowledge; fine-tuning suits style and behaviour.</li><li>Indexing happens ahead of time; retrieval and generation happen per question.</li><li>Most RAG failures come from embeddings, chunking, retrieval, grounding or missing evaluation.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/retrieval-augmented-generation/" target="_blank" rel="noopener">What is retrieval-augmented generation?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/retrieval-augmented-generation" target="_blank" rel="noopener">What is retrieval augmented generation?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Why can't a general LLM reliably answer 'What's our refund window?'",
+"options": [
+"It's not allowed to discuss refunds",
+"It has never seen your private policies, so it can only guess",
+"Refunds are too complex",
+"It needs a bigger context window"
+],
+"answer": 1,
+"explain": "Private information isn't in the training data."
+},
+{
+"q": "Which approach best suits an assistant answering from 400 policy documents updated monthly?",
+"options": [
+"Fine-tuning",
+"Retrieval-augmented generation",
+"Pasting all 400 documents into every prompt",
+"A bigger model"
+],
+"answer": 1,
+"explain": "RAG scales and stays current as documents change."
+},
+{
+"q": "Which step happens at indexing time?",
+"options": [
+"Generating the answer",
+"Embedding the user's question",
+"Splitting documents into chunks and embedding them",
+"Showing citations"
+],
+"answer": 2,
+"explain": "Chunking and embedding documents is done ahead of time."
+},
+{
+"q": "Why is fine-tuning a poor way to add frequently changing facts?",
+"options": [
+"It's illegal",
+"It's expensive to update and models don't reliably recall trained facts",
+"It deletes the model",
+"It only works on images"
+],
+"answer": 1,
+"explain": "Fine-tuning is better for behaviour and style."
+},
+{
+"q": "Users report answers that miss exact product codes. Which stage is the likely culprit?",
+"options": [
+"Generation",
+"Retrieval — semantic search often misses exact identifiers",
+"The user interface",
+"Billing"
+],
+"answer": 1,
+"explain": "Module 4's hybrid search addresses this."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Embeddings and vector search →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

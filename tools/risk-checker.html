@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EU AI Act Risk Checker — Free Tool | Rey Timson</title>
+<meta name="description" content="Answer a few questions about an AI system to get an indicative EU AI Act risk tier and the obligations likely to apply. Updated for the 2026 Digital Omnibus.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body data-root="../" data-page="tools">
+<div id="site-header"></div>
+
+<main id="main">
+  <section class="course-hero">
+    <div class="container read">
+      <span class="eyebrow">Free tool</span>
+      <h1>EU AI Act risk checker</h1>
+      <p class="lead">Describe an AI use case by answering up to eight questions. You'll get an indicative risk tier and a checklist of the obligations likely to apply to you.</p>
+      <p class="muted" style="font-size:.9rem">This is a learning tool, not legal advice. Your answers stay in your browser.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="wizard" id="wizard" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="../assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var el = document.getElementById("wizard");
+  var state = {};
+  var history = [];
+
+  var PROHIBITED = [
+    ["manip", "Uses subliminal, manipulative or deceptive techniques that distort behaviour and are likely to cause significant harm"],
+    ["vuln", "Exploits vulnerabilities due to age, disability or social/economic situation, likely to cause significant harm"],
+    ["social", "Scores people on social behaviour or personal traits, leading to unjustified or unrelated detrimental treatment"],
+    ["crime", "Predicts whether a person will commit a crime based solely on profiling or personality traits"],
+    ["scrape", "Builds or expands a facial recognition database by untargeted scraping from the internet or CCTV"],
+    ["emotion", "Infers emotions of people at work or in education (not for medical or safety reasons)"],
+    ["biocat", "Uses biometric data to infer race, political views, union membership, religion, sex life or sexual orientation"],
+    ["rbi", "Real-time remote biometric identification in public spaces for law enforcement"],
+    ["ncii", "Generates or manipulates non-consensual intimate imagery of real people, or child sexual abuse material"]
+  ];
+  var ANNEX3 = [
+    ["bio", "Biometrics", "Remote biometric identification, biometric categorisation, emotion recognition"],
+    ["infra", "Critical infrastructure", "Safety components for traffic, digital infrastructure, water, gas, heating, electricity"],
+    ["edu", "Education & training", "Admissions, grading, assessing level of education, detecting cheating"],
+    ["work", "Employment & workers", "Recruitment, CV screening, promotion, termination, task allocation, performance monitoring"],
+    ["services", "Essential services", "Public benefits eligibility, credit scoring, life/health insurance pricing, emergency call triage"],
+    ["law", "Law enforcement", "Victim risk, evidence reliability, profiling in investigations"],
+    ["border", "Migration & border control", "Asylum, visa and residence applications; risk assessments"],
+    ["justice", "Justice & democracy", "Assisting judicial decisions; influencing elections or voting"]
+  ];
+  var TRANSP = [
+    ["chat", "Interacts directly with people (e.g. chatbot, voice assistant)"],
+    ["synth", "Generates synthetic text, images, audio or video"],
+    ["emo", "Recognises emotions or categorises people using biometrics"],
+    ["deepfake", "Is used to publish deepfakes, or AI-written text informing the public on matters of public interest"]
+  ];
+
+  var steps = {
+    ai: {
+      title: "Does the system infer its outputs from inputs?",
+      help: "For example using machine learning, or logic- and knowledge-based reasoning — rather than only following rules a human has written.",
+      choices: [
+        ["yes", "Yes — it learns from data or infers outputs", "e.g. a trained model, an LLM, a recommender"],
+        ["no", "No — it only follows fixed rules written by people", "e.g. a spreadsheet formula or simple if-then logic"],
+        ["unsure", "I'm not sure", "We'll continue as if it is, to be safe"]
+      ],
+      next: function (v) { state.ai = v; return v === "no" ? "result" : "scope"; }
+    },
+    scope: {
+      title: "Is it used exclusively for any of these?",
+      choices: [
+        ["military", "Military, defence or national security", ""],
+        ["research", "Scientific research and development only", "Not placed on the market or put into service"],
+        ["personal", "Purely personal, non-professional use by an individual", ""],
+        ["none", "None of these", "It's used in a professional or commercial context"]
+      ],
+      next: function (v) { state.scope = v; return v === "none" ? "prohibited" : "result"; }
+    },
+    prohibited: {
+      title: "Does the system do any of the following?",
+      help: "Tick all that apply. These are the prohibited practices in Article 5.",
+      checks: PROHIBITED,
+      next: function (vals) { state.prohibited = vals; return vals.length ? "result" : "annex1"; }
+    },
+    annex1: {
+      title: "Is it a safety component of a regulated product — or itself such a product?",
+      help: "Products covered by EU product-safety law (Annex I), such as medical devices, toys, lifts, radio equipment or vehicles, that need third-party conformity assessment. The AI must be intended to prevent or reduce health and safety risks.",
+      choices: [
+        ["yes", "Yes", ""],
+        ["no", "No", ""]
+      ],
+      next: function (v) { state.annex1 = v === "yes"; return "annex3"; }
+    },
+    annex3: {
+      title: "Is it used in any of these areas?",
+      help: "Tick all that apply. These are the Annex III high-risk areas.",
+      checks: ANNEX3.map(function (a) { return [a[0], "<strong>" + a[1] + "</strong><small>" + a[2] + "</small>"]; }),
+      next: function (vals) { state.annex3 = vals; return vals.length ? "profiling" : "transparency"; }
+    },
+    profiling: {
+      title: "Does it profile people?",
+      help: "Profiling means automatically evaluating personal aspects of someone — such as performance, reliability, behaviour, preferences, health or economic situation.",
+      choices: [
+        ["yes", "Yes", ""],
+        ["no", "No", ""]
+      ],
+      next: function (v) { state.profiling = v === "yes"; return v === "yes" ? "transparency" : "filter"; }
+    },
+    filter: {
+      title: "Does it only do one of these limited tasks?",
+      help: "The Article 6(3) filter. Choose 'Yes' only if the system does not materially influence the outcome of decisions about people.",
+      choices: [
+        ["yes", "Yes — a narrow procedural task, a preparatory task, improving finished human work, or flagging patterns for human review", "e.g. sorting documents, translating files, checking spelling"],
+        ["no", "No — it makes or materially influences decisions", "e.g. ranks, scores, recommends or decides"]
+      ],
+      next: function (v) { state.filter = v === "yes"; return "transparency"; }
+    },
+    transparency: {
+      title: "Does the system do any of these?",
+      help: "Tick all that apply. These trigger the Article 50 transparency duties.",
+      checks: TRANSP,
+      next: function (vals) { state.transparency = vals; return "role"; }
+    },
+    role: {
+      title: "What is your organisation's role?",
+      choices: [
+        ["provider", "We build it (or have it built) and offer it under our name", "Provider"],
+        ["deployer", "We use a system built by someone else", "Deployer"],
+        ["both", "We build it and use it ourselves", "Provider and deployer"]
+      ],
+      next: function (v) { state.role = v; return "result"; }
+    }
+  };
+  var ORDER = ["ai", "scope", "prohibited", "annex1", "annex3", "profiling", "filter", "transparency", "role"];
+
+  function render(id) {
+    if (id === "result") return renderResult();
+    var s = steps[id];
+    var n = ORDER.indexOf(id) + 1;
+    var html = '<div class="wizard-progress">Question ' + n + " of up to " + ORDER.length + '</div><div class="progress" style="margin-bottom:24px"><span style="width:' + Math.round((n - 1) / ORDER.length * 100) + '%"></span></div>';
+    html += "<h2>" + s.title + "</h2>" + (s.help ? '<p class="muted">' + s.help + "</p>" : "");
+    if (s.choices) {
+      html += '<div class="choice-list">' + s.choices.map(function (c) {
+        return '<button type="button" class="choice" data-v="' + c[0] + '">' + c[1] + (c[2] ? "<small>" + c[2] + "</small>" : "") + "</button>";
+      }).join("") + "</div>";
+    } else {
+      html += '<div class="check-grid">' + s.checks.map(function (c) {
+        return '<label><input type="checkbox" value="' + c[0] + '"><span>' + c[1] + "</span></label>";
+      }).join("") + '</div><div class="btn-row"><button type="button" class="btn btn-primary" data-continue>Continue</button></div>' +
+      '<p class="muted" style="font-size:.88rem;margin-top:10px">If none apply, just continue without ticking anything.</p>';
+    }
+    if (history.length) html += '<p style="margin-top:24px"><button type="button" class="btn btn-ghost" data-back>← Back</button></p>';
+    el.innerHTML = html;
+
+    el.querySelectorAll(".choice").forEach(function (b) {
+      b.addEventListener("click", function () { go(id, s.next(b.getAttribute("data-v"))); });
+    });
+    var cont = el.querySelector("[data-continue]");
+    if (cont) cont.addEventListener("click", function () {
+      var vals = Array.prototype.map.call(el.querySelectorAll("input:checked"), function (i) { return i.value; });
+      go(id, s.next(vals));
+    });
+    var back = el.querySelector("[data-back]");
+    if (back) back.addEventListener("click", function () { render(history.pop()); });
+    var h2 = el.querySelector("h2"); if (h2) { h2.setAttribute("tabindex", "-1"); h2.focus({ preventScroll: true }); }
+  }
+  function go(from, to) { history.push(from); render(to); }
+
+  function li(arr) { return "<ul>" + arr.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>"; }
+  function label(list, key) { var f = list.filter(function (x) { return x[0] === key; })[0]; return f ? f[1] : key; }
+
+  function renderResult() {
+    var tier, title, summary, obligations = [], notes = [];
+    var role = state.role || "deployer";
+    var isProv = role === "provider" || role === "both";
+    var isDep = role === "deployer" || role === "both";
+
+    if (state.ai === "no") {
+      tier = "minimal"; title = "Probably not an AI system";
+      summary = "Software that only follows rules written entirely by people generally falls outside the AI Act's definition. Check the Commission's guidelines on the AI system definition if in doubt.";
+    } else if (state.scope && state.scope !== "none") {
+      tier = "minimal"; title = "Likely outside the scope of the AI Act";
+      summary = { military: "AI used exclusively for military, defence or national security purposes is excluded.", research: "AI developed and used solely for scientific research and development is excluded — until it is placed on the market or put into service.", personal: "Purely personal, non-professional use by individuals is excluded." }[state.scope];
+    } else if (state.prohibited && state.prohibited.length) {
+      tier = "unacceptable"; title = "Unacceptable risk — prohibited";
+      summary = "Based on your answers, this use appears to fall under Article 5. It must not be placed on the market, put into service or used in the EU (subject to very narrow exceptions for law-enforcement biometric identification).";
+      obligations = state.prohibited.map(function (k) { return label(PROHIBITED, k); });
+      notes.push("Fines for prohibited practices reach €35m or 7% of worldwide annual turnover, whichever is higher.");
+      if (state.prohibited.indexOf("ncii") !== -1) notes.push("The ban on non-consensual intimate imagery and CSAM generators applies from 2 December 2026.");
+    } else {
+      var high = state.annex1 || (state.annex3 && state.annex3.length && (state.profiling || !state.filter));
+      var filtered = state.annex3 && state.annex3.length && !state.profiling && state.filter;
+      var t = state.transparency || [];
+      if (high) {
+        tier = "high"; title = "High risk";
+        var areas = (state.annex3 || []).map(function (k) { return ANNEX3.filter(function (a) { return a[0] === k; })[0][1]; });
+        summary = "This system is likely high-risk" + (state.annex1 ? " as a safety component of a regulated product (Annex I)" : "") + (state.annex1 && areas.length ? " and" : "") + (areas.length ? " because it is used in: " + areas.join(", ") + " (Annex III)" : "") + ".";
+        if (isProv) obligations = obligations.concat([
+          "Risk management system across the lifecycle (Art. 9)",
+          "Data governance — representative, examined for bias (Art. 10)",
+          "Technical documentation (Art. 11) — simplified for SMEs/SMCs",
+          "Automatic logging (Art. 12)",
+          "Instructions for use for deployers (Art. 13)",
+          "Human oversight by design (Art. 14)",
+          "Accuracy, robustness and cybersecurity (Art. 15)",
+          "Quality management system (Art. 17)",
+          "Conformity assessment, EU declaration of conformity and CE marking",
+          "Registration in the EU database (Art. 49)",
+          "Post-market monitoring and serious incident reporting (Arts. 72–73)"
+        ]);
+        if (isDep) {
+          obligations = obligations.concat([
+            "Use in line with the provider's instructions (Art. 26)",
+            "Assign competent, trained people to human oversight",
+            "Ensure input data you control is relevant and representative",
+            "Monitor operation; report risks and serious incidents",
+            "Keep logs for at least six months",
+            "Inform workers' representatives before workplace use; inform people affected by decisions"
+          ]);
+          if ((state.annex3 || []).indexOf("services") !== -1) obligations.push("Fundamental rights impact assessment if you're a public body, provide public services, or use AI for credit scoring or life/health insurance pricing (Art. 27)");
+        }
+        notes.push(state.annex1 && !(state.annex3 || []).length ? "Applies from 2 August 2028 (Annex I)." : "Annex III obligations apply from 2 December 2027; Annex I from 2 August 2028.");
+      } else if (t.length) {
+        tier = "limited"; title = "Transparency risk";
+        summary = "This system isn't high-risk on your answers, but it triggers Article 50 transparency duties, which apply from 2 August 2026.";
+      } else {
+        tier = "minimal"; title = "Minimal risk";
+        summary = "No specific AI Act obligations beyond AI literacy. Consider following voluntary codes of conduct and responsible AI good practice.";
+      }
+      if (filtered) notes.push("You indicated the Article 6(3) filter applies. Document this assessment before placing the system on the market and keep it available for authorities — and revisit it if the system's use changes.");
+      if (t.indexOf("chat") !== -1) obligations.push((isProv ? "Provider: " : "") + "Make sure people are told they're interacting with AI, unless obvious (Art. 50(1))");
+      if (t.indexOf("synth") !== -1 && isProv) obligations.push("Provider: mark AI-generated outputs in a machine-readable, detectable way (Art. 50(2)) — systems on the market before 2 Aug 2026 have until 2 Dec 2026");
+      if (t.indexOf("emo") !== -1 && isDep) obligations.push("Deployer: inform people exposed to emotion recognition or biometric categorisation (Art. 50(3))");
+      if (t.indexOf("deepfake") !== -1 && isDep) obligations.push("Deployer: disclose deepfakes and AI-generated public-interest text (Art. 50(4))");
+    }
+    obligations.push("AI literacy: take measures to support a sufficient level of AI literacy among staff (Art. 4)");
+    if (tier === "unacceptable") obligations = obligations.slice(0, -1);
+
+    var html = '<div class="result-card ' + tier + '"><span class="eyebrow" style="color:#fff;opacity:.85">Indicative result</span><h2>' + title + '</h2><p style="margin:0">' + summary + "</p></div>";
+    if (obligations.length) html += '<div class="card" style="margin-top:20px"><h3>' + (tier === "unacceptable" ? "Practices identified" : "Obligations likely to apply") + (state.role && tier !== "unacceptable" ? ' <span class="tag">' + ({ provider: "Provider", deployer: "Deployer", both: "Provider & deployer" })[role] + "</span>" : "") + "</h3>" + li(obligations) + "</div>";
+    if (notes.length) html += '<div class="callout warn">' + "<b>Notes</b>" + li(notes) + "</div>";
+    html += '<div class="callout"><b>Learn more</b><p>Work through <a href="../academy/eu-ai-act/index.html">EU AI Act Fundamentals</a> to understand each obligation. This tool gives an indication only and is not legal advice — complex cases need professional review.</p></div>';
+    html += '<div class="btn-row no-print"><button type="button" class="btn btn-primary" data-restart>Check another system</button><button type="button" class="btn btn-ghost" data-print>Print result</button>' + (history.length ? '<button type="button" class="btn btn-ghost" data-back>← Change last answer</button>' : "") + "</div>";
+    el.innerHTML = html;
+    el.querySelector("[data-restart]").addEventListener("click", function () { state = {}; history = []; render("ai"); });
+    el.querySelector("[data-print]").addEventListener("click", function () { window.print(); });
+    var b = el.querySelector("[data-back]"); if (b) b.addEventListener("click", function () { render(history.pop()); });
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  render("ai");
+})();
+</script>
+</body>
+</html>

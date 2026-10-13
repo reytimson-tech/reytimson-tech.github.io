@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Key terms from Fine-tuning &amp; Model Optimisation, in plain English.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="glossary" aria-label="Course modules"></nav>
+    <article class="lesson">
+      <span class="eyebrow">Reference</span>
+      <h1>Fine-tuning glossary</h1>
+      <p class="lead">Key terms from this course, in plain English.</p>
+      <label for="g-search" class="muted" style="font-size:.9rem">Search terms</label>
+      <input id="g-search" class="glossary-search" type="search" placeholder="e.g. LoRA, DPO, quantisation" data-auto>
+      <p id="g-empty" class="muted" style="display:none">No matching terms.</p>
+      <dl class="glossary" id="glossary">
+        <dt>Adapter</dt><dd>A small set of trainable parameters added to a frozen model, as in LoRA.</dd>
+        <dt>Base model</dt><dd>The pre-trained model you start from before fine-tuning.</dd>
+        <dt>Catastrophic forgetting</dt><dd>Loss of general abilities when a model is trained narrowly.</dd>
+        <dt>Checkpoint</dt><dd>A saved copy of model weights at a point in training.</dd>
+        <dt>Continued pre-training</dt><dd>Further pre-training on unlabelled domain text before task tuning.</dd>
+        <dt>Data leakage</dt><dd>When test data influences training, inflating evaluation results.</dd>
+        <dt>Distillation</dt><dd>Training a small student model on outputs from a larger teacher model.</dd>
+        <dt>DPO</dt><dd>Direct Preference Optimization: tuning on preferred vs rejected responses.</dd>
+        <dt>Epoch</dt><dd>One full pass through the training data.</dd>
+        <dt>Fine-tuning</dt><dd>Further training a pre-trained model on your examples to adapt its behaviour.</dd>
+        <dt>Full fine-tuning</dt><dd>Updating all of a model's parameters.</dd>
+        <dt>JSONL</dt><dd>JSON Lines: a text format with one JSON object per line.</dd>
+        <dt>Learning rate</dt><dd>How large each training update step is.</dd>
+        <dt>LoRA</dt><dd>Low-Rank Adaptation: a PEFT method that trains small low-rank matrices alongside frozen weights.</dd>
+        <dt>Model card</dt><dd>Documentation of a model's purpose, data, performance, limitations and ownership.</dd>
+        <dt>Model routing</dt><dd>Sending each request to the most cost-effective model able to handle it.</dd>
+        <dt>PEFT</dt><dd>Parameter-efficient fine-tuning: methods that train only a small number of parameters.</dd>
+        <dt>Preference tuning</dt><dd>Training on human or AI preferences between responses.</dd>
+        <dt>Prompt caching</dt><dd>Reusing the processed form of a repeated prompt prefix to reduce cost and latency.</dd>
+        <dt>Pruning</dt><dd>Removing weights or components that contribute little to a model.</dd>
+        <dt>QLoRA</dt><dd>LoRA applied to a base model loaded in 4-bit precision.</dd>
+        <dt>Quantisation</dt><dd>Storing model weights with fewer bits to save memory and speed up inference.</dd>
+        <dt>Reinforcement fine-tuning (RFT)</dt><dd>Tuning a model using rewards from a grader on its answers.</dd>
+        <dt>Supervised fine-tuning (SFT)</dt><dd>Training on examples of inputs paired with ideal outputs.</dd>
+        <dt>Validation loss</dt><dd>Error on held-out validation data, used to detect overfitting.</dd>
+      </dl>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

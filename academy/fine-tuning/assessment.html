@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Fine-tuning & Model Optimisation: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "Which situation most clearly calls for fine-tuning?",
+"options": [
+"Answering questions about a policy updated weekly",
+"Making a small model reliably classify millions of messages a day in your categories",
+"Summarising one document",
+"Explaining a new law published today"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Prompting gets your format right 60% of the time and you haven't tried examples in the prompt. Next step?",
+"options": [
+"Fine-tune immediately",
+"Add few-shot examples and clearer instructions, then re-measure",
+"Switch to RAG",
+"Give up"
+],
+"answer": 1,
+"explain": "Climb the ladder (Module 1)."
+},
+{
+"q": "Which is a weakness of fine-tuning?",
+"options": [
+"Consistent formatting",
+"Keeping facts current",
+"Shorter prompts",
+"Narrow-task efficiency"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Why are LoRA adapters convenient in production?",
+"options": [
+"They're large",
+"They're small files, so many adapters can share one base model",
+"They remove the need for evaluation",
+"They can't be swapped"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "You have pairs of 'good' and 'bad' summaries for each article. Which method fits?",
+"options": [
+"SFT only",
+"DPO (preference tuning)",
+"Quantisation",
+"Continued pre-training"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which method suits improving reasoning where answers can be automatically graded?",
+"options": [
+"Reinforcement fine-tuning",
+"Pruning",
+"Prompt caching",
+"Batching"
+],
+"answer": 0,
+"explain": "Module 2."
+},
+{
+"q": "Before fine-tuning on an open-weight model for a commercial product, you must check…",
+"options": [
+"Its colour scheme",
+"That its licence permits commercial use and fine-tuning",
+"Its logo",
+"Nothing"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which dataset is best for tuning product descriptions?",
+"options": [
+"10,000 scraped descriptions of mixed quality",
+"400 approved descriptions in your house style, covering the product range",
+"50 random examples",
+"Descriptions from competitors"
+],
+"answer": 1,
+"explain": "Quality and consistency (Module 3)."
+},
+{
+"q": "What should the last message in each training example be?",
+"options": [
+"The user's question",
+"The assistant's ideal response",
+"The system prompt",
+"An empty string"
+],
+"answer": 1,
+"explain": "The model learns to produce it (Module 3)."
+},
+{
+"q": "A test example also appears in the training set. What's the problem?",
+"options": [
+"None",
+"Data leakage — test scores will be inflated",
+"It improves accuracy legitimately",
+"It saves storage"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "When is synthetic training data appropriate?",
+"options": [
+"Always, without review",
+"When reviewed by people, with terms of use checked",
+"Never",
+"Only for images"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "What does 'target_modules' in a LoRA config specify?",
+"options": [
+"Which layers get adapters",
+"The learning rate",
+"The dataset",
+"The output folder"
+],
+"answer": 0,
+"explain": "Module 4."
+},
+{
+"q": "After 5 epochs, validation loss is lowest at epoch 2. Which checkpoint should you use?",
+"options": [
+"Epoch 5",
+"Epoch 2",
+"Epoch 1 always",
+"None"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which is a known risk of fine-tuning, even on benign data?",
+"options": [
+"Faster inference",
+"Weakened safety behaviours",
+"Lower cost",
+"Better general ability"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which baseline should a fine-tuned model always be compared with?",
+"options": [
+"Nothing",
+"The base model with your best prompt",
+"A random guesser only",
+"Last year's model only"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Your tuned classifier has 95% accuracy but misses most examples of a rare, important class. Which metric would reveal this?",
+"options": [
+"Overall accuracy",
+"Per-class recall",
+"Latency",
+"Token count"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "The tuned model reproduces a customer's address from training data. What's this?",
+"options": [
+"Good recall",
+"Memorisation — a privacy failure",
+"Hallucination",
+"Quantisation"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which technique reduces memory by storing weights with fewer bits?",
+"options": [
+"Distillation",
+"Quantisation",
+"Routing",
+"RAG"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Which approach creates a small model that imitates a large one on a task?",
+"options": [
+"Distillation",
+"Prompt caching",
+"Batching",
+"Pruning only"
+],
+"answer": 0,
+"explain": "Module 6."
+},
+{
+"q": "What should a cost comparison include besides per-call price?",
+"options": [
+"Nothing",
+"One-off data, training and evaluation costs, plus hosting and re-tuning",
+"Only GPU price",
+"Only electricity"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

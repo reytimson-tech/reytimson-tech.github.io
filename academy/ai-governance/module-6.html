@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Running an AI governance programme — AI Governance, Risk &amp; Compliance</title>
+<meta name="description" content="The policy stack, lifecycle gates, monitoring, incident management, assurance, metrics, a 90-day roadmap and culture.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-governance">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Running an AI governance programme</h1>
+      <p class="lead">Bring it together into a working programme — one that keeps AI safe and compliant without slowing the organisation down.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Design an AI policy stack</li><li>Embed governance gates in the AI lifecycle</li><li>Plan monitoring and AI incident management</li><li>Choose assurance activities and governance metrics</li><li>Plan a 90-day governance launch</li></ul>
+      </div>
+
+      <h2>6.1 The policy stack</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Document</th><th>Purpose</th><th>Audience</th></tr></thead>
+          <tbody>
+            <tr><td><strong>AI policy</strong></td><td>Principles, risk appetite, roles, governance process, prohibited uses</td><td>Whole organisation</td></tr>
+            <tr><td><strong>Acceptable use policy</strong> for generative AI</td><td>Approved tools; what data may be used; disclosure; verification</td><td>All staff</td></tr>
+            <tr><td><strong>AI development / procurement standard</strong></td><td>Lifecycle requirements: assessments, testing, documentation, approval gates</td><td>Builders and buyers</td></tr>
+            <tr><td><strong>Procedures and templates</strong></td><td>Inventory form, impact assessment, model card, vendor questionnaire</td><td>Practitioners</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>6.2 Lifecycle gates</h2>
+      <p>Embed governance into the processes teams already use — product development, procurement, change management — with clear <strong>gates</strong>:</p>
+      <ol>
+        <li><strong>Intake:</strong> register the use case; initial risk tiering.</li>
+        <li><strong>Design approval:</strong> impact assessments; data and fairness plans; oversight design.</li>
+        <li><strong>Pre-deployment:</strong> test results against acceptance criteria; documentation complete; go/no-go by the right authority for the tier.</li>
+        <li><strong>Post-deployment:</strong> monitoring, periodic review and re-assessment after significant changes.</li>
+        <li><strong>Retirement:</strong> decommissioning, data handling and record-keeping.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 751 170" style="min-width:620px" role="img" aria-label="Governance embedded in the AI lifecycle through approval gates."><rect x="20" y="50" width="115" height="54" rx="10" class="b-n"/><text x="77.5" y="81.375" font-size="12.5" text-anchor="middle" font-weight="600">Intake</text><rect x="169" y="50" width="115" height="54" rx="10" class="b-a"/><text x="226.5" y="73.25" font-size="12.5" text-anchor="middle" font-weight="600">Design</text><text x="226.5" y="89.5" font-size="12.5" text-anchor="middle">approval</text><rect x="318" y="50" width="115" height="54" rx="10" class="b-a"/><text x="375.5" y="73.25" font-size="12.5" text-anchor="middle" font-weight="600">Pre-</text><text x="375.5" y="89.5" font-size="12.5" text-anchor="middle">deployment</text><rect x="467" y="50" width="115" height="54" rx="10" class="b-w"/><text x="524.5" y="73.25" font-size="12.5" text-anchor="middle" font-weight="600">Post-</text><text x="524.5" y="89.5" font-size="12.5" text-anchor="middle">deployment</text><rect x="616" y="50" width="115" height="54" rx="10" class="b-n"/><text x="673.5" y="81.375" font-size="12.5" text-anchor="middle" font-weight="600">Retirement</text><line x1="138" y1="77" x2="160" y2="77" class="ln"/><polygon points="166,77 158,81.4 158,72.6" class="ah"/><line x1="287" y1="77" x2="309" y2="77" class="ln"/><polygon points="315,77 307,81.4 307,72.6" class="ah"/><line x1="436" y1="77" x2="458" y2="77" class="ln"/><polygon points="464,77 456,81.4 456,72.6" class="ah"/><line x1="585" y1="77" x2="607" y2="77" class="ln"/><polygon points="613,77 605,81.4 605,72.6" class="ah"/><rect x="149" y="40" width="6" height="74" rx="2" class="f-w"/><rect x="298" y="40" width="6" height="74" rx="2" class="f-w"/><rect x="447" y="40" width="6" height="74" rx="2" class="f-w"/><rect x="596" y="40" width="6" height="74" rx="2" class="f-w"/><text x="77.5" y="136.7" font-size="11" text-anchor="middle" class="mut">register,</text><text x="77.5" y="151" font-size="11" text-anchor="middle" class="mut">initial tier</text><text x="226.5" y="136.7" font-size="11" text-anchor="middle" class="mut">assessments,</text><text x="226.5" y="151" font-size="11" text-anchor="middle" class="mut">oversight design</text><text x="375.5" y="136.7" font-size="11" text-anchor="middle" class="mut">test results,</text><text x="375.5" y="151" font-size="11" text-anchor="middle" class="mut">go / no-go</text><text x="524.5" y="136.7" font-size="11" text-anchor="middle" class="mut">monitor, review,</text><text x="524.5" y="151" font-size="11" text-anchor="middle" class="mut">re-assess</text><text x="673.5" y="136.7" font-size="11" text-anchor="middle" class="mut">decommission,</text><text x="673.5" y="151" font-size="11" text-anchor="middle" class="mut">keep records</text><text x="20" y="28" font-size="11.5" text-anchor="start" font-weight="600" class="t-w">Gates (amber) where work can be paused or stopped</text></svg></div>
+        <figcaption>Governance embedded in the AI lifecycle through approval gates.</figcaption>
+      </figure>
+
+      <h2>6.3 Monitoring</h2>
+      <p>AI systems change — data drifts, vendors update models, users find new ways to use them. Monitor:</p>
+      <ul>
+        <li><strong>Performance:</strong> accuracy, error rates, drift</li>
+        <li><strong>Fairness:</strong> outcomes by group</li>
+        <li><strong>Usage:</strong> is it used as intended? Are humans overriding it (too much or too little)?</li>
+        <li><strong>Incidents and complaints</strong></li>
+        <li><strong>Vendor changes</strong> to underlying models</li>
+      </ul>
+
+      <h2>6.4 Incident management</h2>
+      <p>Define what an <strong>AI incident</strong> is (e.g. harmful output, discriminatory outcome, data leak, security compromise, significant malfunction), how to report it, who triages it, and when to pause or roll back a system. Integrate with existing incident, privacy-breach and security processes. Under the EU AI Act, providers of high-risk systems must report serious incidents to authorities, and deployers must inform providers.</p>
+
+      <h2>6.5 Assurance and audit</h2>
+      <ul>
+        <li><strong>Internal audit</strong> of the governance programme and of high-risk systems</li>
+        <li><strong>External assurance</strong> — ISO/IEC 42001 certification, independent algorithmic audits, conformity assessment for EU high-risk systems</li>
+        <li><strong>Management review</strong> — regular reporting to the executive and board</li>
+      </ul>
+
+      <h2>6.6 Metrics that matter</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Example metrics</th></tr></thead>
+          <tbody>
+            <tr><td>Coverage</td><td>% of known AI systems in the inventory with an owner and risk tier</td></tr>
+            <tr><td>Process</td><td>% of high-risk systems with completed assessments; average time through review</td></tr>
+            <tr><td>People</td><td>% of staff who completed AI literacy training</td></tr>
+            <tr><td>Outcomes</td><td>Incidents by severity; fairness gaps; complaints about AI decisions</td></tr>
+            <tr><td>Third parties</td><td>% of AI vendors with completed due diligence</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>6.7 A 90-day starter roadmap</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Days</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>0–30</td><td>Executive sponsor; cross-functional working group; generative AI acceptable use policy and approved tools; start the inventory</td></tr>
+            <tr><td>31–60</td><td>Risk-tiering scheme; impact assessment template; vendor questionnaire; classify inventory; identify any prohibited or high-risk uses</td></tr>
+            <tr><td>61–90</td><td>AI policy approved; governance committee running; AI literacy training launched; gap analysis against EU AI Act and ISO/IEC 42001; roadmap for the next year</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 236" style="min-width:560px" role="img" aria-label="A 90-day starter roadmap: quick wins first (sponsor, acceptable use policy, inventory), then the scheme, policy and committee."><line x1="280" y1="20" x2="280" y2="226" class="ln-l"/><text x="280" y="14" font-size="11" text-anchor="middle" class="mut">day 0</text><line x1="400" y1="20" x2="400" y2="226" class="ln-l"/><text x="400" y="14" font-size="11" text-anchor="middle" class="mut">day 30</text><line x1="520" y1="20" x2="520" y2="226" class="ln-l"/><text x="520" y="14" font-size="11" text-anchor="middle" class="mut">day 60</text><line x1="640" y1="20" x2="640" y2="226" class="ln-l"/><text x="640" y="14" font-size="11" text-anchor="middle" class="mut">day 90</text><text x="270" y="42" font-size="11.5" text-anchor="end">Executive sponsor &amp; working group</text><rect x="280" y="30" width="60" height="18" rx="4" class="b-a"/><text x="270" y="70" font-size="11.5" text-anchor="end">Generative AI acceptable use policy</text><rect x="280" y="58" width="120" height="18" rx="4" class="b-a"/><text x="270" y="98" font-size="11.5" text-anchor="end">Start AI inventory</text><rect x="300" y="86" width="220" height="18" rx="4" class="b-a"/><text x="270" y="126" font-size="11.5" text-anchor="end">Risk tiers, assessment &amp; vendor templates</text><rect x="400" y="114" width="120" height="18" rx="4" class="b-w"/><text x="270" y="154" font-size="11.5" text-anchor="end">AI policy &amp; governance committee</text><rect x="500" y="142" width="140" height="18" rx="4" class="b-g"/><text x="270" y="182" font-size="11.5" text-anchor="end">AI literacy training launched</text><rect x="520" y="170" width="120" height="18" rx="4" class="b-g"/><text x="270" y="210" font-size="11.5" text-anchor="end">Gap analysis: EU AI Act &amp; ISO 42001</text><rect x="540" y="198" width="100" height="18" rx="4" class="b-g"/></svg></div>
+        <figcaption>A 90-day starter roadmap: quick wins first (sponsor, acceptable use policy, inventory), then the scheme, policy and committee.</figcaption>
+      </figure>
+
+      <h2>6.8 Culture</h2>
+      <p>Governance succeeds when people see it as helping them ship safely, not blocking them. Make the process fast for low-risk uses, explain the "why", celebrate teams that raise issues early, and make it safe for anyone to report concerns.</p>
+
+      <div class="activity">
+        <b>Capstone: governance gap analysis</b>
+        <p>For your organisation (or one you know), score 1–5 on: inventory; policy; roles; risk tiering; impact assessment; vendor due diligence; testing and monitoring; incident management; training; assurance. Pick the three lowest scores and write one concrete action for each in the next 90 days.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Policy, acceptable use policy, lifecycle standard, procedures and templates.</li><li>Gates at intake, design, pre-deployment, post-deployment and retirement.</li><li>Monitor performance, fairness, usage, incidents and vendor changes.</li><li>Define and rehearse AI incident response.</li><li>Measure coverage, process, people, outcomes and third parties — and build a culture that helps teams ship safely.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">NIST</span><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">AI Risk Management Framework</a> — AI RMF 1.0 and the Generative AI Profile (NIST AI 600-1)</li><li><span class="provider">ISO</span><a href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener">ISO/IEC 42001:2023 — AI management systems</a></li><li><span class="provider">Microsoft</span><a href="https://www.microsoft.com/ai/responsible-ai" target="_blank" rel="noopener">Responsible AI: policies and practices</a> — Responsible AI Standard and annual transparency report</li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener">All courses</a> — including Apply AI at Work and Lead AI Adoption</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Which document tells all staff which generative AI tools they may use and what data they can put in them?",
+"options": [
+"Model card",
+"Acceptable use policy",
+"Statement of Applicability",
+"Datasheet"
+],
+"answer": 1,
+"explain": "The AUP guides everyday use."
+},
+{
+"q": "At which gate are test results checked against acceptance criteria before go/no-go?",
+"options": [
+"Intake",
+"Pre-deployment",
+"Retirement",
+"Design approval"
+],
+"answer": 1,
+"explain": "Pre-deployment gates confirm readiness."
+},
+{
+"q": "Why monitor how often humans override an AI system?",
+"options": [
+"To reward speed",
+"Too few overrides may indicate rubber-stamping; too many may indicate poor performance",
+"It's not useful",
+"To reduce staff"
+],
+"answer": 1,
+"explain": "Override rates signal oversight quality and performance."
+},
+{
+"q": "Under the EU AI Act, who must report serious incidents involving high-risk systems to authorities?",
+"options": [
+"Nobody",
+"Providers, with deployers informing providers",
+"Only end users",
+"Only the AI Office"
+],
+"answer": 1,
+"explain": "Providers report; deployers inform providers."
+},
+{
+"q": "Which belongs in the first 30 days of a governance launch?",
+"options": [
+"ISO certification audit",
+"Executive sponsor, working group, generative AI acceptable use policy and starting the inventory",
+"Annual external audit",
+"Decommissioning all AI"
+],
+"answer": 1,
+"explain": "Start with sponsorship, quick policy wins and visibility."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

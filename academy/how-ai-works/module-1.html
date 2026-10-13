@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: From rules to learning — How AI and Large Language Models Work</title>
+<meta name="description" content="Traditional programming vs machine learning; data, features, models, training and inference; why AI took off.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 20 minutes</span>
+      <h1>From rules to learning</h1>
+      <p class="lead">Every AI system you use rests on one shift in thinking: instead of telling computers the rules, we let them learn the rules from examples.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Contrast traditional programming with machine learning</li><li>Define data, features, labels, models, training and inference</li><li>Describe training intuitively as error-reducing adjustment</li><li>Explain why AI advanced so quickly from the 2010s</li></ul>
+      </div>
+
+      <h2>1.1 Two ways to make a computer do something</h2>
+      <p>For most of computing history, software worked one way: a programmer wrote explicit rules. That's perfect when the rules are known — calculating VAT, sorting a list, booking a seat.</p>
+      <p>But some tasks resist rules. Try writing instructions for recognising a cat in a photo: pointy ears (but some cats' ears fold), whiskers (but so do dogs), fur (but so do rugs)… You'd never finish. <strong>Machine learning</strong> flips the approach: instead of writing rules, you show the computer many examples and let it find the patterns itself.</p>
+      <div class="compare">
+        <div><h4>Traditional programming</h4><p><strong>Rules + data → answers.</strong> A person writes the rules; the computer applies them.</p></div>
+        <div><h4>Machine learning</h4><p><strong>Data + answers → rules.</strong> The computer learns the "rules" (a model) from examples; then it applies the model to new data.</p></div>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 225" style="min-width:560px" role="img" aria-label="Traditional software applies rules a person wrote. Machine learning works backwards from examples with known answers to learn the rules — the model — which it then applies to new data."><text x="170" y="22" font-size="14" text-anchor="middle" font-weight="700">Traditional programming</text><text x="530" y="22" font-size="14" text-anchor="middle" font-weight="700">Machine learning</text><rect x="30" y="50" width="120" height="44" rx="10" class="b-n"/><text x="90" y="76.55" font-size="13" text-anchor="middle" font-weight="600">Rules</text><rect x="30" y="110" width="120" height="44" rx="10" class="b-n"/><text x="90" y="136.55" font-size="13" text-anchor="middle" font-weight="600">Data</text><rect x="200" y="78" width="110" height="48" rx="10" class="b-s"/><text x="255" y="106.55" font-size="13" text-anchor="middle" font-weight="600">Program</text><rect x="200" y="160" width="110" height="44" rx="10" class="b-g"/><text x="255" y="186.55" font-size="13" text-anchor="middle" font-weight="600">Answers</text><line x1="153" y1="83.4545" x2="191.097" y2="90.3812" class="ln"/><polygon points="197,91.4545 188.342,94.3525 189.916,85.6944" class="ah"/><line x1="153" y1="120.545" x2="191.097" y2="113.619" class="ln"/><polygon points="197,112.545 189.916,118.306 188.342,109.648" class="ah"/><line x1="255" y1="129" x2="255" y2="151" class="ln"/><polygon points="255,157 250.6,149 259.4,149" class="ah"/><text x="263" y="147" font-size="11.5" text-anchor="start" class="mut">computes</text><line x1="360" y1="40" x2="360" y2="220" class="ln-l"/><rect x="390" y="50" width="120" height="44" rx="10" class="b-n"/><text x="450" y="76.55" font-size="13" text-anchor="middle" font-weight="600">Data</text><rect x="390" y="110" width="120" height="44" rx="10" class="b-n"/><text x="450" y="128.25" font-size="12.5" text-anchor="middle" font-weight="600">Answers</text><text x="450" y="144.5" font-size="12.5" text-anchor="middle">(examples)</text><rect x="560" y="78" width="110" height="48" rx="10" class="b-a"/><text x="615" y="106.55" font-size="13" text-anchor="middle" font-weight="600">Training</text><rect x="560" y="160" width="110" height="44" rx="10" class="b-g"/><text x="615" y="178.25" font-size="12.5" text-anchor="middle" font-weight="600">Model</text><text x="615" y="194.5" font-size="12.5" text-anchor="middle">(learned rules)</text><line x1="513" y1="83.4545" x2="551.097" y2="90.3812" class="ln"/><polygon points="557,91.4545 548.342,94.3525 549.916,85.6944" class="ah"/><line x1="513" y1="120.545" x2="551.097" y2="113.619" class="ln"/><polygon points="557,112.545 549.916,118.306 548.342,109.648" class="ah"/><line x1="615" y1="129" x2="615" y2="151" class="ln"/><polygon points="615,157 610.6,149 619.4,149" class="ah"/><text x="623" y="147" font-size="11.5" text-anchor="start" class="mut">produces</text></svg></div>
+        <figcaption>Traditional software applies rules a person wrote. Machine learning works backwards from examples with known answers to learn the rules — the <em>model</em> — which it then applies to new data.</figcaption>
+      </figure>
+
+      <h2>1.2 The building blocks</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Term</th><th>Plain-English meaning</th><th>House-price example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Data</strong></td><td>The examples the system learns from</td><td>10,000 past house sales</td></tr>
+            <tr><td><strong>Features</strong></td><td>The pieces of information about each example</td><td>Bedrooms, floor area, postcode, garden</td></tr>
+            <tr><td><strong>Label</strong></td><td>The answer you want it to learn to predict</td><td>The sale price</td></tr>
+            <tr><td><strong>Model</strong></td><td>The learned pattern — a mathematical function with adjustable settings (parameters)</td><td>"Each extra bedroom adds roughly £X in this area…"</td></tr>
+            <tr><td><strong>Training</strong></td><td>Adjusting the parameters so predictions match the examples as closely as possible</td><td>Tuning until predicted prices are close to real ones</td></tr>
+            <tr><td><strong>Inference</strong></td><td>Using the trained model on new data</td><td>Estimating the price of a house that's just been listed</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>1.3 How training works, intuitively</h2>
+      <p>Imagine tuning a radio. You turn the dial, listen, and turn it a bit more in whichever direction sounds clearer. Training is similar, but with thousands to billions of dials (parameters):</p>
+      <ol>
+        <li>The model makes a prediction for a training example.</li>
+        <li>We measure how wrong it was, using a <strong>loss</strong> (error) score.</li>
+        <li>We nudge every parameter slightly in the direction that would have reduced the error.</li>
+        <li>Repeat — over every example, many times.</li>
+      </ol>
+      <p>This nudging process is called <strong>gradient descent</strong>. You don't need the maths to use AI well, but the intuition matters: <em>a model only learns what its data and its error score reward</em>. That idea will come back when we look at why LLMs hallucinate.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 320" style="min-width:560px" role="img" aria-label="Training is a loop: the model predicts, the loss measures how wrong it was, and gradient descent nudges every parameter to reduce that error. Repeated millions of times, the error falls."><polyline points="400.012,64 418.388,71.6117 440.692,125.457" class="ln"/><polygon points="442.988,131 435.861,125.293 443.991,121.925" class="ah"/><polyline points="442.988,189 418.388,248.388 405.555,253.704" class="ln"/><polygon points="400.012,256 405.719,248.873 409.087,257.004" class="ah"/><polyline points="259.988,256 241.612,248.388 219.308,194.543" class="ln"/><polygon points="217.012,189 224.139,194.707 216.009,198.075" class="ah"/><polyline points="217.012,131 241.612,71.6117 254.445,66.2961" class="ln"/><polygon points="259.988,64 254.281,71.1265 250.913,62.9964" class="ah"/><rect x="255" y="9" width="150" height="52" rx="10" class="b-a"/><text x="330" y="39.55" font-size="13" text-anchor="middle" font-weight="600">1. Predict</text><rect x="380" y="134" width="150" height="52" rx="10" class="b-w"/><text x="455" y="156.1" font-size="13" text-anchor="middle" font-weight="600">2. Measure error</text><text x="455" y="173" font-size="13" text-anchor="middle">(loss)</text><rect x="255" y="259" width="150" height="52" rx="10" class="b-a"/><text x="330" y="281.1" font-size="13" text-anchor="middle" font-weight="600">3. Nudge every</text><text x="330" y="298" font-size="13" text-anchor="middle">parameter</text><rect x="130" y="134" width="150" height="52" rx="10" class="b-n"/><text x="205" y="156.1" font-size="13" text-anchor="middle" font-weight="600">4. Repeat with</text><text x="205" y="173" font-size="13" text-anchor="middle">next examples</text><text x="330" y="156" font-size="15" text-anchor="middle" font-weight="700">Training</text><text x="330" y="176" font-size="15" text-anchor="middle" font-weight="700">loop</text></svg></div>
+        <figcaption>Training is a loop: the model predicts, the loss measures how wrong it was, and gradient descent nudges every parameter to reduce that error. Repeated millions of times, the error falls.</figcaption>
+      </figure>
+
+      <h2>1.4 Why now?</h2>
+      <p>The core ideas behind machine learning and neural networks are decades old. Three things came together in the 2010s to make them powerful:</p>
+      <ul>
+        <li><strong>Data:</strong> the internet and digitisation created huge datasets of text, images and behaviour.</li>
+        <li><strong>Compute:</strong> graphics processing units (GPUs), originally built for video games, turned out to be excellent at the maths neural networks need.</li>
+        <li><strong>Algorithms:</strong> better techniques for training very large networks — culminating in the transformer architecture in 2017.</li>
+      </ul>
+
+      <div class="activity">
+        <b>Try it: rules or learning?</b>
+        <p>For each task, decide whether rules or machine learning fits better: (a) calculating holiday pay, (b) detecting fraudulent insurance claims, (c) checking a form has a valid date, (d) transcribing a phone call.</p>
+        <details><summary>Show answers</summary><p>(a) Rules — the policy is known. (b) Learning — fraud patterns are complex and change. (c) Rules. (d) Learning — speech varies far too much for hand-written rules.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Machine learning learns rules from data and answers instead of being given rules.</li><li>A model is a function with parameters adjusted in training to reduce error.</li><li>A model only learns what its data and error score reward.</li><li>Data, compute (GPUs) and better algorithms drove the AI boom.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/get-started-ai-fundamentals/" target="_blank" rel="noopener">Introduction to AI concepts</a> — AI workloads: generative AI, vision, speech, language and responsible AI</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/artificial-intelligence" target="_blank" rel="noopener">What is artificial intelligence?</a></li><li><span class="provider">AWS Skill Builder</span><a href="https://skillbuilder.aws/category/exam-prep/ai-practitioner-AIF-C01" target="_blank" rel="noopener">AWS Certified AI Practitioner exam prep plan</a> — free foundational AI training, including responsible AI and AI governance</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Which describes machine learning?",
+"options": [
+"Rules + data → answers",
+"Data + answers → learned rules (a model)",
+"Answers → data",
+"Rules only, no data"
+],
+"answer": 1,
+"explain": "ML learns the model from examples with known answers."
+},
+{
+"q": "In a model predicting house prices, the number of bedrooms is a…",
+"options": [
+"Label",
+"Feature",
+"Loss",
+"Token"
+],
+"answer": 1,
+"explain": "Features describe each example; the price is the label."
+},
+{
+"q": "What is 'inference'?",
+"options": [
+"Collecting training data",
+"Using a trained model to make predictions on new data",
+"Deleting a model",
+"Labelling data"
+],
+"answer": 1,
+"explain": "Inference is applying the model after training."
+},
+{
+"q": "During training, parameters are adjusted to…",
+"options": [
+"Make the model larger",
+"Reduce the error (loss) on training examples",
+"Make the model faster",
+"Increase randomness"
+],
+"answer": 1,
+"explain": "Gradient descent nudges parameters to reduce the loss."
+},
+{
+"q": "Which was NOT one of the main drivers of the deep learning boom?",
+"options": [
+"Large datasets",
+"GPUs",
+"Better training algorithms",
+"The invention of the spreadsheet"
+],
+"answer": 3,
+"explain": "Data, compute and algorithms came together in the 2010s."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Types of machine learning →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

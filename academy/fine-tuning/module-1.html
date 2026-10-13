@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: When to fine-tune — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="What fine-tuning is, the prompt → model → RAG → fine-tune ladder, strengths and weaknesses, where to fine-tune, and total cost.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>When to fine-tune</h1>
+      <p class="lead">Fine-tuning is the most over-prescribed technique in generative AI. This module helps you decide when it's genuinely the right tool.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Define fine-tuning</li><li>Apply the optimisation ladder</li><li>Identify what fine-tuning is good and bad at</li><li>Compare hosted and self-managed fine-tuning</li><li>Estimate the full cost of a fine-tuned model</li></ul>
+      </div>
+
+      <h2>1.1 What fine-tuning is</h2>
+      <p><strong>Fine-tuning</strong> means taking a pre-trained model and training it further on your own examples so it adapts its behaviour. The model's parameters change; afterwards, it behaves differently even with a short prompt.</p>
+
+      <h2>1.2 Try these first</h2>
+      <p>Fine-tuning is powerful but slow, costly to maintain and easy to get wrong. Most teams should climb this ladder one rung at a time, stopping as soon as quality is good enough:</p>
+      <ol>
+        <li><strong>Better prompts</strong> — clear instructions, examples, structure (see <a href="../prompt-engineering/index.html">Prompt Engineering</a>).</li>
+        <li><strong>A better or different model</strong> — a stronger model, or a reasoning model, may simply solve it.</li>
+        <li><strong>Retrieval (RAG)</strong> — if the problem is missing knowledge (see <a href="../rag/index.html">RAG</a>).</li>
+        <li><strong>Fine-tuning</strong> — if the problem is behaviour, format, style or efficiency, and you have good examples.</li>
+      </ol>
+      <p>OpenAI's model optimisation guidance makes the same point: prompt engineering "may be all you need", and fine-tuning "can be a time-consuming process".</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 232" style="min-width:560px" role="img" aria-label="The optimisation ladder. Each rung costs more to build and maintain than the one below."><rect x="20" y="160" width="300" height="40" rx="10" class="b-n"/><text x="170" y="184.2" font-size="12" text-anchor="middle">1 · Better prompt — instructions, examples, structure</text><rect x="65" y="114" width="300" height="40" rx="10" class="b-n"/><text x="215" y="138.2" font-size="12" text-anchor="middle">2 · Better model — stronger or reasoning model</text><rect x="110" y="68" width="300" height="40" rx="10" class="b-a"/><text x="260" y="92.2" font-size="12" text-anchor="middle">3 · RAG — if knowledge is missing</text><rect x="155" y="22" width="300" height="40" rx="10" class="b-w"/><text x="305" y="46.2" font-size="12" text-anchor="middle">4 · Fine-tune — if behaviour, format or cost</text><polyline points="520,200 520,32" class="ln"/><polygon points="520,26 524.4,34 515.6,34" class="ah"/><text x="530" y="24" font-size="11.5" text-anchor="start" class="mut">more effort,</text><text x="530" y="40" font-size="11.5" text-anchor="start" class="mut">cost and upkeep</text><text x="200" y="222" font-size="11.5" text-anchor="middle" font-weight="600" class="t-g">Stop at the first rung that meets your quality bar</text></svg></div>
+        <figcaption>The optimisation ladder. Each rung costs more to build and maintain than the one below.</figcaption>
+      </figure>
+
+      <h2>1.3 What fine-tuning is good — and bad — at</h2>
+      <div class="compare">
+        <div class="strong"><h4>Good at</h4><ul><li>Consistent output formats and structure</li><li>Tone, style and brand voice</li><li>Narrow classification and extraction tasks</li><li>Following complex instructions reliably</li><li>Making a <em>smaller, cheaper, faster</em> model do one task well</li><li>Shorter prompts (fewer tokens per call)</li></ul></div>
+        <div class="weak"><h4>Bad at</h4><ul><li>Teaching frequently changing facts — use RAG</li><li>Fixing a vague task definition — fix the task first</li><li>Small datasets of mixed quality</li><li>Guaranteeing accuracy — fine-tuned models still hallucinate</li><li>Anything you can't evaluate</li></ul></div>
+      </div>
+
+      <h2>1.4 Where you can fine-tune</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Option</th><th>Examples</th><th>Trade-offs</th></tr></thead>
+          <tbody>
+            <tr><td>Hosted fine-tuning from model providers and clouds</td><td>Cloud AI platforms such as Amazon Bedrock, Google Vertex AI and Microsoft Azure AI Foundry offer fine-tuning for selected models</td><td>Easy and managed; limited choice of models and methods; check data terms</td></tr>
+            <tr><td>Open-weight models you tune yourself</td><td>Llama, Mistral, Gemma, Qwen and others, using open-source libraries such as Hugging Face Transformers and PEFT</td><td>Full control and privacy; you manage GPUs, serving and security</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout update">
+        <b>The landscape is shifting</b>
+        <p>Provider offerings change often. In 2026, OpenAI's documentation states that its fine-tuning platform is winding down and no longer open to new users — a reminder to check current availability, and to design so you're not locked into one vendor's tuning service.</p>
+      </div>
+
+      <h2>1.5 The total cost of a fine-tuned model</h2>
+      <ul>
+        <li><strong>Data:</strong> collecting, cleaning and labelling examples — usually the biggest cost.</li>
+        <li><strong>Training:</strong> compute (GPUs) or platform fees.</li>
+        <li><strong>Evaluation:</strong> test sets and repeated comparisons.</li>
+        <li><strong>Serving:</strong> hosting a custom model may cost more than calling a shared one.</li>
+        <li><strong>Maintenance:</strong> when the base model is updated or retired, you may need to re-tune and re-evaluate.</li>
+      </ul>
+
+      <div class="activity">
+        <b>Try it: fine-tune or not?</b>
+        <p>(a) Your support bot doesn't know about this month's new product line. (b) Your product descriptions must always follow a precise 5-part template and brand voice, and prompting gets it right 80% of the time. (c) You want to classify 2 million emails a day cheaply.</p>
+        <details><summary>Show suggested answers</summary><p>(a) RAG — it's missing knowledge. (b) Good fine-tuning candidate — consistent format and style, after strengthening the prompt. (c) Strong candidate — fine-tune (or distil into) a small, cheap model for one narrow task.</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Fine-tuning changes the model's weights using your examples.</li><li>Try prompting, a better model and RAG first.</li><li>Fine-tuning suits format, style, narrow tasks and efficiency — not changing facts.</li><li>Provider offerings change; avoid lock-in.</li><li>Data and maintenance are usually the biggest costs.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/fine-tuning" target="_blank" rel="noopener">What is fine-tuning?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/foundation-models/" target="_blank" rel="noopener">What are foundation models?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "Your assistant doesn't know about products launched this month. What's the best fix?",
+"options": [
+"Fine-tune monthly",
+"RAG over the product catalogue",
+"Raise the temperature",
+"Use a smaller model"
+],
+"answer": 1,
+"explain": "Missing, changing knowledge suits retrieval."
+},
+{
+"q": "Which problem is fine-tuning best suited to?",
+"options": [
+"Answering questions about yesterday's news",
+"Producing a precise output format and brand voice consistently",
+"Fixing an unclear task definition",
+"Guaranteeing zero hallucinations"
+],
+"answer": 1,
+"explain": "Consistent format and style."
+},
+{
+"q": "What's usually the biggest cost of a fine-tuned model?",
+"options": [
+"The training run's electricity",
+"Collecting, cleaning and labelling high-quality data — plus maintenance",
+"The adapter file storage",
+"The API key"
+],
+"answer": 1,
+"explain": "Data and upkeep dominate."
+},
+{
+"q": "What should you try before fine-tuning?",
+"options": [
+"Nothing",
+"Better prompts, a better model and RAG",
+"Training from scratch",
+"Removing evaluation"
+],
+"answer": 1,
+"explain": "Climb the ladder one rung at a time."
+},
+{
+"q": "Why design to avoid lock-in to one vendor's fine-tuning service?",
+"options": [
+"It's illegal",
+"Provider offerings change — some platforms have closed to new users",
+"Vendors don't allow evaluation",
+"It's always cheaper"
+],
+"answer": 1,
+"explain": "Availability shifts."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Fine-tuning methods →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

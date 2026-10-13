@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Discovery: the right problem — AI Product Management</title>
+<meta name="description" content="User problems before technology, when AI helps, automate vs augment, problem framing, and fast prototyping with real inputs.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 25 minutes</span>
+      <h1>Discovery: the right problem</h1>
+      <p class="lead">The most important AI product decision is whether to use AI at all. This module helps you find problems where AI adds real value.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Assess whether AI adds unique value</li><li>Decide between automation and augmentation</li><li>Write an AI problem framing</li><li>Prototype quickly with real examples</li></ul>
+      </div>
+
+      <h2>2.1 Start with the user problem</h2>
+      <p>"Use AI" is not a user need. Discovery for AI products is the same as for any product — interviews, observation, data — with one extra question: <strong>is AI the best way to solve this?</strong> Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a> recommends asking whether AI adds unique value before committing.</p>
+
+      <h2>2.2 When AI helps — and when it doesn't</h2>
+      <div class="compare">
+        <div><h4>AI is likely to help when…</h4><ul><li>The task involves language, images or patterns humans find tedious</li><li>Personalisation at scale matters</li><li>Rules would be too many or too brittle to write</li><li>Some errors are acceptable and recoverable</li></ul></div>
+        <div><h4>Prefer simpler solutions when…</h4><ul><li>Clear rules already work well</li><li>Users need total predictability</li><li>Errors are costly and hard to detect</li><li>There's no data, or no way to judge quality</li></ul></div>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 750 214" style="min-width:640px" role="img" aria-label="A quick screen before committing to AI. &#x27;No&#x27; answers don&#x27;t always kill an idea, but they change the design."><rect x="20" y="70" width="110" height="46" rx="10" class="b-n"/><text x="75" y="97.2" font-size="12" text-anchor="middle" font-weight="600">User problem</text><rect x="165" y="70" width="120" height="46" rx="10" class="b-w"/><text x="225" y="89.55" font-size="11.5" text-anchor="middle" font-weight="600">Do simple rules</text><text x="225" y="104.5" font-size="11.5" text-anchor="middle">work well?</text><rect x="320" y="70" width="120" height="46" rx="10" class="b-w"/><text x="380" y="89.55" font-size="11.5" text-anchor="middle" font-weight="600">Can we judge</text><text x="380" y="104.5" font-size="11.5" text-anchor="middle">quality?</text><rect x="475" y="70" width="120" height="46" rx="10" class="b-w"/><text x="535" y="89.55" font-size="11.5" text-anchor="middle" font-weight="600">Are errors</text><text x="535" y="104.5" font-size="11.5" text-anchor="middle">recoverable?</text><rect x="630" y="70" width="100" height="46" rx="10" class="b-g"/><text x="680" y="89.4" font-size="12" text-anchor="middle" font-weight="600">Good AI</text><text x="680" y="105" font-size="12" text-anchor="middle">candidate</text><rect x="165" y="160" width="120" height="40" rx="10" class="b-s"/><text x="225" y="184.2" font-size="12" text-anchor="middle" font-weight="600">Use rules</text><rect x="320" y="160" width="120" height="40" rx="10" class="b-b"/><text x="380" y="176.55" font-size="11.5" text-anchor="middle" font-weight="600">Define quality</text><text x="380" y="191.5" font-size="11.5" text-anchor="middle">first</text><rect x="475" y="160" width="120" height="40" rx="10" class="b-b"/><text x="535" y="176.55" font-size="11.5" text-anchor="middle" font-weight="600">Keep a human</text><text x="535" y="191.5" font-size="11.5" text-anchor="middle">deciding</text><line x1="133" y1="93" x2="156" y2="93" class="ln"/><polygon points="162,93 154,97.4 154,88.6" class="ah"/><line x1="288" y1="93" x2="311" y2="93" class="ln"/><polygon points="317,93 309,97.4 309,88.6" class="ah"/><text x="302.5" y="86" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="443" y1="93" x2="466" y2="93" class="ln"/><polygon points="472,93 464,97.4 464,88.6" class="ah"/><text x="457.5" y="86" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="598" y1="93" x2="621" y2="93" class="ln"/><polygon points="627,93 619,97.4 619,88.6" class="ah"/><text x="612.5" y="86" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="225" y1="120" x2="225" y2="150" class="ln"/><polygon points="225,156 220.6,148 229.4,148" class="ah"/><text x="233" y="142" font-size="11.5" text-anchor="start" class="mut">yes</text><line x1="380" y1="120" x2="380" y2="150" class="ln"/><polygon points="380,156 375.6,148 384.4,148" class="ah"/><text x="388" y="142" font-size="11.5" text-anchor="start" class="mut">no</text><line x1="535" y1="120" x2="535" y2="150" class="ln"/><polygon points="535,156 530.6,148 539.4,148" class="ah"/><text x="543" y="142" font-size="11.5" text-anchor="start" class="mut">no</text></svg></div>
+        <figcaption>A quick screen before committing to AI. 'No' answers don't always kill an idea, but they change the design.</figcaption>
+      </figure>
+
+      <h2>2.3 Automate or augment?</h2>
+      <p>Should AI do the task <strong>for</strong> the user, or help the user do it better? Users often want to keep control of tasks they enjoy, are accountable for, or where personal judgement matters; they're happy to hand off tasks that are boring, repetitive or that they lack skill for. Many products start by augmenting (suggestions a person approves) and move towards automation as trust and evidence grow.</p>
+
+      <h2>2.4 Write the problem framing</h2>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><td><strong>User &amp; job</strong></td><td>Who, and what they're trying to get done</td></tr>
+            <tr><td><strong>Current pain</strong></td><td>Time, errors, frustration — with evidence</td></tr>
+            <tr><td><strong>AI's role</strong></td><td>Generate, transform, classify, answer, predict or act; automate or augment</td></tr>
+            <tr><td><strong>Inputs available</strong></td><td>What data or context the AI will have at that moment</td></tr>
+            <tr><td><strong>Quality bar</strong></td><td>What "good enough" looks like, and which errors are unacceptable</td></tr>
+            <tr><td><strong>Outcome metric</strong></td><td>How you'll know users and the business are better off</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>2.5 Prototype early with real inputs</h2>
+      <p>With today's models you can test an idea in hours: write a prompt, run it on 20–50 <em>real</em> examples (anonymised where needed), and read every output. This "vibe check" reveals feasibility and failure modes long before engineering investment. It is not an evaluation — that comes in Module 4 — but it's the fastest way to kill weak ideas and sharpen strong ones. See <a href="../prompt-engineering/index.html">Prompt Engineering</a>.</p>
+<div class="activity"><b>Activity: frame an AI feature</b><p>Fill in the six-row problem framing for one AI feature idea. Decide automate or augment and justify it.</p><details><summary>See a worked example</summary><p><b>Example — expense categorisation:</b> User: employees submitting expenses. Pain: 4 minutes per claim choosing categories; 12% miscategorised. AI's role: classify receipts and suggest a category (augment — the employee confirms). Inputs: receipt image, merchant, amount. Quality bar: ≥ 95% correct top suggestion; never auto-submit. Outcome: time per claim, finance correction rate.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>'Use AI' is not a user need.</li><li>Prefer rules when they work and predictability matters.</li><li>Augment first; automate as trust and evidence grow.</li><li>Frame user, pain, AI's role, inputs, quality bar and outcome.</li><li>Prototype on real inputs and read every output.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-for-builders" target="_blank" rel="noopener">AI Fluency for Builders</a> — from customer problem to shipped product</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener">All courses</a> — including Apply AI at Work and Lead AI Adoption</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "When should you prefer a simple rule over AI?",
+"options": [
+"Never",
+"When clear rules already work and predictability matters",
+"Always",
+"When data is abundant"
+],
+"answer": 1,
+"explain": "Don't use AI for its own sake."
+},
+{
+"q": "Augmentation means…",
+"options": [
+"AI replaces the user",
+"AI helps the user do the task, who stays in control",
+"Bigger models",
+"More servers"
+],
+"answer": 1,
+"explain": "Suggest, assist, support."
+},
+{
+"q": "Users usually prefer to keep control of tasks that…",
+"options": [
+"Are boring",
+"They enjoy, are accountable for or need personal judgement",
+"Are repetitive",
+"They lack skill for"
+],
+"answer": 1,
+"explain": "Respect user agency."
+},
+{
+"q": "A quick prototype on 30 real examples is…",
+"options": [
+"A full evaluation",
+"A fast feasibility check, not a full evaluation",
+"Pointless",
+"A launch"
+],
+"answer": 1,
+"explain": "Formal evals come later."
+},
+{
+"q": "Which belongs in an AI problem framing?",
+"options": [
+"Model weights",
+"Quality bar and unacceptable errors",
+"Server specs",
+"Office plan"
+],
+"answer": 1,
+"explain": "Define good enough early."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Designing AI experiences →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

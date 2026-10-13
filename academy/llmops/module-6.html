@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Managing cost, change and governance — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="Versioning everything, safe release techniques, model upgrades and deprecations, cost controls in code, operational governance and a readiness checklist.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Managing cost, change and governance</h1>
+      <p class="lead">Models, prices and platforms keep changing. This module covers how to keep a production AI system stable, affordable and accountable over time.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Version models, prompts, retrieval, tools and guardrails</li><li>Use shadow, canary, A/B, flags and rollback</li><li>Plan for model upgrades and deprecations</li><li>Control costs with budgets, quotas and routing</li><li>Maintain operational governance</li></ul>
+      </div>
+
+      <h2>6.1 Version everything</h2>
+      <p>An LLM application's behaviour depends on many moving parts. Record the version of each, for every release:</p>
+      <ul class="checklist">
+        <li>Model name and version (pin specific versions where providers offer them)</li>
+        <li>Prompts and system instructions</li>
+        <li>Retrieval configuration and index version</li>
+        <li>Tool definitions and permissions</li>
+        <li>Guardrail settings</li>
+        <li>Evaluation set version and results</li>
+      </ul>
+
+      <h2>6.2 Releasing changes safely</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Technique</th><th>How it works</th></tr></thead>
+          <tbody>
+            <tr><td>Offline gate</td><td>Evaluation suite must pass before release (Module 2)</td></tr>
+            <tr><td>Shadow testing</td><td>New version runs on real traffic in parallel; outputs are compared but not shown</td></tr>
+            <tr><td>Canary release</td><td>New version serves a small percentage of users first</td></tr>
+            <tr><td>A/B test</td><td>Compare versions on user outcomes with statistically sound samples</td></tr>
+            <tr><td>Feature flags</td><td>Switch features or prompts on and off without redeploying</td></tr>
+            <tr><td>Rollback</td><td>One-step return to the previous known-good version</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 719 160" style="min-width:560px" role="img" aria-label="Releasing a change safely, from offline evaluation to full traffic — with a rollback always available."><rect x="20" y="40" width="115" height="46" rx="10" class="b-n"/><text x="77.5" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">Offline gate</text><rect x="161" y="40" width="115" height="46" rx="10" class="b-a"/><text x="218.5" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">Shadow</text><rect x="302" y="40" width="115" height="46" rx="10" class="b-w"/><text x="359.5" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">Canary 5%</text><rect x="443" y="40" width="115" height="46" rx="10" class="b-w"/><text x="500.5" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">A/B 50%</text><rect x="584" y="40" width="115" height="46" rx="10" class="b-g"/><text x="641.5" y="67.375" font-size="12.5" text-anchor="middle" font-weight="600">100%</text><line x1="138" y1="63" x2="152" y2="63" class="ln"/><polygon points="158,63 150,67.4 150,58.6" class="ah"/><line x1="279" y1="63" x2="293" y2="63" class="ln"/><polygon points="299,63 291,67.4 291,58.6" class="ah"/><line x1="420" y1="63" x2="434" y2="63" class="ln"/><polygon points="440,63 432,67.4 432,58.6" class="ah"/><line x1="561" y1="63" x2="575" y2="63" class="ln"/><polygon points="581,63 573,67.4 573,58.6" class="ah"/><polyline points="641.5,88 641.5,130 77.5,130 77.5,94" class="ln dash"/><polygon points="77.5,88 81.9,96 73.1,96" class="ah"/><text x="359.5" y="148" font-size="11.5" text-anchor="middle" font-weight="600" class="t-b">one-step rollback at any stage</text></svg></div>
+        <figcaption>Releasing a change safely, from offline evaluation to full traffic — with a rollback always available.</figcaption>
+      </figure>
+
+      <h2>6.3 Model upgrades and deprecations</h2>
+      <p>Providers release new models frequently and retire old ones on published schedules. Platforms change too: in 2026, for example, OpenAI announced it was deprecating its hosted Evals platform and winding down its fine-tuning platform for new users. Plan for change:</p>
+      <ul>
+        <li>Track providers' deprecation notices and put retirement dates in your calendar.</li>
+        <li>Re-run your full evaluation suite on any new model before switching.</li>
+        <li>Keep your evals, prompts and data portable — in your own repository, not only inside a vendor's tool.</li>
+        <li>Abstract model calls behind your gateway so switching is a configuration change.</li>
+      </ul>
+
+      <h2>6.4 Managing cost</h2>
+<pre data-copy><code><span class="label">Python · a simple daily budget guard</span>DAILY_BUDGET = 200.00          # in your billing currency
+spent_today = 0.0
+
+def record_cost(input_tokens, output_tokens, price_in, price_out):
+    global spent_today
+    spent_today += input_tokens / 1e6 * price_in + output_tokens / 1e6 * price_out
+    if spent_today > 0.8 * DAILY_BUDGET:
+        alert(f"80% of daily AI budget used: {spent_today:.2f}")
+    if spent_today > DAILY_BUDGET:
+        enable_degraded_mode()   # e.g. route to a cheaper model, pause non-essential features</code></pre>
+      <p>Other levers: per-user quotas, smaller models via routing, prompt and response caching, batch processing for non-urgent work, shorter prompts and output limits, and attributing cost to features so you know where money goes.</p>
+
+      <h2>6.5 Operational governance</h2>
+      <p>Production AI sits inside your organisation's governance: the system is in the AI inventory with an owner; risk and impact assessments are kept current; changes that alter risk trigger review; incidents are reported; and documentation is maintained (see <a href="../ai-governance/index.html">AI Governance, Risk &amp; Compliance</a>). For high-risk uses under the EU AI Act, post-market monitoring and logging are legal requirements.</p>
+
+      <h2>6.6 A production readiness checklist</h2>
+      <ul class="checklist">
+        <li>Success criteria and an evaluation suite that gates releases</li>
+        <li>Guardrails on input, output and actions; safety test suite</li>
+        <li>Gateway with timeouts, retries, fallbacks, rate limits and quotas</li>
+        <li>Tracing, dashboards and alerts for reliability, latency, cost, quality and safety</li>
+        <li>Versioned prompts, models, retrieval and tools; one-step rollback</li>
+        <li>Plan for model deprecations; portable evals and prompts</li>
+        <li>Data protection for prompts, outputs and logs</li>
+        <li>Named owner, incident playbook and governance records</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Record the version of every component for every release.</li><li>Release gradually with a one-step rollback.</li><li>Track deprecations; re-evaluate before switching; keep evals portable.</li><li>Budgets, quotas, routing, caching and batching control cost.</li><li>Production AI stays inside governance: owner, assessments, incidents, documentation.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/mlops/" target="_blank" rel="noopener">What is MLOps?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/llmops" target="_blank" rel="noopener">What is LLMOps?</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-governance" target="_blank" rel="noopener">What is AI governance?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Which should be versioned for each release?",
+"options": [
+"Only the code",
+"Model version, prompts, retrieval config, tools, guardrails and eval results",
+"Only the prompt",
+"Nothing"
+],
+"answer": 1,
+"explain": "All of these affect behaviour."
+},
+{
+"q": "In a canary release, the new version…",
+"options": [
+"Replaces the old one for everyone at once",
+"Serves a small percentage of users first",
+"Is never shown to users",
+"Runs only at night"
+],
+"answer": 1,
+"explain": "Limit the blast radius."
+},
+{
+"q": "Your provider announces a model retirement date. What should you do?",
+"options": [
+"Wait until it breaks",
+"Plan the migration and run your full evaluation suite on the replacement before switching",
+"Remove all evals",
+"Switch immediately without testing"
+],
+"answer": 1,
+"explain": "Re-evaluate before switching."
+},
+{
+"q": "Why keep evals and prompts in your own repository?",
+"options": [
+"Vendor tools and platforms can change or close",
+"It's slower",
+"Vendors forbid it",
+"No reason"
+],
+"answer": 0,
+"explain": "Portability protects against platform changes."
+},
+{
+"q": "Spend passes the daily budget. A sensible automated response is…",
+"options": [
+"Do nothing",
+"Alert and switch to a degraded mode, e.g. a cheaper model or pausing non-essential features",
+"Delete the logs",
+"Double the budget automatically"
+],
+"answer": 1,
+"explain": "Budget guards prevent runaway costs."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

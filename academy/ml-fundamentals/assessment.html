@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Machine Learning Fundamentals</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Machine Learning Fundamentals: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "Which is a well-framed ML problem?",
+"options": [
+"'Use AI on our data'",
+"'Predict which customers will cancel in the next 30 days, using data available today, to prioritise retention calls; success = more saves per call than the current rule'",
+"'Make a model'",
+"'Find insights'"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which is a classification task?",
+"options": [
+"Forecasting revenue",
+"Predicting whether an invoice is fraudulent",
+"Estimating delivery time",
+"Predicting house prices"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Your model's accuracy equals the DummyClassifier's. What does that mean?",
+"options": [
+"Excellent model",
+"The model isn't learning anything useful beyond the most common class",
+"The test set is too big",
+"Nothing"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which regression metric is in the target's units and easy to explain?",
+"options": [
+"R²",
+"MAE",
+"AUC",
+"F1"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Two features are highly correlated. What happens to linear regression coefficients?",
+"options": [
+"They become more reliable",
+"They can become unstable and hard to interpret",
+"They disappear",
+"R² becomes negative always"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "R² of 0.85 on the test set means…",
+"options": [
+"85% accuracy",
+"The model explains about 85% of the variation compared with predicting the mean",
+"Errors are £85",
+"Overfitting"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Logistic regression is used for…",
+"options": [
+"Regression only",
+"Classification, outputting probabilities",
+"Clustering",
+"PCA"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Of 200 actual churners, the model flagged 150. Recall is…",
+"options": [
+"0.25",
+"0.75",
+"0.50",
+"1.0"
+],
+"answer": 1,
+"explain": "150/200 (Module 3)."
+},
+{
+"q": "The retention team can make only 50 calls per week. How should you set the threshold?",
+"options": [
+"As low as possible",
+"High enough that about the top 50 most likely churners are flagged",
+"Exactly 0.5",
+"Randomly"
+],
+"answer": 1,
+"explain": "Capacity drives the threshold (Module 3)."
+},
+{
+"q": "Which model is a readable flowchart of yes/no questions?",
+"options": [
+"k-means",
+"Decision tree",
+"PCA",
+"Linear regression"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "As tree depth increases, training accuracy rises to 1.0 while test accuracy falls. This is…",
+"options": [
+"Underfitting",
+"Overfitting",
+"Data cleaning",
+"Stratification"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which ensemble builds trees sequentially, each correcting earlier errors?",
+"options": [
+"Random forest",
+"Gradient boosting",
+"k-means",
+"Logistic regression"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "What does GridSearchCV do?",
+"options": [
+"Cleans data",
+"Tries combinations of hyperparameters with cross-validation and picks the best",
+"Plots a grid",
+"Splits data by time"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Why put a scaler inside a pipeline with the model?",
+"options": [
+"Style",
+"So cross-validation refits scaling within each fold, avoiding leakage",
+"It's faster",
+"It removes the need for testing"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Which method groups customers without labels?",
+"options": [
+"Logistic regression",
+"k-means clustering",
+"Linear regression",
+"Gradient boosting"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "You cluster on 'monthly_spend' (£5–£120) and 'tickets' (0–6) without scaling. What happens?",
+"options": [
+"Nothing",
+"Spend dominates the distances, so tickets barely affect clusters",
+"Tickets dominate",
+"Clustering fails"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "PCA's explained_variance_ratio_ shows…",
+"options": [
+"Accuracy",
+"How much variation each component keeps",
+"Cluster sizes",
+"Feature names"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Permutation importance ranks 'support_tickets' first. Which conclusion is justified?",
+"options": [
+"Tickets cause churn",
+"The model relies heavily on tickets for its predictions",
+"Tickets should be removed",
+"Nothing at all"
+],
+"answer": 1,
+"explain": "Reliance, not causation (Module 6)."
+},
+{
+"q": "After deployment, the share of customers predicted to churn doubles overnight with no business change. What might this signal?",
+"options": [
+"Great success",
+"Data drift or a data pipeline problem — investigate",
+"Nothing",
+"The test set was too small"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Which belongs in a model card?",
+"options": [
+"Purpose, data, metrics by group, limitations and owner",
+"Only the accuracy",
+"Customer names",
+"The source code only"
+],
+"answer": 0,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

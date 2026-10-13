@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Building and launching — AI Product Management</title>
+<meta name="description" content="Experimental delivery, the improvement ladder, guardrails, staged launches and A/B tests, and unit economics.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Building and launching</h1>
+      <p class="lead">Shipping AI safely means iterating against evals, layering guardrails and rolling out in stages. This module covers the playbook.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Run AI development in learning cycles</li><li>Apply the improvement ladder from prompts to fine-tuning</li><li>Plan guardrails</li><li>Design a staged rollout with a kill switch</li><li>Calculate cost per active user</li></ul>
+      </div>
+
+      <h2>5.1 Working with the build team</h2>
+      <p>AI development is more experimental than traditional software. Plan in short learning cycles — try a prompt, retrieval change or model, run the evals, decide — rather than fixed-scope sprints. The PM keeps the team focused on the eval set and the user outcome, and makes the trade-off calls on quality, cost and latency.</p>
+
+      <h2>5.2 The improvement ladder</h2>
+      <p>When quality isn't good enough, try the cheapest fixes first:</p>
+      <ol>
+        <li><strong>Better prompts</strong> — clearer instructions, examples, output format</li>
+        <li><strong>Better context</strong> — retrieve the right documents or data (RAG)</li>
+        <li><strong>Better workflow</strong> — split the task into steps, add checks, use tools</li>
+        <li><strong>Different model</strong> — larger for quality, smaller for speed and cost</li>
+        <li><strong>Fine-tuning</strong> — when you have many good examples and a consistent task</li>
+      </ol>
+      <p>Each step should be justified by eval results, not intuition. See <a href="../fine-tuning/index.html">Fine-tuning</a> for when step 5 is worth it.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 264" style="min-width:560px" role="img" aria-label="The improvement ladder. Climb only as far as your eval results require."><rect x="20" y="170" width="118" height="44" rx="10" class="b-n"/><text x="79" y="196.025" font-size="11.5" text-anchor="middle" font-weight="600">Better prompts</text><rect x="144" y="136" width="118" height="44" rx="10" class="b-a"/><text x="203" y="162.025" font-size="11.5" text-anchor="middle" font-weight="600">Better context (RAG)</text><rect x="268" y="102" width="118" height="44" rx="10" class="b-a"/><text x="327" y="128.025" font-size="11.5" text-anchor="middle" font-weight="600">Better workflow</text><rect x="392" y="68" width="118" height="44" rx="10" class="b-w"/><text x="451" y="94.025" font-size="11.5" text-anchor="middle" font-weight="600">Different model</text><rect x="516" y="34" width="118" height="44" rx="10" class="b-b"/><text x="575" y="60.025" font-size="11.5" text-anchor="middle" font-weight="600">Fine-tuning</text><line x1="20" y1="236" x2="634" y2="236" class="ln"/><polygon points="640,236 632,240.4 632,231.6" class="ah"/><text x="330" y="256" font-size="11" text-anchor="middle" class="mut">effort, cost and time increase → try the lower rungs first</text></svg></div>
+        <figcaption>The improvement ladder. Climb only as far as your eval results require.</figcaption>
+      </figure>
+
+      <h2>5.3 Guardrails</h2>
+      <ul class="checklist">
+        <li><strong>Input checks</strong> — block or route off-topic, abusive or prompt-injection attempts</li>
+        <li><strong>Output checks</strong> — format validation, grounding, policy and safety filters</li>
+        <li><strong>Action limits</strong> — permissions, spending caps, confirmation steps for agents</li>
+        <li><strong>Rate and cost limits</strong> — per user and overall</li>
+      </ul>
+      <p>The threats are covered in <a href="../ai-security/index.html">AI Security</a>.</p>
+
+      <h2>5.4 Launching safely</h2>
+      <ul class="checklist">
+        <li><strong>Internal dogfooding</strong> — staff use it first and report problems</li>
+        <li><strong>Limited beta</strong> — a small group of real users, with close monitoring</li>
+        <li><strong>Staged rollout</strong> — 5% → 25% → 100%, with a kill switch</li>
+        <li><strong>A/B test</strong> — compare outcomes with and without the feature</li>
+        <li><strong>Readiness review</strong> — evals passed, risk assessment done, support briefed, monitoring live</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 220" style="min-width:560px" role="img" aria-label="A staged rollout widens exposure only as monitoring stays green, with a kill switch ready at every stage."><rect x="40" y="186" width="90" height="4" rx="4" class="b-a"/><text x="85" y="208" font-size="12" text-anchor="middle" font-weight="600">Dogfood</text><text x="85" y="178" font-size="11" text-anchor="middle" class="mut">staff</text><rect x="158" y="180" width="90" height="10" rx="4" class="b-a"/><text x="203" y="208" font-size="12" text-anchor="middle" font-weight="600">Beta</text><text x="203" y="172" font-size="11" text-anchor="middle" class="mut">small group</text><rect x="276" y="160" width="90" height="30" rx="4" class="b-a"/><text x="321" y="208" font-size="12" text-anchor="middle" font-weight="600">Stage 1</text><text x="321" y="152" font-size="11" text-anchor="middle" class="mut">5%</text><rect x="394" y="110" width="90" height="80" rx="4" class="b-a"/><text x="439" y="208" font-size="12" text-anchor="middle" font-weight="600">Stage 2</text><text x="439" y="102" font-size="11" text-anchor="middle" class="mut">25%</text><rect x="512" y="30" width="90" height="160" rx="4" class="b-g"/><text x="557" y="208" font-size="12" text-anchor="middle" font-weight="600">Everyone</text><text x="557" y="22" font-size="11" text-anchor="middle" class="mut">100%</text><line x1="20" y1="190" x2="630" y2="190" class="ln"/><rect x="20" y="10" width="150" height="34" rx="10" class="b-b"/><text x="95" y="31.2" font-size="12" text-anchor="middle" font-weight="600">Kill switch ready</text><text x="190" y="32" font-size="11" text-anchor="start" class="mut">watch evals, complaints, cost at each stage</text></svg></div>
+        <figcaption>A staged rollout widens exposure only as monitoring stays green, with a kill switch ready at every stage.</figcaption>
+      </figure>
+
+      <h2>5.5 Unit economics</h2>
+      <p>Know your <strong>cost per request</strong> and <strong>cost per active user</strong>. Heavy users of AI features can cost more than they pay, especially on flat-rate plans. Levers include caching repeated requests, routing simple requests to smaller models, limiting output length, and usage-based pricing or limits. Model the costs at your expected scale before you price the feature.</p>
+<div class="activity"><b>Activity: plan the rollout</b><p>Write a launch plan for your feature: stages, audience and duration of each, metrics watched at each stage, the conditions that trigger the kill switch, and the estimated cost per active user.</p><details><summary>See a worked example</summary><p><b>Example:</b> Week 1–2 dogfood (finance team, 40 people). Week 3–6 beta (2 departments, 400 users) watching accuracy on a reviewed sample and edit rate. Then 25% → 100% over 4 weeks with an A/B comparison of time per claim. Kill switch if accuracy on sampled claims falls below 90% or any auto-submission occurs. Cost: ~£0.40 per active user per month.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Iterate in short cycles judged by evals.</li><li>Prompts, context, workflow, model — then fine-tuning.</li><li>Guard inputs, outputs, actions and costs.</li><li>Dogfood, beta, stage, A/B test, with a kill switch.</li><li>Know cost per request and per active user.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-for-builders" target="_blank" rel="noopener">AI Fluency for Builders</a> — from customer problem to shipped product</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/llmops" target="_blank" rel="noopener">What is LLMOps?</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/foundation-models/" target="_blank" rel="noopener">What are foundation models?</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener">Generative AI for Beginners (21 lessons, GitHub)</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "Quality is too low. The cheapest first fix is usually…",
+"options": [
+"Fine-tuning",
+"Improving prompts and context",
+"Training a new model",
+"Hiring"
+],
+"answer": 1,
+"explain": "Climb the ladder from the bottom."
+},
+{
+"q": "An output guardrail might…",
+"options": [
+"Validate format and grounding",
+"Increase cost",
+"Remove logging",
+"Disable monitoring"
+],
+"answer": 0,
+"explain": "Check before users see it."
+},
+{
+"q": "Why use a staged rollout?",
+"options": [
+"To slow everyone down",
+"To catch problems at small scale with a kill switch ready",
+"It's cheaper to market",
+"Required by law"
+],
+"answer": 1,
+"explain": "Limit blast radius."
+},
+{
+"q": "An A/B test compares…",
+"options": [
+"Two logos",
+"Outcomes with and without the feature",
+"Two servers",
+"Two budgets"
+],
+"answer": 1,
+"explain": "Evidence of impact."
+},
+{
+"q": "Which reduces cost per request?",
+"options": [
+"Longer outputs",
+"Caching and routing simple requests to smaller models",
+"Bigger models for all",
+"No limits"
+],
+"answer": 1,
+"explain": "Unit-economics levers."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Operating and improving →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

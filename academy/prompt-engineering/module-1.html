@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: How prompts work — Prompt Engineering &amp; Working with Generative AI</title>
+<meta name="description" content="What the model sees, the &#x27;brilliant new colleague&#x27; test, iterating, and how models differ.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="prompt-engineering">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 20 minutes</span>
+      <h1>How prompts work</h1>
+      <p class="lead">A prompt is more than the words you type. Understanding what the model actually receives is the first step to getting what you want.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Describe the parts of a prompt: system prompt, history, context and message</li><li>Apply the 'new colleague' test</li><li>Use an iterative prompting loop</li><li>Explain why different models need different prompting</li></ul>
+      </div>
+
+      <h2>1.1 What the model actually sees</h2>
+      <p>When you send a message to an AI assistant, the model doesn't just see your words. It receives a block of text (and sometimes images or files) that usually contains:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Part</th><th>Who writes it</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><strong>System prompt</strong> (or developer message)</td><td>The app builder — or you, through "custom instructions", Projects or custom GPTs</td><td>Sets the role, rules, tone and boundaries for the whole conversation</td></tr>
+            <tr><td><strong>Conversation history</strong></td><td>You and the model</td><td>Earlier turns, which keep influencing later answers</td></tr>
+            <tr><td><strong>Context</strong></td><td>You, or the app (e.g. via search or retrieval)</td><td>Documents, data, images and search results</td></tr>
+            <tr><td><strong>Your message</strong></td><td>You</td><td>The current request</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The model then predicts a response, token by token, based on <em>all</em> of that. So prompting is really <strong>context design</strong>: giving the model everything it needs, and nothing that confuses it.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 720 246" style="min-width:560px" role="img" aria-label="The model responds to everything in its context, not just your latest message — which is why prompting is really context design."><rect x="20" y="20" width="330" height="44" rx="6" class="b-w"/><text x="185" y="40" font-size="12.5" text-anchor="middle" font-weight="600">System prompt / custom instructions</text><text x="185" y="55" font-size="10.5" text-anchor="middle" class="mut">set by the app or by you, once</text><rect x="20" y="70" width="330" height="44" rx="6" class="b-n"/><text x="185" y="90" font-size="12.5" text-anchor="middle" font-weight="600">Conversation history</text><text x="185" y="105" font-size="10.5" text-anchor="middle" class="mut">earlier turns keep shaping answers</text><rect x="20" y="120" width="330" height="44" rx="6" class="b-n"/><text x="185" y="140" font-size="12.5" text-anchor="middle" font-weight="600">Context: documents, search results, images</text><text x="185" y="155" font-size="10.5" text-anchor="middle" class="mut">what the model can draw on</text><rect x="20" y="170" width="330" height="44" rx="6" class="b-a"/><text x="185" y="190" font-size="12.5" text-anchor="middle" font-weight="600">Your message</text><text x="185" y="205" font-size="10.5" text-anchor="middle" class="mut">the request right now</text><rect x="14" y="14" width="342" height="212" rx="10" class="b-none"/><polyline points="360,110 414,110" class="ln ln-a"/><polygon points="420,110 412,114.4 412,105.6" class="ah-a"/><rect x="425" y="85" width="100" height="50" rx="10" class="b-a"/><text x="475" y="114.55" font-size="13" text-anchor="middle" font-weight="600">Model</text><rect x="590" y="85" width="110" height="50" rx="10" class="b-g"/><text x="645" y="114.55" font-size="13" text-anchor="middle" font-weight="600">Response</text><line x1="528" y1="110" x2="581" y2="110" class="ln"/><polygon points="587,110 579,114.4 579,105.6" class="ah"/><text x="185" y="234" font-size="11.5" text-anchor="middle" class="mut">all of this is &#x27;the prompt&#x27;</text></svg></div>
+        <figcaption>The model responds to everything in its context, not just your latest message — which is why prompting is really context design.</figcaption>
+      </figure>
+
+      <h2>1.2 The model can't read your mind</h2>
+      <p>Anthropic's prompting guidance suggests imagining the model as a <strong>brilliant new colleague with no context</strong> on your situation — your organisation, audience, standards or what you tried before. If a smart temp would need more information to do the job well, so does the model.</p>
+      <div class="example">
+        <span class="eyebrow">The colleague test</span>
+        <p>Before you send a prompt, ask: <em>"If I gave these exact words to a capable colleague who'd just joined today, would they produce what I want?"</em> If not, add what's missing.</p>
+      </div>
+
+      <h2>1.3 Prompting is iterative</h2>
+      <p>Expert users rarely get the perfect result first time. They work in a loop:</p>
+      <ol>
+        <li><strong>Draft</strong> a prompt.</li>
+        <li><strong>Run</strong> it and read the output critically.</li>
+        <li><strong>Diagnose</strong> what's off: missing context? Wrong format? Too long?</li>
+        <li><strong>Refine</strong> — either by follow-up ("make it shorter, and drop the jargon") or by editing the original prompt and running it again.</li>
+      </ol>
+      <p>For one-off tasks, follow-ups are fine. For anything you'll repeat, improve the <em>original</em> prompt so it works first time next time (Module 5).</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 600 300" style="min-width:560px" role="img" aria-label="Expert users rarely get it right first time — they loop. For repeat tasks, fold the fixes back into the original prompt."><polyline points="370.012,69 377.782,72.2183 395.692,115.457" class="ln"/><polygon points="397.988,121 390.861,115.293 398.991,111.925" class="ah"/><polyline points="397.988,179 377.782,227.782 375.555,228.704" class="ln"/><polygon points="370.012,231 375.719,223.873 379.087,232.004" class="ah"/><polyline points="229.988,231 222.218,227.782 204.308,184.543" class="ln"/><polygon points="202.012,179 209.139,184.707 201.009,188.075" class="ah"/><polyline points="202.012,121 222.218,72.2183 224.445,71.2961" class="ln"/><polygon points="229.988,69 224.281,76.1265 220.913,67.9964" class="ah"/><rect x="225" y="14" width="150" height="52" rx="10" class="b-a"/><text x="300" y="35.45" font-size="13" text-anchor="middle" font-weight="600">Draft</text><text x="300" y="55.55" font-size="11" text-anchor="middle" class="mut">write the prompt</text><rect x="335" y="124" width="150" height="52" rx="10" class="b-n"/><text x="410" y="145.45" font-size="13" text-anchor="middle" font-weight="600">Run</text><text x="410" y="165.55" font-size="11" text-anchor="middle" class="mut">read critically</text><rect x="225" y="234" width="150" height="52" rx="10" class="b-w"/><text x="300" y="255.45" font-size="13" text-anchor="middle" font-weight="600">Diagnose</text><text x="300" y="275.55" font-size="11" text-anchor="middle" class="mut">what&#x27;s missing?</text><rect x="115" y="124" width="150" height="52" rx="10" class="b-g"/><text x="190" y="145.45" font-size="13" text-anchor="middle" font-weight="600">Refine</text><text x="190" y="165.55" font-size="11" text-anchor="middle" class="mut">follow-up or edit</text><text x="300" y="155" font-size="14" text-anchor="middle" font-weight="700">Iterate</text></svg></div>
+        <figcaption>Expert users rarely get it right first time — they loop. For repeat tasks, fold the fixes back into the original prompt.</figcaption>
+      </figure>
+
+      <h2>1.4 Different models, different strengths</h2>
+      <p>Models differ. OpenAI's guidance notes that <strong>reasoning models</strong> do well when given a goal and room to work it out — like a senior colleague — while faster general models benefit from more precise, explicit instructions — like a junior colleague. A prompt that works brilliantly in one tool may need adjusting in another, and after a model update. Test, don't assume.</p>
+
+      <div class="callout">
+        <b>Prompt engineering isn't always the fix</b>
+        <p>If a task fails because the model lacks information (e.g. your company's latest prices), no wording will fix it — you need to supply the information. And if speed or cost is the problem, a different model may help more than a different prompt.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>The model responds to everything in its context — prompting is context design.</li><li>Write for a brilliant colleague who knows nothing about your situation.</li><li>Draft, run, diagnose, refine.</li><li>Reasoning models need goals; faster models need more explicit instructions.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener">Prompt engineering overview (Claude docs)</a> — clarity, examples, XML structure, roles, thinking and prompt chaining</li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt engineering guide</a> — message roles, formatting, few-shot examples and reasoning models</li><li><span class="provider">Google</span><a href="https://ai.google.dev/gemini-api/docs/prompting-strategies" target="_blank" rel="noopener">Prompt design strategies (Gemini API docs)</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/prompt-engineering" target="_blank" rel="noopener">What is prompt engineering?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "What is a system prompt?",
+"options": [
+"The model's training data",
+"Standing instructions that set role, rules and tone for a conversation",
+"An error message",
+"The user's latest message only"
+],
+"answer": 1,
+"explain": "System prompts (or custom instructions) frame the whole conversation."
+},
+{
+"q": "Why is prompting described as 'context design'?",
+"options": [
+"Because prompts must be long",
+"Because the model responds to everything it's given — instructions, history, documents and your message",
+"Because only images matter",
+"Because context windows are small"
+],
+"answer": 1,
+"explain": "Output quality depends on the whole context."
+},
+{
+"q": "The 'brilliant new colleague' test asks…",
+"options": [
+"Would a new, capable colleague produce what I want from exactly these words?",
+"Is the model new?",
+"Is my colleague better than AI?",
+"How long is the prompt?"
+],
+"answer": 0,
+"explain": "It exposes missing context."
+},
+{
+"q": "For a prompt you'll reuse weekly, the best way to fix a problem is to…",
+"options": [
+"Add follow-up corrections every time",
+"Improve the original prompt so it works first time",
+"Switch AI tools weekly",
+"Ignore it"
+],
+"answer": 1,
+"explain": "Improve the source prompt for repeat tasks."
+},
+{
+"q": "According to OpenAI's guidance, reasoning models generally work best when you…",
+"options": [
+"Give them a goal and let them work out the details",
+"Give minute, step-by-step instructions only",
+"Use no context",
+"Use maximum temperature"
+],
+"answer": 0,
+"explain": "Reasoning models are compared to a senior colleague."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Anatomy of a strong prompt →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

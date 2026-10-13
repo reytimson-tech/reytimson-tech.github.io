@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — NLP Fundamentals</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="nlp-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>NLP Fundamentals: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "Routing emails to billing, delivery or product teams is…",
+"options": [
+"Text classification",
+"Topic modelling",
+"Translation",
+"Regression"
+],
+"answer": 0,
+"explain": "Assigning a category."
+},
+{
+"q": "Which representation ignores word order?",
+"options": [
+"Bag of words",
+"Transformer",
+"Sentence embedding",
+"Attention"
+],
+"answer": 0,
+"explain": "Counts only."
+},
+{
+"q": "Adding ngram_range=(1, 2) to a vectoriser…",
+"options": [
+"Adds pairs of adjacent words as features",
+"Removes stop words",
+"Halves the vocabulary",
+"Translates text"
+],
+"answer": 0,
+"explain": "Unigrams plus bigrams."
+},
+{
+"q": "TF-IDF lowers the weight of…",
+"options": [
+"Rare, distinctive words",
+"Words that appear in almost every document",
+"Numbers",
+"Bigrams"
+],
+"answer": 1,
+"explain": "Inverse document frequency."
+},
+{
+"q": "Fitting TfidfVectorizer on all data before splitting causes…",
+"options": [
+"Leakage",
+"Better generalisation",
+"Nothing",
+"Faster training only"
+],
+"answer": 0,
+"explain": "Fit inside a pipeline on training data."
+},
+{
+"q": "Inspecting a text model's strongest words helps you…",
+"options": [
+"Spot shortcuts and sanity-check behaviour",
+"Increase accuracy automatically",
+"Remove labels",
+"Reduce cost"
+],
+"answer": 0,
+"explain": "Interpretation catches spurious features."
+},
+{
+"q": "Cosine similarity compares…",
+"options": [
+"Word lengths",
+"The directions of two vectors",
+"File sizes",
+"Token prices"
+],
+"answer": 1,
+"explain": "−1 to 1."
+},
+{
+"q": "Semantic search finds 'parcel missing' for the query 'package not arrived' because…",
+"options": [
+"They share many words",
+"Their embeddings are close in meaning",
+"Of regex",
+"It's random"
+],
+"answer": 1,
+"explain": "Meaning, not exact words."
+},
+{
+"q": "Vectors from two different embedding models…",
+"options": [
+"Can be mixed freely",
+"Aren't comparable",
+"Are identical",
+"Must be averaged"
+],
+"answer": 1,
+"explain": "Re-embed when switching models."
+},
+{
+"q": "For large collections, vectors are usually stored in…",
+"options": [
+"A spreadsheet",
+"A vector database or index",
+"Email",
+"A PDF"
+],
+"answer": 1,
+"explain": "Fast nearest-neighbour search."
+},
+{
+"q": "The simplest reliable way to extract postcodes with a fixed format is…",
+"options": [
+"An LLM",
+"A regular expression",
+"Topic modelling",
+"Sentiment analysis"
+],
+"answer": 1,
+"explain": "Precise pattern."
+},
+{
+"q": "Named entity recognition identifies…",
+"options": [
+"People, organisations, places, dates and similar",
+"Topics only",
+"Sentiment",
+"Duplicates"
+],
+"answer": 0,
+"explain": "Entities in text."
+},
+{
+"q": "A grounding check confirms that…",
+"options": [
+"The JSON is pretty",
+"Extracted values actually appear in the source text",
+"The API key is valid",
+"The model is fast"
+],
+"answer": 1,
+"explain": "Catches invented values."
+},
+{
+"q": "Attention in transformers…",
+"options": [
+"Lets each token weigh its relationship to other tokens",
+"Counts words",
+"Removes stop words",
+"Compresses images"
+],
+"answer": 0,
+"explain": "Context modelling."
+},
+{
+"q": "LLM API cost is mainly driven by…",
+"options": [
+"Number of tokens",
+"Number of users",
+"Font size",
+"Time of day only"
+],
+"answer": 0,
+"explain": "Input and output tokens."
+},
+{
+"q": "Zero-shot classification uses…",
+"options": [
+"No examples — just instructions",
+"Thousands of labels",
+"Only regex",
+"PCA"
+],
+"answer": 0,
+"explain": "Instructions only."
+},
+{
+"q": "A sensible hybrid design is…",
+"options": [
+"LLM labels a sample, humans check it, a classic model runs at scale, low-confidence cases are reviewed",
+"LLM only, no checks",
+"Regex for everything",
+"No evaluation"
+],
+"answer": 0,
+"explain": "Cost, speed and quality balanced."
+},
+{
+"q": "NMF topic modelling outputs…",
+"options": [
+"Named topics",
+"Word groups that people interpret and name",
+"Sentiment scores",
+"Entity lists"
+],
+"answer": 1,
+"explain": "Human naming required."
+},
+{
+"q": "Before sending customer messages to an external API you should…",
+"options": [
+"Redact personal data you don't need",
+"Add more personal data",
+"Disable logging only",
+"Nothing"
+],
+"answer": 0,
+"explain": "Data minimisation."
+},
+{
+"q": "A text classifier's accuracy is lower for one dialect group. The right response is…",
+"options": [
+"Measure, improve data, keep a human route and document it",
+"Hide the result",
+"Delete that group's data",
+"Raise all thresholds"
+],
+"answer": 0,
+"explain": "Fairness requires action and recourse."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

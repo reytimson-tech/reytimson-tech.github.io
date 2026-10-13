@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Documents, data and images — Prompt Engineering &amp; Working with Generative AI</title>
+<meta name="description" content="Long documents, quote-first grounding, spreadsheets and data, multimodal prompting, output formats and image generation.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="prompt-engineering">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 25 minutes</span>
+      <h1>Documents, data and images</h1>
+      <p class="lead">Some of the biggest time savings come from working with your own material — reports, contracts, spreadsheets, screenshots. Here's how to prompt for accurate results.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Structure prompts for long documents, with the query at the end</li><li>Ground answers with quotes and references</li><li>Prompt for reliable data analysis</li><li>Prompt effectively with images and screenshots</li><li>Specify machine-readable output formats</li></ul>
+      </div>
+
+      <h2>4.1 Working with long documents</h2>
+      <p>Modern assistants can read very long documents, but how you ask still matters:</p>
+      <ul class="checklist">
+        <li><strong>Put long documents first and your question last.</strong> Anthropic's guidance notes that placing the query after the long material can noticeably improve response quality.</li>
+        <li><strong>Label each document</strong> — with tags or headings, including its title, date and source — so the model can refer to them.</li>
+        <li><strong>Ask for quotes first.</strong> "First extract the passages relevant to X, then answer using only those passages." This grounds the answer and makes checking easy.</li>
+        <li><strong>Ask for page or section references</strong> so you can verify.</li>
+      </ul>
+<pre data-copy><code>&lt;document title="Supplier contract — Acme Ltd" date="2026-03-01"&gt;
+[contract text]
+&lt;/document&gt;
+
+1. Quote every clause about termination, word for word, in &lt;quotes&gt; tags.
+2. Then, using only those quotes, explain in plain English how either
+   party can end the contract and what notice is required.
+3. If something is ambiguous, say so rather than guessing.</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 770 200" style="min-width:620px" role="img" aria-label="Quote-first grounding for long documents: the highlighted passages are pulled out word for word, the answer uses only those, and you can check it in seconds."><rect x="20" y="20" width="200" height="150" rx="8" class="b-s"/><rect x="36" y="40" width="168" height="4" rx="2" class="f-l"/><rect x="36" y="52" width="138" height="4" rx="2" class="f-l"/><rect x="36" y="64" width="108" height="4" rx="2" class="f-l"/><rect x="36" y="76" width="168" height="4" rx="2" class="f-l"/><rect x="36" y="88" width="138" height="4" rx="2" class="f-l"/><rect x="36" y="100" width="108" height="4" rx="2" class="f-l"/><rect x="36" y="112" width="168" height="4" rx="2" class="f-l"/><rect x="36" y="124" width="138" height="4" rx="2" class="f-l"/><rect x="36" y="136" width="108" height="4" rx="2" class="f-l"/><rect x="36" y="76" width="168" height="4" rx="2" class="f-a"/><rect x="36" y="112" width="138" height="4" rx="2" class="f-a"/><text x="120" y="186" font-size="12" text-anchor="middle" font-weight="600">1. Long document first</text><rect x="260" y="50" width="150" height="70" rx="10" class="b-w"/><text x="335" y="81.25" font-size="12.5" text-anchor="middle" font-weight="600">2. Extract relevant</text><text x="335" y="97.5" font-size="12.5" text-anchor="middle">quotes</text><rect x="450" y="50" width="150" height="70" rx="10" class="b-a"/><text x="525" y="81.25" font-size="12.5" text-anchor="middle" font-weight="600">3. Answer only</text><text x="525" y="97.5" font-size="12.5" text-anchor="middle">from the quotes</text><rect x="640" y="50" width="110" height="70" rx="10" class="b-g"/><text x="695" y="81.25" font-size="12.5" text-anchor="middle" font-weight="600">4. You verify</text><text x="695" y="97.5" font-size="12.5" text-anchor="middle">against quotes</text><line x1="222" y1="85" x2="250" y2="85" class="ln"/><polygon points="256,85 248,89.4 248,80.6" class="ah"/><line x1="413" y1="85" x2="441" y2="85" class="ln"/><polygon points="447,85 439,89.4 439,80.6" class="ah"/><line x1="603" y1="85" x2="631" y2="85" class="ln"/><polygon points="637,85 629,89.4 629,80.6" class="ah"/><text x="450" y="160" font-size="11.5" text-anchor="middle" class="mut">Question goes at the end of the prompt</text></svg></div>
+        <figcaption>Quote-first grounding for long documents: the highlighted passages are pulled out word for word, the answer uses only those, and you can check it in seconds.</figcaption>
+      </figure>
+
+      <h2>4.2 Working with data</h2>
+      <p>AI tools can analyse spreadsheets and CSV files — many can now write and run code behind the scenes to do so, which is far more reliable for calculations than "mental arithmetic".</p>
+      <ul>
+        <li>Describe the data: what each column means, units, the time period.</li>
+        <li>Ask it to <strong>show its working</strong> — the code or formula used — so you can check.</li>
+        <li>Ask it to check data quality first: "List missing values, duplicates or anything unusual before analysing."</li>
+        <li>Verify key numbers yourself (see the <a href="../validating-ai-output/index.html">Validating AI Output</a> course).</li>
+        <li>Remember data protection: remove personal data you don't need (<a href="../ai-literacy/module-4.html">AI Literacy, Module 4</a>).</li>
+      </ul>
+
+      <h2>4.3 Multimodal prompting: images, screenshots and audio</h2>
+      <p>Multimodal models can work with images, PDFs with charts, screenshots and sometimes audio and video. Good practice:</p>
+      <ul>
+        <li><strong>Say what the image is and what you want</strong>: "This is a photo of our whiteboard from a retro. Transcribe every sticky note into a table grouped by column."</li>
+        <li><strong>Point to specifics</strong>: "Focus on the chart in the bottom-right."</li>
+        <li><strong>Ask it to describe before it interprets</strong> — this exposes misreadings early.</li>
+        <li><strong>Check carefully</strong>: small text, handwriting, and exact values on charts are common error points.</li>
+      </ul>
+
+      <h2>4.4 Controlling output format</h2>
+      <p>When output will be pasted somewhere else — a spreadsheet, a system, an email — be precise:</p>
+<pre data-copy><code>Return a JSON array only, no commentary. Each item:
+{"name": string, "category": "BILLING" | "DELIVERY" | "PRODUCT" | "OTHER",
+ "urgent": true | false}</code></pre>
+      <p>Many AI platforms also offer <strong>structured outputs</strong> features that guarantee valid formats for developers. For everyday use, a clear example of the format is usually enough.</p>
+
+      <h2>4.5 Generating images</h2>
+      <p>For image generation, describe the <strong>subject</strong>, <strong>setting</strong>, <strong>style</strong>, <strong>composition</strong> and <strong>mood</strong>, and iterate. Check images for errors (hands, text, logos), bias and IP concerns, and label AI-generated images where appropriate.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Put long documents first, label them, and ask your question last.</li><li>Ask for relevant quotes before the answer.</li><li>For data, describe the columns, ask to see the working and verify key numbers.</li><li>With images: say what it is, point to specifics, describe before interpreting.</li><li>Show the exact output format you need.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener">Prompt engineering overview (Claude docs)</a> — clarity, examples, XML structure, roles, thinking and prompt chaining</li><li><span class="provider">Google</span><a href="https://ai.google.dev/gemini-api/docs/prompting-strategies" target="_blank" rel="noopener">Prompt design strategies (Gemini API docs)</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/fundamentals-generative-ai/" target="_blank" rel="noopener">Introduction to generative AI and agents</a> — LLMs, prompts and agents</li><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/ai-at-work-bcx7td" target="_blank" rel="noopener">AI at Work</a> — AI fluency, real workflows and high-impact use cases</li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "When prompting with a long document, where should your question usually go?",
+"options": [
+"Before the document",
+"After the document, at the end",
+"In a separate chat",
+"It doesn't matter at all"
+],
+"answer": 1,
+"explain": "Anthropic's guidance notes queries at the end can improve quality."
+},
+{
+"q": "Why ask the model to extract relevant quotes before answering?",
+"options": [
+"It looks impressive",
+"It grounds the answer in the source and makes verification easier",
+"It makes the answer longer",
+"Quotes are always correct"
+],
+"answer": 1,
+"explain": "Quote-first grounding reduces unsupported claims."
+},
+{
+"q": "When an AI tool analyses a spreadsheet, what should you ask for?",
+"options": [
+"Only the final number",
+"The code or formula used, so you can check its working",
+"A poem about the data",
+"Nothing"
+],
+"answer": 1,
+"explain": "Visible working lets you verify."
+},
+{
+"q": "Which is good multimodal practice?",
+"options": [
+"Upload an image with no explanation",
+"Say what the image is, point to what matters, and ask it to describe before interpreting",
+"Only use black-and-white images",
+"Never check small text"
+],
+"answer": 1,
+"explain": "Describing first exposes misreadings."
+},
+{
+"q": "You need AI output to paste into a system expecting JSON. Best approach?",
+"options": [
+"Ask nicely for 'some data'",
+"Specify the exact structure and say 'JSON only, no commentary'",
+"Use a higher temperature",
+"Ask for a table in prose"
+],
+"answer": 1,
+"explain": "Precise format specifications produce usable output."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Templates and reusable workflows →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

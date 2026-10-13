@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Core prompting techniques — Prompt Engineering &amp; Working with Generative AI</title>
+<meta name="description" content="Few-shot examples, tags and delimiters, step-by-step thinking, prompt chaining, permission to say &#x27;I don&#x27;t know&#x27;, and critique.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="prompt-engineering">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Core prompting techniques</h1>
+      <p class="lead">These are the techniques professional prompt engineers use most — and they work just as well for everyday tasks.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Use few-shot examples to control format and judgement</li><li>Structure prompts with delimiters or XML tags</li><li>Encourage step-by-step reasoning appropriately</li><li>Break complex tasks into prompt chains</li><li>Reduce made-up answers and sycophancy</li></ul>
+      </div>
+
+      <h2>3.1 Few-shot prompting: show, don't just tell</h2>
+      <p>Including a few <strong>examples</strong> of the input and output you want is one of the most reliable ways to control format, tone and judgement. It's called <strong>few-shot prompting</strong> (zero-shot means no examples). Use examples that are varied, so the model learns the pattern rather than copying one example.</p>
+<pre data-copy><code>Classify each customer message as BILLING, DELIVERY, PRODUCT or OTHER.
+
+Message: "I was charged twice for order 1182."
+Category: BILLING
+
+Message: "The handle on my pan came loose after a week."
+Category: PRODUCT
+
+Message: "Where's my parcel? It said Tuesday."
+Category: DELIVERY
+
+Message: "Do you have a shop in Norwich?"
+Category:</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 670 195" style="min-width:560px" role="img" aria-label="Few-shot prompting: a handful of varied examples teaches the model the exact format and judgement you want, then it applies the pattern to new inputs."><text x="110" y="20" font-size="12" text-anchor="middle" class="mut">Examples in the prompt</text><rect x="20" y="32" width="140" height="34" rx="10" class="b-n"/><text x="90" y="53.025" font-size="11.5" text-anchor="middle">&#x27;Charged twice&#x27;</text><line x1="162" y1="49" x2="186" y2="49" class="ln"/><polygon points="192,49 184,53.4 184,44.6" class="ah"/><rect x="196" y="32" width="90" height="34" rx="10" class="b-g"/><text x="241" y="53.025" font-size="11.5" text-anchor="middle" font-weight="600">BILLING</text><rect x="20" y="76" width="140" height="34" rx="10" class="b-n"/><text x="90" y="97.025" font-size="11.5" text-anchor="middle">&#x27;Handle came loose&#x27;</text><line x1="162" y1="93" x2="186" y2="93" class="ln"/><polygon points="192,93 184,97.4 184,88.6" class="ah"/><rect x="196" y="76" width="90" height="34" rx="10" class="b-g"/><text x="241" y="97.025" font-size="11.5" text-anchor="middle" font-weight="600">PRODUCT</text><rect x="20" y="120" width="140" height="34" rx="10" class="b-n"/><text x="90" y="141.025" font-size="11.5" text-anchor="middle">&#x27;Where&#x27;s my parcel?&#x27;</text><line x1="162" y1="137" x2="186" y2="137" class="ln"/><polygon points="192,137 184,141.4 184,132.6" class="ah"/><rect x="196" y="120" width="90" height="34" rx="10" class="b-g"/><text x="241" y="141.025" font-size="11.5" text-anchor="middle" font-weight="600">DELIVERY</text><rect x="14" y="26" width="280" height="140" rx="8" class="b-none"/><rect x="330" y="70" width="120" height="56" rx="10" class="b-a"/><text x="390" y="94.4" font-size="12" text-anchor="middle" font-weight="600">Model picks up</text><text x="390" y="110" font-size="12" text-anchor="middle">the pattern</text><line x1="296" y1="98" x2="320" y2="98" class="ln"/><polygon points="326,98 318,102.4 318,93.6" class="ah"/><rect x="500" y="30" width="150" height="40" rx="10" class="b-s"/><text x="575" y="54.2" font-size="12" text-anchor="middle">&#x27;Shop in Norwich?&#x27;</text><rect x="500" y="126" width="150" height="40" rx="10" class="b-g"/><text x="575" y="150.55" font-size="13" text-anchor="middle" font-weight="600">OTHER</text><line x1="497" y1="70.2378" x2="458.808" y2="80.1472" class="ln"/><polygon points="453,81.6541 459.639,75.3859 461.849,83.9039" class="ah"/><line x1="453" y1="114.346" x2="491.192" y2="124.255" class="ln"/><polygon points="497,125.762 488.151,128.012 490.361,119.494" class="ah"/><text x="575" y="22" font-size="11" text-anchor="middle" class="mut">new input</text><text x="575" y="184" font-size="11" text-anchor="middle" class="mut">consistent output</text></svg></div>
+        <figcaption>Few-shot prompting: a handful of varied examples teaches the model the exact format and judgement you want, then it applies the pattern to new inputs.</figcaption>
+      </figure>
+
+      <h2>3.2 Structure with delimiters and tags</h2>
+      <p>When a prompt contains several parts — instructions, a document, examples — separate them clearly so the model doesn't confuse your data with your instructions. Both Anthropic and OpenAI recommend using Markdown headings or XML-style tags.</p>
+<pre data-copy><code>&lt;instructions&gt;
+Summarise the report for a non-technical board.
+Use 5 bullet points, then one line: "Decision needed: …"
+&lt;/instructions&gt;
+
+&lt;report&gt;
+[paste report here]
+&lt;/report&gt;</code></pre>
+
+      <h2>3.3 Let the model think</h2>
+      <p>For problems involving analysis, maths or several steps, asking the model to <strong>work through the problem before giving a final answer</strong> often improves quality. With standard models you can ask it to "think step by step" or to reason inside <code>&lt;thinking&gt;</code> tags before the answer. Reasoning models do this automatically — for them, focus on stating the goal and the criteria for a good answer.</p>
+      <div class="callout warn">
+        <b>Remember Module 3 of "How AI Works"</b>
+        <p>A model's written reasoning helps performance and lets you spot errors — but it isn't a guaranteed record of how it reached the answer. Check the conclusion, not just the reasoning.</p>
+      </div>
+
+      <h2>3.4 Prompt chaining: break big tasks into steps</h2>
+      <p>A complex task in one giant prompt often produces a mediocre result. Instead, <strong>chain</strong> prompts, feeding each output into the next step:</p>
+      <ol>
+        <li>Extract the key facts from these five customer interviews.</li>
+        <li>Group the facts into themes.</li>
+        <li>For each theme, suggest product improvements.</li>
+        <li>Review your suggestions: which are most feasible for a two-person team?</li>
+      </ol>
+      <p>Chaining makes each step easier, lets you check intermediate results, and makes it obvious which step needs fixing.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 720 130" style="min-width:560px" role="img" aria-label="Prompt chaining: each step&#x27;s output feeds the next. Smaller steps are easier for the model, and you can check — and fix — each one."><rect x="20" y="40" width="140" height="56" rx="10" class="b-a"/><text x="90" y="64.25" font-size="12.5" text-anchor="middle" font-weight="600">Extract facts</text><text x="90" y="80.5" font-size="12.5" text-anchor="middle">from interviews</text><rect x="200" y="40" width="140" height="56" rx="10" class="b-a"/><text x="270" y="64.25" font-size="12.5" text-anchor="middle" font-weight="600">Group into</text><text x="270" y="80.5" font-size="12.5" text-anchor="middle">themes</text><rect x="380" y="40" width="140" height="56" rx="10" class="b-a"/><text x="450" y="64.25" font-size="12.5" text-anchor="middle" font-weight="600">Suggest</text><text x="450" y="80.5" font-size="12.5" text-anchor="middle">improvements</text><rect x="560" y="40" width="140" height="56" rx="10" class="b-g"/><text x="630" y="64.25" font-size="12.5" text-anchor="middle" font-weight="600">Rank by</text><text x="630" y="80.5" font-size="12.5" text-anchor="middle">feasibility</text><line x1="163" y1="68" x2="191" y2="68" class="ln"/><polygon points="197,68 189,72.4 189,63.6" class="ah"/><line x1="343" y1="68" x2="371" y2="68" class="ln"/><polygon points="377,68 369,72.4 369,63.6" class="ah"/><line x1="523" y1="68" x2="551" y2="68" class="ln"/><polygon points="557,68 549,72.4 549,63.6" class="ah"/><text x="90" y="118" font-size="11" text-anchor="middle" class="mut">✓ you can check</text><text x="270" y="118" font-size="11" text-anchor="middle" class="mut">✓ you can check</text><text x="450" y="118" font-size="11" text-anchor="middle" class="mut">✓ you can check</text></svg></div>
+        <figcaption>Prompt chaining: each step's output feeds the next. Smaller steps are easier for the model, and you can check — and fix — each one.</figcaption>
+      </figure>
+
+      <h2>3.5 Give the model permission not to know</h2>
+      <p>Models tend to answer even when they shouldn't. Reduce made-up answers by saying explicitly what to do when information is missing:</p>
+<pre data-copy><code>Answer using only the policy document provided.
+If the answer isn't in the document, say "The policy doesn't cover this"
+and suggest who to ask. Do not guess.</code></pre>
+
+      <h2>3.6 Ask for critique and alternatives</h2>
+      <ul>
+        <li><strong>Self-review:</strong> "Now review your draft against the brief. List anything missing or weak, then produce an improved version."</li>
+        <li><strong>Options:</strong> "Give me three different approaches, with pros and cons of each."</li>
+        <li><strong>Devil's advocate:</strong> "What are the strongest arguments against this plan?" — useful for countering sycophancy.</li>
+      </ul>
+
+      <div class="activity">
+        <b>Try it: chain a task</b>
+        <p>Pick a report you need to read. Prompt 1: "Extract every recommendation and its supporting evidence as a table." Prompt 2: "Which recommendations have the weakest evidence?" Prompt 3: "Draft a five-line summary for my manager, flagging the weak ones." Compare with asking for a summary in one go.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Varied examples (few-shot) are one of the most reliable controls.</li><li>Separate instructions from data with tags or headings.</li><li>Ask standard models to think step by step; give reasoning models clear goals.</li><li>Chain big tasks into checkable steps.</li><li>Explicitly allow 'I don't know' and ask for counter-arguments.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener">Prompt engineering overview (Claude docs)</a> — clarity, examples, XML structure, roles, thinking and prompt chaining</li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt engineering guide</a> — message roles, formatting, few-shot examples and reasoning models</li><li><span class="provider">Google</span><a href="https://ai.google.dev/gemini-api/docs/prompting-strategies" target="_blank" rel="noopener">Prompt design strategies (Gemini API docs)</a></li><li><span class="provider">Anthropic</span><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">Interactive prompt engineering tutorial (GitHub)</a> — hands-on exercises</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What is few-shot prompting?",
+"options": [
+"Using a short prompt",
+"Including a few examples of desired input and output in the prompt",
+"Asking only a few questions",
+"Running a prompt a few times"
+],
+"answer": 1,
+"explain": "Examples show the model the pattern you want."
+},
+{
+"q": "Why wrap a pasted document in tags like &lt;report&gt;…&lt;/report&gt;?",
+"options": [
+"Tags are required by law",
+"To clearly separate data from instructions so the model doesn't confuse them",
+"To make it shorter",
+"To hide it from the model"
+],
+"answer": 1,
+"explain": "Clear structure reduces confusion — and helps against injected instructions."
+},
+{
+"q": "Prompt chaining means…",
+"options": [
+"Sending the same prompt repeatedly",
+"Breaking a complex task into steps, feeding each output into the next",
+"Linking to other websites",
+"Using several AI tools at once"
+],
+"answer": 1,
+"explain": "Chains make each step easier and checkable."
+},
+{
+"q": "Which instruction best reduces made-up answers when using a policy document?",
+"options": [
+"'Be creative'",
+"'Answer only from the document; if it isn't covered, say so — don't guess'",
+"'Answer quickly'",
+"'Use your general knowledge'"
+],
+"answer": 1,
+"explain": "Give the model an explicit way out."
+},
+{
+"q": "To counter an AI's tendency to agree with you, ask it to…",
+"options": [
+"Agree more strongly",
+"Argue the opposite case or list the strongest objections",
+"Use more emojis",
+"Shorten its answer"
+],
+"answer": 1,
+"explain": "Requesting critique counters sycophancy."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Documents, data and images →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

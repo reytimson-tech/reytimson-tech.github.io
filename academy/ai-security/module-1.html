@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: The AI threat landscape — AI Security &amp; Safety</title>
+<meta name="description" content="Why AI security is different, AI as target, tool and weapon, safety vs security, key frameworks and the AWS scoping matrix.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-security">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>The AI threat landscape</h1>
+      <p class="lead">AI systems inherit every traditional security risk — and add new ones. This module maps the landscape and the frameworks defenders use.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain what makes AI systems distinctively vulnerable</li><li>Distinguish security of AI, AI for security and AI-enabled threats</li><li>Distinguish AI security from AI safety</li><li>Identify the main AI security frameworks</li><li>Use the AWS scoping matrix to define responsibilities</li></ul>
+      </div>
+
+      <h2>1.1 Why AI security is different</h2>
+      <p>AI systems are software, so all the usual security basics still apply: access control, patching, secure configuration, logging. But AI adds new properties that attackers exploit:</p>
+      <ul>
+        <li><strong>Instructions and data are mixed.</strong> In an LLM, the developer's instructions and untrusted content (emails, web pages, documents) are all just text. The model can't reliably tell them apart.</li>
+        <li><strong>Behaviour is learned, not coded.</strong> You can't read the source code to see what a model will do; it can be influenced through its training data.</li>
+        <li><strong>Outputs are unpredictable.</strong> The same input can produce different outputs, and small changes can have large effects.</li>
+        <li><strong>AI increasingly acts.</strong> Agents with tools can send emails, move money or change systems, so a manipulated model can cause real-world damage.</li>
+        <li><strong>Complex supply chains.</strong> Pre-trained models, datasets, libraries, plugins and APIs from many parties.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 730 300" style="min-width:620px" role="img" aria-label="The attack surface of a typical LLM application. Red labels mark where the attacks in this course strike."><rect x="20" y="110" width="110" height="50" rx="10" class="b-n"/><text x="75" y="139.375" font-size="12.5" text-anchor="middle" font-weight="600">User input</text><rect x="190" y="100" width="150" height="70" rx="10" class="b-a"/><text x="265" y="131.1" font-size="13" text-anchor="middle" font-weight="600">Your AI</text><text x="265" y="148" font-size="13" text-anchor="middle">application</text><rect x="410" y="100" width="120" height="70" rx="10" class="b-a"/><text x="470" y="139.9" font-size="14" text-anchor="middle" font-weight="600">LLM</text><rect x="190" y="10" width="150" height="46" rx="10" class="b-n"/><text x="265" y="29.4" font-size="12" text-anchor="middle" font-weight="600">Documents, web,</text><text x="265" y="45" font-size="12" text-anchor="middle">emails (RAG)</text><rect x="410" y="220" width="120" height="46" rx="10" class="b-n"/><text x="470" y="247.375" font-size="12.5" text-anchor="middle" font-weight="600">Tools / APIs</text><rect x="580" y="10" width="130" height="46" rx="10" class="b-n"/><text x="645" y="37.375" font-size="12.5" text-anchor="middle" font-weight="600">Training data</text><rect x="580" y="110" width="130" height="50" rx="10" class="b-n"/><text x="645" y="131.4" font-size="12" text-anchor="middle" font-weight="600">Output → web,</text><text x="645" y="147" font-size="12" text-anchor="middle">DB, actions</text><rect x="190" y="220" width="150" height="46" rx="10" class="b-n"/><text x="265" y="239.4" font-size="12" text-anchor="middle" font-weight="600">Models, libraries,</text><text x="265" y="255" font-size="12" text-anchor="middle">plugins</text><line x1="133" y1="135" x2="181" y2="135" class="ln"/><polygon points="187,135 179,139.4 179,130.6" class="ah"/><line x1="265" y1="59" x2="265" y2="91" class="ln"/><polygon points="265,97 260.6,89 269.4,89" class="ah"/><line x1="343" y1="135" x2="401" y2="135" class="ln"/><polygon points="407,135 399,139.4 399,130.6" class="ah"/><line x1="470" y1="179" x2="470" y2="211" class="ln"/><polygon points="470,217 465.6,209 474.4,209" class="ah"/><polygon points="470,173 474.4,181 465.6,181" class="ah"/><line x1="600.392" y1="59" x2="538.184" y2="95.2586" class="ln"/><polygon points="533,98.28 537.696,90.4501 542.127,98.0529" class="ah"/><line x1="533" y1="135" x2="571" y2="135" class="ln"/><polygon points="577,135 569,139.4 569,130.6" class="ah"/><line x1="265" y1="217" x2="265" y2="179" class="ln"/><polygon points="265,173 269.4,181 260.6,181" class="ah"/><text x="75" y="100" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ direct injection</text><text x="265" y="72" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ indirect injection</text><text x="645" y="70" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ poisoning</text><text x="645" y="176" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ output handling</text><text x="470" y="286" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ excessive agency</text><text x="265" y="286" font-size="11" text-anchor="middle" font-weight="600" class="t-b">⚠ supply chain</text></svg></div>
+        <figcaption>The attack surface of a typical LLM application. Red labels mark where the attacks in this course strike.</figcaption>
+      </figure>
+
+      <h2>1.2 Three relationships between AI and security</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Relationship</th><th>Examples</th><th>Covered</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Security <em>of</em> AI</strong> — AI as a target</td><td>Prompt injection, data poisoning, model theft</td><td>This course</td></tr>
+            <tr><td><strong>AI <em>for</em> security</strong> — AI as a defender's tool</td><td>Threat detection, triage, code review</td><td>Briefly, Module 6</td></tr>
+            <tr><td><strong>AI-enabled threats</strong> — AI as an attacker's tool</td><td>Deepfake fraud, convincing phishing at scale, faster vulnerability discovery</td><td>Briefly, below</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>On AI-enabled threats, the <em>International AI Safety Report 2026</em> and national cyber agencies note that AI is lowering the cost of some attacks — for example, highly personalised phishing and voice cloning. Basic controls (multi-factor authentication, verification of payment requests, patching) matter more than ever.</p>
+
+      <h2>1.3 Safety and security</h2>
+      <p>The terms overlap. Broadly, <strong>AI security</strong> is about protecting AI systems from deliberate attack and misuse; <strong>AI safety</strong> is about preventing AI from causing harm — including through errors, unintended behaviour and, for the most capable models, dangerous capabilities. This course covers both, with an emphasis on practical security.</p>
+
+      <h2>1.4 The frameworks you'll use</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Framework</th><th>From</th><th>What it gives you</th></tr></thead>
+          <tbody>
+            <tr><td><strong>OWASP Top 10 for LLM Applications (2025)</strong></td><td>OWASP GenAI Security Project</td><td>The ten most critical risks for LLM apps — the common language for AppSec teams</td></tr>
+            <tr><td><strong>MITRE ATLAS</strong></td><td>MITRE</td><td>A knowledge base of adversary tactics and techniques against AI systems, modelled on MITRE ATT&amp;CK</td></tr>
+            <tr><td><strong>Guidelines for secure AI system development</strong></td><td>UK NCSC with US CISA and international partners</td><td>Security across four stages: secure design, development, deployment, and operation and maintenance</td></tr>
+            <tr><td><strong>AI Cyber Security Code of Practice</strong> (January 2025)</td><td>UK Government</td><td>Baseline security principles across the AI lifecycle, feeding into a global ETSI standard</td></tr>
+            <tr><td><strong>Secure AI Framework (SAIF)</strong></td><td>Google</td><td>Six core elements, from extending security foundations to AI to contextualising AI risk in business processes</td></tr>
+            <tr><td><strong>Generative AI Security Scoping Matrix</strong></td><td>AWS</td><td>Five scopes, from consumer apps to self-trained models, to work out which controls you own</td></tr>
+            <tr><td><strong>NIST AI RMF and GenAI Profile</strong></td><td>NIST</td><td>Risk management, including information security risks of generative AI</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>1.5 Know your scope</h2>
+      <p>AWS's scoping matrix is a useful starting point. Your security responsibilities depend on how much of the AI stack you own:</p>
+      <ol>
+        <li><strong>Consumer app</strong> — staff using a public AI service. Focus: acceptable use, data handling, account security.</li>
+        <li><strong>Enterprise app</strong> — a third-party business app with AI features. Focus: contracts, configuration, access.</li>
+        <li><strong>Pre-trained models</strong> — your app built on a foundation model API. Focus: application security, prompt injection, output handling.</li>
+        <li><strong>Fine-tuned models</strong> — a foundation model tuned on your data. Add: training data security and poisoning.</li>
+        <li><strong>Self-trained models</strong> — you own everything. Add: the full model supply chain and infrastructure.</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 230" style="min-width:560px" role="img" aria-label="AWS&#x27;s Generative AI Security Scoping Matrix: moving from scope 1 to 5, you own more of the system — and more of the controls."><text x="470" y="14" font-size="11.5" text-anchor="middle" class="mut">How much of the stack — and its security — you own</text><circle cx="34" cy="40" r="14" class="b-a"/><text x="34" y="45" font-size="13" text-anchor="middle" font-weight="700" class="t-a">1</text><text x="60" y="45" font-size="12.5" text-anchor="start" font-weight="600">Consumer app</text><rect x="260" y="30" width="420" height="20" rx="4" class="b-n"/><rect x="260" y="30" width="63" height="20" rx="4" class="f-a"/><circle cx="34" cy="80" r="14" class="b-a"/><text x="34" y="85" font-size="13" text-anchor="middle" font-weight="700" class="t-a">2</text><text x="60" y="85" font-size="12.5" text-anchor="start" font-weight="600">Enterprise app</text><rect x="260" y="70" width="420" height="20" rx="4" class="b-n"/><rect x="260" y="70" width="126" height="20" rx="4" class="f-a"/><circle cx="34" cy="120" r="14" class="b-a"/><text x="34" y="125" font-size="13" text-anchor="middle" font-weight="700" class="t-a">3</text><text x="60" y="125" font-size="12.5" text-anchor="start" font-weight="600">Pre-trained model (API)</text><rect x="260" y="110" width="420" height="20" rx="4" class="b-n"/><rect x="260" y="110" width="231" height="20" rx="4" class="f-a"/><circle cx="34" cy="160" r="14" class="b-a"/><text x="34" y="165" font-size="13" text-anchor="middle" font-weight="700" class="t-a">4</text><text x="60" y="165" font-size="12.5" text-anchor="start" font-weight="600">Fine-tuned model</text><rect x="260" y="150" width="420" height="20" rx="4" class="b-n"/><rect x="260" y="150" width="315" height="20" rx="4" class="f-a"/><circle cx="34" cy="200" r="14" class="b-a"/><text x="34" y="205" font-size="13" text-anchor="middle" font-weight="700" class="t-a">5</text><text x="60" y="205" font-size="12.5" text-anchor="start" font-weight="600">Self-trained model</text><rect x="260" y="190" width="420" height="20" rx="4" class="b-n"/><rect x="260" y="190" width="420" height="20" rx="4" class="f-a"/></svg></div>
+        <figcaption>AWS's Generative AI Security Scoping Matrix: moving from scope 1 to 5, you own more of the system — and more of the controls.</figcaption>
+      </figure>
+
+      <h2>Key takeaways</h2>
+      <ul><li>LLMs mix instructions and data, learn behaviour from data, and increasingly act.</li><li>AI is a target, a defensive tool and an attacker's tool.</li><li>OWASP, MITRE ATLAS, NCSC, the UK Code of Practice, SAIF and NIST give you a shared language.</li><li>Your controls depend on your scope — from consumer app to self-trained model.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">NCSC (UK)</span><a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development" target="_blank" rel="noopener">Guidelines for secure AI system development</a></li><li><span class="provider">UK Government</span><a href="https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice" target="_blank" rel="noopener">AI Cyber Security Code of Practice</a> — January 2025</li><li><span class="provider">Google</span><a href="https://safety.google/cybersecurity-advancements/saif/" target="_blank" rel="noopener">Secure AI Framework (SAIF)</a> — six core elements for securing AI</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/" target="_blank" rel="noopener">Generative AI Security Scoping Matrix</a> — five scopes, from consumer apps to self-trained models</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "What fundamental property makes LLMs vulnerable to prompt injection?",
+"options": [
+"They run on GPUs",
+"Instructions and untrusted data are both just text to the model",
+"They're open source",
+"They use too much memory"
+],
+"answer": 1,
+"explain": "The model can't reliably separate instructions from data."
+},
+{
+"q": "Deepfake voice fraud targeting a finance team is an example of…",
+"options": [
+"Security of AI",
+"AI for security",
+"An AI-enabled threat",
+"Data poisoning"
+],
+"answer": 2,
+"explain": "AI used as the attacker's tool."
+},
+{
+"q": "Which framework lists the ten most critical risks for LLM applications?",
+"options": [
+"ISO 9001",
+"OWASP Top 10 for LLM Applications",
+"PCI DSS",
+"ITIL"
+],
+"answer": 1,
+"explain": "The 2025 edition is current."
+},
+{
+"q": "The NCSC's secure AI development guidelines are organised around…",
+"options": [
+"Secure design, development, deployment, and operation and maintenance",
+"Plan, Do, Check, Act",
+"Govern, Map, Measure, Manage",
+"Identify, Protect, Detect"
+],
+"answer": 0,
+"explain": "Four lifecycle stages."
+},
+{
+"q": "In AWS's scoping matrix, building an app on a foundation model API is…",
+"options": [
+"Scope 1 — consumer app",
+"Scope 3 — pre-trained models",
+"Scope 5 — self-trained",
+"Not covered"
+],
+"answer": 1,
+"explain": "Scope 3: your app, a third party's model."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Prompt injection and jailbreaks →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

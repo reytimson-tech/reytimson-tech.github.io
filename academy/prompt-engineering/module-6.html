@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: GenAI for research, writing and analysis — Prompt Engineering &amp; Working with Generative AI</title>
+<meta name="description" content="Research prompts and source checking, writing workflows, decision support, briefing agents, responsible use and a prompt toolkit.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="prompt-engineering">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 25 minutes</span>
+      <h1>GenAI for research, writing and analysis</h1>
+      <p class="lead">Bring it all together: practical workflows for the three things people use generative AI for most — and for briefing AI agents.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Use AI as a research assistant and verify its sources</li><li>Apply an outline-draft-edit writing workflow</li><li>Use AI to structure and stress-test decisions</li><li>Write effective briefs for AI agents</li><li>Diagnose and fix common prompt problems</li></ul>
+      </div>
+
+      <h2>6.1 Research</h2>
+      <p>AI tools with web search or "deep research" features can gather and synthesise sources quickly. Use them as a <strong>research assistant</strong>, not an oracle.</p>
+<pre data-copy><code>I'm researching [topic] for [purpose/audience].
+1. Find recent, authoritative sources (government, regulators, peer-reviewed
+   research, major industry bodies). Prefer sources from the last 2 years.
+2. For each key finding, give the source name, date and link.
+3. Separate well-established findings from contested or emerging ones.
+4. Note any important gaps or limitations in the evidence.</code></pre>
+      <p>Then <strong>open and check the key sources yourself</strong> — confirm they exist, are current and actually say what's claimed.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 750 180" style="min-width:620px" role="img" aria-label="Use AI as a research assistant, not an oracle: the step that makes research trustworthy is you opening the sources."><rect x="20" y="50" width="150" height="56" rx="10" class="b-a"/><text x="95" y="73.625" font-size="12.5" text-anchor="middle" font-weight="600">AI research tool</text><text x="95" y="92.925" font-size="10.5" text-anchor="middle" class="mut">finds &amp; summarises</text><rect x="220" y="50" width="150" height="56" rx="10" class="b-n"/><text x="295" y="73.625" font-size="12.5" text-anchor="middle" font-weight="600">Cited sources</text><text x="295" y="92.925" font-size="10.5" text-anchor="middle" class="mut">links, dates</text><rect x="420" y="50" width="150" height="56" rx="10" class="b-w"/><text x="495" y="74.4" font-size="12" text-anchor="middle" font-weight="600">You open &amp; read</text><text x="495" y="90" font-size="12" text-anchor="middle">key sources</text><rect x="620" y="50" width="110" height="56" rx="10" class="b-g"/><text x="675" y="74.25" font-size="12.5" text-anchor="middle" font-weight="600">Use with</text><text x="675" y="90.5" font-size="12.5" text-anchor="middle">confidence</text><line x1="173" y1="78" x2="211" y2="78" class="ln"/><polygon points="217,78 209,82.4 209,73.6" class="ah"/><line x1="573" y1="78" x2="611" y2="78" class="ln"/><polygon points="617,78 609,82.4 609,73.6" class="ah"/><text x="595" y="71" font-size="11.5" text-anchor="middle" class="mut">verified</text><line x1="373" y1="78" x2="411" y2="78" class="ln"/><polygon points="417,78 409,82.4 409,73.6" class="ah"/><polyline points="495,110 495,150 95,150 95,116" class="ln dash"/><polygon points="95,110 99.4,118 90.6,118" class="ah"/><text x="295" y="168" font-size="11" text-anchor="middle" class="mut">not there or doesn&#x27;t say it? → back to research</text></svg></div>
+        <figcaption>Use AI as a research assistant, not an oracle: the step that makes research trustworthy is you opening the sources.</figcaption>
+      </figure>
+
+      <h2>6.2 Writing</h2>
+      <ul>
+        <li><strong>Outline first:</strong> agree the structure before asking for a full draft.</li>
+        <li><strong>Feed it your voice:</strong> paste two or three examples of writing you like and ask it to match the style.</li>
+        <li><strong>Edit in passes:</strong> structure → clarity → tone → length → proofreading.</li>
+        <li><strong>Make it yours:</strong> add specifics, judgement and examples only you have. Readers notice generic AI prose.</li>
+      </ul>
+      <div class="compare">
+        <div><h4>Editing prompt</h4><p>"Edit this for clarity and concision. Keep my voice. Don't add new claims. Show changes as a bulleted list, then the full revised text."</p></div>
+        <div><h4>Feedback prompt</h4><p>"You're a demanding editor. Without rewriting, give me the five most important improvements to this draft, in priority order."</p></div>
+      </div>
+
+      <h2>6.3 Analysis and decision support</h2>
+      <ul>
+        <li><strong>Frame the decision:</strong> "We're deciding whether to X. Criteria: cost, risk, time to launch."</li>
+        <li><strong>Ask for structure:</strong> options, pros and cons, assumptions, risks, what evidence would change the answer.</li>
+        <li><strong>Stress-test:</strong> "Argue the opposite case." "What would a sceptical investor ask?"</li>
+        <li><strong>Keep the decision human:</strong> AI can widen and sharpen your thinking; accountability for the decision stays with you.</li>
+      </ul>
+
+      <h2>6.4 Delegating to agents</h2>
+      <p>With agents and agentic features — which can browse, use files and take actions — your prompt becomes a <strong>brief</strong>. A good brief includes:</p>
+      <ul class="checklist">
+        <li>The goal and what "done" looks like</li>
+        <li>Resources and where to find them</li>
+        <li>Boundaries: what it may and may not do (e.g. "draft emails but don't send")</li>
+        <li>When to stop and check in with you</li>
+        <li>How to report back (summary, sources, open questions)</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 250" style="min-width:560px" role="img" aria-label="With an agent, your prompt becomes a brief. Boundaries and check-in points matter most, because the agent can act."><rect x="20" y="16" width="210" height="40" rx="10" class="b-a"/><text x="125" y="31.625" font-size="12.5" text-anchor="middle" font-weight="600">Goal</text><text x="125" y="50.925" font-size="10.5" text-anchor="middle" class="mut">what &#x27;done&#x27; looks like</text><rect x="20" y="62" width="210" height="40" rx="10" class="b-a"/><text x="125" y="77.625" font-size="12.5" text-anchor="middle" font-weight="600">Resources</text><text x="125" y="96.925" font-size="10.5" text-anchor="middle" class="mut">where to look</text><rect x="20" y="108" width="210" height="40" rx="10" class="b-w"/><text x="125" y="123.625" font-size="12.5" text-anchor="middle" font-weight="600">Boundaries</text><text x="125" y="142.925" font-size="10.5" text-anchor="middle" class="mut">may / may not do</text><rect x="20" y="154" width="210" height="40" rx="10" class="b-a"/><text x="125" y="169.625" font-size="12.5" text-anchor="middle" font-weight="600">Check-ins</text><text x="125" y="188.925" font-size="10.5" text-anchor="middle" class="mut">when to stop &amp; ask</text><rect x="20" y="200" width="210" height="40" rx="10" class="b-a"/><text x="125" y="215.625" font-size="12.5" text-anchor="middle" font-weight="600">Report</text><text x="125" y="234.925" font-size="10.5" text-anchor="middle" class="mut">summary, sources, open questions</text><polyline points="236,130 284,130" class="ln ln-a"/><polygon points="290,130 282,134.4 282,125.6" class="ah-a"/><rect x="295" y="95" width="120" height="70" rx="10" class="b-a"/><text x="355" y="134.9" font-size="14" text-anchor="middle" font-weight="600">Agent</text><rect x="470" y="40" width="150" height="46" rx="10" class="b-n"/><text x="545" y="59.4" font-size="12" text-anchor="middle" font-weight="600">Tools: files,</text><text x="545" y="75" font-size="12" text-anchor="middle">browser, email</text><rect x="470" y="130" width="150" height="46" rx="10" class="b-g"/><text x="545" y="149.4" font-size="12" text-anchor="middle" font-weight="600">You approve risky</text><text x="545" y="165" font-size="12" text-anchor="middle">actions</text><line x1="418" y1="107.784" x2="465.61" y2="90.9954" class="ln"/><polygon points="471.269,89 465.187,95.81 462.261,87.5109" class="ah"/><text x="444.634" y="91.3921" font-size="11.5" text-anchor="middle" class="mut">uses</text><line x1="418" y1="137.626" x2="461.043" y2="142.837" class="ln"/><polygon points="467,143.558 458.529,146.965 459.587,138.228" class="ah"/><text x="442.5" y="133.592" font-size="11.5" text-anchor="middle" class="mut">asks</text></svg></div>
+        <figcaption>With an agent, your prompt becomes a brief. Boundaries and check-in points matter most, because the agent can act.</figcaption>
+      </figure>
+
+      <h2>6.5 Responsible prompting</h2>
+      <p>Everything from the <a href="../ai-literacy/index.html">AI Literacy</a> course still applies: approved tools, no confidential or personal data unless permitted, verify facts, disclose AI use where it matters, and stay accountable for the result.</p>
+
+      <h2>6.6 Your prompt toolkit</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Problem</th><th>Try</th></tr></thead>
+          <tbody>
+            <tr><td>Generic, bland output</td><td>Add context, audience and examples; ask for a specific angle</td></tr>
+            <tr><td>Wrong format</td><td>Show the exact format; use tags or a template</td></tr>
+            <tr><td>Made-up facts</td><td>Supply sources; "answer only from the document"; allow "I don't know"; verify</td></tr>
+            <tr><td>Weak reasoning</td><td>Ask it to think step by step, or use a reasoning model; break into a chain</td></tr>
+            <tr><td>Too agreeable</td><td>Ask neutral questions; request counter-arguments and critique</td></tr>
+            <tr><td>Inconsistent results</td><td>Turn it into a template; test with a set of inputs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="activity">
+        <b>Capstone: build your own prompt</b>
+        <p>Choose a real, recurring task. Write a template using the six ingredients, add one example, and include an "if unsure" instruction. Test it on five realistic inputs including one tricky case. Revise once. Save it in your prompt library.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>AI is a research assistant, not an oracle — check key sources yourself.</li><li>Outline, draft, edit in passes, and add what only you know.</li><li>Use AI to widen and stress-test thinking; keep decisions human.</li><li>Agent briefs need goals, boundaries, check-in points and reporting.</li><li>Match the fix to the problem.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI Academy</span><a href="https://academy.openai.com/pages/ai-at-work-bcx7td" target="_blank" rel="noopener">AI at Work</a> — AI fluency, real workflows and high-impact use cases</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">AI Fluency: Framework &amp; Foundations</a> — the 4D Framework: Delegation, Description, Discernment and Diligence</li><li><span class="provider">Google</span><a href="https://grow.google/ai-essentials/" target="_blank" rel="noopener">Google AI Essentials</a> — self-paced, under 5 hours, no experience needed</li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/fundamentals-generative-ai/" target="_blank" rel="noopener">Introduction to generative AI and agents</a> — LLMs, prompts and agents</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "An AI research tool gives you five sources. What should you do before citing them?",
+"options": [
+"Cite them — AI checked them",
+"Open the key sources to confirm they exist, are current and say what's claimed",
+"Ask the AI for five more",
+"Remove the dates"
+],
+"answer": 1,
+"explain": "Verify sources yourself."
+},
+{
+"q": "Which writing workflow tends to work best?",
+"options": [
+"Ask for the final document in one go",
+"Agree an outline, draft, then edit in focused passes",
+"Never edit AI drafts",
+"Translate it twice"
+],
+"answer": 1,
+"explain": "Structured iteration produces better writing."
+},
+{
+"q": "Which is a good decision-support prompt?",
+"options": [
+"'Decide for me'",
+"'List options against our criteria of cost, risk and time, with assumptions and what evidence would change the answer'",
+"'Agree with my choice'",
+"'Pick at random'"
+],
+"answer": 1,
+"explain": "Structure the decision, keep accountability human."
+},
+{
+"q": "What should a brief for an AI agent include?",
+"options": [
+"Only the goal",
+"Goal, resources, boundaries, when to check in and how to report back",
+"Nothing — agents work it out",
+"A password list"
+],
+"answer": 1,
+"explain": "Boundaries and check-ins matter when AI can act."
+},
+{
+"q": "Your AI outputs keep coming out bland and generic. The best first fix is…",
+"options": [
+"Lower the temperature",
+"Add specific context, audience and examples",
+"Shorten the prompt to one word",
+"Switch off the computer"
+],
+"answer": 1,
+"explain": "Generic output usually means missing context."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

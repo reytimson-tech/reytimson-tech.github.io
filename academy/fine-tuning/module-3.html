@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Preparing training data — Fine-tuning &amp; Model Optimisation</title>
+<meta name="description" content="Why data quality dominates, the JSONL chat format, qualities of good data, sources including synthetic data, validation and splits in Python, and personal data.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="fine-tuning">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Preparing training data</h1>
+      <p class="lead">A fine-tuned model is a mirror of its training data. This module shows how to build a dataset worth learning from.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Format examples in the JSONL chat format</li><li>Assess data for correctness, consistency, coverage and lawfulness</li><li>Use historical, expert and synthetic sources appropriately</li><li>Validate, de-duplicate and split a dataset in Python</li><li>Handle personal data and rights</li></ul>
+      </div>
+
+      <h2>3.1 Data is the product</h2>
+      <p>The quality of a fine-tuned model is limited by the quality of its training examples. A few hundred excellent, consistent examples often beat many thousands of noisy ones. Every flaw — an inconsistent format, a wrong label, a rude reply — will be learned.</p>
+
+      <h2>3.2 The chat format</h2>
+      <p>Most tools expect training data as <strong>JSONL</strong> (one JSON object per line), each holding a short conversation in the same format the model will see in use:</p>
+<pre data-copy><code><span class="label">train.jsonl · one example per line</span>{"messages": [
+  {"role": "system", "content": "You write product descriptions for Good For You. Warm, concise, UK English."},
+  {"role": "user", "content": "Product: bamboo chopping board, large, FSC-certified, juice groove"},
+  {"role": "assistant", "content": "Meet your new kitchen favourite. Our large FSC-certified bamboo board ..."}
+]}</code></pre>
+      <p>Keep the system prompt the same as you'll use in production, so the model learns the right context.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 200" style="min-width:560px" role="img" aria-label="A single training example in chat format. The final assistant message is the behaviour being taught."><rect x="20" y="16" width="420" height="150" rx="8" class="b-s"/><rect x="34" y="30" width="90" height="32" rx="6" class="b-w"/><text x="79" y="51" font-size="12" text-anchor="middle" font-weight="700">system</text><text x="136" y="51" font-size="11.5" text-anchor="start">You write product descriptions for Good For You…</text><rect x="34" y="74" width="90" height="32" rx="6" class="b-n"/><text x="79" y="95" font-size="12" text-anchor="middle" font-weight="700">user</text><text x="136" y="95" font-size="11.5" text-anchor="start">Product: bamboo board, large, FSC-certified…</text><rect x="34" y="118" width="90" height="32" rx="6" class="b-g"/><text x="79" y="139" font-size="12" text-anchor="middle" font-weight="700">assistant</text><text x="136" y="139" font-size="11.5" text-anchor="start">Meet your new kitchen favourite…</text><text x="230" y="186" font-size="11.5" text-anchor="middle" class="mut">one line of train.jsonl = one example</text><text x="470" y="60" font-size="11.5" text-anchor="start" class="t-a">← same as production</text><text x="470" y="150" font-size="11.5" text-anchor="start" class="t-g">← what the model learns</text><text x="470" y="166" font-size="11.5" text-anchor="start" class="t-g">   to produce</text></svg></div>
+        <figcaption>A single training example in chat format. The final assistant message is the behaviour being taught.</figcaption>
+      </figure>
+
+      <h2>3.3 What good training data looks like</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Quality</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr><td>Correct</td><td>Every output is one you'd be happy to ship</td></tr>
+            <tr><td>Consistent</td><td>Same format, tone and decisions for similar inputs</td></tr>
+            <tr><td>Representative</td><td>Covers the real range of inputs, including hard and unusual ones</td></tr>
+            <tr><td>Balanced</td><td>Classes and cases in sensible proportions</td></tr>
+            <tr><td>Clean</td><td>No duplicates, no leakage of test examples, no broken records</td></tr>
+            <tr><td>Lawful</td><td>You have the right to use it; personal data handled lawfully; licences respected</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3.4 Sources of examples</h2>
+      <ul>
+        <li><strong>Historical data</strong> — past tickets and replies, approved documents. Filter to the best.</li>
+        <li><strong>Expert-written examples</strong> — slow but high quality; ideal for edge cases.</li>
+        <li><strong>Synthetic data</strong> — generated by a strong model, then reviewed. Fast, but can introduce subtle errors and a monotonous style. Always check a sample, and check the provider's terms on using outputs for training.</li>
+      </ul>
+
+      <h2>3.5 Splits and checks</h2>
+<pre data-copy><code><span class="label">Python · validate and split a JSONL dataset</span>import json, random
+
+rows = [json.loads(line) for line in open("train_all.jsonl")]
+valid_roles = {"system", "user", "assistant"}
+clean = []
+for r in rows:
+    msgs = r.get("messages", [])
+    if (msgs and all(m.get("role") in valid_roles and m.get("content") for m in msgs)
+            and msgs[-1]["role"] == "assistant"):
+        clean.append(r)
+
+# remove exact duplicates
+seen, unique = set(), []
+for r in clean:
+    key = json.dumps(r, sort_keys=True)
+    if key not in seen:
+        seen.add(key); unique.append(r)
+
+random.seed(42); random.shuffle(unique)
+n = len(unique)
+splits = {"train": unique[:int(.8*n)], "val": unique[int(.8*n):int(.9*n)], "test": unique[int(.9*n):]}
+for name, data in splits.items():
+    with open(f"{name}.jsonl", "w") as f:
+        f.writelines(json.dumps(r) + "\n" for r in data)
+    print(name, len(data))</code></pre>
+      <p>The <strong>test</strong> split is sacred: never train on it, never tune settings against it. Use the <strong>validation</strong> split to watch for overfitting during training.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 120" style="min-width:560px" role="img" aria-label="Split once, before training. Never train or tune settings on the test set."><rect x="20" y="40" width="480" height="46" rx="6" class="b-a"/><rect x="500" y="40" width="60" height="46" rx="0" class="b-w"/><rect x="560" y="40" width="60" height="46" rx="6" class="b-g"/><text x="260" y="68" font-size="13" text-anchor="middle" font-weight="600">Train · 80%</text><text x="530" y="68" font-size="12.5" text-anchor="middle" font-weight="600">Val</text><text x="590" y="68" font-size="12.5" text-anchor="middle" font-weight="600">Test</text><text x="260" y="108" font-size="11.5" text-anchor="middle" class="mut">learn</text><text x="530" y="108" font-size="11.5" text-anchor="middle" class="mut">watch loss</text><text x="590" y="108" font-size="11.5" text-anchor="middle" class="mut">final only</text></svg></div>
+        <figcaption>Split once, before training. Never train or tune settings on the test set.</figcaption>
+      </figure>
+
+      <h2>3.6 Personal data and rights</h2>
+      <p>Fine-tuned models can memorise training examples and reproduce them. Remove or pseudonymise personal data you don't need, respect data protection law (a DPIA is often appropriate), and make sure you have the rights to the content you train on.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>A few hundred excellent examples can beat thousands of noisy ones.</li><li>Match training examples to the production prompt format.</li><li>Good data is correct, consistent, representative, balanced, clean and lawful.</li><li>Review synthetic data; keep the test split untouched.</li><li>Models can memorise training data — minimise personal data.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/model-optimization" target="_blank" rel="noopener">Model optimization guide</a> — prompting and fine-tuning methods: SFT, DPO, RFT</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/overfitting" target="_blank" rel="noopener">ML Crash Course: Datasets, generalization and overfitting</a></li><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What does each line of a JSONL chat dataset contain?",
+"options": [
+"A CSV row",
+"One JSON object holding a short conversation with roles and content",
+"An image",
+"A model weight"
+],
+"answer": 1,
+"explain": "One example per line."
+},
+{
+"q": "Why keep the training system prompt the same as production?",
+"options": [
+"To save money",
+"So the model learns behaviour in the same context it will be used in",
+"It's required by law",
+"It has no effect"
+],
+"answer": 1,
+"explain": "Consistency between training and use."
+},
+{
+"q": "Half your historical support replies are excellent and half are curt. What should you do?",
+"options": [
+"Train on all of them",
+"Filter to the excellent ones (and add expert examples for gaps)",
+"Train only on the curt ones",
+"Double the data by duplicating"
+],
+"answer": 1,
+"explain": "The model learns every flaw."
+},
+{
+"q": "What's the role of the validation split?",
+"options": [
+"Final reporting",
+"Watching for overfitting and comparing settings during training",
+"Training",
+"Nothing"
+],
+"answer": 1,
+"explain": "The test split is kept for final evaluation."
+},
+{
+"q": "Why remove unnecessary personal data before fine-tuning?",
+"options": [
+"It slows training",
+"Fine-tuned models can memorise and reproduce training examples",
+"JSONL can't store names",
+"It's never a concern"
+],
+"answer": 1,
+"explain": "Memorisation is a privacy risk."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Running a fine-tune →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

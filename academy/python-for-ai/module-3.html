@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3: Files, text and JSON — Python for AI</title>
+<meta name="description" content="Reading and writing files, JSON for AI APIs, try/except, cleaning text with regular expressions, and CSV files.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="python-for-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m3" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 3 of 6 · 30 minutes</span>
+      <h1>Files, text and JSON</h1>
+      <p class="lead">AI work is full of text and JSON. This module shows you how to read, write, clean and safely parse them.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Read and write text files with encoding</li><li>Convert between JSON and Python with json.loads and json.dumps</li><li>Handle bad input with try/except</li><li>Clean and search text with string methods and regular expressions</li><li>Read and write CSV files</li></ul>
+      </div>
+
+      <h2>3.1 Reading and writing text files</h2>
+<pre data-copy><code>with open("notes.txt", "w", encoding="utf-8") as f:
+    f.write("First line\nSecond line\n")
+
+with open("notes.txt", encoding="utf-8") as f:
+    for line in f:
+        print(line.strip())</code></pre>
+      <p>The <code>with</code> block closes the file automatically. Always set <code>encoding="utf-8"</code> for text that might include accents or emojis.</p>
+
+      <h2>3.2 JSON: the language of AI APIs</h2>
+      <p>AI model APIs send requests and responses as <strong>JSON</strong>. Python's <code>json</code> module converts between JSON text and dictionaries and lists.</p>
+<pre data-copy><code>import json
+
+raw = '{"category": "DELIVERY", "urgent": true, "summary": "Parcel late"}'
+data = json.loads(raw)            # JSON text -> Python dict
+print(data["category"], data["urgent"])     # DELIVERY True
+
+reply = {"order": "GFY-10422", "items": ["board", "oil"], "total": 31.50}
+text = json.dumps(reply, indent=2)           # Python -> JSON text
+with open("reply.json", "w") as f:
+    f.write(text)</code></pre>
+      <p>Note how JSON <code>true</code> becomes Python <code>True</code>, and <code>null</code> becomes <code>None</code>.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 150" style="min-width:560px" role="img" aria-label="json.loads turns JSON text into Python objects; json.dumps does the reverse. Note true → True and null → None."><rect x="20" y="20" width="250" height="110" rx="8" class="b-s"/><text x="36" y="42" font-size="12" text-anchor="start" font-weight="700">JSON text (from an API)</text><text x="36" y="66" font-size="12" text-anchor="start">{&quot;category&quot;: &quot;DELIVERY&quot;,</text><text x="36" y="84" font-size="12" text-anchor="start"> &quot;urgent&quot;: true,</text><text x="36" y="102" font-size="12" text-anchor="start"> &quot;summary&quot;: null}</text><rect x="390" y="20" width="250" height="110" rx="8" class="b-a"/><text x="406" y="42" font-size="12" text-anchor="start" font-weight="700">Python dict</text><text x="406" y="66" font-size="12" text-anchor="start">{&#x27;category&#x27;: &#x27;DELIVERY&#x27;,</text><text x="406" y="84" font-size="12" text-anchor="start"> &#x27;urgent&#x27;: True,</text><text x="406" y="102" font-size="12" text-anchor="start"> &#x27;summary&#x27;: None}</text><line x1="274" y1="60" x2="380" y2="60" class="ln"/><polygon points="386,60 378,64.4 378,55.6" class="ah"/><text x="330" y="53" font-size="11.5" text-anchor="middle" class="mut">json.loads</text><line x1="386" y1="98" x2="280" y2="98" class="ln"/><polygon points="274,98 282,93.6 282,102.4" class="ah"/><text x="330" y="114" font-size="11.5" text-anchor="middle" class="mut">json.dumps</text></svg></div>
+        <figcaption>json.loads turns JSON text into Python objects; json.dumps does the reverse. Note true → True and null → None.</figcaption>
+      </figure>
+
+      <h2>3.3 Handling bad data with try/except</h2>
+      <p>AI models sometimes return text that isn't valid JSON. Handle it rather than crashing:</p>
+<pre data-copy><code>def parse_json(text):
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        return None
+
+print(parse_json('{"ok": true}'))        # {'ok': True}
+print(parse_json("Sure! Here is JSON:"))  # None</code></pre>
+
+      <h2>3.4 Cleaning text</h2>
+<pre data-copy><code>import re
+
+def clean(text):
+    text = text.strip().lower()
+    text = re.sub(r"\s+", " ", text)          # collapse repeated spaces/newlines
+    text = re.sub(r"[^\w\s£.,!?'-]", "", text)  # drop unusual symbols
+    return text
+
+print(clean("  GREAT   board!!! 😀\n\nArrived    late  "))</code></pre>
+      <p><code>re</code> is Python's regular expressions module — handy for finding patterns such as order numbers or email addresses.</p>
+
+      <h2>3.5 CSV files</h2>
+<pre data-copy><code>import csv
+
+rows = [{"id": 1, "text": "Love it", "stars": 5}, {"id": 2, "text": "Too small", "stars": 2}]
+with open("reviews.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=["id", "text", "stars"])
+    writer.writeheader()
+    writer.writerows(rows)
+
+with open("reviews.csv", encoding="utf-8") as f:
+    for row in csv.DictReader(f):
+        print(row["text"], row["stars"])</code></pre>
+      <p>For anything beyond simple CSVs, you'll use pandas (Module 4).</p>
+<div class="activity"><b>Exercise: extract order numbers</b><p>Write a function that finds every order number in the format GFY-##### (five digits) in a piece of text and returns them as a list.</p><details><summary>Show a solution</summary><pre data-copy><code>import re
+
+def find_orders(text):
+    return re.findall(r"GFY-\d{5}", text)
+
+print(find_orders("Orders GFY-10422 and GFY-10423 are late; GFY-99 is invalid"))
+# ['GFY-10422', 'GFY-10423']</code></pre></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Use with open(..., encoding='utf-8') for files.</li><li>json.loads parses JSON text; json.dumps creates it.</li><li>Wrap parsing in try/except — AI output isn't always valid JSON.</li><li>re finds and cleans patterns in text.</li><li>csv handles simple tables; pandas handles the rest.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google · Kaggle Learn</span><a href="https://www.kaggle.com/learn/python" target="_blank" rel="noopener">Python</a> — free, browser-based exercises</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noopener">Prompt engineering guide</a> — message roles, formatting, few-shot examples and reasoning models</li><li><span class="provider">IBM SkillsBuild</span><a href="https://skillsbuild.org/adult-learners/explore-learning/artificial-intelligence" target="_blank" rel="noopener">Free AI learning catalogue</a> — courses and digital credentials, including AI Fundamentals</li></ul></aside>
+      <div class="quiz" data-quiz="m3" data-pass="80" data-next="module-4.html">
+        <script type="application/json">
+[
+{
+"q": "What does json.loads('{\"ok\": true}') return?",
+"options": [
+"The string unchanged",
+"A Python dict {'ok': True}",
+"An error",
+"A list"
+],
+"answer": 1,
+"explain": "JSON true becomes Python True."
+},
+{
+"q": "Why wrap json.loads in try/except when parsing AI output?",
+"options": [
+"It's faster",
+"AI output may not be valid JSON, and the program shouldn't crash",
+"It's required by Python",
+"To hide errors permanently"
+],
+"answer": 1,
+"explain": "Handle failures gracefully."
+},
+{
+"q": "What does the with statement do when opening a file?",
+"options": [
+"Encrypts it",
+"Closes the file automatically afterwards",
+"Deletes it",
+"Makes it read-only"
+],
+"answer": 1,
+"explain": "Clean resource handling."
+},
+{
+"q": "Which module finds patterns like 'GFY-12345' in text?",
+"options": [
+"json",
+"re",
+"csv",
+"math"
+],
+"answer": 1,
+"explain": "Regular expressions."
+},
+{
+"q": "JSON null becomes which Python value?",
+"options": [
+"0",
+"None",
+"'null'",
+"False"
+],
+"answer": 1,
+"explain": "null maps to None."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-2.html">← Module 2</a>
+        <a class="btn btn-dark" href="module-4.html">Module 4: Working with data in pandas →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

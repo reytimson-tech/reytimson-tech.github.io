@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Spotting bias — Critical Thinking: Checking and Validating AI Output</title>
+<meta name="description" content="Where bias comes from, what it looks like in generative AI, counterfactual testing, legal context and what to do.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="validating-ai-output">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 25 minutes</span>
+      <h1>Spotting bias</h1>
+      <p class="lead">Bias in AI is often subtle — a word choice, a missing perspective, a different tone for different names. This module gives you practical tests to find it.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain how bias enters AI systems</li><li>Recognise patterns of bias in generative AI</li><li>Run counterfactual bias checks</li><li>Describe the UK legal context</li><li>Respond appropriately when you find bias</li></ul>
+      </div>
+
+      <h2>4.1 Where bias comes from</h2>
+      <p>AI learns from data produced by people and societies with unequal histories. Bias can enter at every stage:</p>
+      <ul>
+        <li><strong>Data:</strong> some groups under-represented, or historical decisions that were themselves unfair.</li>
+        <li><strong>Labels:</strong> human labellers' assumptions baked into "correct" answers.</li>
+        <li><strong>Design:</strong> choices about what to optimise and which data to include.</li>
+        <li><strong>Use:</strong> applying a system to people or contexts it wasn't built or tested for.</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 720 120" style="min-width:560px" role="img" aria-label="Bias can enter at every stage, not only in the training data."><rect x="20" y="40" width="140" height="56" rx="10" class="b-n"/><text x="90" y="63.625" font-size="12.5" text-anchor="middle" font-weight="600">Data</text><text x="90" y="82.925" font-size="10.5" text-anchor="middle" class="mut">who&#x27;s missing?</text><rect x="200" y="40" width="140" height="56" rx="10" class="b-n"/><text x="270" y="63.625" font-size="12.5" text-anchor="middle" font-weight="600">Labels</text><text x="270" y="82.925" font-size="10.5" text-anchor="middle" class="mut">whose judgement?</text><rect x="380" y="40" width="140" height="56" rx="10" class="b-n"/><text x="450" y="63.625" font-size="12.5" text-anchor="middle" font-weight="600">Design</text><text x="450" y="82.925" font-size="10.5" text-anchor="middle" class="mut">what&#x27;s optimised?</text><rect x="560" y="40" width="140" height="56" rx="10" class="b-w"/><text x="630" y="63.625" font-size="12.5" text-anchor="middle" font-weight="600">Use</text><text x="630" y="82.925" font-size="10.5" text-anchor="middle" class="mut">used where tested?</text><line x1="163" y1="68" x2="191" y2="68" class="ln"/><polygon points="197,68 189,72.4 189,63.6" class="ah"/><line x1="343" y1="68" x2="371" y2="68" class="ln"/><polygon points="377,68 369,72.4 369,63.6" class="ah"/><line x1="523" y1="68" x2="551" y2="68" class="ln"/><polygon points="557,68 549,72.4 549,63.6" class="ah"/></svg></div>
+        <figcaption>Bias can enter at every stage, not only in the training data.</figcaption>
+      </figure>
+
+      <h2>4.2 What bias looks like in generative AI</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pattern</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Stereotyping</td><td>Images of "a nurse" always show women; "a CEO" always men</td></tr>
+            <tr><td>Erasure</td><td>Examples, names and case studies drawn only from one culture or region</td></tr>
+            <tr><td>Unequal quality</td><td>Weaker answers in less widely used languages or dialects</td></tr>
+            <tr><td>Unequal treatment</td><td>Different tone or recommendations when only a name or gender changes</td></tr>
+            <tr><td>One-sided framing</td><td>Presenting a contested issue from a single perspective</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.3 Testing for bias: counterfactual checks</h2>
+      <p>A simple, powerful technique: <strong>change only one attribute and compare</strong>. If the output changes in ways that aren't justified, you've found a problem.</p>
+<pre data-copy><code>Version A: "Write a reference for James, a 28-year-old software engineer..."
+Version B: "Write a reference for Aisha, a 28-year-old software engineer..."
+Version C: "Write a reference for James, a 58-year-old software engineer..."
+
+Compare: adjectives used, skills emphasised, tone, length, assumptions.</code></pre>
+      <p>Look for differences such as "warm" and "supportive" for one person versus "analytical" and "decisive" for another with identical details.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 760 210" style="min-width:620px" role="img" aria-label="A counterfactual check: change one attribute only, keep everything else identical, and compare. Unjustified differences reveal bias. (Outputs illustrative.)"><rect x="20" y="70" width="170" height="60" rx="10" class="b-n"/><text x="105" y="89.075" font-size="11.5" text-anchor="middle" font-weight="600">Same prompt:</text><text x="105" y="104.025" font-size="11.5" text-anchor="middle">&#x27;Write a reference for</text><text x="105" y="118.975" font-size="11.5" text-anchor="middle">___, software engineer&#x27;</text><rect x="240" y="20" width="120" height="40" rx="10" class="b-a"/><text x="300" y="44.375" font-size="12.5" text-anchor="middle" font-weight="600">James, 28</text><line x1="193" y1="72.9231" x2="231.265" y2="61.1491" class="ln"/><polygon points="237,59.3846 230.648,65.9427 228.06,57.5319" class="ah"/><rect x="400" y="20" width="210" height="40" rx="10" class="b-s"/><text x="505" y="44.025" font-size="11.5" text-anchor="middle">&#x27;decisive, technical leader&#x27;</text><line x1="363" y1="40" x2="391" y2="40" class="ln"/><polygon points="397,40 389,44.4 389,35.6" class="ah"/><rect x="240" y="90" width="120" height="40" rx="10" class="b-a"/><text x="300" y="114.375" font-size="12.5" text-anchor="middle" font-weight="600">Aisha, 28</text><line x1="193" y1="104.513" x2="231.008" y2="106.462" class="ln"/><polygon points="237,106.769 228.785,110.754 229.236,101.965" class="ah"/><rect x="400" y="90" width="210" height="40" rx="10" class="b-s"/><text x="505" y="114.025" font-size="11.5" text-anchor="middle">&#x27;warm, supportive team player&#x27;</text><line x1="363" y1="110" x2="391" y2="110" class="ln"/><polygon points="397,110 389,114.4 389,105.6" class="ah"/><rect x="240" y="160" width="120" height="40" rx="10" class="b-a"/><text x="300" y="184.375" font-size="12.5" text-anchor="middle" font-weight="600">James, 58</text><line x1="185.438" y1="133" x2="238.386" y2="154.723" class="ln"/><polygon points="243.938,157 234.866,158.034 238.206,149.893" class="ah"/><rect x="400" y="160" width="210" height="40" rx="10" class="b-s"/><text x="505" y="184.025" font-size="11.5" text-anchor="middle">&#x27;reliable, experienced&#x27;</text><line x1="363" y1="180" x2="391" y2="180" class="ln"/><polygon points="397,180 389,184.4 389,175.6" class="ah"/><path d="M 615 40 H 650 V 180 H 615" class="ln dash"/><text x="660" y="104" font-size="11" text-anchor="start" font-weight="600" class="t-b">different</text><text x="660" y="118" font-size="11" text-anchor="start" font-weight="600" class="t-b">for no reason?</text></svg></div>
+        <figcaption>A counterfactual check: change one attribute only, keep everything else identical, and compare. Unjustified differences reveal bias. (Outputs illustrative.)</figcaption>
+      </figure>
+
+      <h2>4.4 Questions to ask of any output about people</h2>
+      <ul class="checklist">
+        <li>Who is represented — and who is missing?</li>
+        <li>Would this change if the person's gender, ethnicity, age, disability or background were different?</li>
+        <li>Are generalisations about groups supported by evidence?</li>
+        <li>Whose perspective is this written from?</li>
+        <li>Could this lead to someone being treated unfairly — or unlawfully?</li>
+      </ul>
+
+      <h2>4.5 The legal dimension</h2>
+      <p>In the UK, the <strong>Equality Act 2010</strong> prohibits discrimination on the basis of protected characteristics, regardless of whether a human or an AI tool was involved. Data protection law also requires fair processing of personal data. Using AI in recruitment, lending, insurance, education or access to services is high-stakes; under the EU AI Act, many of these uses are classed as <a href="../eu-ai-act/module-4.html">high-risk</a>.</p>
+
+      <h2>4.6 What to do when you spot bias</h2>
+      <ol>
+        <li><strong>Don't use</strong> the biased output as is.</li>
+        <li><strong>Revise</strong> — edit it yourself or re-prompt (e.g. "Use a diverse range of names and examples", "Describe both candidates using the same criteria").</li>
+        <li><strong>Report</strong> patterns to whoever owns the tool, especially for systems used in decisions about people.</li>
+        <li><strong>Escalate</strong> if the tool is being used for consequential decisions without proper testing.</li>
+      </ol>
+      <p>The <a href="../responsible-ai/index.html">Responsible AI Principles</a> course goes deeper into fairness definitions and mitigation.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Bias can enter through data, labels, design and use.</li><li>Look for stereotyping, erasure, unequal quality, unequal treatment and one-sided framing.</li><li>Change one attribute and compare — the counterfactual check.</li><li>The Equality Act 2010 applies whether or not AI was involved.</li><li>Don't use, revise, report and escalate.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/fairness" target="_blank" rel="noopener">Machine Learning Crash Course: Fairness</a></li><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/554" target="_blank" rel="noopener">Introduction to Responsible AI</a></li><li><span class="provider">Microsoft Learn</span><a href="https://learn.microsoft.com/training/modules/embrace-responsible-ai-principles-practices/" target="_blank" rel="noopener">Embrace responsible AI principles and practices</a> — Microsoft's six principles and governance</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-ethics" target="_blank" rel="noopener">What is AI ethics?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "A CV model trained on ten years of a company's hiring decisions favours one gender. Where did the bias most likely enter?",
+"options": [
+"The user interface",
+"Historical data reflecting past unfair decisions",
+"The font",
+"The server"
+],
+"answer": 1,
+"explain": "Historical bias in data is learned by the model."
+},
+{
+"q": "What is a counterfactual bias check?",
+"options": [
+"Asking the AI if it's biased",
+"Changing one attribute (e.g. name or age) while keeping everything else the same, and comparing outputs",
+"Deleting all names",
+"Using a different AI"
+],
+"answer": 1,
+"explain": "Isolating one attribute reveals unjustified differences."
+},
+{
+"q": "AI-generated case studies only ever feature people from one country. This pattern is…",
+"options": [
+"Erasure",
+"Fabrication",
+"Overfitting",
+"Prompt injection"
+],
+"answer": 0,
+"explain": "Some groups are missing from the output."
+},
+{
+"q": "Does the Equality Act 2010 apply if an AI tool made a discriminatory shortlisting decision?",
+"options": [
+"No — only humans can discriminate",
+"Yes — discrimination law applies regardless of whether AI was involved",
+"Only if the AI was made in the UK",
+"Only for public bodies"
+],
+"answer": 1,
+"explain": "The organisation remains responsible."
+},
+{
+"q": "You notice an AI-drafted reference describes a woman as 'warm' and a man with identical details as 'decisive'. Best response?",
+"options": [
+"Use both as written",
+"Revise to describe both against the same criteria and report the pattern to the tool owner",
+"Ignore it",
+"Delete the woman's reference"
+],
+"answer": 1,
+"explain": "Revise, report and escalate if used in decisions."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Checking numbers, data and code →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

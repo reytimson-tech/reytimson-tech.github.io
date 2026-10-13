@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Why LLMs get things wrong — How AI and Large Language Models Work</title>
+<meta name="description" content="Hallucination, knowledge cut-offs, sycophancy, reasoning slips and bias — and how RAG, tools and review help.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="how-ai-works">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 25 minutes</span>
+      <h1>Why LLMs get things wrong</h1>
+      <p class="lead">Now you know how LLMs work, their failures make sense. This module connects each common failure to its cause — and to the techniques that reduce it.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain why LLMs hallucinate</li><li>Describe knowledge cut-offs and sycophancy</li><li>Recognise reasoning and calculation errors</li><li>Evaluate mitigations such as RAG, tools, citations and human review</li></ul>
+      </div>
+
+      <h2>6.1 Hallucination</h2>
+      <p>LLMs generate the most plausible continuation, not a verified fact. When a model doesn't "know" something, the most plausible-looking text may still be a confident answer — a made-up citation, a wrong date, an invented quote.</p>
+      <p>OpenAI's 2025 paper <em>"Why language models hallucinate"</em> argues that training and evaluation often reward guessing over saying "I don't know" — just as a multiple-choice exam with no penalty for wrong answers rewards guessing. Remember Module 1: <em>a model learns what its error score rewards</em>. Developers are working on reducing hallucination, but it cannot be fully eliminated.</p>
+
+      <h2>6.2 Knowledge cut-off</h2>
+      <p>A model's built-in knowledge stops at its <strong>training cut-off</strong>. Without a search tool, it may not know about recent events, new laws or the latest prices — and may not realise it doesn't know. Always check time-sensitive facts.</p>
+
+      <h2>6.3 Sycophancy</h2>
+      <p><strong>Sycophancy</strong> is a tendency to tell users what they want to hear: agreeing with a wrong premise, praising weak work, or changing a correct answer when challenged. Leading questions make it worse. Ask neutrally ("What are the strengths and weaknesses of this plan?") rather than "This plan is great, isn't it?"</p>
+
+      <h2>6.4 Reasoning and calculation errors</h2>
+      <p>LLMs can make arithmetic slips, lose track of steps or apply a familiar pattern where it doesn't fit — for instance, answering a well-known riddle "from memory" even when you've changed a key detail. Reasoning models and code tools help, but checking still matters.</p>
+
+      <h2>6.5 Bias and uneven performance</h2>
+      <p>Models reflect their training data. They may perform better in English than other languages, better on topics well covered online, and may reproduce stereotypes. Performance should be tested for the people and contexts where a system will be used.</p>
+
+      <h2>6.6 How the industry reduces these problems</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Technique</th><th>What it does</th><th>Limits</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Retrieval-augmented generation (RAG)</strong></td><td>Looks up relevant documents and puts them in the context, so answers are grounded in sources</td><td>Only as good as the documents retrieved; the model can still misread them</td></tr>
+            <tr><td><strong>Tools</strong> (search, calculators, code)</td><td>Fetches current facts; does exact calculation</td><td>Search results can be wrong or manipulated</td></tr>
+            <tr><td><strong>Citations</strong></td><td>Links claims to sources you can check</td><td>Citations must still be checked — they can be misattributed</td></tr>
+            <tr><td><strong>Better training</strong></td><td>Rewards calibrated uncertainty and honesty</td><td>Reduces, doesn't eliminate, errors</td></tr>
+            <tr><td><strong>Evaluation &amp; monitoring</strong></td><td>Tests systems on realistic tasks before and after release</td><td>Tests can miss real-world cases</td></tr>
+            <tr><td><strong>Human review</strong></td><td>People check high-stakes outputs</td><td>Only works if reviewers have time, skill and authority</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 700 215" style="min-width:560px" role="img" aria-label="Retrieval-augmented generation (RAG): relevant passages are retrieved and placed in the model&#x27;s context, so answers are grounded in your sources — which you can then check."><rect x="20" y="40" width="120" height="50" rx="10" class="b-a"/><text x="80" y="69.375" font-size="12.5" text-anchor="middle" font-weight="600">Your question</text><rect x="190" y="40" width="130" height="50" rx="10" class="b-n"/><text x="255" y="60.625" font-size="12.5" text-anchor="middle" font-weight="600">Retriever</text><text x="255" y="79.925" font-size="10.5" text-anchor="middle" class="mut">searches by meaning</text><rect x="190" y="140" width="130" height="56" rx="10" class="b-s"/><text x="255" y="163.625" font-size="12.5" text-anchor="middle" font-weight="600">Your documents</text><text x="255" y="182.925" font-size="10.5" text-anchor="middle" class="mut">policies, reports…</text><rect x="370" y="40" width="140" height="50" rx="10" class="b-w"/><text x="440" y="61.4" font-size="12" text-anchor="middle" font-weight="600">Question +</text><text x="440" y="77" font-size="12" text-anchor="middle">relevant passages</text><rect x="560" y="40" width="100" height="50" rx="10" class="b-a"/><text x="610" y="69.55" font-size="13" text-anchor="middle" font-weight="600">LLM</text><rect x="540" y="140" width="140" height="56" rx="10" class="b-g"/><text x="610" y="163.625" font-size="12.5" text-anchor="middle" font-weight="600">Grounded answer</text><text x="610" y="182.925" font-size="10.5" text-anchor="middle" class="mut">with citations</text><line x1="143" y1="65" x2="181" y2="65" class="ln"/><polygon points="187,65 179,69.4 179,60.6" class="ah"/><line x1="255" y1="93" x2="255" y2="131" class="ln"/><polygon points="255,137 250.6,129 259.4,129" class="ah"/><text x="263" y="119" font-size="11.5" text-anchor="start" class="mut">finds</text><line x1="323" y1="65" x2="361" y2="65" class="ln"/><polygon points="367,65 359,69.4 359,60.6" class="ah"/><line x1="513" y1="65" x2="551" y2="65" class="ln"/><polygon points="557,65 549,69.4 549,60.6" class="ah"/><line x1="610" y1="93" x2="610" y2="131" class="ln"/><polygon points="610,137 605.6,129 614.4,129" class="ah"/></svg></div>
+        <figcaption>Retrieval-augmented generation (RAG): relevant passages are retrieved and placed in the model's context, so answers are grounded in your sources — which you can then check.</figcaption>
+      </figure>
+
+      <h2>6.7 Putting it together</h2>
+      <p>Understanding how LLMs work gives you an accurate mental model: <strong>a powerful pattern-completion engine, shaped by training to be helpful, that produces plausible text — not guaranteed truth</strong>. Use it for what it's good at, give it the context and tools it needs, and verify what matters. The <a href="../validating-ai-output/index.html">Validating AI Output</a> course turns this into practical checking skills, and <a href="../prompt-engineering/index.html">Prompt Engineering</a> shows how to get better results in the first place.</p>
+
+      <div class="activity">
+        <b>Try it: provoke and diagnose</b>
+        <p>In an approved AI tool, try: (1) ask about a very recent event without search; (2) ask a leading question with a false premise, e.g. "Why did the UK adopt the euro in 2015?"; (3) ask how many times the letter "r" appears in a long, unusual word. For each, which failure from this module did you see — and how would you guard against it?</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>LLMs produce plausible text, not verified truth — hallucinations can be reduced, not eliminated.</li><li>Built-in knowledge stops at the training cut-off.</li><li>Sycophancy: models may tell you what you want to hear — ask neutral questions.</li><li>RAG, tools, citations, evaluation and human review each help, with limits.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OpenAI</span><a href="https://openai.com/index/why-language-models-hallucinate/" target="_blank" rel="noopener">Why language models hallucinate</a> — research, September 2025</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-hallucinations" target="_blank" rel="noopener">What are AI hallucinations?</a> — causes, types and mitigation</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/ai-capabilities-and-limitations" target="_blank" rel="noopener">AI Capabilities and Limitations</a> — a mental model of how generative AI behaves, and why</li><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/539" target="_blank" rel="noopener">Introduction to Large Language Models</a> — one-hour micro-learning course</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Why do LLMs hallucinate, at root?",
+"options": [
+"They are programmed to lie",
+"They generate plausible continuations rather than verified facts, and training often rewards guessing",
+"They are connected to bad websites",
+"Users type too fast"
+],
+"answer": 1,
+"explain": "Plausibility isn't truth, and evaluation incentives matter."
+},
+{
+"q": "An AI assistant without search confidently describes 'current' interest rates. The main risk is…",
+"options": [
+"Sycophancy",
+"Its knowledge is frozen at its training cut-off",
+"Prompt injection",
+"Overfitting"
+],
+"answer": 1,
+"explain": "Time-sensitive facts need checking against current sources."
+},
+{
+"q": "You ask, 'My plan is excellent, isn't it?' and the AI agrees enthusiastically. Which failure might this be?",
+"options": [
+"Sycophancy",
+"Tokenisation",
+"Underfitting",
+"Low temperature"
+],
+"answer": 0,
+"explain": "Leading questions invite agreement. Ask neutrally."
+},
+{
+"q": "What does retrieval-augmented generation (RAG) do?",
+"options": [
+"Retrains the model every day",
+"Retrieves relevant documents and adds them to the context so answers are grounded in sources",
+"Removes all errors",
+"Makes the model smaller"
+],
+"answer": 1,
+"explain": "RAG grounds answers in retrieved material — which still needs checking."
+},
+{
+"q": "Which statement is correct?",
+"options": [
+"Citations guarantee accuracy",
+"Human review is only effective if reviewers have the time, skill and authority to act",
+"Reasoning models never make mistakes",
+"Hallucinations have been eliminated"
+],
+"answer": 1,
+"explain": "Every mitigation has limits."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

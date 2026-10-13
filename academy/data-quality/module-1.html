@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Why data quality decides AI quality — Data Quality &amp; Preparation for AI</title>
+<meta name="description" content="Garbage in, garbage out; six dimensions of data quality; why AI raises the stakes; the preparation workflow; and the practice dataset.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="data-quality">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>Why data quality decides AI quality</h1>
+      <p class="lead">The fastest way to a better model is usually better data. This module shows you what 'good data' means and why AI makes it matter more.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain the data-centric view of AI</li><li>Assess data on six quality dimensions</li><li>Explain why data errors matter more in AI</li><li>Outline the data preparation workflow</li></ul>
+      </div>
+
+      <h2>1.1 Garbage in, garbage out</h2>
+      <p>A model can only be as good as the data it learns from and the data it's given. Better algorithms rarely rescue bad data, but better data often rescues an ordinary algorithm. This idea — improving the data rather than endlessly tuning the model — is sometimes called <strong>data-centric AI</strong>.</p>
+      <p>Demand for these skills is growing fast: Coursera's 2026 job skills research reports data quality and data cleansing among the fastest-growing data skills, each roughly doubling in enrolments.</p>
+
+      <h2>1.2 Six dimensions of data quality</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dimension</th><th>Question</th><th>Example problem</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Accuracy</strong></td><td>Does it reflect reality?</td><td>Age recorded as 230</td></tr>
+            <tr><td><strong>Completeness</strong></td><td>Is anything missing?</td><td>No signup date for some customers</td></tr>
+            <tr><td><strong>Consistency</strong></td><td>Is the same thing recorded the same way?</td><td>"UK", "uk", "United Kingdom", "U.K."</td></tr>
+            <tr><td><strong>Validity</strong></td><td>Does it follow the rules and formats?</td><td>A date of "2025-13-01" (month 13)</td></tr>
+            <tr><td><strong>Uniqueness</strong></td><td>Are there duplicates?</td><td>The same customer appearing twice</td></tr>
+            <tr><td><strong>Timeliness</strong></td><td>Is it up to date?</td><td>Prices from last year used to predict demand</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>1.3 Why it matters more for AI</h2>
+      <ul>
+        <li><strong>Models learn patterns — including errors.</strong> Mislabelled examples teach the wrong lesson.</li>
+        <li><strong>Problems are invisible in outputs.</strong> A model trained on skewed data still produces confident predictions.</li>
+        <li><strong>Errors scale.</strong> One bad rule in a spreadsheet affects one report; a model trained on it affects every decision it makes.</li>
+        <li><strong>Unrepresentative data creates unfair outcomes</strong> for groups that are under-represented (Module 5).</li>
+        <li><strong>Law requires it for high-risk AI.</strong> The EU AI Act's Article 10 sets data governance requirements for training, validation and testing data of high-risk systems (Module 6).</li>
+      </ul>
+
+      <h2>1.4 The data preparation workflow</h2>
+      <ol>
+        <li><strong>Understand</strong> the purpose and where the data comes from.</li>
+        <li><strong>Profile</strong> it — measure what's there (Module 2).</li>
+        <li><strong>Clean</strong> it — fix, remove or flag problems (Module 3).</li>
+        <li><strong>Label</strong> it, if the task needs labels (Module 4).</li>
+        <li><strong>Check representativeness and split</strong> it for training and testing (Module 5).</li>
+        <li><strong>Document and govern</strong> it (Module 6).</li>
+      </ol>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 692 100" style="min-width:620px" role="img" aria-label="The data preparation workflow covered module by module in this course."><rect x="20" y="30" width="92" height="50" rx="10" class="b-n"/><text x="66" y="59.2" font-size="12" text-anchor="middle" font-weight="600">Understand</text><rect x="132" y="30" width="92" height="50" rx="10" class="b-a"/><text x="178" y="59.2" font-size="12" text-anchor="middle" font-weight="600">Profile</text><rect x="244" y="30" width="92" height="50" rx="10" class="b-a"/><text x="290" y="59.2" font-size="12" text-anchor="middle" font-weight="600">Clean</text><rect x="356" y="30" width="92" height="50" rx="10" class="b-w"/><text x="402" y="59.2" font-size="12" text-anchor="middle" font-weight="600">Label</text><rect x="468" y="30" width="92" height="50" rx="10" class="b-w"/><text x="514" y="51.4" font-size="12" text-anchor="middle" font-weight="600">Check &amp;</text><text x="514" y="67" font-size="12" text-anchor="middle">split</text><rect x="580" y="30" width="92" height="50" rx="10" class="b-g"/><text x="626" y="51.4" font-size="12" text-anchor="middle" font-weight="600">Document</text><text x="626" y="67" font-size="12" text-anchor="middle">&amp; govern</text><line x1="115" y1="55" x2="123" y2="55" class="ln"/><polygon points="129,55 121,59.4 121,50.6" class="ah"/><line x1="227" y1="55" x2="235" y2="55" class="ln"/><polygon points="241,55 233,59.4 233,50.6" class="ah"/><line x1="339" y1="55" x2="347" y2="55" class="ln"/><polygon points="353,55 345,59.4 345,50.6" class="ah"/><line x1="451" y1="55" x2="459" y2="55" class="ln"/><polygon points="465,55 457,59.4 457,50.6" class="ah"/><line x1="563" y1="55" x2="571" y2="55" class="ln"/><polygon points="577,55 569,59.4 569,50.6" class="ah"/></svg></div>
+        <figcaption>The data preparation workflow covered module by module in this course.</figcaption>
+      </figure>
+
+      <h2>1.5 The practice dataset</h2>
+      <p>Throughout this course you'll use a small, deliberately messy customer table. Paste this into a notebook (e.g. <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a>) and keep it handy. Basic Python and pandas are assumed (see <a href="../python-for-ai/index.html">Python for AI</a>).</p>
+<pre data-copy><code><span class="label">Python · the practice dataset used in this course</span>import pandas as pd
+import numpy as np
+
+customers = pd.DataFrame({
+    "customer_id": [101, 102, 103, 103, 104, 105, 106, 107, 108, 109],
+    "signup_date": ["2025-01-04", "04/02/2025", "2025-02-10", "2025-02-10", "2025-03-15",
+                    "2025-13-01", "2025-04-02", None, "2025-05-20", "2025-06-01"],
+    "country": ["UK", "United Kingdom", "uk", "uk", "Ireland", "UK", "IE", "UK", "U.K.", "UK"],
+    "age": [34, 29, None, None, 41, 230, 38, 27, -1, 52],
+    "monthly_spend": [42.5, 18.0, 63.2, 63.2, None, 25.0, 12000.0, 31.4, 22.0, 47.9],
+    "churned": ["no", "yes", "No", "No", "no", "yes", "no", "YES", "no", "no"],
+})</code></pre>
+
+      <div class="activity">
+        <b>Try it: spot the problems</b>
+        <p>Before running any code, list every data quality problem you can see in the table, and which dimension each belongs to.</p>
+        <details><summary>Show what to look for</summary><p>Duplicate customer 103 (uniqueness); mixed date formats and an invalid month 13 (validity, consistency); missing signup date (completeness); five spellings of the UK and two of Ireland (consistency); ages 230 and −1 (accuracy, validity); missing age and spend (completeness); a spend of 12,000 that may be an outlier or error (accuracy); "no", "No", "yes", "YES" (consistency).</p></details>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Better data often beats a better algorithm.</li><li>Accuracy, completeness, consistency, validity, uniqueness and timeliness.</li><li>Models learn errors and scale them.</li><li>Understand → profile → clean → label → split → document.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/data-quality" target="_blank" rel="noopener">What is data quality?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course/numerical-data" target="_blank" rel="noopener">ML Crash Course: Working with numerical data</a></li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/Data-Science-For-Beginners" target="_blank" rel="noopener">Data Science for Beginners (20 lessons, GitHub)</a> — including working with Python and data preparation</li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/what-is/machine-learning/" target="_blank" rel="noopener">What is machine learning?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "'United Kingdom', 'UK' and 'U.K.' in one column is a problem of…",
+"options": [
+"Timeliness",
+"Consistency",
+"Uniqueness",
+"Validity"
+],
+"answer": 1,
+"explain": "The same thing recorded different ways."
+},
+{
+"q": "A date of 2025-13-01 fails which dimension?",
+"options": [
+"Validity",
+"Uniqueness",
+"Timeliness",
+"Completeness"
+],
+"answer": 0,
+"explain": "Month 13 breaks the format rules."
+},
+{
+"q": "Why do data errors matter more in AI than in a single report?",
+"options": [
+"They don't",
+"Models learn errors and repeat them in every decision they make",
+"AI ignores data",
+"Reports are never wrong"
+],
+"answer": 1,
+"explain": "Errors scale."
+},
+{
+"q": "What does 'data-centric AI' emphasise?",
+"options": [
+"Bigger models",
+"Improving the data rather than only tuning the model",
+"Removing data",
+"Avoiding labels"
+],
+"answer": 1,
+"explain": "Fix the data first."
+},
+{
+"q": "Which step comes first in the preparation workflow?",
+"options": [
+"Cleaning",
+"Understanding the purpose and source of the data",
+"Labelling",
+"Splitting"
+],
+"answer": 1,
+"explain": "Context guides every later decision."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Profiling and exploring data →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

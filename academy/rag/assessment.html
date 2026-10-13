@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Building LLM Applications with RAG</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="rag">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Building LLM Applications with RAG: final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "A team wants an assistant to answer questions from 10,000 support articles that change weekly. Best starting approach?",
+"options": [
+"Fine-tune a model weekly",
+"RAG",
+"Paste all articles into every prompt",
+"Train a model from scratch"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which happens at query time in RAG?",
+"options": [
+"Chunking documents",
+"Embedding the question and retrieving similar chunks",
+"Cleaning PDFs",
+"Deleting stale chunks"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "What's the main advantage of RAG over fine-tuning for facts?",
+"options": [
+"It changes the model's weights",
+"Knowledge updates by changing documents, and answers can cite sources",
+"It needs no data",
+"It's always free"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Cosine similarity between two vectors pointing in opposite directions is…",
+"options": [
+"1",
+"0",
+"−1",
+"100"
+],
+"answer": 2,
+"explain": "Module 2."
+},
+{
+"q": "Why normalise embeddings?",
+"options": [
+"To make them shorter text",
+"So cosine similarity equals the dot product, which is fast to compute",
+"To encrypt them",
+"It's required for BM25"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Your documents are in Welsh and English. What should guide your embedding model choice?",
+"options": [
+"Brand",
+"Testing multilingual models on real queries in both languages",
+"Vector length only",
+"Price only"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which is a good reason to store 'section heading' as chunk metadata?",
+"options": [
+"It looks nice",
+"It adds context for retrieval and enables precise citations",
+"It's required by Python",
+"It reduces cost to zero"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "A fixed-size chunker splits a refund rule across two chunks, and neither retrieves well. A good fix is…",
+"options": [
+"Larger temperature",
+"Structure-aware chunking with overlap",
+"Removing metadata",
+"Fewer documents"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Before indexing, you find three versions of the same policy. What should you do?",
+"options": [
+"Index all three",
+"Index only the current version and record its version",
+"Index the oldest",
+"Merge them randomly"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Hybrid search combines…",
+"options": [
+"Two LLMs",
+"Lexical (e.g. BM25) and semantic (vector) search",
+"Images and text",
+"Two databases of the same type"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "In a retrieval funnel, what comes after cheap retrieval of ~100 candidates?",
+"options": [
+"Generation directly",
+"Reranking to select the best handful",
+"Deleting the index",
+"Fine-tuning"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Anthropic's contextual retrieval experiments found the largest reduction in retrieval failures when combining…",
+"options": [
+"Embeddings alone",
+"Contextual embeddings, contextual BM25 and reranking",
+"BM25 alone",
+"Larger chunks"
+],
+"answer": 1,
+"explain": "A 67% reduction in their tests (Module 4)."
+},
+{
+"q": "An employee's question retrieves a confidential HR document they shouldn't see. Where must this be prevented?",
+"options": [
+"In the prompt, by asking the model not to reveal it",
+"At retrieval, with permission filters",
+"In the user interface colours",
+"It can't be prevented"
+],
+"answer": 1,
+"explain": "Never rely on the LLM to keep secrets (Module 4)."
+},
+{
+"q": "Where should the question go in a grounded RAG prompt?",
+"options": [
+"Before the sources",
+"After the sources, at the end",
+"Inside the system prompt only",
+"It doesn't matter"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which is NOT part of a good grounded prompt?",
+"options": [
+"Answer only from the sources",
+"Cite sources",
+"Refuse if the answer isn't present",
+"Fill gaps with general knowledge without saying so"
+],
+"answer": 3,
+"explain": "Module 5."
+},
+{
+"q": "In the mini RAG code, what does retrieve() return?",
+"options": [
+"The final answer",
+"The top-k most similar chunks to the question",
+"The model's API key",
+"All documents"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Recall@5 is 95% but answers are often wrong. Where should you look first?",
+"options": [
+"Retrieval",
+"Generation — the prompt, grounding and how passages are used",
+"The embedding model",
+"Chunk size"
+],
+"answer": 1,
+"explain": "Retrieval is working; generation isn't (Module 6)."
+},
+{
+"q": "What does MRR reward?",
+"options": [
+"Long answers",
+"Relevant passages appearing near the top of results",
+"Fast responses",
+"More chunks"
+],
+"answer": 1,
+"explain": "Mean reciprocal rank (Module 6)."
+},
+{
+"q": "Before relying on an LLM judge's faithfulness scores, you should…",
+"options": [
+"Trust them immediately",
+"Compare a sample of its verdicts against human judgement",
+"Use the same model that generated the answers",
+"Remove the rubric"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Which belongs on a production RAG checklist?",
+"options": [
+"Hidden sources",
+"Permission-aware retrieval, visible citations, a refusal path and tracked metrics",
+"No updates to the index",
+"Unlimited chunks per prompt"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

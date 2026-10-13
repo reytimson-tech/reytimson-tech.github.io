@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Guardrails and human-in-the-loop — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="Agent failure modes, guardrails by design, approval gates in code, escalation, failure handling and prompt injection.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Guardrails and human-in-the-loop</h1>
+      <p class="lead">An agent that can act can also act wrongly. This module shows how to give agents power without giving up control.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Identify agent failure modes</li><li>Apply guardrails: least privilege, action tiers, limits, sandboxing and separation</li><li>Implement human approval and business rules in code</li><li>Design escalation and failure handling</li><li>Recognise prompt injection as the main agent security risk</li></ul>
+      </div>
+
+      <h2>5.1 What can go wrong</h2>
+      <ul>
+        <li><strong>Wrong action:</strong> misreads the goal, calls the wrong tool, or uses wrong arguments.</li>
+        <li><strong>Runaway loops:</strong> repeats the same failing step, burning time and money.</li>
+        <li><strong>Compounding errors:</strong> a small early mistake propagates through later steps.</li>
+        <li><strong>Manipulation:</strong> prompt injection in emails, web pages or documents redirects the agent.</li>
+        <li><strong>Over-reach:</strong> takes an action beyond what the user intended — deleting, sending, paying.</li>
+      </ul>
+
+      <h2>5.2 Guardrails by design</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Guardrail</th><th>Implementation</th></tr></thead>
+          <tbody>
+            <tr><td>Least privilege</td><td>Only the tools and data the task needs; read-only by default; scoped, short-lived credentials</td></tr>
+            <tr><td>Action tiers</td><td>Classify tools as safe / needs approval / forbidden</td></tr>
+            <tr><td>Human-in-the-loop</td><td>Pause for approval before consequential or irreversible actions</td></tr>
+            <tr><td>Input validation</td><td>Check every tool argument in code — types, ranges, allow-lists</td></tr>
+            <tr><td>Limits</td><td>Max steps, max spend, timeouts, rate limits</td></tr>
+            <tr><td>Sandboxing</td><td>Run code and browsing in isolated environments</td></tr>
+            <tr><td>Separation</td><td>Agents that read untrusted content don't also hold powerful tools</td></tr>
+            <tr><td>Logging</td><td>Record every step for audit and debugging</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 665 190" style="min-width:560px" role="img" aria-label="Tier every tool. The tiers are enforced in code, so a manipulated or mistaken model can&#x27;t talk its way past them."><rect x="15" y="10" width="200" height="170" rx="10" class="b-g"/><text x="115" y="34" font-size="12.5" text-anchor="middle" font-weight="700" class="t-g">Safe — run automatically</text><rect x="29" y="50" width="172" height="30" rx="6" class="b-s"/><text x="115" y="70" font-size="11.5" text-anchor="middle">get_order_status</text><rect x="29" y="90" width="172" height="30" rx="6" class="b-s"/><text x="115" y="110" font-size="11.5" text-anchor="middle">search_help_articles</text><rect x="29" y="130" width="172" height="30" rx="6" class="b-s"/><text x="115" y="150" font-size="11.5" text-anchor="middle">check_stock</text><rect x="230" y="10" width="200" height="170" rx="10" class="b-w"/><text x="330" y="34" font-size="12.5" text-anchor="middle" font-weight="700" class="t-w">Needs human approval</text><rect x="244" y="50" width="172" height="30" rx="6" class="b-s"/><text x="330" y="70" font-size="11.5" text-anchor="middle">issue_refund (≤ £50)</text><rect x="244" y="90" width="172" height="30" rx="6" class="b-s"/><text x="330" y="110" font-size="11.5" text-anchor="middle">send_email</text><rect x="244" y="130" width="172" height="30" rx="6" class="b-s"/><text x="330" y="150" font-size="11.5" text-anchor="middle">update_address</text><rect x="445" y="10" width="200" height="170" rx="10" class="b-b"/><text x="545" y="34" font-size="12.5" text-anchor="middle" font-weight="700" class="t-b">Forbidden for this agent</text><rect x="459" y="50" width="172" height="30" rx="6" class="b-s"/><text x="545" y="70" font-size="11.5" text-anchor="middle">delete_customer</text><rect x="459" y="90" width="172" height="30" rx="6" class="b-s"/><text x="545" y="110" font-size="11.5" text-anchor="middle">change_prices</text><rect x="459" y="130" width="172" height="30" rx="6" class="b-s"/><text x="545" y="150" font-size="11.5" text-anchor="middle">refund &gt; £50</text></svg></div>
+        <figcaption>Tier every tool. The tiers are enforced in code, so a manipulated or mistaken model can't talk its way past them.</figcaption>
+      </figure>
+
+      <h2>5.3 Human approval in code</h2>
+<pre data-copy><code><span class="label">Python · approval gate for risky tools</span>NEEDS_APPROVAL = {"issue_refund", "send_email", "delete_record"}
+REFUND_LIMIT = 50.00
+
+def execute(call):
+    if call.name == "issue_refund" and float(call.input["amount"]) > REFUND_LIMIT:
+        return {"error": f"Refunds over £{REFUND_LIMIT:.0f} must be escalated to a manager."}
+    if call.name in NEEDS_APPROVAL:
+        print(f"Agent wants to run {call.name} with {call.input}")
+        if input("Approve? (y/n) ").strip().lower() != "y":
+            return {"error": "A human declined this action. Explain and suggest alternatives."}
+    return TOOL_FUNCS[call.name](**call.input)</code></pre>
+      <p>Note that business rules (the £50 limit) live in <strong>code</strong>, not just in the prompt — prompts can be ignored or manipulated; code can't.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 690 220" style="min-width:620px" role="img" aria-label="An approval gate around tool execution: validate, check the tier, ask a human for risky actions, and always return something the agent can act on."><rect x="20" y="60" width="110" height="50" rx="10" class="b-a"/><text x="75" y="81.4" font-size="12" text-anchor="middle" font-weight="600">Agent</text><text x="75" y="97" font-size="12" text-anchor="middle">proposes action</text><rect x="170" y="60" width="130" height="50" rx="10" class="b-w"/><text x="235" y="81.4" font-size="12" text-anchor="middle" font-weight="600">Validate args</text><text x="235" y="97" font-size="12" text-anchor="middle">&amp; business rules</text><rect x="340" y="60" width="110" height="50" rx="10" class="b-w"/><text x="395" y="89.375" font-size="12.5" text-anchor="middle" font-weight="600">Risky?</text><rect x="490" y="10" width="140" height="46" rx="10" class="b-n"/><text x="560" y="37.2" font-size="12" text-anchor="middle" font-weight="600">Human approves?</text><rect x="490" y="110" width="140" height="46" rx="10" class="b-g"/><text x="560" y="137.375" font-size="12.5" text-anchor="middle" font-weight="600">Execute + log</text><rect x="170" y="170" width="280" height="40" rx="10" class="b-b"/><text x="310" y="194.2" font-size="12" text-anchor="middle" font-weight="600">Return clear error / decline to the agent</text><line x1="133" y1="85" x2="161" y2="85" class="ln"/><polygon points="167,85 159,89.4 159,80.6" class="ah"/><line x1="303" y1="85" x2="331" y2="85" class="ln"/><polygon points="337,85 329,89.4 329,80.6" class="ah"/><text x="320" y="78" font-size="11.5" text-anchor="middle" class="mut">ok</text><line x1="453" y1="66.7212" x2="481.277" y2="57.8095" class="ln"/><polygon points="487,56.0061 480.692,62.6072 478.047,54.2142" class="ah"/><text x="470" y="54.3636" font-size="11.5" text-anchor="middle" class="mut">yes</text><line x1="453" y1="101.873" x2="481.239" y2="110.088" class="ln"/><polygon points="487,111.764 478.089,113.754 480.547,105.304" class="ah"/><text x="470" y="99.8182" font-size="11.5" text-anchor="middle" class="mut">no</text><line x1="560" y1="59" x2="560" y2="101" class="ln"/><polygon points="560,107 555.6,99 564.4,99" class="ah"/><text x="568" y="87" font-size="11.5" text-anchor="start" class="mut">yes</text><line x1="235" y1="112" x2="235" y2="162" class="ln"/><polygon points="235,168 230.6,160 239.4,160" class="ah"/><text x="243" y="144" font-size="11.5" text-anchor="start" class="mut">fails</text><polyline points="632,33 660,33 660,190 458,190" class="ln"/><polygon points="452,190 460,185.6 460,194.4" class="ah"/><text x="668" y="110" font-size="11" text-anchor="start" class="mut">no</text></svg></div>
+        <figcaption>An approval gate around tool execution: validate, check the tier, ask a human for risky actions, and always return something the agent can act on.</figcaption>
+      </figure>
+
+      <h2>5.4 Designing good escalation</h2>
+      <p>Good agents know when to stop. Give them an explicit way to hand over ("escalate_to_human" as a tool), tell them when to use it — ambiguity, low confidence, policy exceptions, angry customers — and design the hand-over so the human gets a clear summary of what's been done.</p>
+
+      <h2>5.5 Failure handling</h2>
+      <ul class="checklist">
+        <li>Return clear, actionable errors from tools so the agent can recover</li>
+        <li>Retry transient failures in code (with back-off), not by letting the agent loop</li>
+        <li>Detect repetition — the same tool with the same arguments several times — and stop</li>
+        <li>Make actions idempotent where possible, so a repeated call doesn't double-charge</li>
+        <li>Have a kill switch and a rollback plan</li>
+      </ul>
+
+      <div class="callout warn">
+        <b>Prompt injection is the agent's biggest security risk</b>
+        <p>An agent that reads untrusted content and can take actions can be hijacked. Combine the guardrails above, and avoid giving one agent private data, untrusted input and external communication all at once. See <a href="../ai-security/module-5.html">Securing AI agents</a>.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Agents fail by wrong actions, loops, compounding errors, manipulation and over-reach.</li><li>Classify tools as safe, approval-needed or forbidden.</li><li>Enforce business rules in code, not only in prompts.</li><li>Give agents an explicit, well-designed way to escalate.</li><li>Assume injection; limit what a hijacked agent could do.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">OWASP</span><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">Top 10 for LLM Applications 2025</a></li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/research/prompt-injection-defenses" target="_blank" rel="noopener">Mitigating the risk of prompt injections in browser use</a> — November 2025</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">AI Agents for Beginners (18 lessons, GitHub)</a></li><li><span class="provider">AWS</span><a href="https://aws.amazon.com/ai/generative-ai/security/scoping-matrix/" target="_blank" rel="noopener">Generative AI Security Scoping Matrix</a> — five scopes, from consumer apps to self-trained models</li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "Where should a rule like 'refunds over £50 need a manager' be enforced?",
+"options": [
+"Only in the system prompt",
+"In code that executes tool calls (and optionally also in the prompt)",
+"In the user interface colour",
+"Nowhere"
+],
+"answer": 1,
+"explain": "Prompts can be ignored or manipulated; code can't."
+},
+{
+"q": "Which tool should usually require human approval?",
+"options": [
+"get_order_status",
+"search_help_articles",
+"issue_refund",
+"get_current_time"
+],
+"answer": 2,
+"explain": "Consequential, irreversible actions."
+},
+{
+"q": "An agent calls the same failing tool with the same arguments eight times. What should catch this?",
+"options": [
+"Nothing",
+"Repetition detection and step limits in code",
+"A higher temperature",
+"More tools"
+],
+"answer": 1,
+"explain": "Detect loops and stop."
+},
+{
+"q": "Why make actions idempotent?",
+"options": [
+"To make them faster",
+"So repeating a call doesn't cause duplicate effects such as double refunds",
+"To reduce logging",
+"For style"
+],
+"answer": 1,
+"explain": "Retries are common in agents."
+},
+{
+"q": "What's the biggest security risk for an agent that reads emails and can send them?",
+"options": [
+"Slow responses",
+"Prompt injection hidden in incoming content",
+"Spelling errors",
+"High temperature"
+],
+"answer": 1,
+"explain": "Untrusted content + actions = injection risk."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Evaluating and operating agents →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

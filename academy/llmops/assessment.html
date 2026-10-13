@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final assessment — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="Test your knowledge with 20 scenario-based questions. Pass with 80% to earn a certificate of completion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="assessment" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Final assessment · about 30 minutes</span>
+      <h1>Evaluating & Deploying AI (LLMOps): final assessment</h1>
+      <p class="lead">20 questions, most of them real-world scenarios, covering all 6 modules. Score <strong>80% or more</strong> to pass and unlock your certificate of completion.</p>
+      <div class="callout">
+        <b>Before you start</b>
+        <p>You can retake the assessment as many times as you like — your best score is kept in this browser. Explanations appear after you submit, so use them to fill any gaps.</p>
+      </div>
+
+      <div class="quiz" data-quiz="assessment" data-pass="80" data-title="Assessment questions" data-intro="Answer all 20 questions, then submit.">
+        <script type="application/json">
+[
+{
+"q": "A prototype answered 10 demo questions perfectly. What's the main risk in launching it?",
+"options": [
+"None",
+"Unmeasured quality on real, varied inputs — plus cost, latency and safety unknowns",
+"It's too fast",
+"It's too cheap"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which component centralises model calls, keys, retries and logging?",
+"options": [
+"Vector store",
+"AI gateway",
+"Front-end",
+"Spreadsheet"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "What step follows 'monitor' in the LLMOps lifecycle?",
+"options": [
+"Delete",
+"Improve — turn failures into test cases and iterate",
+"Design from scratch",
+"Stop"
+],
+"answer": 1,
+"explain": "Module 1."
+},
+{
+"q": "Which grader is best for checking that output is valid JSON?",
+"options": [
+"Human",
+"Code",
+"LLM judge",
+"None"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Your evaluation set contains only questions the team wrote in one afternoon. What's missing?",
+"options": [
+"Nothing",
+"Real user inputs and edge cases",
+"Fonts",
+"A bigger model"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "A candidate prompt scores 2 points lower than the live version. What does the regression gate do?",
+"options": [
+"Ships it",
+"Blocks the release",
+"Deletes the live version",
+"Ignores the score"
+],
+"answer": 1,
+"explain": "Module 2."
+},
+{
+"q": "Which is an input guardrail?",
+"options": [
+"Prompt-injection detection before the model call",
+"Format validation of the response",
+"Showing citations",
+"Response caching"
+],
+"answer": 0,
+"explain": "Module 3."
+},
+{
+"q": "A required policy check service is down. What should a refund agent do?",
+"options": [
+"Issue the refund anyway",
+"Fail closed — don't act, and route to a human",
+"Retry forever",
+"Guess"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "Why validate structured outputs with a schema?",
+"options": [
+"Models always produce valid output",
+"Model output can be malformed or unexpected; invalid data shouldn't flow downstream",
+"It's faster than not validating",
+"Schemas improve creativity"
+],
+"answer": 1,
+"explain": "Module 3."
+},
+{
+"q": "A bank needs data to stay in its cloud account and region with enterprise controls, using several models. Which option fits?",
+"options": [
+"Consumer chatbot",
+"Cloud AI platform",
+"Personal API key",
+"Spreadsheet"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "What does exponential back-off do?",
+"options": [
+"Retries immediately and repeatedly",
+"Waits progressively longer between retries",
+"Cancels all requests",
+"Increases temperature"
+],
+"answer": 1,
+"explain": "Module 4."
+},
+{
+"q": "Your app hits the provider's tokens-per-minute limit at peak. Which helps?",
+"options": [
+"Queue non-urgent work, use batch APIs, add per-user quotas and request higher limits",
+"Remove timeouts",
+"Longer prompts",
+"Disable logging"
+],
+"answer": 0,
+"explain": "Module 4."
+},
+{
+"q": "Which metric reveals that some users wait far longer than most?",
+"options": [
+"Average latency",
+"p95 latency",
+"Tokens per request",
+"Error rate"
+],
+"answer": 1,
+"explain": "Module 4/5."
+},
+{
+"q": "Users report a strange answer. What lets you find the cause quickly?",
+"options": [
+"A trace of that request",
+"A bigger model",
+"Deleting the prompt",
+"A new logo"
+],
+"answer": 0,
+"explain": "Module 5."
+},
+{
+"q": "How should you monitor answer quality in production?",
+"options": [
+"Don't — offline evals are enough",
+"Score a sample of live traffic automatically and send a smaller sample to human review",
+"Ask the model if it did well",
+"Only count requests"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Prompts and outputs in logs contain customer details. What applies?",
+"options": [
+"Nothing — logs are exempt",
+"Data protection: minimise, protect, restrict access and set retention",
+"Logs must be public",
+"Delete all logs immediately"
+],
+"answer": 1,
+"explain": "Module 5."
+},
+{
+"q": "Which technique runs a new version on real traffic without showing its outputs to users?",
+"options": [
+"Canary",
+"Shadow testing",
+"Feature flag",
+"Rollback"
+],
+"answer": 1,
+"explain": "Module 6."
+},
+{
+"q": "Why pin model versions where providers allow?",
+"options": [
+"To prevent unexpected behaviour changes from silent updates",
+"It's cheaper always",
+"It disables safety",
+"It increases latency"
+],
+"answer": 0,
+"explain": "Module 6."
+},
+{
+"q": "Which is a cost-control lever?",
+"options": [
+"Routing easy requests to smaller models",
+"Removing output limits",
+"Longer system prompts",
+"Disabling caching"
+],
+"answer": 0,
+"explain": "Module 6."
+},
+{
+"q": "For a high-risk AI system under the EU AI Act, what's legally required in operation?",
+"options": [
+"Nothing",
+"Post-market monitoring and logging",
+"Daily press releases",
+"Open-sourcing the model"
+],
+"answer": 1,
+"explain": "Module 6."
+}
+]
+        </script>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Unsupervised learning — Machine Learning Fundamentals</title>
+<meta name="description" content="Segmentation with k-means, scaling, choosing the number of clusters, PCA for visualisation, and anomaly detection with isolation forests.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ml-fundamentals">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m5" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 5 of 6 · 30 minutes</span>
+      <h1>Unsupervised learning</h1>
+      <p class="lead">Not every problem has labels. Unsupervised learning finds groups and oddities in your data — and turns them into action.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Explain how k-means clustering works</li><li>Scale features before distance-based methods</li><li>Choose k with silhouette scores, the elbow method and business sense</li><li>Use PCA to visualise high-dimensional data</li><li>Flag anomalies for investigation</li></ul>
+      </div>
+
+      <h2>5.1 Finding structure without labels</h2>
+      <p><strong>Unsupervised learning</strong> finds patterns in data without a target. The most common business use is <strong>segmentation</strong>: grouping customers, products or documents that behave similarly, so you can tailor actions to each group.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 230" style="min-width:560px" role="img" aria-label="Clustering groups similar customers without any labels. The + marks each cluster&#x27;s centre; naming the segments is a human job."><line x1="50" y1="200" x2="600" y2="200" class="ln"/><line x1="50" y1="200" x2="50" y2="20" class="ln"/><text x="325" y="220" font-size="11" text-anchor="middle" class="mut">tenure (scaled) →</text><text x="56" y="18" font-size="11" text-anchor="start" class="mut">monthly spend (scaled)</text><circle cx="120" cy="128" r="5" class="d-a"/><circle cx="132" cy="160" r="5" class="d-a"/><circle cx="144" cy="115" r="5" class="d-a"/><circle cx="158" cy="150" r="5" class="d-a"/><circle cx="170" cy="132" r="5" class="d-a"/><circle cx="178" cy="162" r="5" class="d-a"/><circle cx="124" cy="148" r="5" class="d-a"/><circle cx="164" cy="114" r="5" class="d-a"/><circle cx="152" cy="168" r="5" class="d-a"/><circle cx="184" cy="138" r="5" class="d-a"/><circle cx="138" cy="140" r="5" class="d-a"/><circle cx="156" cy="130" r="5" class="d-a"/><circle cx="150" cy="140" r="9" class="b-none"/><text x="150" y="144" font-size="13" text-anchor="middle" font-weight="700">+</text><text x="150" y="186" font-size="11.5" text-anchor="middle" font-weight="600">new, low spend</text><circle cx="310" cy="63" r="5" class="d-g"/><circle cx="322" cy="95" r="5" class="d-g"/><circle cx="334" cy="50" r="5" class="d-g"/><circle cx="348" cy="85" r="5" class="d-g"/><circle cx="360" cy="67" r="5" class="d-g"/><circle cx="368" cy="97" r="5" class="d-g"/><circle cx="314" cy="83" r="5" class="d-g"/><circle cx="354" cy="49" r="5" class="d-g"/><circle cx="342" cy="103" r="5" class="d-g"/><circle cx="374" cy="73" r="5" class="d-g"/><circle cx="328" cy="75" r="5" class="d-g"/><circle cx="346" cy="65" r="5" class="d-g"/><circle cx="340" cy="75" r="9" class="b-none"/><text x="340" y="79" font-size="13" text-anchor="middle" font-weight="700">+</text><text x="340" y="34" font-size="11.5" text-anchor="middle" font-weight="600">loyal, high spend</text><circle cx="470" cy="138" r="5" class="d-o"/><circle cx="482" cy="170" r="5" class="d-o"/><circle cx="494" cy="125" r="5" class="d-o"/><circle cx="508" cy="160" r="5" class="d-o"/><circle cx="520" cy="142" r="5" class="d-o"/><circle cx="528" cy="172" r="5" class="d-o"/><circle cx="474" cy="158" r="5" class="d-o"/><circle cx="514" cy="124" r="5" class="d-o"/><circle cx="502" cy="178" r="5" class="d-o"/><circle cx="534" cy="148" r="5" class="d-o"/><circle cx="488" cy="150" r="5" class="d-o"/><circle cx="506" cy="140" r="5" class="d-o"/><circle cx="500" cy="150" r="9" class="b-none"/><text x="500" y="154" font-size="13" text-anchor="middle" font-weight="700">+</text><text x="500" y="106" font-size="11.5" text-anchor="middle" font-weight="600">frustrated: many tickets</text></svg></div>
+        <figcaption>Clustering groups similar customers without any labels. The + marks each cluster's centre; naming the segments is a human job.</figcaption>
+      </figure>
+
+      <h2>5.2 k-means clustering</h2>
+      <p><strong>k-means</strong> places k centre points, assigns each example to its nearest centre, moves each centre to the average of its members, and repeats until stable. Because it uses distances, <strong>features must be scaled</strong> — otherwise a feature measured in hundreds swamps one measured in single digits.</p>
+<pre data-copy><code><span class="label">Python · customer segmentation</span>from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+seg_features = ["tenure_months", "monthly_spend", "support_tickets"]
+Xs = StandardScaler().fit_transform(customers[seg_features])
+
+km = KMeans(n_clusters=4, n_init=10, random_state=0).fit(Xs)
+customers["segment"] = km.labels_
+profile = customers.groupby("segment")[seg_features + ["churned"]].mean().round(1)
+profile["size"] = customers["segment"].value_counts().sort_index()
+print(profile)</code></pre>
+      <p>Now <em>name</em> the segments from their profiles — "new, low-spend", "loyal high-spenders", "frustrated (many tickets)" — and check the names with people who know the customers.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 674 140" style="min-width:600px" role="img" aria-label="The k-means loop. Because it measures distances, scale features first."><rect x="20" y="30" width="136" height="54" rx="10" class="b-n"/><text x="88" y="53.4" font-size="12" text-anchor="middle" font-weight="600">Place k</text><text x="88" y="69" font-size="12" text-anchor="middle">centres</text><rect x="186" y="30" width="136" height="54" rx="10" class="b-a"/><text x="254" y="53.4" font-size="12" text-anchor="middle" font-weight="600">Assign each point</text><text x="254" y="69" font-size="12" text-anchor="middle">to nearest centre</text><rect x="352" y="30" width="136" height="54" rx="10" class="b-a"/><text x="420" y="53.4" font-size="12" text-anchor="middle" font-weight="600">Move centres to</text><text x="420" y="69" font-size="12" text-anchor="middle">members&#x27; average</text><rect x="518" y="30" width="136" height="54" rx="10" class="b-g"/><text x="586" y="53.4" font-size="12" text-anchor="middle" font-weight="600">Stable?</text><text x="586" y="69" font-size="12" text-anchor="middle">Stop</text><line x1="159" y1="57" x2="177" y2="57" class="ln"/><polygon points="183,57 175,61.4 175,52.6" class="ah"/><line x1="325" y1="57" x2="343" y2="57" class="ln"/><polygon points="349,57 341,61.4 341,52.6" class="ah"/><line x1="491" y1="57" x2="509" y2="57" class="ln"/><polygon points="515,57 507,61.4 507,52.6" class="ah"/><polyline points="420,87 420,112 254,112 254,93" class="ln dash"/><polygon points="254,87 258.4,95 249.6,95" class="ah"/><text x="337" y="128" font-size="11" text-anchor="middle" class="mut">repeat until centres stop moving</text></svg></div>
+        <figcaption>The k-means loop. Because it measures distances, scale features first.</figcaption>
+      </figure>
+
+      <h2>5.3 How many clusters?</h2>
+<pre data-copy><code>from sklearn.metrics import silhouette_score
+
+for k in range(2, 8):
+    labels = KMeans(n_clusters=k, n_init=10, random_state=0).fit_predict(Xs)
+    print(k, round(silhouette_score(Xs, labels), 3))</code></pre>
+      <p>The <strong>silhouette score</strong> (−1 to 1) measures how well each point fits its own cluster compared with the nearest other cluster. Combine it with the <strong>elbow method</strong> (where adding clusters stops reducing within-cluster distance much) — and above all with usefulness: can the business act differently on each segment?</p>
+
+      <h2>5.4 Dimensionality reduction with PCA</h2>
+      <p><strong>Principal component analysis (PCA)</strong> compresses many features into a few new ones that keep as much variation as possible. It's useful for visualising high-dimensional data in 2D and for removing redundancy.</p>
+<pre data-copy><code>from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+pca = PCA(n_components=2).fit(Xs)
+xy = pca.transform(Xs)
+print("Variance explained:", pca.explained_variance_ratio_.round(2))
+plt.scatter(xy[:, 0], xy[:, 1], c=customers["segment"], s=6, cmap="tab10")
+plt.title("Customer segments (PCA projection)")
+plt.show()</code></pre>
+
+      <h2>5.5 Anomaly detection</h2>
+      <p>Unsupervised methods can also flag unusual examples — potential fraud, faults or data errors. scikit-learn's <code>IsolationForest</code> is a common starting point. As always, flagged items are leads for human investigation, not verdicts.</p>
+<pre data-copy><code>from sklearn.ensemble import IsolationForest
+
+iso = IsolationForest(contamination=0.01, random_state=0).fit(Xs)
+customers["unusual"] = iso.predict(Xs) == -1
+print(customers.loc[customers["unusual"], seg_features].head())</code></pre>
+
+      <h2>Key takeaways</h2>
+      <ul><li>k-means assigns points to the nearest of k centres and updates centres iteratively.</li><li>Scale features before clustering.</li><li>Choose k using metrics and usefulness.</li><li>PCA compresses features while keeping variation.</li><li>Anomalies are leads for investigation, not verdicts.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ML-For-Beginners" target="_blank" rel="noopener">Machine Learning for Beginners (26 lessons, GitHub)</a> — regression, classification, clustering, NLP and more with scikit-learn</li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener">Machine Learning Crash Course</a> — free, with interactive visualisations</li><li><span class="provider">scikit-learn</span><a href="https://scikit-learn.org/stable/getting_started.html" target="_blank" rel="noopener">Getting started</a> — the open-source library used in this course</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/machine-learning" target="_blank" rel="noopener">What is machine learning?</a></li></ul></aside>
+      <div class="quiz" data-quiz="m5" data-pass="80" data-next="module-6.html">
+        <script type="application/json">
+[
+{
+"q": "Why scale features before k-means?",
+"options": [
+"It's faster",
+"k-means uses distances, so large-scale features would dominate",
+"It's required by pandas",
+"To add labels"
+],
+"answer": 1,
+"explain": "Distances need comparable scales."
+},
+{
+"q": "A silhouette score near 1 suggests…",
+"options": [
+"Poorly separated clusters",
+"Points fit their own cluster well and are far from others",
+"Too few points",
+"Overfitting"
+],
+"answer": 1,
+"explain": "Higher is better separated."
+},
+{
+"q": "What's the best final test for choosing the number of segments?",
+"options": [
+"The largest k",
+"Whether the business can act differently on each segment, alongside the metrics",
+"k = 2 always",
+"Random choice"
+],
+"answer": 1,
+"explain": "Usefulness matters."
+},
+{
+"q": "What does PCA do?",
+"options": [
+"Labels data",
+"Compresses many features into a few components that keep most variation",
+"Deletes outliers",
+"Trains a classifier"
+],
+"answer": 1,
+"explain": "Dimensionality reduction."
+},
+{
+"q": "An isolation forest flags 20 transactions. Next step?",
+"options": [
+"Block the customers automatically",
+"Investigate them — they're leads, not verdicts",
+"Delete them",
+"Ignore them"
+],
+"answer": 1,
+"explain": "Human review."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-4.html">← Module 4</a>
+        <a class="btn btn-dark" href="module-6.html">Module 6: Interpreting and deploying models →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

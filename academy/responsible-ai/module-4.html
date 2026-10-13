@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Transparency, explainability and accountability — Responsible AI Principles &amp; Ethics</title>
+<meta name="description" content="Levels of transparency, model cards and system cards, explainability methods, the ICO&#x27;s six explanation types and accountability.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="responsible-ai">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m4" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 4 of 6 · 30 minutes</span>
+      <h1>Transparency, explainability and accountability</h1>
+      <p class="lead">People can't trust, use well or challenge AI they can't see or understand. This module covers the practices that make AI open and answerable.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Describe levels of AI transparency</li><li>Use documentation tools such as model cards and system cards</li><li>Compare interpretable models and post-hoc explanations</li><li>Apply the ICO's six types of explanation</li><li>Put accountability mechanisms in place</li></ul>
+      </div>
+
+      <h2>4.1 Transparency: being open about AI</h2>
+      <p><strong>Transparency</strong> means being open that AI is used, what it does, its limitations and how it's governed. It operates at different levels:</p>
+      <ul>
+        <li><strong>Disclosure:</strong> telling people when they're interacting with AI or seeing AI-generated content (required in some cases by Article 50 of the EU AI Act).</li>
+        <li><strong>System information:</strong> what the system is for, how well it performs and where it doesn't work well.</li>
+        <li><strong>Organisational openness:</strong> publishing policies, impact assessments or transparency reports.</li>
+      </ul>
+
+      <h2>4.2 Documentation tools</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tool</th><th>What it documents</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Model cards</strong></td><td>A model's intended use, performance (including across groups), limitations and ethical considerations. Proposed by Google researchers in 2019; now widely used.</td></tr>
+            <tr><td><strong>Datasheets for datasets</strong></td><td>How a dataset was collected, its composition, intended uses and known issues.</td></tr>
+            <tr><td><strong>System cards</strong></td><td>Published by frontier AI developers such as Anthropic and OpenAI: capabilities, safety evaluations and mitigations for a model release.</td></tr>
+            <tr><td><strong>Transparency notes</strong></td><td>Microsoft's documents explaining how its AI services work, intended uses and limitations, to help customers deploy them responsibly.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>4.3 Explainability: why did it decide that?</h2>
+      <p><strong>Explainability</strong> is the ability to give meaningful reasons for an AI output. It matters most when decisions affect people, so they can understand, trust or challenge them.</p>
+      <ul>
+        <li><strong>Interpretable models</strong> (e.g. simple decision trees, scorecards) are explainable by design. For high-stakes decisions, consider whether a simpler model would do.</li>
+        <li><strong>Post-hoc explanation</strong> methods (e.g. feature-importance techniques) estimate which inputs drove a complex model's output. They're useful but approximate.</li>
+        <li><strong>LLM self-explanations</strong> aren't guaranteed to reflect the model's actual internal process, as interpretability research has shown.</li>
+      </ul>
+
+      <h2>4.4 Explaining decisions to people</h2>
+      <p>The UK ICO and The Alan Turing Institute's guidance <em>Explaining decisions made with AI</em> describes six types of explanation organisations may need to provide:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Explanation type</th><th>Answers</th></tr></thead>
+          <tbody>
+            <tr><td>Rationale</td><td>Why did the system reach this decision?</td></tr>
+            <tr><td>Responsibility</td><td>Who is involved and who can I talk to for a human review?</td></tr>
+            <tr><td>Data</td><td>What data was used, and how?</td></tr>
+            <tr><td>Fairness</td><td>What steps were taken to make it fair?</td></tr>
+            <tr><td>Safety and performance</td><td>How accurate, reliable and secure is it?</td></tr>
+            <tr><td>Impact</td><td>What effect does this have on me and on society?</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 660 300" style="min-width:560px" role="img" aria-label="The six explanation types in the UK ICO and Alan Turing Institute guidance Explaining decisions made with AI."><polyline points="398,43.2205 392.5,41.7468 408.011,57.2574" class="ln" style="display:none"/><polygon points="412.253,61.5 403.485,58.9544 409.708,52.7319" class="ah" style="display:none"/><polyline points="445.22,113.5 455,150 446.773,180.704" class="ln" style="display:none"/><polygon points="445.22,186.5 443.04,177.634 451.54,179.911" class="ah" style="display:none"/><polyline points="412.253,238.5 392.5,258.253 392.204,258.332" class="ln" style="display:none"/><polygon points="398,256.779 391.411,263.1 389.134,254.6" class="ah" style="display:none"/><polyline points="262,256.779 267.5,258.253 251.989,242.743" class="ln" style="display:none"/><polygon points="247.747,238.5 256.515,241.046 250.292,247.268" class="ah" style="display:none"/><polyline points="214.78,186.5 205,150 213.227,119.296" class="ln" style="display:none"/><polygon points="214.78,113.5 216.96,122.366 208.46,120.089" class="ah" style="display:none"/><polyline points="247.747,61.5 267.5,41.7468 267.796,41.6676" class="ln" style="display:none"/><polygon points="262,43.2205 268.589,36.8999 270.866,45.4001" class="ah" style="display:none"/><rect x="265" y="2" width="130" height="46" rx="10" class="b-a"/><text x="330" y="29.55" font-size="13" text-anchor="middle" font-weight="600">Rationale</text><rect x="373.253" y="64.5" width="130" height="46" rx="10" class="b-a"/><text x="438.253" y="92.05" font-size="13" text-anchor="middle" font-weight="600">Responsibility</text><rect x="373.253" y="189.5" width="130" height="46" rx="10" class="b-a"/><text x="438.253" y="217.05" font-size="13" text-anchor="middle" font-weight="600">Data</text><rect x="265" y="252" width="130" height="46" rx="10" class="b-a"/><text x="330" y="279.55" font-size="13" text-anchor="middle" font-weight="600">Fairness</text><rect x="156.747" y="189.5" width="130" height="46" rx="10" class="b-a"/><text x="221.747" y="208.6" font-size="13" text-anchor="middle" font-weight="600">Safety &amp;</text><text x="221.747" y="225.5" font-size="13" text-anchor="middle">performance</text><rect x="156.747" y="64.5" width="130" height="46" rx="10" class="b-a"/><text x="221.747" y="92.05" font-size="13" text-anchor="middle" font-weight="600">Impact</text><rect x="260" y="125" width="140" height="50" rx="10" class="b-w"/><text x="330" y="146.4" font-size="12" text-anchor="middle" font-weight="600">Person affected</text><text x="330" y="162" font-size="12" text-anchor="middle">by a decision</text><line x1="330" y1="122" x2="330" y2="57" class="ln"/><polygon points="330,51 334.4,59 325.6,59" class="ah"/><line x1="378.497" y1="122" x2="388.024" y2="116.5" class="ln"/><polygon points="393.22,113.5 388.492,121.311 384.092,113.689" class="ah"/><line x1="378.497" y1="178" x2="388.024" y2="183.5" class="ln"/><polygon points="393.22,186.5 384.092,186.311 388.492,178.689" class="ah"/><line x1="330" y1="178" x2="330" y2="243" class="ln"/><polygon points="330,249 325.6,241 334.4,241" class="ah"/><line x1="281.503" y1="178" x2="271.976" y2="183.5" class="ln"/><polygon points="266.78,186.5 271.508,178.689 275.908,186.311" class="ah"/><line x1="281.503" y1="122" x2="271.976" y2="116.5" class="ln"/><polygon points="266.78,113.5 275.908,113.689 271.508,121.311" class="ah"/></svg></div>
+        <figcaption>The six explanation types in the UK ICO and Alan Turing Institute guidance <em>Explaining decisions made with AI</em>.</figcaption>
+      </figure>
+
+      <h2>4.5 Accountability</h2>
+      <p><strong>Accountability</strong> means identifiable people and organisations answer for an AI system's design, use and effects — and that affected people have routes to redress. In practice:</p>
+      <ul class="checklist">
+        <li>A named <strong>owner</strong> for every AI system in use</li>
+        <li>Clear <strong>decision rights</strong>: who can approve, change or switch off a system</li>
+        <li><strong>Records</strong>: documentation, risk assessments and logs</li>
+        <li><strong>Contestability</strong>: a way for people to challenge decisions and get human review</li>
+        <li><strong>Audit</strong>: internal or external checks that the system behaves as claimed</li>
+      </ul>
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 760 165" style="min-width:620px" role="img" aria-label="The &#x27;many hands&#x27; problem: responsibility is spread along the AI supply chain, so it must be pinned down deliberately."><rect x="20" y="40" width="120" height="54" rx="10" class="b-n"/><text x="80" y="63.4" font-size="12" text-anchor="middle" font-weight="600">Model</text><text x="80" y="79" font-size="12" text-anchor="middle">developer</text><rect x="170" y="40" width="120" height="54" rx="10" class="b-n"/><text x="230" y="63.4" font-size="12" text-anchor="middle" font-weight="600">Platform /</text><text x="230" y="79" font-size="12" text-anchor="middle">cloud</text><rect x="320" y="40" width="120" height="54" rx="10" class="b-n"/><text x="380" y="63.4" font-size="12" text-anchor="middle" font-weight="600">System</text><text x="380" y="79" font-size="12" text-anchor="middle">integrator</text><rect x="470" y="40" width="120" height="54" rx="10" class="b-a"/><text x="530" y="63.4" font-size="12" text-anchor="middle" font-weight="600">Deploying</text><text x="530" y="79" font-size="12" text-anchor="middle">organisation</text><rect x="620" y="40" width="120" height="54" rx="10" class="b-w"/><text x="680" y="63.4" font-size="12" text-anchor="middle" font-weight="600">Affected</text><text x="680" y="79" font-size="12" text-anchor="middle">person</text><line x1="143" y1="67" x2="161" y2="67" class="ln"/><polygon points="167,67 159,71.4 159,62.6" class="ah"/><line x1="293" y1="67" x2="311" y2="67" class="ln"/><polygon points="317,67 309,71.4 309,62.6" class="ah"/><line x1="443" y1="67" x2="461" y2="67" class="ln"/><polygon points="467,67 459,71.4 459,62.6" class="ah"/><line x1="593" y1="67" x2="611" y2="67" class="ln"/><polygon points="617,67 609,71.4 609,62.6" class="ah"/><text x="380" y="130" font-size="12.5" text-anchor="middle" font-weight="600" class="t-b">Something goes wrong. Who answers for it?</text><text x="380" y="150" font-size="11.5" text-anchor="middle" class="mut">Contracts, documentation and laws such as the EU AI Act assign duties along the chain.</text></svg></div>
+        <figcaption>The 'many hands' problem: responsibility is spread along the AI supply chain, so it must be pinned down deliberately.</figcaption>
+      </figure>
+
+      <div class="callout">
+        <b>The "many hands" problem</b>
+        <p>AI systems often involve a model developer, a platform, a system integrator and a deploying organisation. When something goes wrong, each can point to the others. Contracts, documentation and laws such as the EU AI Act — which assigns duties to providers and deployers — help pin responsibility down.</p>
+      </div>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Transparency covers disclosure, system information and organisational openness.</li><li>Model cards, datasheets, system cards and transparency notes document AI.</li><li>Consider interpretable models for high-stakes decisions; post-hoc explanations are approximate.</li><li>ICO explanation types: rationale, responsibility, data, fairness, safety and performance, impact.</li><li>Every AI system needs an owner, decision rights, records, contestability and audit.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">ICO (UK)</span><a href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/" target="_blank" rel="noopener">Artificial intelligence guidance</a> — AI and data protection; explaining decisions made with AI</li><li><span class="provider">Microsoft</span><a href="https://www.microsoft.com/ai/responsible-ai" target="_blank" rel="noopener">Responsible AI: policies and practices</a> — Responsible AI Standard and annual transparency report</li><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/research/tracing-thoughts-language-model" target="_blank" rel="noopener">Tracing the thoughts of a large language model</a> — interpretability research, March 2025</li><li><span class="provider">Google Skills</span><a href="https://www.skills.google/course_templates/554" target="_blank" rel="noopener">Introduction to Responsible AI</a></li></ul></aside>
+      <div class="quiz" data-quiz="m4" data-pass="80" data-next="module-5.html">
+        <script type="application/json">
+[
+{
+"q": "What is a model card?",
+"options": [
+"A payment card for AI services",
+"A document describing a model's intended use, performance across groups, limitations and ethical considerations",
+"A graphics card",
+"A legal licence"
+],
+"answer": 1,
+"explain": "Proposed in 2019; now common practice."
+},
+{
+"q": "For a high-stakes lending decision, why might a simpler, interpretable model be preferred?",
+"options": [
+"It's always more accurate",
+"Its reasoning can be explained and challenged more reliably",
+"It's cheaper to license",
+"Regulators ban complex models"
+],
+"answer": 1,
+"explain": "Explainability can outweigh small accuracy gains."
+},
+{
+"q": "In the ICO's guidance, a 'responsibility' explanation tells people…",
+"options": [
+"How the model was trained",
+"Who is involved and who they can contact for human review",
+"The model's accuracy",
+"The company's profits"
+],
+"answer": 1,
+"explain": "It identifies accountable people and routes to review."
+},
+{
+"q": "What does 'contestability' mean?",
+"options": [
+"Running AI competitions",
+"People can challenge AI-influenced decisions and get human review",
+"Comparing vendors",
+"Testing models"
+],
+"answer": 1,
+"explain": "A route to redress is part of accountability."
+},
+{
+"q": "The 'many hands' problem refers to…",
+"options": [
+"Too many people labelling data",
+"Responsibility getting lost across developers, platforms, integrators and deployers",
+"Robot hands",
+"Crowdsourcing"
+],
+"answer": 1,
+"explain": "Contracts, documentation and law help assign responsibility."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-3.html">← Module 3</a>
+        <a class="btn btn-dark" href="module-5.html">Module 5: Privacy, safety and human agency →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

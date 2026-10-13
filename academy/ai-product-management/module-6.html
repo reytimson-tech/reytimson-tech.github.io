@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6: Operating and improving — AI Product Management</title>
+<meta name="description" content="Post-launch monitoring, the improvement loop and data flywheel, incident handling, responsible AI as a requirement, and planning amid fast model change.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-product-management">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m6" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 6 of 6 · 30 minutes</span>
+      <h1>Operating and improving</h1>
+      <p class="lead">Launch is the beginning. This module covers how AI products are monitored, improved and governed over their lifetime.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Define monitoring signals for AI features</li><li>Run an improvement loop driven by failures</li><li>Prepare for AI incidents</li><li>Treat responsible AI as a product requirement</li></ul>
+      </div>
+
+      <h2>6.1 Launch is the start</h2>
+      <p>After launch, real users find cases your evals missed, data shifts, and model providers update or retire models. Plan for continuous operation from day one — see <a href="../llmops/index.html">LLMOps</a> for the technical side.</p>
+
+      <h2>6.2 What to monitor</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Signals</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Quality</strong></td><td>Sampled human reviews, automated eval scores on live traffic, groundedness</td></tr>
+            <tr><td><strong>User behaviour</strong></td><td>Acceptance, edits, regenerations, abandonment, feedback reasons</td></tr>
+            <tr><td><strong>Safety &amp; risk</strong></td><td>Flagged outputs, complaints, escalations, injection attempts</td></tr>
+            <tr><td><strong>Operations</strong></td><td>Latency, errors, cost per request and per user</td></tr>
+            <tr><td><strong>Fairness</strong></td><td>Quality and outcomes across user groups and languages</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>6.3 The improvement loop</h2>
+      <p>Turn production into a learning engine: collect failures → add them to the eval set → fix with the improvement ladder → re-run evals → release. Over time this creates a <strong>data flywheel</strong>: more usage produces more examples, which improve the product, which attracts more usage. Respect privacy and consent when using customer data to improve the product.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 640 290" style="min-width:560px" role="img" aria-label="The improvement loop turns production failures into tests and fixes — the engine of a data flywheel."><polyline points="388,52.0945 390.534,52.918 411.71,82.0639" class="ln"/><polygon points="415.237,86.918 406.975,83.0321 414.094,77.8596" class="ah"/><polyline points="434.127,138.918 434.127,187.082 412.951,216.228" class="ln"/><polygon points="409.424,221.082 410.567,212.024 417.686,217.196" class="ah"/><polyline points="322.534,269.177 320,270 323.172,271.031" class="ln"/><polygon points="317.466,269.177 326.434,267.464 323.715,275.833" class="ah"/><polyline points="230.576,221.082 205.873,187.082 205.873,144.918" class="ln"/><polygon points="205.873,138.918 210.273,146.918 201.473,146.918" class="ah"/><polyline points="224.763,86.918 249.466,52.918 246.294,53.9486" class="ln"/><polygon points="252,52.0945 245.751,58.7513 243.032,50.382" class="ah"/><rect x="255" y="7" width="130" height="46" rx="10" class="b-n"/><text x="320" y="34.2" font-size="12" text-anchor="middle" font-weight="600">Live traffic</text><rect x="369.127" y="89.918" width="130" height="46" rx="10" class="b-w"/><text x="434.127" y="109.318" font-size="12" text-anchor="middle" font-weight="600">Collect failures</text><text x="434.127" y="124.918" font-size="12" text-anchor="middle">&amp; feedback</text><rect x="325.534" y="224.082" width="130" height="46" rx="10" class="b-a"/><text x="390.534" y="243.482" font-size="12" text-anchor="middle" font-weight="600">Add to</text><text x="390.534" y="259.082" font-size="12" text-anchor="middle">eval set</text><rect x="184.466" y="224.082" width="130" height="46" rx="10" class="b-a"/><text x="249.466" y="251.282" font-size="12" text-anchor="middle" font-weight="600">Fix (ladder)</text><rect x="140.873" y="89.918" width="130" height="46" rx="10" class="b-g"/><text x="205.873" y="109.318" font-size="12" text-anchor="middle" font-weight="600">Re-run evals</text><text x="205.873" y="124.918" font-size="12" text-anchor="middle">&amp; release</text></svg></div>
+        <figcaption>The improvement loop turns production failures into tests and fixes — the engine of a data flywheel.</figcaption>
+      </figure>
+
+      <h2>6.4 Handling incidents</h2>
+      <ul class="checklist">
+        <li>Define what counts as an AI incident (harmful output, data leak, systematic error)</li>
+        <li>Have a kill switch or fallback for every AI feature</li>
+        <li>Know who decides, who communicates and who fixes</li>
+        <li>Record incidents and lessons learned; feed them into evals and design</li>
+        <li>Report serious incidents as regulations require — see <a href="../ai-governance/index.html">AI Governance</a></li>
+      </ul>
+
+      <h2>6.5 Responsible AI is a product requirement</h2>
+      <p>Fairness, transparency, privacy and safety belong in the backlog alongside features — with owners, acceptance criteria and evidence. Run a responsible AI review at key stages (framing, pre-launch, major changes), and keep a model or system card describing purpose, data, evaluation results, limitations and owner. See <a href="../responsible-ai/index.html">Responsible AI</a>.</p>
+
+      <h2>6.6 Planning when models change fast</h2>
+      <p>New models arrive every few months. Keep your evals model-agnostic so you can test new models quickly; revisit ideas you rejected as infeasible; and avoid building features that the next general-purpose model will make obsolete. Your durable advantage is your understanding of users, your data and your evals — not a particular model.</p>
+<div class="activity"><b>Activity: an AI feature one-pager</b><p>Bring it together: a one-page product brief for your AI feature covering problem framing, automate/augment decision, error experience, eval plan and launch criteria, rollout plan, monitoring signals, and responsible AI considerations.</p><details><summary>See a worked example</summary><p><b>Headings to use:</b> Problem &amp; users · AI's role and human oversight · Experience and error handling · Eval set and launch thresholds (including must-nevers) · Rollout stages and kill-switch triggers · Monitoring dashboard · Cost per active user · Risks, fairness checks and owner.</p></details></div>
+      <h2>Key takeaways</h2>
+      <ul><li>Monitor quality, behaviour, safety, operations and fairness.</li><li>Failures → evals → fixes → re-test → release.</li><li>Every AI feature needs a kill switch and incident plan.</li><li>Responsible AI work belongs in the backlog with owners.</li><li>Your durable advantage is users, data and evals — not one model.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/llmops" target="_blank" rel="noopener">What is LLMOps?</a></li><li><span class="provider">Google</span><a href="https://pair.withgoogle.com/guidebook" target="_blank" rel="noopener">People + AI Guidebook</a> — a toolkit for human-centred AI products</li><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li><li><span class="provider">AWS</span><a href="https://docs.aws.amazon.com/whitepapers/latest/aws-caf-for-ai/aws-caf-for-ai.html" target="_blank" rel="noopener">Cloud Adoption Framework for AI, ML and generative AI (CAF-AI)</a> — a whitepaper on moving beyond proofs of concept</li></ul></aside>
+      <div class="quiz" data-quiz="m6" data-pass="80" data-next="assessment.html">
+        <script type="application/json">
+[
+{
+"q": "Which is a fairness monitoring signal?",
+"options": [
+"Server uptime",
+"Quality across user groups and languages",
+"Logo clicks",
+"Office temperature"
+],
+"answer": 1,
+"explain": "Check groups separately."
+},
+{
+"q": "A data flywheel is…",
+"options": [
+"Hardware",
+"More usage → more examples → better product → more usage",
+"A backup system",
+"A pricing model"
+],
+"answer": 1,
+"explain": "Respect privacy and consent."
+},
+{
+"q": "Every AI feature should have…",
+"options": [
+"No fallback",
+"A kill switch or fallback",
+"Unlimited access",
+"No owner"
+],
+"answer": 1,
+"explain": "Be ready to turn it off."
+},
+{
+"q": "Responsible AI work should be…",
+"options": [
+"Done after launch only",
+"In the backlog with owners and acceptance criteria",
+"Optional",
+"Only legal's job"
+],
+"answer": 1,
+"explain": "A product requirement."
+},
+{
+"q": "Why keep evals model-agnostic?",
+"options": [
+"To test new models quickly as they appear",
+"It's cheaper to print",
+"Regulators insist",
+"No reason"
+],
+"answer": 0,
+"explain": "Models change fast."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-5.html">← Module 5</a>
+        <a class="btn btn-dark" href="assessment.html">Final assessment →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

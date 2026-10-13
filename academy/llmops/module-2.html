@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Evaluating LLM quality — Evaluating &amp; Deploying AI (LLMOps)</title>
+<meta name="description" content="Success criteria, evaluation sets, code / LLM / human graders, an evaluation harness in Python, evals as release gates, and offline vs online evaluation.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="llmops">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m2" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 2 of 6 · 35 minutes</span>
+      <h1>Evaluating LLM quality</h1>
+      <p class="lead">If you can't measure quality, every change is a guess. This module shows how to build evaluations that make shipping safe.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Write specific, measurable success criteria</li><li>Build representative, versioned evaluation sets</li><li>Choose between code, LLM and human grading</li><li>Implement an evaluation harness and regression gate</li><li>Combine offline and online evaluation</li></ul>
+      </div>
+
+      <h2>2.1 Start with success criteria</h2>
+      <p>Anthropic's guidance on evaluations recommends defining criteria that are <strong>specific, measurable, achievable and relevant</strong> before you build. Not "good answers", but, for example: "on a held-out set of 500 real customer questions, at least 90% of answers are rated correct and grounded, with no answers revealing personal data, and median latency under 3 seconds."</p>
+
+      <h2>2.2 Build an evaluation set</h2>
+      <ul class="checklist">
+        <li><strong>Representative:</strong> mirrors real inputs — sample from logs where lawful</li>
+        <li><strong>Edge cases:</strong> empty, very long, ambiguous, off-topic, multilingual, adversarial</li>
+        <li><strong>Labelled:</strong> expected answers, or rubrics describing a good answer</li>
+        <li><strong>Versioned:</strong> stored with the code; grows as you find new failures</li>
+        <li><strong>Separate:</strong> a held-out set you don't tune against</li>
+      </ul>
+
+      <h2>2.3 Three ways to grade</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Grader</th><th>Examples</th><th>Strengths</th><th>Weaknesses</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Code</strong></td><td>Exact match, valid JSON, contains required field, regex, length</td><td>Fast, cheap, reliable, scalable</td><td>Can't judge nuance</td></tr>
+            <tr><td><strong>LLM judge</strong></td><td>Rubric-based scores for correctness, tone, groundedness</td><td>Scales to open-ended outputs</td><td>Must be validated; can be biased</td></tr>
+            <tr><td><strong>Human</strong></td><td>Expert review, side-by-side preference</td><td>Highest quality and flexibility</td><td>Slow and expensive</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Use code where you can, LLM judges where you must (checked against human samples), and humans for calibration and high-stakes decisions.</p>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 580 200" style="min-width:560px" role="img" aria-label="Use code graders wherever possible, validated LLM judges for nuance, and humans to calibrate both."><text x="470" y="18" font-size="11" text-anchor="middle" class="mut">share of checks (illustrative)</text><rect x="20" y="28" width="150" height="44" rx="10" class="b-g"/><text x="95" y="45.45" font-size="13" text-anchor="middle" font-weight="600">Code</text><text x="95" y="65.55" font-size="11" text-anchor="middle" class="mut">fast · cheap · reliable</text><text x="190" y="55" font-size="12" text-anchor="start">valid JSON, contains X</text><rect x="400" y="40" width="144" height="20" rx="4" class="f-g"/><rect x="20" y="82" width="150" height="44" rx="10" class="b-a"/><text x="95" y="99.45" font-size="13" text-anchor="middle" font-weight="600">LLM judge</text><text x="95" y="119.55" font-size="11" text-anchor="middle" class="mut">scalable for nuance</text><text x="190" y="109" font-size="12" text-anchor="start">rubric: grounded? tone?</text><rect x="400" y="94" width="96" height="20" rx="4" class="f-a"/><rect x="20" y="136" width="150" height="44" rx="10" class="b-w"/><text x="95" y="153.45" font-size="13" text-anchor="middle" font-weight="600">Human</text><text x="95" y="173.55" font-size="11" text-anchor="middle" class="mut">highest quality · slow</text><text x="190" y="163" font-size="12" text-anchor="start">expert review, calibration</text><rect x="400" y="148" width="40" height="20" rx="4" class="f-w"/></svg></div>
+        <figcaption>Use code graders wherever possible, validated LLM judges for nuance, and humans to calibrate both.</figcaption>
+      </figure>
+
+      <h2>2.4 An evaluation harness</h2>
+<pre data-copy><code><span class="label">Python · a minimal evaluation harness</span>import json, re, statistics, time
+
+def grade_code(case, output):
+    checks = {
+        "valid_json": _is_json(output),
+        "mentions_required": all(w.lower() in output.lower() for w in case.get("must_include", [])),
+        "no_forbidden": not any(w.lower() in output.lower() for w in case.get("must_not_include", [])),
+    }
+    return all(checks.values()), checks
+
+def _is_json(s):
+    try: json.loads(s); return True
+    except ValueError: return False
+
+def run_eval(cases, generate, version):
+    results, latencies = [], []
+    for case in cases:
+        t0 = time.time()
+        out = generate(case["input"])
+        latencies.append(time.time() - t0)
+        ok, detail = grade_code(case, out)
+        results.append({"id": case["id"], "pass": ok, **detail})
+    pass_rate = sum(r["pass"] for r in results) / len(results)
+    print(f"{version}: pass rate {pass_rate:.1%}, median latency {statistics.median(latencies):.2f}s")
+    return pass_rate, results</code></pre>
+
+      <h2>2.5 Evals as a release gate</h2>
+      <p>Run the evaluation suite automatically whenever prompts, retrieval, tools or models change — for example in your CI pipeline — and block releases that fall below thresholds or regress against the current version.</p>
+<pre data-copy><code><span class="label">Python · fail the build on regression</span>baseline, _ = run_eval(cases, generate_v12, "v12 (live)")
+candidate, _ = run_eval(cases, generate_v13, "v13 (candidate)")
+assert candidate >= 0.90, "Below the 90% quality bar"
+assert candidate >= baseline - 0.01, "Regression against the live version"</code></pre>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 680 190" style="min-width:560px" role="img" aria-label="Evaluations as a release gate in your CI pipeline: no change ships if it falls below the bar or regresses."><rect x="20" y="40" width="130" height="56" rx="10" class="b-n"/><text x="85" y="64.4" font-size="12" text-anchor="middle" font-weight="600">Change</text><text x="85" y="80" font-size="12" text-anchor="middle">(prompt, model…)</text><rect x="190" y="40" width="130" height="56" rx="10" class="b-a"/><text x="255" y="64.4" font-size="12" text-anchor="middle" font-weight="600">Run eval</text><text x="255" y="80" font-size="12" text-anchor="middle">suite</text><rect x="360" y="40" width="130" height="56" rx="10" class="b-w"/><text x="425" y="64.4" font-size="12" text-anchor="middle" font-weight="600">≥ quality bar</text><text x="425" y="80" font-size="12" text-anchor="middle">&amp; no regression?</text><rect x="530" y="40" width="130" height="56" rx="10" class="b-g"/><text x="595" y="72.2" font-size="12" text-anchor="middle" font-weight="600">Deploy</text><line x1="153" y1="68" x2="181" y2="68" class="ln"/><polygon points="187,68 179,72.4 179,63.6" class="ah"/><line x1="323" y1="68" x2="351" y2="68" class="ln"/><polygon points="357,68 349,72.4 349,63.6" class="ah"/><line x1="493" y1="68" x2="521" y2="68" class="ln"/><polygon points="527,68 519,72.4 519,63.6" class="ah"/><line x1="425" y1="98" x2="425" y2="134" class="ln"/><polygon points="425,140 420.6,132 429.4,132" class="ah"/><text x="433" y="123" font-size="11.5" text-anchor="start" class="mut">no</text><rect x="355" y="142" width="140" height="36" rx="10" class="b-b"/><text x="425" y="164.2" font-size="12" text-anchor="middle" font-weight="600">Block &amp; fix</text><text x="510" y="60" font-size="11" text-anchor="start" class="mut">yes</text></svg></div>
+        <figcaption>Evaluations as a release gate in your CI pipeline: no change ships if it falls below the bar or regresses.</figcaption>
+      </figure>
+
+      <h2>2.6 Offline vs online evaluation</h2>
+      <p><strong>Offline</strong> evaluation uses your test set before release. <strong>Online</strong> evaluation measures behaviour with real users: thumbs up/down, edits, escalations, task completion, A/B tests. You need both — offline to prevent regressions, online to discover what your test set missed.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Define SMART-style success criteria first.</li><li>Evaluation sets need real inputs, edge cases, labels and versioning.</li><li>Prefer code graders; validate LLM judges against humans.</li><li>Run evals automatically and block regressions.</li><li>Offline evals prevent regressions; online signals reveal gaps.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://platform.claude.com/docs/en/test-and-evaluate/develop-tests" target="_blank" rel="noopener">Define success criteria and build evaluations</a> — code-, LLM- and human-graded evals</li><li><span class="provider">Anthropic Academy</span><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">Building with the Claude API</a> — API basics, evals, tool use, RAG, MCP, agents and workflows</li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-agent-evaluation" target="_blank" rel="noopener">What is AI agent evaluation?</a></li><li><span class="provider">Google for Developers</span><a href="https://developers.google.com/machine-learning/guides/rules-of-ml" target="_blank" rel="noopener">Rules of Machine Learning</a> — best practices for ML engineering</li></ul></aside>
+      <div class="quiz" data-quiz="m2" data-pass="80" data-next="module-3.html">
+        <script type="application/json">
+[
+{
+"q": "Which is a well-formed success criterion?",
+"options": [
+"'Good answers'",
+"'≥90% of answers on a 500-question held-out set rated correct and grounded, median latency under 3s'",
+"'Users like it'",
+"'Better than before'"
+],
+"answer": 1,
+"explain": "Specific and measurable."
+},
+{
+"q": "Which grader is fastest and most reliable where it applies?",
+"options": [
+"Human review",
+"Code-based checks",
+"LLM judges",
+"Random sampling"
+],
+"answer": 1,
+"explain": "Code graders scale best."
+},
+{
+"q": "Before trusting an LLM judge, you should…",
+"options": [
+"Trust it immediately",
+"Compare its grades with human judgements on a sample",
+"Use the same model that produced the outputs without checking",
+"Remove the rubric"
+],
+"answer": 1,
+"explain": "Validate the judge."
+},
+{
+"q": "What does the regression gate in the example check?",
+"options": [
+"That the candidate is at least as good as the live version and above a quality bar",
+"That the code compiles",
+"That costs are zero",
+"That users approve"
+],
+"answer": 0,
+"explain": "Block releases that regress."
+},
+{
+"q": "Why do you need online evaluation as well as offline?",
+"options": [
+"Offline evaluation is illegal",
+"Real users reveal inputs and failures your test set missed",
+"It's cheaper",
+"Online evaluation replaces testing"
+],
+"answer": 1,
+"explain": "Both are needed."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="module-1.html">← Module 1</a>
+        <a class="btn btn-dark" href="module-3.html">Module 3: Guardrails and safety in production →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

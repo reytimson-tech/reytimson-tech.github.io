@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: What makes an AI agent — AI Agents &amp; Agentic Workflows</title>
+<meta name="description" content="Workflows vs agents, the augmented LLM, when (not) to use agents, and the autonomy spectrum.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body data-root="../../" data-page="course" data-course="ai-agents">
+<div id="site-header"></div>
+
+<main id="main" class="container">
+  <div class="lesson-wrap">
+    <nav class="lesson-side" id="course-nav" data-current="m1" aria-label="Course modules"></nav>
+
+    <article class="lesson">
+      <span class="eyebrow">Module 1 of 6 · 25 minutes</span>
+      <h1>What makes an AI agent</h1>
+      <p class="lead">'Agent' is the most hyped word in AI. This module gives you precise definitions — and the judgement to know when an agent is the right tool.</p>
+
+      <div class="objectives">
+        <h4>Learning objectives</h4>
+        <ul><li>Define workflows and agents</li><li>Describe the augmented LLM building block</li><li>Decide when an agent is justified</li><li>Place systems on an autonomy spectrum</li></ul>
+      </div>
+
+      <div class="callout">
+        <b>Running the code</b>
+        <p>Examples are Python and run in a free notebook such as <a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a>. They use Anthropic's Python SDK because its tool-use format is compact; OpenAI, Google and Microsoft SDKs follow the same pattern with slightly different field names. You'll need your own API key, and you should replace <code>YOUR-MODEL-NAME</code> with a current model from your provider's documentation.</p>
+      </div>
+
+      <h2>1.1 From chatbots to agents</h2>
+      <p>A chatbot answers. An <strong>agent</strong> pursues a goal: it decides what to do next, uses tools — search, code, files, APIs — observes the results, and keeps going until the job is done or it needs help.</p>
+      <p>Anthropic's widely cited guide <em>Building effective agents</em> (December 2024) draws a useful line between two kinds of "agentic system":</p>
+      <div class="compare">
+        <div><h4>Workflows</h4><p>LLMs and tools orchestrated through <strong>predefined code paths</strong>. You decide the steps; the LLM does the work inside each step. Predictable and easier to test.</p></div>
+        <div><h4>Agents</h4><p>LLMs that <strong>dynamically direct their own processes and tool usage</strong>, typically in a loop guided by feedback from the environment. Flexible, but less predictable and more expensive.</p></div>
+      </div>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 690 210" style="min-width:560px" role="img" aria-label="Workflows follow a path you design; agents choose their own next step in a loop. Both use the same building blocks."><text x="170" y="22" font-size="14" text-anchor="middle" font-weight="700">Workflow</text><text x="170" y="40" font-size="11" text-anchor="middle" class="mut">your code decides the path</text><rect x="20" y="60" width="90" height="50" rx="10" class="b-a"/><text x="65" y="81.4" font-size="12" text-anchor="middle" font-weight="600">Step 1</text><text x="65" y="97" font-size="12" text-anchor="middle">(LLM)</text><rect x="132" y="60" width="90" height="50" rx="10" class="b-a"/><text x="177" y="81.4" font-size="12" text-anchor="middle" font-weight="600">Step 2</text><text x="177" y="97" font-size="12" text-anchor="middle">(LLM)</text><rect x="244" y="60" width="90" height="50" rx="10" class="b-a"/><text x="289" y="81.4" font-size="12" text-anchor="middle" font-weight="600">Step 3</text><text x="289" y="97" font-size="12" text-anchor="middle">(LLM)</text><line x1="113" y1="85" x2="123" y2="85" class="ln"/><polygon points="129,85 121,89.4 121,80.6" class="ah"/><line x1="225" y1="85" x2="235" y2="85" class="ln"/><polygon points="241,85 233,89.4 233,80.6" class="ah"/><line x1="345" y1="20" x2="345" y2="200" class="ln-l"/><text x="520" y="22" font-size="14" text-anchor="middle" font-weight="700">Agent</text><text x="520" y="40" font-size="11" text-anchor="middle" class="mut">the LLM decides the path</text><rect x="460" y="60" width="120" height="50" rx="10" class="b-a"/><text x="520" y="81.4" font-size="12" text-anchor="middle" font-weight="600">LLM decides</text><text x="520" y="97" font-size="12" text-anchor="middle">next action</text><rect x="380" y="150" width="90" height="40" rx="10" class="b-n"/><text x="425" y="174.2" font-size="12" text-anchor="middle" font-weight="600">Tool A</text><rect x="480" y="150" width="90" height="40" rx="10" class="b-n"/><text x="525" y="174.2" font-size="12" text-anchor="middle" font-weight="600">Tool B</text><rect x="580" y="150" width="90" height="40" rx="10" class="b-g"/><text x="625" y="174.2" font-size="12" text-anchor="middle" font-weight="600">Done?</text><line x1="488.706" y1="113" x2="455.177" y2="142.999" class="ln"/><polygon points="450.706,147 453.734,138.387 459.602,144.945" class="ah"/><line x1="521.647" y1="113" x2="523.295" y2="141.01" class="ln"/><polygon points="523.647,147 518.785,139.272 527.57,138.755" class="ah"/><line x1="554.588" y1="113" x2="591.925" y2="143.225" class="ln"/><polygon points="596.588,147 587.602,145.386 593.139,138.547" class="ah"/><polyline points="425,148 425,85 450,85" class="ln dash"/><polygon points="456,85 448,89.4 448,80.6" class="ah"/><text x="400" y="125" font-size="10.5" text-anchor="middle" class="mut">observe</text><text x="170" y="150" font-size="11.5" text-anchor="middle" class="t-g">predictable · easy to test</text><text x="170" y="168" font-size="11.5" text-anchor="middle" class="mut">cheaper · less flexible</text></svg></div>
+        <figcaption>Workflows follow a path you design; agents choose their own next step in a loop. Both use the same building blocks.</figcaption>
+      </figure>
+
+      <h2>1.2 The building block: an augmented LLM</h2>
+      <p>Every agentic system starts with an LLM augmented with three capabilities:</p>
+      <ul>
+        <li><strong>Tools</strong> — functions it can call to fetch information or take actions (Module 2).</li>
+        <li><strong>Retrieval</strong> — access to knowledge, for example through RAG (see the <a href="../rag/index.html">RAG course</a>).</li>
+        <li><strong>Memory</strong> — information carried across steps or sessions (Module 4).</li>
+      </ul>
+
+      <figure class="diagram">
+        <div class="dg-scroll"><svg class="dg" viewBox="0 0 620 225" style="min-width:560px" role="img" aria-label="The augmented LLM: the building block of every agentic system."><rect x="240" y="85" width="140" height="60" rx="10" class="b-a"/><text x="310" y="120.25" font-size="15" text-anchor="middle" font-weight="600">LLM</text><rect x="30" y="20" width="140" height="46" rx="10" class="b-n"/><text x="100" y="38.45" font-size="13" text-anchor="middle" font-weight="600">Tools</text><text x="100" y="58.55" font-size="11" text-anchor="middle" class="mut">search, code, APIs</text><rect x="30" y="160" width="140" height="46" rx="10" class="b-n"/><text x="100" y="178.45" font-size="13" text-anchor="middle" font-weight="600">Retrieval</text><text x="100" y="198.55" font-size="11" text-anchor="middle" class="mut">your documents</text><rect x="450" y="90" width="140" height="50" rx="10" class="b-n"/><text x="520" y="110.45" font-size="13" text-anchor="middle" font-weight="600">Memory</text><text x="520" y="130.55" font-size="11" text-anchor="middle" class="mut">state across steps</text><line x1="231.324" y1="88.0255" x2="178.676" y2="69.9745" class="ln"/><polygon points="173,68.0286 181.995,66.461 179.141,74.7853" class="ah"/><polygon points="237,89.9714 228.005,91.539 230.859,83.2147" class="ah"/><line x1="231.292" y1="140.486" x2="178.708" y2="157.514" class="ln"/><polygon points="173,159.362 179.255,152.711 181.966,161.083" class="ah"/><polygon points="237,138.638 230.745,145.289 228.034,136.917" class="ah"/><line x1="389" y1="115" x2="441" y2="115" class="ln"/><polygon points="447,115 439,119.4 439,110.6" class="ah"/><polygon points="383,115 391,110.6 391,119.4" class="ah"/></svg></div>
+        <figcaption>The augmented LLM: the building block of every agentic system.</figcaption>
+      </figure>
+
+      <h2>1.3 When to use an agent — and when not to</h2>
+      <p>The most important design advice from practitioners is: <strong>start with the simplest thing that works.</strong> Often that's a single well-prompted LLM call with retrieval. Add workflows when a task splits naturally into fixed steps. Reach for an autonomous agent only when:</p>
+      <ul class="checklist">
+        <li>the steps can't be predicted in advance (open-ended problems);</li>
+        <li>the task benefits from trying, observing and adjusting;</li>
+        <li>success can be checked (tests pass, data reconciles, the user confirms);</li>
+        <li>the extra cost, latency and risk are worth it.</li>
+      </ul>
+      <p>Coding agents are a strong fit: the steps are open-ended, but tests give clear feedback. A refund-approval process with fixed rules is a poor fit: a workflow is safer and cheaper.</p>
+
+      <h2>1.4 The autonomy spectrum</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Level</th><th>What the AI does</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>1. Assistant</td><td>Suggests; a human does everything</td><td>Drafts an email reply</td></tr>
+            <tr><td>2. Workflow</td><td>Executes fixed steps you designed</td><td>Classify ticket → retrieve policy → draft reply</td></tr>
+            <tr><td>3. Supervised agent</td><td>Plans and acts; a human approves key actions</td><td>Researches and prepares a refund, waits for approval</td></tr>
+            <tr><td>4. Autonomous agent</td><td>Plans and acts within boundaries, reports back</td><td>Fixes failing tests in a sandbox and opens a pull request</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Move up the ladder only as far as the task needs and your safeguards allow.</p>
+
+      <h2>Key takeaways</h2>
+      <ul><li>Workflows follow predefined code paths; agents direct their own steps and tool use.</li><li>Agents are built from an LLM augmented with tools, retrieval and memory.</li><li>Start simple; use agents for open-ended tasks with checkable success.</li><li>Move up the autonomy ladder only as far as needed and as safeguards allow.</li></ul>
+<aside class="go-further"><h3>Go further: trusted free learning</h3><p class="muted" style="font-size:.9rem">Hand-picked resources from Anthropic, OpenAI, Microsoft, AWS, IBM and Google that go deeper on this module. External links open in a new tab.</p><ul><li><span class="provider">Anthropic</span><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building effective agents</a> — workflows vs agents and five patterns, December 2024</li><li><span class="provider">Microsoft</span><a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">AI Agents for Beginners (18 lessons, GitHub)</a></li><li><span class="provider">IBM Think</span><a href="https://www.ibm.com/think/topics/ai-agents" target="_blank" rel="noopener">What are AI agents?</a></li><li><span class="provider">OpenAI</span><a href="https://developers.openai.com/api/docs/guides/agents" target="_blank" rel="noopener">Agents guide</a> — Agents API, Agents SDK and Responses API compared</li></ul></aside>
+      <div class="quiz" data-quiz="m1" data-pass="80" data-next="module-2.html">
+        <script type="application/json">
+[
+{
+"q": "According to Anthropic's definitions, what distinguishes an agent from a workflow?",
+"options": [
+"Agents use bigger models",
+"Agents dynamically direct their own processes and tool use; workflows follow predefined code paths",
+"Workflows can't use tools",
+"Agents never need humans"
+],
+"answer": 1,
+"explain": "Control flow decided by the LLM vs by your code."
+},
+{
+"q": "Which is NOT one of the augmented LLM's capabilities?",
+"options": [
+"Tools",
+"Retrieval",
+"Memory",
+"Self-funding"
+],
+"answer": 3,
+"explain": "Tools, retrieval and memory."
+},
+{
+"q": "Which task is the strongest fit for an autonomous agent?",
+"options": [
+"Applying a fixed refund rule",
+"Fixing failing code where tests show success",
+"Translating one sentence",
+"Formatting a date"
+],
+"answer": 1,
+"explain": "Open-ended steps with checkable success."
+},
+{
+"q": "What's the first thing to try for most LLM features?",
+"options": [
+"A multi-agent system",
+"The simplest approach that works — often a single well-prompted call with retrieval",
+"Fine-tuning",
+"Full autonomy"
+],
+"answer": 1,
+"explain": "Add complexity only when it helps."
+},
+{
+"q": "An AI researches a refund and prepares it, but a human must approve. Which autonomy level?",
+"options": [
+"Assistant",
+"Workflow",
+"Supervised agent",
+"Autonomous agent"
+],
+"answer": 2,
+"explain": "It plans and acts, with human approval for key actions."
+}
+]
+        </script>
+      </div>
+
+      <nav class="lesson-nav" aria-label="Module navigation">
+        <a class="btn btn-ghost" href="index.html">← Course overview</a>
+        <a class="btn btn-dark" href="module-2.html">Module 2: Tool use and the Model Context Protocol →</a>
+      </nav>
+    </article>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>
