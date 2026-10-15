@@ -9,7 +9,6 @@
   var ROOT = document.body.getAttribute("data-root") || "./";
   var PAGE = document.body.getAttribute("data-page") || "";
   var SITE_NAME = "Rey Timson";
-  var CONTACT_EMAIL = "reytimson@gmail.com";
   var LINKEDIN = "https://www.linkedin.com/in/rey-timson-a367001bb";
 
   /* ---------- Course registry ----------
@@ -206,7 +205,6 @@
       '<div><h4>Connect</h4><ul>' +
       '<li><a href="' + a + 'index.html">All courses</a></li>' +
       '<li><a href="' + ROOT + 'insights/ai-skills-in-demand.html">In-demand AI skills</a></li>' +
-      '<li><a href="mailto:' + CONTACT_EMAIL + '">Email</a></li>' +
       '<li><a href="' + LINKEDIN + '" target="_blank" rel="noopener">LinkedIn</a></li>' +
       '<li><a href="' + ROOT + 'index.html#contact">Work with me</a></li></ul></div>' +
       "</div>" +
